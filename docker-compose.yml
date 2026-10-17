@@ -1,0 +1,78 @@
+# Converter and validator services. Phase 2 (O2.3) adds fixture-runner and the one-command path.
+#
+# The two converter images are commercial and never published: build them locally (see the
+# Dockerfile headers). Each licence arrives at run time from a host path named by an environment
+# variable and is mounted read-only; it is never in the image, the repository or a log. Both run
+# on the native x86_64 host. There is no network, so a licence that needs a licence server will
+# have to be an explicit decision, recorded in the qualification document.
+#
+# Unset variables do not stop compose from parsing, so step-validator can be used alone. They stop
+# the converters instead: an empty build arg fails the Dockerfile check, and a licence path that is
+# not set or does not exist should fail at container start (create_host_path is off, so no empty
+# directory is ever mounted in its place; not exercised, since the converter images cannot be built here).
+name: pvec-gold-fixtures
+
+x-converter: &converter
+  platform: linux/amd64
+  network_mode: none
+  read_only: true
+  tmpfs:
+    - /tmp
+  security_opt:
+    - no-new-privileges:true
+  cap_drop:
+    - ALL
+
+services:
+  cadex-converter:
+    <<: *converter
+    image: pvec-gold/cadex-converter:local
+    build:
+      context: .
+      dockerfile: docker/cadex/Dockerfile
+      args:
+        CADEX_ARTIFACT: ${CADEX_ARTIFACT:-}
+        CADEX_SHA256: ${CADEX_SHA256:-}
+        CADEX_VERSION: ${CADEX_VERSION:-}
+    volumes:
+      - type: bind
+        source: ${CADEX_LICENSE_FILE:-/set/CADEX_LICENSE_FILE}
+        target: /run/secrets/cadex-license
+        read_only: true
+        bind:
+          create_host_path: false
+      - ${FIXTURE_DIR:-./fixtures}:/fixtures
+
+  oda-converter:
+    <<: *converter
+    image: pvec-gold/oda-converter:local
+    build:
+      context: .
+      dockerfile: docker/oda/Dockerfile
+      args:
+        ODA_DRAWINGS_ARTIFACT: ${ODA_DRAWINGS_ARTIFACT:-}
+        ODA_DRAWINGS_SHA256: ${ODA_DRAWINGS_SHA256:-}
+        ODA_STEP_ARTIFACT: ${ODA_STEP_ARTIFACT:-}
+        ODA_STEP_SHA256: ${ODA_STEP_SHA256:-}
+    volumes:
+      - type: bind
+        source: ${ODA_ACTIVATION_FILE:-/set/ODA_ACTIVATION_FILE}
+        target: /run/secrets/oda-activation
+        read_only: true
+        bind:
+          create_host_path: false
+      - ${FIXTURE_DIR:-./fixtures}:/fixtures
+
+  step-validator:
+    image: pvec-gold/step-validator:local
+    platform: ${VALIDATOR_PLATFORM:-linux/amd64}
+    build:
+      context: .
+      dockerfile: docker/step-validator/Dockerfile
+      target: final
+    network_mode: none
+    read_only: true
+    tmpfs:
+      - /tmp
+    volumes:
+      - ${FIXTURE_DIR:-./fixtures}:/fixtures
