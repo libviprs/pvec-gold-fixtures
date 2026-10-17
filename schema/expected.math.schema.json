@@ -1,0 +1,239 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/libviprs/pvec-gold-fixtures/schema/expected.math.schema.json",
+  "title": "expected.math.json",
+  "description": "Independently specified source mathematics for one known-truth fixture. Arithmetic relations that JSON Schema cannot express (knot counts, determinants, decimal versus f64_hex) are enforced by runner/expected_math.py, and the two together are the gate. Comparison policy is not defined here, see docs/numeric-policy.md.",
+  "type": "object",
+  "required": ["schema_version", "fixture_id", "evidence_class", "units", "provenance", "entities", "assertions"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "pvec-gold/expected.math/1" },
+    "fixture_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+    "evidence_class": { "const": "KNOWN_TRUTH_EXACT" },
+    "units": {
+      "type": "object",
+      "required": ["name", "scale_to_canonical"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "canonical": { "const": "metre" },
+        "scale_to_canonical": { "$ref": "#/$defs/scalar" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["derivation", "authoring_script", "parameter_file"],
+      "additionalProperties": false,
+      "properties": {
+        "derivation": { "const": "AUTHORING_PARAMETERS" },
+        "authoring_script": { "type": "string", "minLength": 1 },
+        "parameter_file": { "type": "string", "minLength": 1 },
+        "parameter_file_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "parameters": { "type": "object" },
+        "notes": { "type": "string" }
+      }
+    },
+    "entities": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/entity" } },
+    "assertions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/assertion" } }
+  },
+  "$defs": {
+    "scalar": {
+      "type": "object",
+      "required": ["decimal", "f64_hex"],
+      "additionalProperties": false,
+      "properties": {
+        "decimal": { "type": "string", "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$" },
+        "f64_hex": { "type": "string", "pattern": "^0x[0-9a-f]{16}$" }
+      }
+    },
+    "count": { "type": "integer", "minimum": 0 },
+    "point3": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "$ref": "#/$defs/scalar" } },
+    "domain": {
+      "type": "object",
+      "required": ["start", "end"],
+      "additionalProperties": false,
+      "properties": { "start": { "$ref": "#/$defs/scalar" }, "end": { "$ref": "#/$defs/scalar" } }
+    },
+    "closure": {
+      "type": "object",
+      "required": ["closed_by_endpoint", "closed_by_knots", "periodic"],
+      "additionalProperties": false,
+      "properties": {
+        "closed_by_endpoint": { "type": "boolean" },
+        "closed_by_knots": { "type": "boolean" },
+        "periodic": { "type": "boolean" }
+      }
+    },
+    "knot": {
+      "type": "object",
+      "required": ["value", "multiplicity"],
+      "additionalProperties": false,
+      "properties": { "value": { "$ref": "#/$defs/scalar" }, "multiplicity": { "type": "integer", "minimum": 1 } }
+    },
+    "transform": {
+      "type": "object",
+      "required": ["convention", "matrix", "determinant", "classification"],
+      "additionalProperties": false,
+      "properties": {
+        "convention": { "const": "ROW_MAJOR_COLUMN_VECTOR_PARENT_LEFT" },
+        "matrix": { "type": "array", "minItems": 16, "maxItems": 16, "items": { "$ref": "#/$defs/scalar" } },
+        "determinant": { "$ref": "#/$defs/scalar" },
+        "classification": {
+          "enum": ["IDENTITY", "TRANSLATION", "ROTATION", "UNIFORM_SCALE", "NON_UNIFORM_SCALE", "REFLECTION", "SHEAR", "GENERAL_AFFINE", "NEAR_SINGULAR", "SINGULAR"]
+        }
+      }
+    },
+    "line_geometry": {
+      "type": "object", "required": ["start", "end"], "additionalProperties": false,
+      "properties": { "start": { "$ref": "#/$defs/point3" }, "end": { "$ref": "#/$defs/point3" } }
+    },
+    "polyline_geometry": {
+      "type": "object", "required": ["vertices", "bulges"], "additionalProperties": false,
+      "properties": {
+        "vertices": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/point3" } },
+        "bulges": { "type": "array", "items": { "$ref": "#/$defs/scalar" } }
+      }
+    },
+    "circle_geometry": {
+      "type": "object", "required": ["center", "normal", "x_axis", "radius"], "additionalProperties": false,
+      "properties": {
+        "center": { "$ref": "#/$defs/point3" }, "normal": { "$ref": "#/$defs/point3" },
+        "x_axis": { "$ref": "#/$defs/point3" }, "radius": { "$ref": "#/$defs/scalar" }
+      }
+    },
+    "circular_arc_geometry": {
+      "type": "object", "required": ["center", "normal", "x_axis", "radius", "start_angle", "sweep_angle"], "additionalProperties": false,
+      "properties": {
+        "center": { "$ref": "#/$defs/point3" }, "normal": { "$ref": "#/$defs/point3" },
+        "x_axis": { "$ref": "#/$defs/point3" }, "radius": { "$ref": "#/$defs/scalar" },
+        "start_angle": { "$ref": "#/$defs/scalar" }, "sweep_angle": { "$ref": "#/$defs/scalar" }
+      }
+    },
+    "ellipse_geometry": {
+      "type": "object", "required": ["center", "normal", "major_axis", "semi_major", "semi_minor"], "additionalProperties": false,
+      "properties": {
+        "center": { "$ref": "#/$defs/point3" }, "normal": { "$ref": "#/$defs/point3" },
+        "major_axis": { "$ref": "#/$defs/point3" },
+        "semi_major": { "$ref": "#/$defs/scalar" }, "semi_minor": { "$ref": "#/$defs/scalar" }
+      }
+    },
+    "elliptical_arc_geometry": {
+      "type": "object", "required": ["center", "normal", "major_axis", "semi_major", "semi_minor", "start_angle", "sweep_angle"], "additionalProperties": false,
+      "properties": {
+        "center": { "$ref": "#/$defs/point3" }, "normal": { "$ref": "#/$defs/point3" },
+        "major_axis": { "$ref": "#/$defs/point3" },
+        "semi_major": { "$ref": "#/$defs/scalar" }, "semi_minor": { "$ref": "#/$defs/scalar" },
+        "start_angle": { "$ref": "#/$defs/scalar" }, "sweep_angle": { "$ref": "#/$defs/scalar" }
+      }
+    },
+    "bezier_geometry": {
+      "type": "object", "required": ["degree", "control_points"], "additionalProperties": false,
+      "properties": {
+        "degree": { "type": "integer", "minimum": 1 },
+        "control_points": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/point3" } }
+      }
+    },
+    "bspline_geometry": {
+      "type": "object", "required": ["degree", "control_points", "knots"], "additionalProperties": false,
+      "properties": {
+        "degree": { "type": "integer", "minimum": 1 },
+        "control_points": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/point3" } },
+        "knots": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/knot" } }
+      }
+    },
+    "nurbs_geometry": {
+      "type": "object", "required": ["degree", "control_points", "knots", "weights", "weights_all_unit"], "additionalProperties": false,
+      "properties": {
+        "degree": { "type": "integer", "minimum": 1 },
+        "control_points": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/point3" } },
+        "knots": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/knot" } },
+        "weights": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/scalar" } },
+        "weights_all_unit": { "type": "boolean" }
+      }
+    },
+    "curve_core": {
+      "type": "object",
+      "required": ["class", "geometry", "parameter_domain", "closure"],
+      "properties": {
+        "class": { "enum": ["line", "polyline", "circle", "circular_arc", "ellipse", "elliptical_arc", "bezier", "bspline", "nurbs"] },
+        "geometry": { "type": "object" },
+        "parameter_domain": { "$ref": "#/$defs/domain" },
+        "closure": { "$ref": "#/$defs/closure" }
+      },
+      "allOf": [
+        { "if": { "properties": { "class": { "const": "line" } } }, "then": { "properties": { "geometry": { "$ref": "#/$defs/line_geometry" } } } },
+        { "if": { "properties": { "class": { "const": "polyline" } } }, "then": { "properties": { "geometry": { "$ref": "#/$defs/polyline_geometry" } } } },
+        { "if": { "properties": { "class": { "const": "circle" } } }, "then": { "properties": { "geometry": { "$ref": "#/$defs/circle_geometry" } } } },
+        { "if": { "properties": { "class": { "const": "circular_arc" } } }, "then": { "properties": { "geometry": { "$ref": "#/$defs/circular_arc_geometry" } } } },
+        { "if": { "properties": { "class": { "const": "ellipse" } } }, "then": { "properties": { "geometry": { "$ref": "#/$defs/ellipse_geometry" } } } },
+        { "if": { "properties": { "class": { "const": "elliptical_arc" } } }, "then": { "properties": { "geometry": { "$ref": "#/$defs/elliptical_arc_geometry" } } } },
+        { "if": { "properties": { "class": { "const": "bezier" } } }, "then": { "properties": { "geometry": { "$ref": "#/$defs/bezier_geometry" } } } },
+        { "if": { "properties": { "class": { "const": "bspline" } } }, "then": { "properties": { "geometry": { "$ref": "#/$defs/bspline_geometry" } } } },
+        { "if": { "properties": { "class": { "const": "nurbs" } } }, "then": { "properties": { "geometry": { "$ref": "#/$defs/nurbs_geometry" } } } }
+      ]
+    },
+    "world_curve": {
+      "allOf": [{ "$ref": "#/$defs/curve_core" }],
+      "unevaluatedProperties": false
+    },
+    "orientation": {
+      "type": "object",
+      "required": ["parameter_direction", "sense_about_normal"],
+      "additionalProperties": false,
+      "properties": {
+        "parameter_direction": { "enum": ["START_TO_END", "REVERSED_AGAINST_SOURCE"] },
+        "sense_about_normal": { "enum": ["CCW", "CW", "NOT_APPLICABLE"] }
+      }
+    },
+    "rejection": {
+      "type": "object",
+      "required": ["classification", "disposition"],
+      "additionalProperties": false,
+      "properties": {
+        "classification": { "enum": ["SINGULAR_TRANSFORM", "NEAR_SINGULAR_TRANSFORM", "UNREPRESENTABLE_TRANSFORM"] },
+        "disposition": { "enum": ["REJECT", "QUARANTINE"] }
+      }
+    },
+    "entity": {
+      "allOf": [
+        { "$ref": "#/$defs/curve_core" },
+        {
+          "required": ["id", "structure"],
+          "properties": {
+            "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+            "structure": { "enum": ["CURVE_ONLY", "INSTANCE_PLUS_TRANSFORM", "FLATTENED"] },
+            "transform": { "$ref": "#/$defs/transform" },
+            "transform_chain": {
+              "type": "object",
+              "required": ["order", "transforms", "composed"],
+              "additionalProperties": false,
+              "properties": {
+                "order": { "const": "OUTERMOST_FIRST" },
+                "transforms": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/transform" } },
+                "composed": { "$ref": "#/$defs/transform" }
+              }
+            },
+            "orientation": { "$ref": "#/$defs/orientation" },
+            "world": { "$ref": "#/$defs/world_curve" },
+            "rejection": { "$ref": "#/$defs/rejection" }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "assertion": {
+      "type": "object",
+      "required": ["id", "kind", "entity", "claim", "statement"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+        "kind": { "enum": ["STRUCTURAL", "GEOMETRIC"] },
+        "entity": { "type": "string" },
+        "claim": {
+          "enum": ["CLASS_PRESERVED", "DEGREE_PRESERVED", "CONTROL_POINTS_PRESERVED", "KNOTS_PRESERVED", "WEIGHTS_PRESERVED", "PARAMETERIZATION_PRESERVED", "VERTEX_ORDER_PRESERVED", "CLOSURE_KIND_PRESERVED", "TRANSFORM_PRESERVED", "ORIENTATION_PRESERVED", "WORLD_SPACE_RESULT", "REJECTED"]
+        },
+        "statement": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

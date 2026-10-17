@@ -1,0 +1,212 @@
+{
+  "schema_version": "pvec-gold/expected.math/1",
+  "fixture_id": "worked-example-rational-bspline",
+  "evidence_class": "KNOWN_TRUTH_EXACT",
+  "units": {
+    "name": "metre",
+    "canonical": "metre",
+    "scale_to_canonical": {
+      "decimal": "1.0",
+      "f64_hex": "0x3ff0000000000000"
+    }
+  },
+  "provenance": {
+    "derivation": "AUTHORING_PARAMETERS",
+    "authoring_script": "tools/authoring/worked_example.py",
+    "parameter_file": "tools/authoring/worked_example.py#PARAMS",
+    "parameters": {
+      "degree": 2,
+      "control_points": [
+        [
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "1",
+          "2",
+          "0"
+        ],
+        [
+          "3",
+          "2.5",
+          "0"
+        ],
+        [
+          "4",
+          "0",
+          "0"
+        ]
+      ],
+      "weights": [
+        "1",
+        "0.5",
+        "2",
+        "1"
+      ],
+      "knots": [
+        [
+          "0",
+          3
+        ],
+        [
+          "0.5",
+          1
+        ],
+        [
+          "1",
+          3
+        ]
+      ]
+    },
+    "notes": "Hand-chosen illustration for docs/fixtures/expected-math.md. The weights do not describe a conic."
+  },
+  "entities": [
+    {
+      "id": "nurbs-0",
+      "class": "nurbs",
+      "structure": "CURVE_ONLY",
+      "geometry": {
+        "degree": 2,
+        "control_points": [
+          [
+            {
+              "decimal": "0.0",
+              "f64_hex": "0x0000000000000000"
+            },
+            {
+              "decimal": "0.0",
+              "f64_hex": "0x0000000000000000"
+            },
+            {
+              "decimal": "0.0",
+              "f64_hex": "0x0000000000000000"
+            }
+          ],
+          [
+            {
+              "decimal": "1.0",
+              "f64_hex": "0x3ff0000000000000"
+            },
+            {
+              "decimal": "2.0",
+              "f64_hex": "0x4000000000000000"
+            },
+            {
+              "decimal": "0.0",
+              "f64_hex": "0x0000000000000000"
+            }
+          ],
+          [
+            {
+              "decimal": "3.0",
+              "f64_hex": "0x4008000000000000"
+            },
+            {
+              "decimal": "2.5",
+              "f64_hex": "0x4004000000000000"
+            },
+            {
+              "decimal": "0.0",
+              "f64_hex": "0x0000000000000000"
+            }
+          ],
+          [
+            {
+              "decimal": "4.0",
+              "f64_hex": "0x4010000000000000"
+            },
+            {
+              "decimal": "0.0",
+              "f64_hex": "0x0000000000000000"
+            },
+            {
+              "decimal": "0.0",
+              "f64_hex": "0x0000000000000000"
+            }
+          ]
+        ],
+        "knots": [
+          {
+            "value": {
+              "decimal": "0.0",
+              "f64_hex": "0x0000000000000000"
+            },
+            "multiplicity": 3
+          },
+          {
+            "value": {
+              "decimal": "0.5",
+              "f64_hex": "0x3fe0000000000000"
+            },
+            "multiplicity": 1
+          },
+          {
+            "value": {
+              "decimal": "1.0",
+              "f64_hex": "0x3ff0000000000000"
+            },
+            "multiplicity": 3
+          }
+        ],
+        "weights": [
+          {
+            "decimal": "1.0",
+            "f64_hex": "0x3ff0000000000000"
+          },
+          {
+            "decimal": "0.5",
+            "f64_hex": "0x3fe0000000000000"
+          },
+          {
+            "decimal": "2.0",
+            "f64_hex": "0x4000000000000000"
+          },
+          {
+            "decimal": "1.0",
+            "f64_hex": "0x3ff0000000000000"
+          }
+        ],
+        "weights_all_unit": false
+      },
+      "parameter_domain": {
+        "start": {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        "end": {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        }
+      },
+      "closure": {
+        "closed_by_endpoint": false,
+        "closed_by_knots": false,
+        "periodic": false
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a1",
+      "kind": "STRUCTURAL",
+      "entity": "nurbs-0",
+      "claim": "WEIGHTS_PRESERVED",
+      "statement": "Weights 1, 0.5, 2, 1 survive as stated; a renormalised all-ones form is a different class."
+    },
+    {
+      "id": "a2",
+      "kind": "STRUCTURAL",
+      "entity": "nurbs-0",
+      "claim": "KNOTS_PRESERVED",
+      "statement": "Knots 0 (x3), 0.5 (x1), 1 (x3) survive with multiplicities."
+    },
+    {
+      "id": "a3",
+      "kind": "GEOMETRIC",
+      "entity": "nurbs-0",
+      "claim": "PARAMETERIZATION_PRESERVED",
+      "statement": "Domain [0, 1] is kept; a reparameterised equivalent is geometric-only."
+    }
+  ]
+}

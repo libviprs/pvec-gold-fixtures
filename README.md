@@ -27,7 +27,7 @@ primitives — before any mass fixture generation.
 | `QUARANTINED` | unresolved disagreement, unsupported entity, approximation, malformed fixture, or a licensing/provenance problem |
 
 Known-truth numbers avoid ambiguous rounded JSON. A documented canonical representation carries the
-intended `f64`, for example `{"decimal": "0.70710678118654757", "f64_hex": "0x3fe6a09e667f3bcc"}`.
+intended `f64`, for example `{"decimal": "0.70710678118654757", "f64_hex": "0x3fe6a09e667f3bcd"}`.
 
 ## Licensing and architecture constraints
 
