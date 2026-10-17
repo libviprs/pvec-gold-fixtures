@@ -1,0 +1,4 @@
+# Paths (shell globs, matched against the path inside the image) that may match a licence pattern
+# without being licence material. One per line: <pattern-name> <glob>   # why
+# An entry exists only after the match was looked at and found to be something else.
+private-key-ml */libgnutls.so*   # GnuTLS embeds private keys as built-in cryptographic self-test vectors
