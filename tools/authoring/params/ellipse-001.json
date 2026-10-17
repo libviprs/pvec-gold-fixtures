@@ -1,0 +1,1 @@
+{"id":"ellipse-001","kind":"ellipse","description":"A full ellipse with axis ratio 0.98 (near 1, not 1) and a major axis along (0.96, 0.28), which is not axis-aligned.","center":["2","1","0"],"major_axis":["0.96","0.28","0"],"semi_major":"3","semi_minor":"2.94"}

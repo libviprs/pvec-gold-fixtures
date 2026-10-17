@@ -1,0 +1,213 @@
+{
+  "schema_version": "pvec-gold/expected.math/1",
+  "fixture_id": "shear-001",
+  "evidence_class": "KNOWN_TRUTH_EXACT",
+  "units": {
+    "name": "metre",
+    "canonical": "metre",
+    "scale_to_canonical": {
+      "decimal": "1.0",
+      "f64_hex": "0x3ff0000000000000"
+    }
+  },
+  "provenance": {
+    "derivation": "AUTHORING_PARAMETERS",
+    "authoring_script": "tools/authoring/author_probes.py",
+    "parameter_file": "tools/authoring/params/transforms/shear-001.json",
+    "parameter_file_sha256": "950ce093e6a9fb64248e175fb86d150654c20d774d8b69ccf7829787235c7052",
+    "parameters": {
+      "id": "shear-001",
+      "group": "transforms",
+      "kind": "transform",
+      "description": "A line under the shear x += 0.5y. A DWG INSERT carries scale, rotation and translation but no shear, so I expect the path to classify this as unrepresentable and quarantine it, not to emit a silently different curve.",
+      "base": {
+        "class": "line",
+        "start": [
+          "0.5",
+          "0.25",
+          "0"
+        ],
+        "end": [
+          "3.75",
+          "2.5",
+          "0"
+        ]
+      },
+      "ops": [
+        {
+          "op": "matrix",
+          "m": [
+            "1",
+            "0.5",
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0",
+            "0",
+            "1"
+          ],
+          "classification": "SHEAR"
+        }
+      ],
+      "expect": "reject",
+      "rejection": {
+        "classification": "UNREPRESENTABLE_TRANSFORM",
+        "disposition": "QUARANTINE"
+      }
+    }
+  },
+  "entities": [
+    {
+      "id": "shear-001",
+      "class": "line",
+      "geometry": {
+        "start": [
+          {
+            "decimal": "0.5",
+            "f64_hex": "0x3fe0000000000000"
+          },
+          {
+            "decimal": "0.25",
+            "f64_hex": "0x3fd0000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          }
+        ],
+        "end": [
+          {
+            "decimal": "3.75",
+            "f64_hex": "0x400e000000000000"
+          },
+          {
+            "decimal": "2.5",
+            "f64_hex": "0x4004000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          }
+        ]
+      },
+      "parameter_domain": {
+        "start": {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        "end": {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        }
+      },
+      "closure": {
+        "closed_by_endpoint": false,
+        "closed_by_knots": false,
+        "periodic": false
+      },
+      "structure": "INSTANCE_PLUS_TRANSFORM",
+      "transform": {
+        "convention": "ROW_MAJOR_COLUMN_VECTOR_PARENT_LEFT",
+        "matrix": [
+          {
+            "decimal": "1.0",
+            "f64_hex": "0x3ff0000000000000"
+          },
+          {
+            "decimal": "0.5",
+            "f64_hex": "0x3fe0000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          },
+          {
+            "decimal": "1.0",
+            "f64_hex": "0x3ff0000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          },
+          {
+            "decimal": "1.0",
+            "f64_hex": "0x3ff0000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          },
+          {
+            "decimal": "1.0",
+            "f64_hex": "0x3ff0000000000000"
+          }
+        ],
+        "determinant": {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        "classification": "SHEAR"
+      },
+      "rejection": {
+        "classification": "UNREPRESENTABLE_TRANSFORM",
+        "disposition": "QUARANTINE"
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a1",
+      "kind": "STRUCTURAL",
+      "entity": "shear-001",
+      "claim": "TRANSFORM_PRESERVED",
+      "statement": "The source keeps an instance plus the stated transform; the matrix and determinant survive as written."
+    },
+    {
+      "id": "a2",
+      "kind": "STRUCTURAL",
+      "entity": "shear-001",
+      "claim": "REJECTED",
+      "statement": "The pipeline must report UNREPRESENTABLE_TRANSFORM (QUARANTINE) and emit no curve for this entity."
+    }
+  ]
+}

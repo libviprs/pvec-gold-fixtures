@@ -1,0 +1,1 @@
+{"id":"elliptical-arc-001","kind":"elliptical_arc","description":"The same near-circular, rotated ellipse as ellipse-001, cut to an arc from 0.3 rad (eccentric anomaly) with a sweep of 2.2 rad.","center":["2","1","0"],"major_axis":["0.96","0.28","0"],"semi_major":"3","semi_minor":"2.94","start_angle":"0.3","sweep_angle":"2.2"}

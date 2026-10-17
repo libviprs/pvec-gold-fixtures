@@ -154,6 +154,20 @@ def _check_curve(c, where, errs):
                 errs.append("%s: weights_all_unit does not match the weights" % where)
 
 
+def required_exclusions(ent):
+    """Parameters (f64) at which a fixture's own geometry has a C0 join, so derivatives must not be
+    compared there. Derived from the stated knots and vertices only, no tolerance involved."""
+    g, cls = ent["geometry"], ent["class"]
+    if cls in ("bspline", "nurbs"):
+        p = g["degree"]
+        ks = g["knots"]
+        span = ks if ent["closure"]["periodic"] else ks[1:-1]
+        return [canon.check_scalar(k["value"]) for k in span if k["multiplicity"] >= p]
+    if cls == "polyline":
+        return [float(i) for i in range(1, len(g["vertices"]) - 1)]
+    return []
+
+
 def semantic_check(doc):
     errs = []
     scalars = []
@@ -220,6 +234,15 @@ def semantic_check(doc):
             errs.append("%s: a reflection must record orientation" % w)
         if top_cls == "NON_UNIFORM_SCALE" and ent["class"] == "circle" and ent.get("world", {}).get("class") != "ellipse":
             errs.append("%s: a circle under non-uniform scale must be expected as an ellipse" % w)
+    listed = set()
+    for x in doc.get("derivative_exclusions", []):
+        if x["entity"] not in ids:
+            errs.append("derivative_exclusions names unknown entity %s" % x["entity"])
+        listed.add((x["entity"], x["parameter"]["f64_hex"]))
+    for ent in doc["entities"]:
+        for p in required_exclusions(ent):
+            if (ent["id"], canon.f64_to_hex(p)) not in listed:
+                errs.append("entity %s has a C0 join at parameter %r that derivative_exclusions does not list" % (ent["id"], p))
     seen = set()
     for a in doc["assertions"]:
         if a["id"] in seen:

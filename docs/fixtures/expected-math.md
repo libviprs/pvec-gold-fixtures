@@ -128,3 +128,23 @@ writes it from the parameters at the top of that script, and the unit tests chec
 The field names in `geometry` (`degree`, `control_points`, `knots` with multiplicities, `weights`)
 and the scalar shape are the same ones the evaluator in O1.3 emits in `*.verification.json`, so the
 two can be compared field for field.
+
+## Orientation and derivative exclusions
+
+`orientation` records `parameter_direction` (`START_TO_END` means the source start maps to the world
+start) and `sense_about_normal`, which is measured about the world image of the source normal, so a
+counter-clockwise arc under a reflection is `CW`. It is required whenever the determinant is
+negative.
+
+`derivative_exclusions` lists, per entity, the parameters where the fixture's own geometry has a C0
+join and derivatives must not be compared: interior knots of multiplicity at least the degree, and
+the interior vertices of a polyline. The validator derives the required list from the stated knots
+and vertices and rejects a record that leaves one out, so the exclusion is enumerated per fixture
+and never applied globally.
+
+## Authoring the probes
+
+`tools/authoring/params/**/*.json` hold the hand-chosen parameters, and
+`python3 tools/authoring/author_probes.py` derives every `expected.math.json` and README under
+`fixtures/known-truth/` from them (`--check` fails if the tree on disk is stale). Derived values
+such as sines, arc centres and ellipse axes are computed to 60 digits and rounded once to f64.

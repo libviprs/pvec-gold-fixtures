@@ -34,7 +34,20 @@
       }
     },
     "entities": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/entity" } },
-    "assertions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/assertion" } }
+    "assertions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/assertion" } },
+    "derivative_exclusions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["entity", "parameter", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "entity": { "type": "string" },
+          "parameter": { "$ref": "#/$defs/scalar" },
+          "reason": { "enum": ["C0_KNOT", "POLYLINE_VERTEX", "CURVE_JOIN"] }
+        }
+      }
+    }
   },
   "$defs": {
     "scalar": {
