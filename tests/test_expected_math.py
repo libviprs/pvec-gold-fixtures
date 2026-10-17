@@ -62,7 +62,7 @@ class Canon(unittest.TestCase):
         canon.check_scalar(s)
 
     def test_round_trip_many(self):
-        for x in [0.1, 1e7 + 1e-4, 1e-5, 5e-324, 1.7976931348623157e308, -2.5]:
+        for x in [float(t) for t in ("0.1", "10000000.0001", "0.00001", "5e-324", "1.7976931348623157e308", "-2.5")]:
             canon.check_scalar(canon.scalar(x))
 
     def test_non_finite_rejected(self):
