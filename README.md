@@ -11,7 +11,10 @@ mathematical intent.
 
 ## Status
 
-**Specification stage. There is no pipeline in this repository yet.**
+**Phase 1 is in progress.** The record format, the numeric policy adoption, the independent STEP
+evaluator and the expected side of the probes are done and tested. What waits on the proprietary
+converters (their images, the probe DWGs, the probe qualification) is listed in
+[docs/phase1-converter-qualification.md](docs/phase1-converter-qualification.md).
 
 Three phases and 27 issues under [#1](https://github.com/libviprs/pvec-gold-fixtures/issues/1).
 Phase 1 proves the methodology — including validating the STEP validator itself against hand-known
@@ -19,12 +22,10 @@ primitives — before any mass fixture generation.
 
 ## Evidence classes
 
-| Class | What it proves |
-|---|---|
-| `KNOWN_TRUTH_EXACT` | synthetic fixture with independently specified expected mathematics; the only class that proves source representation exactness |
-| `DUAL_ORACLE_EQUIVALENT` | both converters agree geometrically, but the original source parameters are not independently known |
-| `REAL_WORLD_DIFFERENTIAL` | real production-style DWG, for regression and provider-difference detection |
-| `QUARANTINED` | unresolved disagreement, unsupported entity, approximation, malformed fixture, or a licensing/provenance problem |
+The four classes (`KNOWN_TRUTH_EXACT`, `DUAL_ORACLE_EQUIVALENT`, `REAL_WORLD_DIFFERENTIAL`,
+`QUARANTINED`) are defined once, in [ADR 0001](docs/adr/0001-evidence-classes.md). Everything else
+refers to them by name.
+
 
 Known-truth numbers avoid ambiguous rounded JSON. A documented canonical representation carries the
 intended `f64`, for example `{"decimal": "0.70710678118654757", "f64_hex": "0x3fe6a09e667f3bcd"}`.

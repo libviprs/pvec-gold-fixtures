@@ -148,3 +148,12 @@ and never applied globally.
 `python3 tools/authoring/author_probes.py` derives every `expected.math.json` and README under
 `fixtures/known-truth/` from them (`--check` fails if the tree on disk is stale). Derived values
 such as sines, arc centres and ellipse axes are computed to 60 digits and rounded once to f64.
+
+### Periodic splines, precisely
+
+For a periodic spline the stored poles are the `n` unique ones and the knots are the `n + 1` values of one
+period (the last equals the first plus the period). Pole `i` is supported on the extended knots
+`t[i-p] .. t[i+1]`, with `t[j + n] = t[j] + period`, so poles `0 .. p` are the active ones at the start of
+the domain. That is the convention `runner/curves.py` evaluates. STEP has no periodic form, so a
+converter has to write a clamped spline with wrapped poles, which is a structural difference the
+qualification reports, not a failure to represent the curve.

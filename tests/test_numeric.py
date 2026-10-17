@@ -114,11 +114,28 @@ class Rules(unittest.TestCase):
         self.assertEqual(numeric.to_canonical(F("0.3"), 1), F("0.3"))
         self.assertEqual(numeric.to_canonical(F("25.4"), F("0.001")), float(numeric.Fraction(F("25.4")) * numeric.Fraction(F("0.001"))))
 
-    def test_adaptive_refines_until_stable_by_the_policy(self):
-        dev, at, lvl = self.p.adaptive_max_deviation(lambda t: math.sin(t), lambda t: math.sin(t) + 0.5 * t * (1 - t), 0.0, 1.0, lambda a, b: abs(a - b), 1.0)
-        self.assertAlmostEqual(dev, 0.125, places=9)
-        self.assertAlmostEqual(at, 0.5, places=2)
+    def test_adaptive_finds_the_maximum_at_an_end_and_stops_when_stable(self):
+        dev, at, lvl = self.p.adaptive_max_deviation(lambda t: 0.0, lambda t: t * t, 0.0, 1.0, lambda a, b: abs(a - b), 1.0)
+        self.assertEqual((dev, at), (1.0, 1.0))
         self.assertGreaterEqual(lvl, 2)
+
+    def test_adaptive_does_not_alias_with_a_grid_aligned_vertex_set(self):
+        # a 32-gon against its circle: a plain k/8 grid lands on vertices at every level and sees nothing
+        n = 32
+        verts = [(math.cos(2 * math.pi * i / n), math.sin(2 * math.pi * i / n)) for i in range(n + 1)]
+
+        def poly(u):
+            x = u * n
+            i = min(int(x), n - 1)
+            a, b = verts[i], verts[i + 1]
+            return (a[0] + (x - i) * (b[0] - a[0]), a[1] + (x - i) * (b[1] - a[1]))
+        circle = lambda u: (math.cos(2 * math.pi * u), math.sin(2 * math.pi * u))
+        try:
+            dev, _, _ = self.p.adaptive_max_deviation(circle, poly, 0.0, 1.0, lambda a, b: math.hypot(a[0] - b[0], a[1] - b[1]), 1.0)
+        except numeric.UnstableEstimate as e:
+            dev = e.best
+        self.assertGreater(dev, 0.0)
+        self.assertLessEqual(dev, 1 - math.cos(math.pi / n) + 1.0 / 1000)
 
     def test_adaptive_gives_up_loudly(self):
         n = [0]
