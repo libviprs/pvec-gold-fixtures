@@ -1,0 +1,169 @@
+{
+  "schema_version": "pvec-gold/validator-selftest/1",
+  "step_file": "line.step",
+  "hand_derivation": "LINE through (1,2,3) with unit direction (0.6, 0.8, 0) (0.36 + 0.64 = 1), trimmed to parameters 0..5. P(t) = (1 + 0.6t, 2 + 0.8t, 3), so the ends are (1,2,3) and (4,6,3), the midpoint t=2.5 is (2.5,4,3), the tangent is the direction itself, and a line has curvature 0.",
+  "entity": {
+    "class": "line",
+    "geometry": {
+      "start": [
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "2.0",
+          "f64_hex": "0x4000000000000000"
+        },
+        {
+          "decimal": "3.0",
+          "f64_hex": "0x4008000000000000"
+        }
+      ],
+      "end": [
+        {
+          "decimal": "4.0",
+          "f64_hex": "0x4010000000000000"
+        },
+        {
+          "decimal": "6.0",
+          "f64_hex": "0x4018000000000000"
+        },
+        {
+          "decimal": "3.0",
+          "f64_hex": "0x4008000000000000"
+        }
+      ]
+    },
+    "parameter_domain": {
+      "start": {
+        "decimal": "0.0",
+        "f64_hex": "0x0000000000000000"
+      },
+      "end": {
+        "decimal": "5.0",
+        "f64_hex": "0x4014000000000000"
+      }
+    },
+    "closure": {
+      "closed_by_endpoint": false,
+      "closed_by_knots": false,
+      "periodic": false
+    }
+  },
+  "checkpoints": [
+    {
+      "parameter": {
+        "decimal": "0.0",
+        "f64_hex": "0x0000000000000000"
+      },
+      "point": [
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "2.0",
+          "f64_hex": "0x4000000000000000"
+        },
+        {
+          "decimal": "3.0",
+          "f64_hex": "0x4008000000000000"
+        }
+      ],
+      "tangent": [
+        {
+          "decimal": "0.6",
+          "f64_hex": "0x3fe3333333333333"
+        },
+        {
+          "decimal": "0.8",
+          "f64_hex": "0x3fe999999999999a"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "curvature": {
+        "decimal": "0.0",
+        "f64_hex": "0x0000000000000000"
+      }
+    },
+    {
+      "parameter": {
+        "decimal": "2.5",
+        "f64_hex": "0x4004000000000000"
+      },
+      "point": [
+        {
+          "decimal": "2.5",
+          "f64_hex": "0x4004000000000000"
+        },
+        {
+          "decimal": "4.0",
+          "f64_hex": "0x4010000000000000"
+        },
+        {
+          "decimal": "3.0",
+          "f64_hex": "0x4008000000000000"
+        }
+      ],
+      "tangent": [
+        {
+          "decimal": "0.6",
+          "f64_hex": "0x3fe3333333333333"
+        },
+        {
+          "decimal": "0.8",
+          "f64_hex": "0x3fe999999999999a"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "curvature": {
+        "decimal": "0.0",
+        "f64_hex": "0x0000000000000000"
+      }
+    },
+    {
+      "parameter": {
+        "decimal": "5.0",
+        "f64_hex": "0x4014000000000000"
+      },
+      "point": [
+        {
+          "decimal": "4.0",
+          "f64_hex": "0x4010000000000000"
+        },
+        {
+          "decimal": "6.0",
+          "f64_hex": "0x4018000000000000"
+        },
+        {
+          "decimal": "3.0",
+          "f64_hex": "0x4008000000000000"
+        }
+      ],
+      "tangent": [
+        {
+          "decimal": "0.6",
+          "f64_hex": "0x3fe3333333333333"
+        },
+        {
+          "decimal": "0.8",
+          "f64_hex": "0x3fe999999999999a"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "curvature": {
+        "decimal": "0.0",
+        "f64_hex": "0x0000000000000000"
+      }
+    }
+  ]
+}
