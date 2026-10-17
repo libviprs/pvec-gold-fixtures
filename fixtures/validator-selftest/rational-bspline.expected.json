@@ -1,0 +1,242 @@
+{
+  "schema_version": "pvec-gold/validator-selftest/1",
+  "step_file": "rational-bspline.step",
+  "hand_derivation": "The worked example of docs/fixtures/expected-math.md: quadratic, control points (0,0) (1,2) (3,2.5) (4,0), weights 1, 0.5, 2, 1, knots 0 (x3), 0.5, 1 (x3). Homogeneous points (w x, w y, w): P0w=(0,0,1), P1w=(0.5,1,0.5), P2w=(6,5,2), P3w=(4,0,1). On [0,0.5] the Bezier points are B0=P0w, B1=P1w, B2=(P1w+P2w)/2=(3.25,3,1.25). At the knot u=0.5 the point is B2, so (3.25/1.25, 3/1.25) = (2.6, 2.4). At u=0.25 it is (B0 + 2B1 + B2)/4 = (1.0625, 1.25, 0.8125), i.e. (17/13, 20/13). With all weights 1 the knot point would be (2, 2.25), so a renormalised weight-1 form is distinguishable.",
+  "entity": {
+    "class": "nurbs",
+    "geometry": {
+      "degree": 2,
+      "control_points": [
+        [
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          }
+        ],
+        [
+          {
+            "decimal": "1.0",
+            "f64_hex": "0x3ff0000000000000"
+          },
+          {
+            "decimal": "2.0",
+            "f64_hex": "0x4000000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          }
+        ],
+        [
+          {
+            "decimal": "3.0",
+            "f64_hex": "0x4008000000000000"
+          },
+          {
+            "decimal": "2.5",
+            "f64_hex": "0x4004000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          }
+        ],
+        [
+          {
+            "decimal": "4.0",
+            "f64_hex": "0x4010000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          }
+        ]
+      ],
+      "knots": [
+        {
+          "value": {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          },
+          "multiplicity": 3
+        },
+        {
+          "value": {
+            "decimal": "0.5",
+            "f64_hex": "0x3fe0000000000000"
+          },
+          "multiplicity": 1
+        },
+        {
+          "value": {
+            "decimal": "1.0",
+            "f64_hex": "0x3ff0000000000000"
+          },
+          "multiplicity": 3
+        }
+      ],
+      "weights": [
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "0.5",
+          "f64_hex": "0x3fe0000000000000"
+        },
+        {
+          "decimal": "2.0",
+          "f64_hex": "0x4000000000000000"
+        },
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        }
+      ],
+      "weights_all_unit": false
+    },
+    "parameter_domain": {
+      "start": {
+        "decimal": "0.0",
+        "f64_hex": "0x0000000000000000"
+      },
+      "end": {
+        "decimal": "1.0",
+        "f64_hex": "0x3ff0000000000000"
+      }
+    },
+    "closure": {
+      "closed_by_endpoint": false,
+      "closed_by_knots": false,
+      "periodic": false
+    }
+  },
+  "checkpoints": [
+    {
+      "parameter": {
+        "decimal": "0.0",
+        "f64_hex": "0x0000000000000000"
+      },
+      "point": [
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "tangent": [
+        {
+          "decimal": "0.4472135954999579",
+          "f64_hex": "0x3fdc9f25c5bfedd9"
+        },
+        {
+          "decimal": "0.8944271909999159",
+          "f64_hex": "0x3fec9f25c5bfedd9"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "curvature": null
+    },
+    {
+      "parameter": {
+        "decimal": "0.25",
+        "f64_hex": "0x3fd0000000000000"
+      },
+      "point": [
+        {
+          "decimal": "1.3076923076923077",
+          "f64_hex": "0x3ff4ec4ec4ec4ec5"
+        },
+        {
+          "decimal": "1.5384615384615385",
+          "f64_hex": "0x3ff89d89d89d89d9"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "tangent": null,
+      "curvature": null
+    },
+    {
+      "parameter": {
+        "decimal": "0.5",
+        "f64_hex": "0x3fe0000000000000"
+      },
+      "point": [
+        {
+          "decimal": "2.6",
+          "f64_hex": "0x4004cccccccccccd"
+        },
+        {
+          "decimal": "2.4",
+          "f64_hex": "0x4003333333333333"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "tangent": null,
+      "curvature": null
+    },
+    {
+      "parameter": {
+        "decimal": "1.0",
+        "f64_hex": "0x3ff0000000000000"
+      },
+      "point": [
+        {
+          "decimal": "4.0",
+          "f64_hex": "0x4010000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "tangent": [
+        {
+          "decimal": "0.3713906763541037",
+          "f64_hex": "0x3fd7c4dd663ebb88"
+        },
+        {
+          "decimal": "-0.9284766908852594",
+          "f64_hex": "0xbfedb614bfce6a6b"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "curvature": null
+    }
+  ]
+}

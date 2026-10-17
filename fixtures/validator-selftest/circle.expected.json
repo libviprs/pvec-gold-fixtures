@@ -1,0 +1,225 @@
+{
+  "schema_version": "pvec-gold/validator-selftest/1",
+  "step_file": "circle.step",
+  "hand_derivation": "CIRCLE radius 2 centred (1,2,3) in the plane z=3, x axis (1,0,0): P(t) = (1 + 2cos t, 2 + 2sin t, 3), tangent (-sin t, cos t, 0), curvature 1/r = 0.5. At t = 0, pi/2, pi, 3pi/2 the cos/sin values are 1,0,-1,0 and 0,1,0,-1.",
+  "entity": {
+    "class": "circle",
+    "geometry": {
+      "center": [
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "2.0",
+          "f64_hex": "0x4000000000000000"
+        },
+        {
+          "decimal": "3.0",
+          "f64_hex": "0x4008000000000000"
+        }
+      ],
+      "normal": [
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        }
+      ],
+      "x_axis": [
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "radius": {
+        "decimal": "2.0",
+        "f64_hex": "0x4000000000000000"
+      }
+    },
+    "parameter_domain": {
+      "start": {
+        "decimal": "0.0",
+        "f64_hex": "0x0000000000000000"
+      },
+      "end": {
+        "decimal": "6.283185307179586",
+        "f64_hex": "0x401921fb54442d18"
+      }
+    },
+    "closure": {
+      "closed_by_endpoint": true,
+      "closed_by_knots": false,
+      "periodic": true
+    }
+  },
+  "checkpoints": [
+    {
+      "parameter": {
+        "decimal": "0.0",
+        "f64_hex": "0x0000000000000000"
+      },
+      "point": [
+        {
+          "decimal": "3.0",
+          "f64_hex": "0x4008000000000000"
+        },
+        {
+          "decimal": "2.0",
+          "f64_hex": "0x4000000000000000"
+        },
+        {
+          "decimal": "3.0",
+          "f64_hex": "0x4008000000000000"
+        }
+      ],
+      "tangent": [
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "curvature": {
+        "decimal": "0.5",
+        "f64_hex": "0x3fe0000000000000"
+      }
+    },
+    {
+      "parameter": {
+        "decimal": "1.5707963267948966",
+        "f64_hex": "0x3ff921fb54442d18"
+      },
+      "point": [
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "4.0",
+          "f64_hex": "0x4010000000000000"
+        },
+        {
+          "decimal": "3.0",
+          "f64_hex": "0x4008000000000000"
+        }
+      ],
+      "tangent": [
+        {
+          "decimal": "-1.0",
+          "f64_hex": "0xbff0000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "curvature": {
+        "decimal": "0.5",
+        "f64_hex": "0x3fe0000000000000"
+      }
+    },
+    {
+      "parameter": {
+        "decimal": "3.141592653589793",
+        "f64_hex": "0x400921fb54442d18"
+      },
+      "point": [
+        {
+          "decimal": "-1.0",
+          "f64_hex": "0xbff0000000000000"
+        },
+        {
+          "decimal": "2.0",
+          "f64_hex": "0x4000000000000000"
+        },
+        {
+          "decimal": "3.0",
+          "f64_hex": "0x4008000000000000"
+        }
+      ],
+      "tangent": [
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "-1.0",
+          "f64_hex": "0xbff0000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "curvature": {
+        "decimal": "0.5",
+        "f64_hex": "0x3fe0000000000000"
+      }
+    },
+    {
+      "parameter": {
+        "decimal": "4.71238898038469",
+        "f64_hex": "0x4012d97c7f3321d2"
+      },
+      "point": [
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "3.0",
+          "f64_hex": "0x4008000000000000"
+        }
+      ],
+      "tangent": [
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "curvature": {
+        "decimal": "0.5",
+        "f64_hex": "0x3fe0000000000000"
+      }
+    }
+  ]
+}

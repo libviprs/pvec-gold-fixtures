@@ -1,0 +1,215 @@
+{
+  "schema_version": "pvec-gold/validator-selftest/1",
+  "step_file": "bspline.step",
+  "hand_derivation": "Cubic B-spline, 5 control points (0,0) (1,2) (3,2) (4,0) (6,1), knots 0 (x4), 0.5 (x1), 1 (x4); 4+1+4 = 9 = 5+3+1. The ends interpolate the end control points and the end tangents point along P1-P0 = (1,2) and P4-P3 = (2,1). At the simple interior knot u=0.5, de Boor with alphas 1/2, 1/2, 0 gives 1/4 P1 + 1/2 P2 + 1/4 P3 = (2.75, 1.5).",
+  "entity": {
+    "class": "bspline",
+    "geometry": {
+      "degree": 3,
+      "control_points": [
+        [
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          }
+        ],
+        [
+          {
+            "decimal": "1.0",
+            "f64_hex": "0x3ff0000000000000"
+          },
+          {
+            "decimal": "2.0",
+            "f64_hex": "0x4000000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          }
+        ],
+        [
+          {
+            "decimal": "3.0",
+            "f64_hex": "0x4008000000000000"
+          },
+          {
+            "decimal": "2.0",
+            "f64_hex": "0x4000000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          }
+        ],
+        [
+          {
+            "decimal": "4.0",
+            "f64_hex": "0x4010000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          }
+        ],
+        [
+          {
+            "decimal": "6.0",
+            "f64_hex": "0x4018000000000000"
+          },
+          {
+            "decimal": "1.0",
+            "f64_hex": "0x3ff0000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          }
+        ]
+      ],
+      "knots": [
+        {
+          "value": {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          },
+          "multiplicity": 4
+        },
+        {
+          "value": {
+            "decimal": "0.5",
+            "f64_hex": "0x3fe0000000000000"
+          },
+          "multiplicity": 1
+        },
+        {
+          "value": {
+            "decimal": "1.0",
+            "f64_hex": "0x3ff0000000000000"
+          },
+          "multiplicity": 4
+        }
+      ]
+    },
+    "parameter_domain": {
+      "start": {
+        "decimal": "0.0",
+        "f64_hex": "0x0000000000000000"
+      },
+      "end": {
+        "decimal": "1.0",
+        "f64_hex": "0x3ff0000000000000"
+      }
+    },
+    "closure": {
+      "closed_by_endpoint": false,
+      "closed_by_knots": false,
+      "periodic": false
+    }
+  },
+  "checkpoints": [
+    {
+      "parameter": {
+        "decimal": "0.0",
+        "f64_hex": "0x0000000000000000"
+      },
+      "point": [
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "tangent": [
+        {
+          "decimal": "0.4472135954999579",
+          "f64_hex": "0x3fdc9f25c5bfedd9"
+        },
+        {
+          "decimal": "0.8944271909999159",
+          "f64_hex": "0x3fec9f25c5bfedd9"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "curvature": null
+    },
+    {
+      "parameter": {
+        "decimal": "0.5",
+        "f64_hex": "0x3fe0000000000000"
+      },
+      "point": [
+        {
+          "decimal": "2.75",
+          "f64_hex": "0x4006000000000000"
+        },
+        {
+          "decimal": "1.5",
+          "f64_hex": "0x3ff8000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "tangent": null,
+      "curvature": null
+    },
+    {
+      "parameter": {
+        "decimal": "1.0",
+        "f64_hex": "0x3ff0000000000000"
+      },
+      "point": [
+        {
+          "decimal": "6.0",
+          "f64_hex": "0x4018000000000000"
+        },
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "tangent": [
+        {
+          "decimal": "0.8944271909999159",
+          "f64_hex": "0x3fec9f25c5bfedd9"
+        },
+        {
+          "decimal": "0.4472135954999579",
+          "f64_hex": "0x3fdc9f25c5bfedd9"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "curvature": null
+    }
+  ]
+}

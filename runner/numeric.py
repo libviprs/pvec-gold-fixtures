@@ -141,3 +141,13 @@ class DerivativeExclusions:
 def c0_parameters(knots, degree):
     """Interior knot values at which a spline is only C0 (multiplicity >= degree). knots: [(value, multiplicity)]."""
     return [v for (v, m) in knots[1:-1] if m >= degree]
+
+
+def _scale_for(self, values):
+    """The scale the relative term multiplies, as the policy names it."""
+    if self.scale_term == "max_abs_coordinate_of_fixture":
+        return max((abs(v) for v in values), default=0.0)
+    raise PolicyError("scale term %r is not implemented here" % (self.scale_term,))
+
+
+Policy.scale_for = _scale_for

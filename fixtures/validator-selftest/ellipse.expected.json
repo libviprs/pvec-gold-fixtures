@@ -1,0 +1,229 @@
+{
+  "schema_version": "pvec-gold/validator-selftest/1",
+  "step_file": "ellipse.step",
+  "hand_derivation": "ELLIPSE semi-major 4 along x, semi-minor 2, centred (1,2,3): P(t) = (1 + 4cos t, 2 + 2sin t, 3). Curvature is ab / (a^2 sin^2 t + b^2 cos^2 t)^(3/2): at t=0 it is a/b^2 = 4/4 = 1, at t=pi/2 it is b/a^2 = 2/16 = 1/8.",
+  "entity": {
+    "class": "ellipse",
+    "geometry": {
+      "center": [
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "2.0",
+          "f64_hex": "0x4000000000000000"
+        },
+        {
+          "decimal": "3.0",
+          "f64_hex": "0x4008000000000000"
+        }
+      ],
+      "normal": [
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        }
+      ],
+      "major_axis": [
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "semi_major": {
+        "decimal": "4.0",
+        "f64_hex": "0x4010000000000000"
+      },
+      "semi_minor": {
+        "decimal": "2.0",
+        "f64_hex": "0x4000000000000000"
+      }
+    },
+    "parameter_domain": {
+      "start": {
+        "decimal": "0.0",
+        "f64_hex": "0x0000000000000000"
+      },
+      "end": {
+        "decimal": "6.283185307179586",
+        "f64_hex": "0x401921fb54442d18"
+      }
+    },
+    "closure": {
+      "closed_by_endpoint": true,
+      "closed_by_knots": false,
+      "periodic": true
+    }
+  },
+  "checkpoints": [
+    {
+      "parameter": {
+        "decimal": "0.0",
+        "f64_hex": "0x0000000000000000"
+      },
+      "point": [
+        {
+          "decimal": "5.0",
+          "f64_hex": "0x4014000000000000"
+        },
+        {
+          "decimal": "2.0",
+          "f64_hex": "0x4000000000000000"
+        },
+        {
+          "decimal": "3.0",
+          "f64_hex": "0x4008000000000000"
+        }
+      ],
+      "tangent": [
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "curvature": {
+        "decimal": "1.0",
+        "f64_hex": "0x3ff0000000000000"
+      }
+    },
+    {
+      "parameter": {
+        "decimal": "1.5707963267948966",
+        "f64_hex": "0x3ff921fb54442d18"
+      },
+      "point": [
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "4.0",
+          "f64_hex": "0x4010000000000000"
+        },
+        {
+          "decimal": "3.0",
+          "f64_hex": "0x4008000000000000"
+        }
+      ],
+      "tangent": [
+        {
+          "decimal": "-1.0",
+          "f64_hex": "0xbff0000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "curvature": {
+        "decimal": "0.125",
+        "f64_hex": "0x3fc0000000000000"
+      }
+    },
+    {
+      "parameter": {
+        "decimal": "3.141592653589793",
+        "f64_hex": "0x400921fb54442d18"
+      },
+      "point": [
+        {
+          "decimal": "-3.0",
+          "f64_hex": "0xc008000000000000"
+        },
+        {
+          "decimal": "2.0",
+          "f64_hex": "0x4000000000000000"
+        },
+        {
+          "decimal": "3.0",
+          "f64_hex": "0x4008000000000000"
+        }
+      ],
+      "tangent": [
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "-1.0",
+          "f64_hex": "0xbff0000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "curvature": {
+        "decimal": "1.0",
+        "f64_hex": "0x3ff0000000000000"
+      }
+    },
+    {
+      "parameter": {
+        "decimal": "4.71238898038469",
+        "f64_hex": "0x4012d97c7f3321d2"
+      },
+      "point": [
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "3.0",
+          "f64_hex": "0x4008000000000000"
+        }
+      ],
+      "tangent": [
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "curvature": {
+        "decimal": "0.125",
+        "f64_hex": "0x3fc0000000000000"
+      }
+    }
+  ]
+}

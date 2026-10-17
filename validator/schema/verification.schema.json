@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/libviprs/pvec-gold-fixtures/validator/schema/verification.schema.json",
+  "title": "*.verification.json",
+  "description": "What step_eval reports for one STEP file. Curve geometry, closure, domain, transform and scalar shapes are the definitions from schema/expected.math.schema.json, so an evaluator record and an expected record share their field names. The evaluator states what it read and compares nothing.",
+  "type": "object",
+  "required": ["schema_version", "tool", "numeric_policy_version", "units", "entities"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "pvec-gold/verification/1" },
+    "tool": {
+      "type": "object",
+      "required": ["name", "evaluator_version", "occt_version"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "const": "step_eval" },
+        "evaluator_version": { "type": "string", "minLength": 1 },
+        "occt_version": { "type": "string", "minLength": 1 }
+      }
+    },
+    "numeric_policy_version": { "type": "string", "minLength": 1 },
+    "units": {
+      "type": "object",
+      "required": ["name", "canonical", "scale_to_canonical", "source"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "canonical": { "const": "metre" },
+        "scale_to_canonical": { "$ref": "https://github.com/libviprs/pvec-gold-fixtures/schema/expected.math.schema.json#/$defs/scalar" },
+        "source": { "enum": ["file", "default"] }
+      }
+    },
+    "entities": { "type": "array", "items": { "$ref": "#/$defs/entity" } }
+  },
+  "$defs": {
+    "sample": {
+      "type": "object",
+      "required": ["parameter", "point", "tangent", "curvature", "derivative_exclusion"],
+      "additionalProperties": false,
+      "properties": {
+        "parameter": { "$ref": "https://github.com/libviprs/pvec-gold-fixtures/schema/expected.math.schema.json#/$defs/scalar" },
+        "point": { "$ref": "https://github.com/libviprs/pvec-gold-fixtures/schema/expected.math.schema.json#/$defs/point3" },
+        "tangent": { "oneOf": [{ "type": "null" }, { "$ref": "https://github.com/libviprs/pvec-gold-fixtures/schema/expected.math.schema.json#/$defs/point3" }] },
+        "curvature": { "oneOf": [{ "type": "null" }, { "$ref": "https://github.com/libviprs/pvec-gold-fixtures/schema/expected.math.schema.json#/$defs/scalar" }] },
+        "derivative_exclusion": { "enum": [null, "C0_KNOT", "C1_KNOT", "ZERO_SPEED"] }
+      }
+    },
+    "entity": {
+      "oneOf": [
+        {
+          "allOf": [
+            { "$ref": "https://github.com/libviprs/pvec-gold-fixtures/schema/expected.math.schema.json#/$defs/curve_core" },
+            {
+              "required": ["id", "structure", "transform", "samples"],
+              "properties": {
+                "id": { "type": "string" },
+                "structure": { "const": "CURVE_ONLY" },
+                "transform": { "$ref": "https://github.com/libviprs/pvec-gold-fixtures/schema/expected.math.schema.json#/$defs/transform" },
+                "samples": { "type": "array", "items": { "$ref": "#/$defs/sample" } },
+                "derivative_exclusions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["parameter", "reason"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "parameter": { "$ref": "https://github.com/libviprs/pvec-gold-fixtures/schema/expected.math.schema.json#/$defs/scalar" },
+                      "reason": { "const": "C0_KNOT" }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["id", "class", "structure", "geometry", "parameter_domain", "closure", "transform", "samples"],
+          "additionalProperties": false,
+          "properties": {
+            "id": { "type": "string" },
+            "class": { "const": "unsupported" },
+            "structure": { "const": "CURVE_ONLY" },
+            "geometry": { "type": "object", "required": ["occt_type"], "properties": { "occt_type": { "type": "string" } }, "additionalProperties": false },
+            "parameter_domain": { "$ref": "https://github.com/libviprs/pvec-gold-fixtures/schema/expected.math.schema.json#/$defs/domain" },
+            "closure": { "$ref": "https://github.com/libviprs/pvec-gold-fixtures/schema/expected.math.schema.json#/$defs/closure" },
+            "transform": { "$ref": "https://github.com/libviprs/pvec-gold-fixtures/schema/expected.math.schema.json#/$defs/transform" },
+            "samples": { "type": "array", "items": { "$ref": "#/$defs/sample" } }
+          }
+        }
+      ]
+    }
+  }
+}

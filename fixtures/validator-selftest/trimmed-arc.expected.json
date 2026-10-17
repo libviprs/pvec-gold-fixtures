@@ -1,0 +1,157 @@
+{
+  "schema_version": "pvec-gold/validator-selftest/1",
+  "step_file": "trimmed-arc.step",
+  "hand_derivation": "The circle above (radius 2, centre (1,2,3)) trimmed to parameters 0.5..2, so start angle 0.5 and sweep 1.5. With cos(0.5)=0.87758256189037271611628158, sin(0.5)=0.47942553860420300027328794, cos(2)=-0.41614683654714238699756823, sin(2)=0.90929742682568169539601987: P(0.5) = (2.75516512378074543223, 2.95885107720840600055, 3) and P(2) = (0.16770632690571522600, 3.81859485365136339079, 3); tangent (-sin, cos); curvature 0.5.",
+  "entity": {
+    "class": "circular_arc",
+    "geometry": {
+      "center": [
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "2.0",
+          "f64_hex": "0x4000000000000000"
+        },
+        {
+          "decimal": "3.0",
+          "f64_hex": "0x4008000000000000"
+        }
+      ],
+      "normal": [
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        }
+      ],
+      "x_axis": [
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "radius": {
+        "decimal": "2.0",
+        "f64_hex": "0x4000000000000000"
+      },
+      "start_angle": {
+        "decimal": "0.5",
+        "f64_hex": "0x3fe0000000000000"
+      },
+      "sweep_angle": {
+        "decimal": "1.5",
+        "f64_hex": "0x3ff8000000000000"
+      }
+    },
+    "parameter_domain": {
+      "start": {
+        "decimal": "0.5",
+        "f64_hex": "0x3fe0000000000000"
+      },
+      "end": {
+        "decimal": "2.0",
+        "f64_hex": "0x4000000000000000"
+      }
+    },
+    "closure": {
+      "closed_by_endpoint": false,
+      "closed_by_knots": false,
+      "periodic": false
+    }
+  },
+  "checkpoints": [
+    {
+      "parameter": {
+        "decimal": "0.5",
+        "f64_hex": "0x3fe0000000000000"
+      },
+      "point": [
+        {
+          "decimal": "2.7551651237807455",
+          "f64_hex": "0x40060a94032dbea8"
+        },
+        {
+          "decimal": "2.958851077208406",
+          "f64_hex": "0x4007abba1d12c17c"
+        },
+        {
+          "decimal": "3.0",
+          "f64_hex": "0x4008000000000000"
+        }
+      ],
+      "tangent": [
+        {
+          "decimal": "-0.479425538604203",
+          "f64_hex": "0xbfdeaee8744b05f0"
+        },
+        {
+          "decimal": "0.8775825618903728",
+          "f64_hex": "0x3fec1528065b7d50"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "curvature": {
+        "decimal": "0.5",
+        "f64_hex": "0x3fe0000000000000"
+      }
+    },
+    {
+      "parameter": {
+        "decimal": "2.0",
+        "f64_hex": "0x4000000000000000"
+      },
+      "point": [
+        {
+          "decimal": "0.16770632690571521",
+          "f64_hex": "0x3fc57766a2b237ed"
+        },
+        {
+          "decimal": "3.8185948536513634",
+          "f64_hex": "0x400e8c7b7568da23"
+        },
+        {
+          "decimal": "3.0",
+          "f64_hex": "0x4008000000000000"
+        }
+      ],
+      "tangent": [
+        {
+          "decimal": "-0.9092974268256817",
+          "f64_hex": "0xbfed18f6ead1b446"
+        },
+        {
+          "decimal": "-0.4161468365471424",
+          "f64_hex": "0xbfdaa22657537205"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "curvature": {
+        "decimal": "0.5",
+        "f64_hex": "0x3fe0000000000000"
+      }
+    }
+  ]
+}
