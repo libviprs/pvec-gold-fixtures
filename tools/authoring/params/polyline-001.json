@@ -1,0 +1,1 @@
+{"id":"polyline-001","kind":"polyline","description":"Five vertices that are neither sorted nor symmetric, so vertex identity and order are checkable. All bulges are zero.","vertices":[["0","0","0"],["4","1","0"],["2.5","3.25","0"],["-1.5","2","0"],["0.75","-1.25","0"]]}
