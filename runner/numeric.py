@@ -14,11 +14,20 @@ from pathlib import Path
 from . import canon
 
 POLICY_DIR = Path(__file__).resolve().parent.parent / "policy"
+GRID_SHIFT = 0.6180339887498949   # fractional part of the golden ratio: a sampling offset, not a tolerance
 REQUIRED = ("ABS", "REL", "ULP", "WEIGHT_FLOOR", "AXIS_RATIO_MAX", "MAX_ABS_COORD")
 
 
 class PolicyError(RuntimeError):
     pass
+
+
+class UnstableEstimate(PolicyError):
+    """The adaptive refinement hit its cap. The last estimate is kept so a caller can report it as such."""
+
+    def __init__(self, best, at, levels):
+        super().__init__("deviation estimate did not stabilise within %d refinements" % levels)
+        self.best, self.at, self.levels = best, at, levels
 
 
 class Policy:
@@ -73,15 +82,18 @@ class Policy:
         n, prev = 8, None
         for level in range(1, max_levels + 1):
             best, at = -1.0, lo
-            for i in range(n + 1):
-                t = lo + (hi - lo) * i / n
+            # The ends are always sampled. The interior grid is nested (each level keeps the last one's
+            # points) but shifted by an irrational offset, so it can't land on a curve's own vertices and
+            # knots at every level, which a plain k/2^m grid does for a 32-gon or a dyadic knot vector.
+            ts = [lo, hi] + [lo + (hi - lo) * ((i / n + GRID_SHIFT) % 1.0) for i in range(n)]
+            for t in ts:
                 d = dist(f(t), g(t))
                 if d > best:
                     best, at = d, t
             if prev is not None and self.near(best, prev, scale):
                 return best, at, level
             prev, n = best, n * 2
-        raise PolicyError("deviation estimate did not stabilise within %d refinements" % max_levels)
+        raise UnstableEstimate(best, at, max_levels)
 
 
 def load_policy(path=None, directory=None):
