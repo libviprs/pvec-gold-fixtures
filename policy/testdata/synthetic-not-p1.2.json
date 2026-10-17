@@ -1,8 +1,0 @@
-{
-  "policy_version": "SYNTHETIC-TEST-ONLY",
-  "note": "Invented values so the helpers can be exercised. This is not P1.2 and must never be loaded by default or vendored as the policy.",
-  "units": { "canonical": "metre" },
-  "tolerance": { "absolute": 1e-9, "relative": 1e-12, "ulp": 4 },
-  "scale_term": "max_abs_coordinate_of_fixture",
-  "adaptive": { "stable_relative_change": 0.01, "max_levels": 12 }
-}

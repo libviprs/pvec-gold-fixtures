@@ -16,8 +16,8 @@ case $cmd in
   build)
     case $arch in
       amd64) "$nas" push "$here" "$name" >/dev/null
-             "${ssh[@]}" "cd /work/nas-work/$name && docker build --platform linux/amd64 -f docker/step-validator/Dockerfile -t gold-stepval:amd64 ${BUILD_ARGS:-} ." ;;
-      arm64) docker build --platform linux/arm64 -f "$here/docker/step-validator/Dockerfile" -t gold-stepval:arm64 ${BUILD_ARGS:-} "$here" ;;
+             "${ssh[@]}" "cd /work/nas-work/$name && docker build --platform linux/amd64 -f docker/step-validator/Dockerfile -t gold-stepval:${TAG:-amd64} ${BUILD_ARGS:-} ." ;;
+      arm64) docker build --platform linux/arm64 -f "$here/docker/step-validator/Dockerfile" -t gold-stepval:${TAG:-arm64} ${BUILD_ARGS:-} "$here" ;;
       *) echo "arch?" >&2; exit 2 ;;
     esac ;;
   run)

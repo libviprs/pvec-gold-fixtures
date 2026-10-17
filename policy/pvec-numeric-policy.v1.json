@@ -1,0 +1,28 @@
+{
+  "policy_version": "PVec numeric policy v1",
+  "source": {
+    "repository": "libviprs/pvec",
+    "commit": "86d8869520e1a6f23b7eed6031ff64d7c25e0f33",
+    "document": "docs/NUMERIC_POLICY.md",
+    "document_sha256": "952ce8edc0b6546717e1eae1a3ae5a0e8a0f2e952e8008896d32f629917e0398",
+    "implementation": "crates/pvec-numeric/src/policy.rs",
+    "implementation_blob_sha": "5af42c440e4f4bd09e1647d2188375e5e4dd0587",
+    "note": "pvec publishes these constants in the table of docs/NUMERIC_POLICY.md and in policy.rs, not as a data file. This file transcribes that table, nothing else, and runner/check_vendored_policy.py compares it to a copy of the document. Citation form: PVec numeric policy v1, NP-nn."
+  },
+  "constants": {
+    "ABS": 1e-12,
+    "REL": 1e-10,
+    "ULP": 8,
+    "WEIGHT_FLOOR": 1e-8,
+    "AXIS_RATIO_MAX": 1e6,
+    "MAX_ABS_COORD": 1099511627776
+  },
+  "rules": {
+    "tolerance_triple": "NP-04",
+    "equality": "NP-05",
+    "degenerate_length": "NP-06",
+    "unit_parameter_map": "NP-13",
+    "continuity_and_one_sided_derivatives": "NP-16",
+    "affine_transforms": "NP-19"
+  }
+}

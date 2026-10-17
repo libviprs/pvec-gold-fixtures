@@ -1,28 +1,20 @@
 """Comparison helpers that take every threshold from the vendored policy file.
 
-The numeric policy is defined once, by P1.2 in libviprs/pvec#1. This repository adopts a version
-of it (policy/pvec-numeric-policy.<version>.json, copied verbatim) and decides only which
-comparisons to run. There is no default policy: no file, or a file with no version id, is an error.
-
-Assumed shape of the vendored file, which is the one place to adapt when P1.2's real field names
-land (see docs/numeric-policy.md):
-
-    policy_version      non-empty string, required
-    tolerance.absolute  number
-    tolerance.relative  number
-    tolerance.ulp       integer
-    scale_term          name of the scale the relative term multiplies
-    adaptive.stable_relative_change, adaptive.max_levels
+The numeric policy is defined once, by P1.2 in libviprs/pvec#1 (docs/NUMERIC_POLICY.md in
+libviprs/pvec). This repository adopts a version of it (policy/pvec-numeric-policy.<version>.json)
+and decides only which comparisons to run. There is no default policy: no file, or a file with no
+version id, is an error. Rule numbers (NP-nn) are the policy's own.
 """
 import glob
 import json
 import math
-import struct
-import sys
 from fractions import Fraction
 from pathlib import Path
 
+from . import canon
+
 POLICY_DIR = Path(__file__).resolve().parent.parent / "policy"
+REQUIRED = ("ABS", "REL", "ULP", "WEIGHT_FLOOR", "AXIS_RATIO_MAX", "MAX_ABS_COORD")
 
 
 class PolicyError(RuntimeError):
@@ -33,39 +25,63 @@ class Policy:
     def __init__(self, data, path):
         self.path = str(path)
         self.version = data["policy_version"]
-        t = data["tolerance"]
-        self._abs, self._rel, self._ulp = t["absolute"], t["relative"], int(t["ulp"])
-        self.scale_term = data["scale_term"]
-        a = data["adaptive"]
-        self._stable, self._levels = a["stable_relative_change"], int(a["max_levels"])
+        c = data["constants"]
+        missing = [k for k in REQUIRED if k not in c]
+        if missing:
+            raise KeyError("constants.%s" % missing[0])
+        self.ABS, self.REL, self.ULP = c["ABS"], c["REL"], int(c["ULP"])
+        self.WEIGHT_FLOOR, self.AXIS_RATIO_MAX, self.MAX_ABS_COORD = c["WEIGHT_FLOOR"], c["AXIS_RATIO_MAX"], c["MAX_ABS_COORD"]
 
-    def close(self, a, b, scale):
-        """True when a and b agree under the scale-aware triple: ULP distance, absolute, or relative*scale."""
-        if a == b:
-            return True
-        if ulp_distance(a, b) <= self._ulp:
-            return True
-        d = abs(a - b)
-        return d <= self._abs or d <= self._rel * abs(scale)
+    # NP-04: tol(scale, mag) = max(ABS, REL * |scale|, ULP * ulp(mag)), with ulp the gap to the next f64.
+    def tol(self, scale, mag):
+        return max(self.ABS, self.REL * abs(scale), self.ULP * math.ulp(mag))
 
-    def adaptive_max_deviation(self, f, g, lo, hi, dist):
-        """Max of dist(f(t), g(t)) over [lo, hi], refining the sampling until the estimate is
-        stable by the policy's own criterion (relative change between levels), or failing loudly
-        if it never is. Returns (deviation, parameter_of_max, levels_used)."""
+    # NP-05: near(a, b, scale) is a == b or |a - b| <= tol(scale, max(|a|, |b|)).
+    def near(self, a, b, scale):
+        if not (math.isfinite(a) and math.isfinite(b)):
+            return False
+        return a == b or abs(a - b) <= self.tol(scale, max(abs(a), abs(b)))
+
+    close = near
+
+    # NP-06: a length between points of magnitude at most mag is degenerate when it is not finite
+    # or len <= max(ABS, ULP * ulp(mag)). There is no relative term.
+    def degenerate_length(self, length, mag):
+        return (not math.isfinite(length)) or length <= max(self.ABS, self.ULP * math.ulp(mag))
+
+    # NP-13: unit(t) = (t - lo) / (hi - lo), refused when the domain is no wider than its own tolerance.
+    def unit_parameter(self, t, lo, hi):
+        if not (hi - lo > self.tol(hi - lo, max(abs(lo), abs(hi)))):
+            raise PolicyError("parameter domain is empty under the policy (NP-13)")
+        return float((Fraction(t) - Fraction(lo)) / (Fraction(hi) - Fraction(lo)))
+
+    def from_unit_parameter(self, u, lo, hi):
+        if not (hi - lo > self.tol(hi - lo, max(abs(lo), abs(hi)))):
+            raise PolicyError("parameter domain is empty under the policy (NP-13)")
+        return float(Fraction(lo) + Fraction(u) * (Fraction(hi) - Fraction(lo)))
+
+    # NP-16: a B-spline is C^(p - m) at a knot of multiplicity m, and the two-sided derivative of
+    # order k exists there if and only if k <= p - m.
+    def two_sided_derivative_exists(self, order, degree, multiplicity):
+        return order <= degree - multiplicity
+
+    def adaptive_max_deviation(self, f, g, lo, hi, dist, scale, max_levels=12):
+        """Max of dist(f(t), g(t)) over [lo, hi], doubling the sampling until the estimate stops
+        moving by more than the policy's own tolerance (NP-04 at the given scale). The criterion is
+        the policy's, not a new number; max_levels is only an iteration count, and exceeding it is an
+        error. Returns (deviation, parameter_of_max, levels_used)."""
         n, prev = 8, None
-        for level in range(1, self._levels + 1):
+        for level in range(1, max_levels + 1):
             best, at = -1.0, lo
             for i in range(n + 1):
                 t = lo + (hi - lo) * i / n
                 d = dist(f(t), g(t))
                 if d > best:
                     best, at = d, t
-            if prev is not None:
-                change = abs(best - prev) / max(abs(best), abs(prev), sys.float_info.min) if best or prev else 0.0
-                if change <= self._stable:
-                    return best, at, level
+            if prev is not None and self.near(best, prev, scale):
+                return best, at, level
             prev, n = best, n * 2
-        raise PolicyError("deviation estimate did not stabilise within the policy's refinement limit")
+        raise PolicyError("deviation estimate did not stabilise within %d refinements" % max_levels)
 
 
 def load_policy(path=None, directory=None):
@@ -89,32 +105,14 @@ def load_policy(path=None, directory=None):
         raise PolicyError("policy %s is missing %s" % (path, e))
 
 
-def _ordered(x):
-    """Map a finite double to an integer that is monotone in the double's value."""
-    (i,) = struct.unpack(">q", struct.pack(">d", x))
-    return i if i >= 0 else -(i & 0x7FFFFFFFFFFFFFFF)
-
-
-def ulp_distance(a, b):
-    if not (math.isfinite(a) and math.isfinite(b)):
-        raise ValueError("non-finite value in comparison")
-    return abs(_ordered(a) - _ordered(b))
+def policy_stamp(pol):
+    """The field every comparison.json, *.verification.json and corpus manifest carries."""
+    return {"numeric_policy_version": pol.version}
 
 
 def to_canonical(value, scale_to_canonical):
     """Exact units normalisation: value * scale in rational arithmetic, rounded once to f64."""
     return float(Fraction(value) * Fraction(scale_to_canonical))
-
-
-def to_unit_parameter(t, domain):
-    """Map t in [start, end] to [0, 1], so two parameterisations can be sampled at the same points."""
-    s, e = domain
-    return float((Fraction(t) - Fraction(s)) / (Fraction(e) - Fraction(s)))
-
-
-def from_unit_parameter(u, domain):
-    s, e = domain
-    return float(Fraction(s) + Fraction(u) * (Fraction(e) - Fraction(s)))
 
 
 class DerivativeExclusions:
@@ -139,15 +137,38 @@ class DerivativeExclusions:
 
 
 def c0_parameters(knots, degree):
-    """Interior knot values at which a spline is only C0 (multiplicity >= degree). knots: [(value, multiplicity)]."""
+    """Interior knot values at which a spline is only C0 (full multiplicity, NP-14). knots: [(value, multiplicity)]."""
     return [v for (v, m) in knots[1:-1] if m >= degree]
 
 
-def _scale_for(self, values):
-    """The scale the relative term multiplies, as the policy names it."""
-    if self.scale_term == "max_abs_coordinate_of_fixture":
-        return max((abs(v) for v in values), default=0.0)
-    raise PolicyError("scale term %r is not implemented here" % (self.scale_term,))
+# ---- the "scale term" of NP-04: the size of the feature being compared ------------------------
+
+def _pt(p):
+    return [canon.check_scalar(c) for c in p]
 
 
-Policy.scale_for = _scale_for
+def _dist(a, b):
+    return math.sqrt(sum((x - y) ** 2 for x, y in zip(a, b)))
+
+
+def feature_scale(entity):
+    """NP-04 says the scale is the size of the feature being compared: a segment's length, an arc's
+    radius. For an ellipse I use the semi-major axis, for a polyline its longest segment, and for a
+    Bezier or spline the diagonal of its control points' bounding box. That last choice is mine, not
+    the policy's."""
+    c, g = entity["class"], entity["geometry"]
+    if c == "line":
+        return _dist(_pt(g["start"]), _pt(g["end"]))
+    if c in ("circle", "circular_arc"):
+        return canon.check_scalar(g["radius"])
+    if c in ("ellipse", "elliptical_arc"):
+        return canon.check_scalar(g["semi_major"])
+    if c == "polyline":
+        vs = [_pt(v) for v in g["vertices"]]
+        return max(_dist(a, b) for a, b in zip(vs, vs[1:]))
+    if c in ("bezier", "bspline", "nurbs"):
+        ps = [_pt(p) for p in g["control_points"]]
+        lo = [min(p[i] for p in ps) for i in range(3)]
+        hi = [max(p[i] for p in ps) for i in range(3)]
+        return _dist(lo, hi)
+    raise PolicyError("no feature scale for class %r" % (c,))
