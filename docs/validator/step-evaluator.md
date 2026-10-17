@@ -60,9 +60,12 @@ self-test stays green on any of them. The rational case separates real weights f
 renormalised form: at u = 0.5 the rational curve passes through (2.6, 2.4), and with all weights 1 it
 would pass through (2, 2.25).
 
-The `final` stage of the Dockerfile runs this against `policy/pvec-numeric-policy.*.json`, so the
-image build fails if a primitive isn't reproduced, and also fails (the `COPY` has nothing to copy)
-while no policy has been vendored.
+The `final` stage of the Dockerfile runs this, with `--mutation-check`, against
+`policy/pvec-numeric-policy.*.json`, so the image build fails if a primitive isn't reproduced, if a
+mutation is not caught, or if no policy has been vendored (the `COPY` has nothing to copy). Each
+comparison uses the policy's NP-04 scale term: the entity's feature size for geometry and sample
+points, 1 for unit tangents, a curvature's own magnitude, and the domain width for parameters and
+angles. Stored values are compared bit for bit regardless.
 
 ## Cross-platform
 

@@ -28,18 +28,20 @@ def is_scalar(x):
     return isinstance(x, dict) and set(x) == {"decimal", "f64_hex"}
 
 
-def floats(node, out):
-    if is_scalar(node):
-        out.append(canon.check_scalar(node))
-    elif isinstance(node, dict):
-        for v in node.values():
-            floats(v, out)
-    elif isinstance(node, list):
-        for v in node:
-            floats(v, out)
+def scale_for(path, exp, base, width):
+    """The NP-04 scale term. Unit directions compare at scale 1, a curvature at its own magnitude, a
+    parameter or angle at the width of its domain, and everything else at the entity's feature size."""
+    if path.endswith(".tangent") or ".tangent[" in path:
+        return 1.0
+    if path.endswith(".curvature"):
+        return abs(canon.check_scalar(exp))
+    if "parameter_domain" in path or "angle" in path or path.endswith(".parameter"):
+        return width
+    return base
 
 
 def compare(path, exp, got, pol, scale, fails, exact=False):
+    base, width = scale
     exact = exact or any(k in path for k in EXACT_KEYS)
     if is_scalar(exp):
         if not is_scalar(got):
@@ -47,7 +49,7 @@ def compare(path, exp, got, pol, scale, fails, exact=False):
         elif exact:
             if exp["f64_hex"] != got["f64_hex"]:
                 fails.append("%s: stored value changed, expected %s got %s" % (path, exp["f64_hex"], got["f64_hex"]))
-        elif not pol.close(canon.check_scalar(exp), canon.check_scalar(got), scale):
+        elif not pol.near(canon.check_scalar(exp), canon.check_scalar(got), scale_for(path, exp, base, width)):
             fails.append("%s: expected %s got %s (outside the policy)" % (path, exp["decimal"], got["decimal"]))
     elif isinstance(exp, dict):
         if not isinstance(got, dict):
@@ -87,16 +89,13 @@ def run_case(evaluator, step, expected_path, pol, out_dir, schema_check):
     if len(got["entities"]) != 1:
         return fails + ["expected exactly one curve, got %d" % len(got["entities"])]
     ent = got["entities"][0]
-    vals = []
-    floats(exp["entity"], vals)
-    floats(exp["checkpoints"], vals)
-    scale = pol.scale_for(vals)
+    dom = ent["parameter_domain"]
+    width = canon.check_scalar(dom["end"]) - canon.check_scalar(dom["start"])
+    scale = (numeric.feature_scale(exp["entity"]), abs(width))
     compare("entity", exp["entity"], ent, pol, scale, fails)
     for i, cp in enumerate(exp["checkpoints"]):
         want = canon.check_scalar(cp["parameter"])
-        dom = ent["parameter_domain"]
-        width = canon.check_scalar(dom["end"]) - canon.check_scalar(dom["start"])
-        hit = [s for s in ent["samples"] if pol.close(canon.check_scalar(s["parameter"]), want, abs(width))]
+        hit = [s for s in ent["samples"] if pol.near(canon.check_scalar(s["parameter"]), want, abs(width))]
         if not hit:
             fails.append("checkpoint %d: no sample at parameter %s" % (i, cp["parameter"]["decimal"]))
             continue
