@@ -237,5 +237,167 @@ class ExpectedRecordsAreUntouched(unittest.TestCase):
             self.assertNotIn("source.dwg", json.dumps(rec), f["id"])
 
 
+PIN = ROOT / "corpus" / "r0-open.pin.json"
+KNOWN_CAPABILITIES = {"line", "polyline", "circle", "ellipse", "trimmed_curve", "composite_curve", "bezier", "bspline",
+                      "nurbs", "affine_transform"}
+NEW_PROBES = ("bulge-arc-neg-001", "lwpolyline-closed-001", "polyline2d-001", "layer-state-001")
+
+
+class HardenedCheck(unittest.TestCase):
+    """`check` is the whole story: each of these tampers with a copy of the corpus and must be reported,
+    even when SHA256SUMS is re-synced afterwards."""
+
+    def setUp(self):
+        import shutil
+        import tempfile
+        self.tmp = Path(tempfile.mkdtemp(prefix="r0open-test-"))
+        shutil.copytree(ROOT / "corpus", self.tmp / "corpus")
+        self.c = self.tmp / "corpus" / "r0-open"
+        from runner import r0_open
+        self.r = r0_open
+
+    def tearDown(self):
+        import shutil
+        shutil.rmtree(self.tmp)
+
+    def problems(self):
+        self.r.write_sums(self.c)
+        return self.r.check(self.c)
+
+    def test_untouched_copy_is_clean(self):
+        self.assertEqual(self.problems(), [])
+
+    def test_forged_comparison_json_is_caught(self):
+        p = self.c / "fixtures" / "line-001" / "comparison.json"
+        d = json.loads(p.read_text())
+        d["checks"]["cross"][0]["expected"] = "0x0000000000000001"
+        p.write_text(json.dumps(d, indent=2, sort_keys=True) + "\n")
+        self.assertTrue(any("comparison.json" in x for x in self.problems()))
+
+    def test_swapped_dwg_bytes_are_caught_against_the_manifest(self):
+        p = self.c / "fixtures" / "line-001" / "source.dwg"
+        p.write_bytes(p.read_bytes() + b"\0")
+        self.assertTrue(any("line-001" in x and "dwg" in x.lower() for x in self.problems()))
+
+    def test_step_files_in_any_case_and_extension_are_caught(self):
+        for name in ("FOO.STEP", "bar.p21", "baz.StpZ"):
+            (self.c / name).write_text("x")
+            self.assertTrue(any(name in x for x in self.problems()), name)
+            (self.c / name).unlink()
+
+    def test_step_content_under_another_name_is_caught(self):
+        (self.c / "innocent.dat").write_text("ISO-10303-21;\nHEADER;\n")
+        self.assertTrue(any("innocent.dat" in x for x in self.problems()))
+
+    def test_vendor_attribution_in_a_readme_is_caught(self):
+        p = self.c / "fixtures" / "line-001" / "README.md"
+        p.write_text(p.read_text() + "\nThis drawing was converted by CAD Exchanger.\n")
+        self.assertTrue(any("line-001/README.md" in x for x in self.problems()))
+
+    def test_vendor_attribution_in_the_changelog_is_caught(self):
+        p = self.tmp / "corpus" / "CHANGELOG.md"
+        p.write_text(p.read_text() + "\nThe ODA writer produced these.\n")
+        self.assertTrue(any("CHANGELOG" in x for x in self.problems()))
+
+    def test_a_vendor_mentioned_in_a_negation_is_allowed(self):
+        p = self.c / "fixtures" / "line-001" / "README.md"
+        p.write_text(p.read_text() + "\nNothing here was converted by CAD Exchanger or ODA.\n")
+        self.assertEqual(self.problems(), [])
+
+
+class PinnedBundle(unittest.TestCase):
+    def test_every_fixture_names_p1_1_capabilities_or_says_none(self):
+        for f in manifest()["fixtures"]:
+            caps = f["capabilities"]
+            self.assertIsInstance(caps, list, f["id"])
+            self.assertLessEqual(set(caps), KNOWN_CAPABILITIES, f["id"])
+            if not caps:
+                self.assertTrue(f["capabilities_note"].strip(), f["id"])
+
+    def test_the_corpus_directory_is_self_contained(self):
+        for f in manifest()["fixtures"]:
+            self.assertTrue(f["expected"]["path"].startswith("fixtures/"), f["id"])
+            self.assertEqual(sha(CORPUS / f["expected"]["path"]), f["expected"]["sha256"], f["id"])
+            self.assertEqual(sha(CORPUS / f["expected"]["path"]), sha(ROOT / f["expected"]["canonical_path"]), f["id"])
+            self.assertEqual(sha(CORPUS / f["parameter_file"]["path"]), sha(ROOT / f["parameter_file"]["canonical_path"]), f["id"])
+
+    def test_the_pin_matches_a_rebuilt_bundle_and_the_manifest(self):
+        from runner import r0_open
+        pin = json.loads(PIN.read_text())
+        self.assertEqual(pin["corpus_revision"], "r0-open")
+        self.assertEqual(pin["manifest_sha256"], sha(CORPUS / "manifest.json"))
+        self.assertEqual(pin["bundle_sha256"], r0_open.bundle_sha256(CORPUS))
+        self.assertTrue(pin["tag"].strip() and pin["how_to_verify"].strip())
+
+
+class AddedProbes(unittest.TestCase):
+    def fixture(self, fid):
+        hits = [f for f in manifest()["fixtures"] if f["id"] == fid]
+        self.assertEqual(len(hits), 1, fid + " is not in the manifest")
+        return hits[0]
+
+    def test_the_new_probes_are_accepted_or_quarantined_for_a_named_reason(self):
+        for fid in NEW_PROBES:
+            self.assertIn(self.fixture(fid)["status"], ("ACCEPTED", "QUARANTINED"))
+
+    def test_closed_lwpolyline_is_really_checked_as_closed(self):
+        c = json.loads((CORPUS / "fixtures" / "lwpolyline-closed-001" / "comparison.json").read_text())
+        row = [i for i in c["checks"]["cross"] if i["field"] == "closed"][0]
+        self.assertEqual((row["expected"], row["read"], row["ok"]), (True, True, True))
+
+    def test_old_style_polyline_is_a_polyline_not_other(self):
+        for which in ("acadrust", "acadsharp"):
+            r = json.loads((CORPUS / "fixtures" / "polyline2d-001" / ("read.%s.json" % which)).read_text())
+            self.assertEqual([e["type"] for e in r["blocks"][0]["entities"]], ["POLYLINE"])
+
+    def test_negative_bulge_has_a_derived_arc_with_negative_sweep_that_is_checked(self):
+        exp = json.loads((ROOT / "fixtures" / "known-truth" / "bulge-arc-neg-001" / "expected.math.json").read_text())
+        arc = [e for e in exp["entities"] if e["class"] == "circular_arc"][0]
+        self.assertTrue(arc["geometry"]["sweep_angle"]["decimal"].startswith("-"))
+        c = json.loads((CORPUS / "fixtures" / "bulge-arc-neg-001" / "comparison.json").read_text())
+        self.assertTrue(any(i["field"].startswith("derived_arc.") for i in c["checks"]["cross"]))
+        pos = json.loads((CORPUS / "fixtures" / "bulge-arc-001" / "comparison.json").read_text())
+        self.assertTrue(any(i["field"].startswith("derived_arc.") for i in pos["checks"]["cross"]))
+
+    def test_layer_states_are_read_back_by_both_readers(self):
+        c = json.loads((CORPUS / "fixtures" / "layer-state-001" / "comparison.json").read_text())
+        fields = {i["field"] for i in c["checks"]["cross"]}
+        for need in ("layer[OFF_L].on", "layer[FROZEN_L].frozen", "layer[SHOWN_L].on"):
+            self.assertIn(need, fields)
+
+
+class WordingAndDispositions(unittest.TestCase):
+    def test_adr_states_the_common_mode_caveat(self):
+        t = ADR.read_text()
+        self.assertIn("common-mode", t)
+        self.assertIn("same DWG specification", t)
+        self.assertIn("round-trip loss", t)
+        self.assertIn("shared misreading", t)
+
+    def test_the_readme_repeats_the_caveat(self):
+        self.assertIn("shared misreading", (CORPUS / "README.md").read_text())
+
+    def test_shear_and_affine_exclusions_are_worded_honestly(self):
+        q = {e["id"]: e for e in quarantine()["excluded"]}
+        for fid in ("shear-001", "general-affine-001"):
+            ev = q[fid]["evidence"]
+            self.assertIn("single INSERT", ev)
+            self.assertIn("three-level", ev)
+            self.assertIn("not attempted", ev)
+            self.assertNotIn("has no DWG INSERT form", ev)
+        self.assertNotIn("has no DWG INSERT form", ADR.read_text())
+
+    def test_rejection_probes_carry_the_downstream_disposition(self):
+        f = [x for x in manifest()["fixtures"] if x["id"] == "near-singular-001"][0]
+        self.assertIn("NEAR_SINGULAR_TRANSFORM", f["downstream_disposition"])
+        self.assertIn("QUARANTINE", f["downstream_disposition"])
+        t = (CORPUS / "fixtures" / "near-singular-001" / "README.md").read_text()
+        self.assertIn("must not emit a curve", t)
+        self.assertIn("near-singular-001", (ROOT / "corpus" / "CHANGELOG.md").read_text())
+        for g in manifest()["fixtures"]:
+            if g["id"] != "near-singular-001":
+                self.assertNotIn("downstream_disposition", g) if "rejection" not in json.loads((ROOT / g["expected"]["canonical_path"]).read_text())["entities"][0] else None
+
+
 if __name__ == "__main__":
     unittest.main()
