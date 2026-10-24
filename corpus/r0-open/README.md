@@ -1,6 +1,6 @@
 # corpus revision r0-open
 
-The open-writer known-truth corpus: 26 probe DWGs written by acadrust's `DwgWriter` (AC1032) from the
+The open-writer known-truth corpus: probe DWGs written by acadrust's `DwgWriter` (AC1032) from the
 O1.5a/O1.6a probe parameters, each read back by ACadSharp's reader and by acadrust's own reader.
 `manifest.json` is the index, `quarantine.json` lists the three probes the writer couldn't store exactly,
 and `SHA256SUMS` covers every file here. The rules are in
@@ -11,7 +11,7 @@ nothing in this revision was written or converted by CAD Exchanger or ODA. The c
 used for reader mapping only (`evidence_scope: READER_MAPPING_ONLY`). It says that two independent open DWG
 readers decode these files to the mathematics I authored before any DWG existed, exactly where a DWG stores
 the number verbatim and within PVec numeric policy v1 where it stores a derived value. It does not say how a
-converter, a STEP path or an AutoCAD-class application would treat them.
+converter, a STEP path or an AutoCAD-class application would treat them. The two readers are independent in code only (both implement the same DWG specification), so this catches round-trip loss and decoder differences, not a shared misreading of the specification.
 
 To check it with no DWG library, no converter and no Docker:
 

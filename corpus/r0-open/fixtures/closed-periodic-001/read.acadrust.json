@@ -47,6 +47,7 @@
             "0x3fe999999999999a",
             "0x3ff0000000000000"
           ],
+          "layer": "0",
           "normal": [
             "0x0000000000000000",
             "0x0000000000000000",
@@ -63,6 +64,13 @@
   ],
   "dwg_sha256": "8ba9cfa5dd3f22bf5b8fe13f6167c14ffdd549164db565bacd124fcbf7fcb435",
   "dwg_version": "AC1032",
+  "layers": [
+    {
+      "frozen": false,
+      "name": "0",
+      "on": true
+    }
+  ],
   "reader": "acadrust@0.5.5+d35691f",
-  "schema": "pvec-gold/r0-open-dwg-read/1"
+  "schema": "pvec-gold/r0-open-dwg-read/2"
 }

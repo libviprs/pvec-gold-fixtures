@@ -24,11 +24,15 @@ DWGs written by an open writer, and I state its limits in the manifest itself.
 **Writer.** `acadrust`'s `DwgWriter`, pinned to one commit of `libviprs/acadrust`, writing DWG version
 AC1032. The manifest records `writer: acadrust@<version>` and where the source came from. A probe the
 writer can't store exactly is not written as a lookalike: it is excluded and listed with the reason
-(`UNSUPPORTED_ENTITY`, ADR 0006). In the first run those are `shear-001` and `general-affine-001`, since
-an INSERT carries translation, one rotation and three scales and no shear, and `singular-001`, since
-acadrust's scale setter rewrites a zero scale to 1e-12, which would turn it into a different probe. (I
-also read ACadSharp's `Insert.XScale` setter, which refuses zero by throwing, so I don't expect that
-family to store it either. That is a reading of its source, not a run.)
+(`UNSUPPORTED_ENTITY`, ADR 0006). In the first run those are `shear-001` and `general-affine-001`, and
+`singular-001`. For the first two the honest statement is narrow: there is no single INSERT form, since one
+INSERT carries translation, one rotation and three scales and no shear. A three-level nested INSERT chain
+(rotate, scale, rotate) could carry the 2x2 part through a singular value decomposition, but the factors would
+be derived values (compared under policy, not EXACT), and these probes' own truth is a rejection outcome that no
+reader-mapping check can exercise, so I did not attempt it. `singular-001` is different: acadrust's scale
+setter rewrites a zero scale to 1e-12, which would turn it into another probe. (I also read ACadSharp's
+`Insert.XScale` setter, which refuses zero by throwing, so I don't expect that family to store it either. That is
+a reading of its source, not a run.)
 
 **Truth.** The `expected.math.json` records and parameter files that O1.5a and O1.6a already recorded.
 They were authored before any DWG existed and r0-open never edits them. The manifest holds each file's
@@ -36,7 +40,7 @@ SHA-256, and `python3 -m runner.r0_open check` fails if either changes. The writ
 bits from the records' `f64_hex` fields, and the transform operations from the decimal strings of the
 parameter files. That has a consequence I'd rather state than hide: the writer's input is the truth, so
 the check can't catch a mistake in the authoring. It checks the path from the authored numbers through a
-DWG file and back out of two independent decoders.
+DWG file and back out of two decoders that were written separately.
 
 **Cross-read rule.** Every probe DWG written by one open family is also read by the other family's
 reader: acadrust-written files are read by ACadSharp's reader (upstream ACadSharp built from source at a
@@ -50,6 +54,11 @@ all three of these hold:
 
 If one fails, the probe is `QUARANTINED` with `UNRESOLVED_DISAGREEMENT` and the evidence (the fields
 that differ). If the other family's reader can't open the file, it is quarantined as `MALFORMED_FIXTURE`.
+The two readers are independent in code and not in specification: both implement the same DWG specification
+(and acadrust's writer cites ACadSharp in places). So the cross-read is a common-mode-limited check. It catches
+round-trip loss, and a decoder bug that one reader has and the other doesn't, but not a shared misreading of the
+specification, which both would decode the same way and which would therefore never show up as a difference. I don't claim more than that anywhere in the corpus.
+
 A probe is never accepted on the writer's say-so, and never accepted because the two readers agree with
 each other while both differ from the truth. Both read records are stored with the DWG, so the verdict is
 recomputed from them, without a DWG library, by `runner/r0_open.py check`.
@@ -76,6 +85,25 @@ nothing about what a reader reports.
   STEP exactness must not take it from this revision.
 - Every artifact names the container image digest that produced it (writer image and reader image), and
   every result is from native x86_64 (MARS).
+
+**What it contains.** Every curve and transform probe from O1.5a and O1.6a that a DWG can carry, plus four
+probes added with it, each with its record authored first by `tools/authoring/author_probes.py`: a negative
+bulge (`bulge-arc-neg-001`, whose derived counter-clockwise arc, with its orientation reversed against the source,
+is checked from the read-back vertices and bulge), a closed lightweight polyline (`lwpolyline-closed-001`), an
+old-style 2D `POLYLINE` entity (`polyline2d-001`), and a drawing with an off layer and a frozen layer
+(`layer-state-001`). Each manifest entry names the PVec v1 capabilities it exercises (or says it exercises none,
+as for layer state, whose use is libviprs policy).
+
+**Pinning.** `corpus/r0-open` is self-contained: besides the DWGs and read records it holds a hash-pinned copy of
+each authored record and parameter file (equal to the canonical files under `fixtures/known-truth` and
+`tools/authoring/params`, which `check` verifies when they are present). `corpus/r0-open.pin.json` pins the
+directory as a deterministic tar (`python3 -m runner.r0_open bundle corpus/r0-open OUT.tar`) by sha256, beside the
+manifest's hash and the numeric policy version. The tag `corpus-r0-open` is for whoever merges, on the merge commit.
+The revision stays a candidate: O2.9 is the freeze.
+
+**Rejection probes.** `near-singular-001` carries a rejection outcome in its record (`NEAR_SINGULAR_TRANSFORM`,
+quarantine) and is accepted here, because what is checked is that the DWG carries the transform as authored. The
+manifest says so in `downstream_disposition`, and so does its README: a mapper must not emit a curve for it.
 
 ## What this unblocks, and what it doesn't
 

@@ -84,6 +84,48 @@
         "mode": "EXACT",
         "ok": true,
         "read": false
+      },
+      {
+        "expected": "0x3ffd4ccccccccccd",
+        "field": "derived_arc.center[0]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3ffd4cccccccccce"
+      },
+      {
+        "expected": "0x4009b33333333333",
+        "field": "derived_arc.center[1]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4009b33333333332"
+      },
+      {
+        "expected": "0x4006b232f3cf319b",
+        "field": "derived_arc.radius",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4006b232f3cf319c"
+      },
+      {
+        "expected": "0x4011a8fc021c4dcf",
+        "field": "derived_arc.start_angle",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4011a8fc021c4dcf"
+      },
+      {
+        "expected": "0x3ff85a376b677dc0",
+        "field": "derived_arc.sweep_angle",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3ff85a376b677dc0"
+      },
+      {
+        "expected": "CCW",
+        "field": "derived_arc.sense_about_normal",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "CCW"
       }
     ],
     "own": [
@@ -170,6 +212,48 @@
         "mode": "EXACT",
         "ok": true,
         "read": false
+      },
+      {
+        "expected": "0x3ffd4ccccccccccd",
+        "field": "derived_arc.center[0]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3ffd4cccccccccce"
+      },
+      {
+        "expected": "0x4009b33333333333",
+        "field": "derived_arc.center[1]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4009b33333333332"
+      },
+      {
+        "expected": "0x4006b232f3cf319b",
+        "field": "derived_arc.radius",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4006b232f3cf319c"
+      },
+      {
+        "expected": "0x4011a8fc021c4dcf",
+        "field": "derived_arc.start_angle",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4011a8fc021c4dcf"
+      },
+      {
+        "expected": "0x3ff85a376b677dc0",
+        "field": "derived_arc.sweep_angle",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3ff85a376b677dc0"
+      },
+      {
+        "expected": "CCW",
+        "field": "derived_arc.sense_about_normal",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "CCW"
       }
     ]
   },

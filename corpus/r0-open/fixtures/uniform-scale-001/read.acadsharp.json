@@ -9,6 +9,7 @@
             "0x0000000000000000",
             "0x0000000000000000"
           ],
+          "layer": "0",
           "normal": [
             "0x0000000000000000",
             "0x0000000000000000",
@@ -33,6 +34,7 @@
             "0xc000000000000000",
             "0x0000000000000000"
           ],
+          "layer": "0",
           "normal": [
             "0x0000000000000000",
             "0x0000000000000000",
@@ -47,6 +49,13 @@
   ],
   "dwg_sha256": "834ea1539c7dbbf5ce02b8c2738b335e907b642227a3607f69d69d55bfbe2fa3",
   "dwg_version": "AC1032",
+  "layers": [
+    {
+      "frozen": false,
+      "name": "0",
+      "on": true
+    }
+  ],
   "reader": "ACadSharp@3.7.1+d7dc111",
-  "schema": "pvec-gold/r0-open-dwg-read/1"
+  "schema": "pvec-gold/r0-open-dwg-read/2"
 }

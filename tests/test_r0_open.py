@@ -114,7 +114,7 @@ class EveryFixture(unittest.TestCase):
             d = CORPUS / f["dwg"]["path"]
             self.assertTrue(d.is_file(), f["id"])
             self.assertEqual(sha(d), f["dwg"]["sha256"], f["id"])
-            e = ROOT / f["expected"]["path"]
+            e = CORPUS / f["expected"]["path"]
             self.assertEqual(sha(e), f["expected"]["sha256"], f["id"])
             self.assertEqual(json.loads(e.read_text())["fixture_id"], f["id"])
 
@@ -204,6 +204,26 @@ class VerdictsRecompute(unittest.TestCase):
         self.assertEqual(v["verdict"], "DISAGREE")
         self.assertTrue(v["reader_vs_reader_differences"])
 
+    def test_a_flipped_bulge_sign_is_caught(self):
+        own, cross = self._record("bulge-arc-neg-001", "acadrust"), self._record("bulge-arc-neg-001")
+        for r in (own, cross):
+            v = r["blocks"][0]["entities"][0]["vertices"][0]
+            v[2] = "0x3fd3333333333333"  # +0.3
+        self.assertEqual(self._verdict("bulge-arc-neg-001", own, cross)["verdict"], "DISAGREE")
+
+    def test_a_dropped_closed_flag_is_caught(self):
+        own, cross = self._record("lwpolyline-closed-001", "acadrust"), self._record("lwpolyline-closed-001")
+        for r in (own, cross):
+            r["blocks"][0]["entities"][0]["closed"] = False
+        self.assertEqual(self._verdict("lwpolyline-closed-001", own, cross)["verdict"], "DISAGREE")
+
+    def test_a_layer_that_loses_its_frozen_state_is_caught(self):
+        own, cross = self._record("layer-state-001", "acadrust"), self._record("layer-state-001")
+        for r in (own, cross):
+            for l in r["layers"]:
+                l["frozen"] = False
+        self.assertEqual(self._verdict("layer-state-001", own, cross)["verdict"], "DISAGREE")
+
     def test_an_unopenable_file_is_malformed_not_accepted(self):
         v = self._verdict("line-001", self._record("line-001", "acadrust"), None)
         self.assertEqual((v["verdict"], v["reason"]), ("UNREADABLE", "MALFORMED_FIXTURE"))
@@ -231,8 +251,8 @@ class VerdictsRecompute(unittest.TestCase):
 class ExpectedRecordsAreUntouched(unittest.TestCase):
     def test_the_manifest_pins_every_expected_record_and_parameter_file(self):
         for f in manifest()["fixtures"]:
-            self.assertEqual(sha(ROOT / f["parameter_file"]["path"]), f["parameter_file"]["sha256"], f["id"])
-            rec = json.loads((ROOT / f["expected"]["path"]).read_text())
+            self.assertEqual(sha(ROOT / f["parameter_file"]["canonical_path"]), f["parameter_file"]["sha256"], f["id"])
+            rec = json.loads((CORPUS / f["expected"]["path"]).read_text())
             self.assertEqual(rec["provenance"]["parameter_file_sha256"], f["parameter_file"]["sha256"], f["id"])
             self.assertNotIn("source.dwg", json.dumps(rec), f["id"])
 
@@ -350,10 +370,12 @@ class AddedProbes(unittest.TestCase):
             r = json.loads((CORPUS / "fixtures" / "polyline2d-001" / ("read.%s.json" % which)).read_text())
             self.assertEqual([e["type"] for e in r["blocks"][0]["entities"]], ["POLYLINE"])
 
-    def test_negative_bulge_has_a_derived_arc_with_negative_sweep_that_is_checked(self):
+    def test_negative_bulge_has_a_reversed_ccw_derived_arc_that_is_checked(self):
         exp = json.loads((ROOT / "fixtures" / "known-truth" / "bulge-arc-neg-001" / "expected.math.json").read_text())
         arc = [e for e in exp["entities"] if e["class"] == "circular_arc"][0]
-        self.assertTrue(arc["geometry"]["sweep_angle"]["decimal"].startswith("-"))
+        # arcs run counter-clockwise, so the record holds the CCW arc with its direction reversed against the source
+        self.assertEqual(arc["orientation"], {"parameter_direction": "REVERSED_AGAINST_SOURCE", "sense_about_normal": "CW"})
+        self.assertTrue(exp["entities"][0]["geometry"]["bulges"][0]["decimal"].startswith("-"))
         c = json.loads((CORPUS / "fixtures" / "bulge-arc-neg-001" / "comparison.json").read_text())
         self.assertTrue(any(i["field"].startswith("derived_arc.") for i in c["checks"]["cross"]))
         pos = json.loads((CORPUS / "fixtures" / "bulge-arc-001" / "comparison.json").read_text())
@@ -395,8 +417,8 @@ class WordingAndDispositions(unittest.TestCase):
         self.assertIn("must not emit a curve", t)
         self.assertIn("near-singular-001", (ROOT / "corpus" / "CHANGELOG.md").read_text())
         for g in manifest()["fixtures"]:
-            if g["id"] != "near-singular-001":
-                self.assertNotIn("downstream_disposition", g) if "rejection" not in json.loads((ROOT / g["expected"]["canonical_path"]).read_text())["entities"][0] else None
+            rejects = "rejection" in json.loads((CORPUS / g["expected"]["path"]).read_text())["entities"][0]
+            self.assertEqual("downstream_disposition" in g, rejects, g["id"])
 
 
 if __name__ == "__main__":

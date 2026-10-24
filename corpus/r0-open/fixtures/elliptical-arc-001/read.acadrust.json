@@ -9,6 +9,7 @@
             "0x0000000000000000"
           ],
           "end_param": "0x4004000000000000",
+          "layer": "0",
           "major_axis": [
             "0x40070a3d70a3d70a",
             "0x3feae147ae147ae2",
@@ -29,6 +30,13 @@
   ],
   "dwg_sha256": "0fe4fcb19a65a8c2296bc89f13516cd05172c34b2aa9bfc1064289493c2de1fd",
   "dwg_version": "AC1032",
+  "layers": [
+    {
+      "frozen": false,
+      "name": "0",
+      "on": true
+    }
+  ],
   "reader": "acadrust@0.5.5+d35691f",
-  "schema": "pvec-gold/r0-open-dwg-read/1"
+  "schema": "pvec-gold/r0-open-dwg-read/2"
 }

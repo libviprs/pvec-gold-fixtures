@@ -9,6 +9,7 @@
             "0x0000000000000000"
           ],
           "end_angle": "0x3fe6f0255dde9740",
+          "layer": "0",
           "normal": [
             "0x0000000000000000",
             "0x0000000000000000",
@@ -24,6 +25,13 @@
   ],
   "dwg_sha256": "9d7bedeb21f9e7e2c0d1b1549fdc732eb4de8d6150eb142fe01989cd8f01dca1",
   "dwg_version": "AC1032",
+  "layers": [
+    {
+      "frozen": false,
+      "name": "0",
+      "on": true
+    }
+  ],
   "reader": "acadrust@0.5.5+d35691f",
-  "schema": "pvec-gold/r0-open-dwg-read/1"
+  "schema": "pvec-gold/r0-open-dwg-read/2"
 }

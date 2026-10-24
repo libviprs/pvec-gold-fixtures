@@ -10,6 +10,7 @@ using System.Text.Json.Nodes;
 using ACadSharp;
 using ACadSharp.Entities;
 using ACadSharp.IO;
+using ACadSharp.Tables;
 using CSMath;
 
 static string H(double d) => "0x" + BitConverter.DoubleToInt64Bits(d).ToString("x16");
@@ -18,8 +19,21 @@ static JsonArray Hs(IEnumerable<double> xs) { var a = new JsonArray(); foreach (
 
 static JsonObject Dump(Entity e)
 {
+    var o = DumpGeometry(e);
+    o["layer"] = e.Layer?.Name;
+    return o;
+}
+
+static JsonObject DumpGeometry(Entity e)
+{
     switch (e)
     {
+        case Polyline2D p2:
+            {
+                var vs = new JsonArray();
+                foreach (var v in p2.Vertices) vs.Add(new JsonArray(H(v.Location.X), H(v.Location.Y), H(v.Bulge)));
+                return new JsonObject { ["type"] = "POLYLINE", ["vertices"] = vs, ["closed"] = p2.IsClosed, ["elevation"] = H(p2.Elevation), ["normal"] = V3(p2.Normal) };
+            }
         case Arc a:
             return new JsonObject { ["type"] = "ARC", ["center"] = V3(a.Center), ["radius"] = H(a.Radius), ["start_angle"] = H(a.StartAngle), ["end_angle"] = H(a.EndAngle), ["normal"] = V3(a.Normal) };
         case Circle c:
@@ -60,9 +74,13 @@ foreach (var br in doc.BlockRecords.OrderBy(b => b.Name, StringComparer.Ordinal)
     foreach (var e in br.Entities) es.Add(Dump(e));
     blocks.Add(new JsonObject { ["name"] = n, ["entities"] = es });
 }
+var layers = new JsonArray();
+foreach (var l in doc.Layers.OrderBy(l => l.Name, StringComparer.Ordinal))
+    layers.Add(new JsonObject { ["name"] = l.Name, ["on"] = l.IsOn, ["frozen"] = l.Flags.HasFlag(LayerFlags.Frozen) });
 var rec = new JsonObject
 {
-    ["schema"] = "pvec-gold/r0-open-dwg-read/1",
+    ["schema"] = "pvec-gold/r0-open-dwg-read/2",
+    ["layers"] = layers,
     ["reader"] = args[2],
     ["dwg_sha256"] = Convert.ToHexString(SHA256.HashData(bytes)).ToLowerInvariant(),
     ["dwg_version"] = doc.Header.Version.ToString(),

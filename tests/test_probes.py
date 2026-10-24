@@ -103,7 +103,7 @@ class Coverage(unittest.TestCase):
         for f in sorted(KT.rglob("expected.math.json")):
             d = em.load(f)
             classes = {e["class"] for e in d["entities"]}
-            if d["fixture_id"] == "bulge-arc-001":
+            if d["fixture_id"] in ("bulge-arc-001", "bulge-arc-neg-001"):
                 self.assertEqual(classes, {"polyline", "circular_arc"})
             else:
                 self.assertEqual(len(classes), 1, f)

@@ -1,0 +1,1 @@
+{"id":"bulge-arc-001","kind":"bulge_arc","description":"Two polyline vertices joined by a bulge of 2/5. The included angle is 4*atan(0.4), about 87.2 degrees, close to a quarter circle (bulge tan(pi/8), about 0.4142) but not one, and nowhere near a half circle (bulge 1), so a converter that snaps to either shows.","p0":["1","0.5","0"],"p1":["4.5","2.25","0"],"bulge":"0.4"}

@@ -5,6 +5,7 @@
         {
           "closed": false,
           "elevation": "0x0000000000000000",
+          "layer": "0",
           "normal": [
             "0x0000000000000000",
             "0x0000000000000000",
@@ -30,6 +31,13 @@
   ],
   "dwg_sha256": "bb96f380d577028c0a3c3d2239a86f6681e44acff7981b4ba664e6186239fd18",
   "dwg_version": "AC1032",
+  "layers": [
+    {
+      "frozen": false,
+      "name": "0",
+      "on": true
+    }
+  ],
   "reader": "acadrust@0.5.5+d35691f",
-  "schema": "pvec-gold/r0-open-dwg-read/1"
+  "schema": "pvec-gold/r0-open-dwg-read/2"
 }

@@ -14,6 +14,7 @@
 
 use acadrust::entities::*;
 use acadrust::types::{DxfVersion, Vector2, Vector3};
+use acadrust::tables::Layer;
 use acadrust::{BlockRecord, CadDocument, DwgReader, DwgWriter, TableEntry};
 use serde_json::{json, Value};
 use sha2::{Digest, Sha256};
@@ -73,7 +74,7 @@ fn default_x_axis(normal: Vector3, x: Vector3) -> bool {
     normal.x == 0.0 && normal.y == 0.0 && normal.z == 1.0 && x.x == 1.0 && x.y == 0.0 && x.z == 0.0
 }
 
-fn make_curve(e: &Value) -> Result<EntityType, Skip> {
+fn make_curve(e: &Value, dwg_entity: Option<&str>) -> Result<EntityType, Skip> {
     let class = e["class"].as_str().unwrap();
     let g = &e["geometry"];
     let cl = &e["closure"];
@@ -147,7 +148,21 @@ fn make_curve(e: &Value) -> Result<EntityType, Skip> {
                 pl.add_point_with_bulge(Vector2::new(v.x, v.y), fx(b));
             }
             pl.elevation = z0;
-            pl.is_closed = false; // closed-by-endpoint is not a closed polyline
+            let closed = cl["closed_by_endpoint"].as_bool().unwrap();
+            if dwg_entity == Some("POLYLINE") {
+                let mut p2 = Polyline2D::new();
+                p2.elevation = z0;
+                for (v, b) in vs.iter().zip(bs) {
+                    let v = p3(v);
+                    p2.add_vertex(Vertex2D::new(Vector3::new(v.x, v.y, z0)).with_bulge(fx(b)));
+                }
+                if closed {
+                    p2.close();
+                }
+                return Ok(EntityType::Polyline2D(p2));
+            }
+            // For a closed record the closing segment is implicit: the flag is the closure.
+            pl.is_closed = closed;
             Ok(EntityType::LwPolyline(pl))
         }
         "bezier" | "bspline" | "nurbs" => {
@@ -214,7 +229,7 @@ fn parse_ops(params: &Value) -> Result<Vec<Op>, Skip> {
             other => {
                 return skip(
                     "UNSUPPORTED_ENTITY",
-                    format!("op '{other}' (a general matrix) has no DWG INSERT form: an INSERT carries translation, one rotation about the normal and three scales, and no shear"),
+                    format!("op '{other}' (a general matrix) has no single INSERT form: one INSERT carries translation, one rotation about the normal and three scales, and no shear. A three-level nested INSERT chain (rotate, scale, rotate) could carry its 2x2 part through a singular value decomposition, but those factors would be derived values compared under policy and not EXACT, and the probe's own truth is a rejection outcome that no reader-mapping check can exercise, so that was not attempted"),
                 )
             }
         }
@@ -271,10 +286,38 @@ fn insert_for(name: &str, ops: &[&Op]) -> Result<Insert, Skip> {
     Ok(ins)
 }
 
+fn build_layers(expected: &Value, doc: &mut CadDocument) -> Result<(), Skip> {
+    for e in expected["entities"].as_array().unwrap() {
+        let l = &e["layer"];
+        let name = l["name"].as_str().unwrap();
+        let mut layer = Layer::new(name);
+        if !l["on"].as_bool().unwrap() {
+            layer.turn_off();
+        }
+        if l["frozen"].as_bool().unwrap() {
+            layer.freeze();
+        }
+        if let Err(err) = doc.layers.add(layer) {
+            return skip("MALFORMED_FIXTURE", format!("layers.add: {err}"));
+        }
+        let mut curve = make_curve(e, None)?;
+        curve.common_mut().layer = name.to_string();
+        if let Err(err) = doc.add_entity(curve) {
+            return skip("MALFORMED_FIXTURE", format!("add_entity: {err:?}"));
+        }
+    }
+    Ok(())
+}
+
 fn build(id: &str, expected: &Value, params: &Value, version: DxfVersion) -> Result<CadDocument, Skip> {
     let ent = &expected["entities"][0];
     let mut doc = CadDocument::with_version(version);
-    let curve = make_curve(ent)?;
+    let dwg_entity = params.get("dwg_entity").and_then(|v| v.as_str());
+    if ent.get("layer").is_some() {
+        build_layers(expected, &mut doc)?;
+        return Ok(doc);
+    }
+    let curve = make_curve(ent, dwg_entity)?;
     let structure = ent["structure"].as_str().unwrap();
     if structure == "CURVE_ONLY" {
         if let Err(e) = doc.add_entity(curve) {
@@ -381,7 +424,16 @@ fn v3(v: &Vector3) -> Value {
 }
 
 fn dump_entity(e: &EntityType) -> Value {
+    let mut v = dump_geometry(e);
+    v["layer"] = json!(e.common().layer);
+    v
+}
+
+fn dump_geometry(e: &EntityType) -> Value {
     match e {
+        EntityType::Polyline2D(p) => json!({"type": "POLYLINE",
+            "vertices": p.vertices.iter().map(|v| json!([hex(v.location.x), hex(v.location.y), hex(v.bulge)])).collect::<Vec<_>>(),
+            "closed": p.is_closed(), "elevation": hex(p.elevation), "normal": v3(&p.normal)}),
         EntityType::Line(l) => json!({"type": "LINE", "start": v3(&l.start), "end": v3(&l.end)}),
         EntityType::Circle(c) => json!({"type": "CIRCLE", "center": v3(&c.center), "radius": hex(c.radius), "normal": v3(&c.normal)}),
         EntityType::Arc(a) => json!({"type": "ARC", "center": v3(&a.center), "radius": hex(a.radius), "start_angle": hex(a.start_angle), "end_angle": hex(a.end_angle), "normal": v3(&a.normal)}),
@@ -403,6 +455,12 @@ fn dump_entity(e: &EntityType) -> Value {
     }
 }
 
+fn dump_layers(doc: &CadDocument) -> Vec<Value> {
+    let mut v: Vec<(String, Value)> = doc.layers.iter().map(|l| (l.name.clone(), json!({"name": l.name, "on": !l.is_off(), "frozen": l.is_frozen()}))).collect();
+    v.sort_by(|a, b| a.0.cmp(&b.0));
+    v.into_iter().map(|x| x.1).collect()
+}
+
 fn cmd_read(args: &[String]) {
     let dwg = PathBuf::from(arg(args, "--dwg").unwrap());
     let out = PathBuf::from(arg(args, "--out").unwrap());
@@ -418,7 +476,8 @@ fn cmd_read(args: &[String]) {
         blocks.insert(n, es);
     }
     let rec = json!({
-        "schema": "pvec-gold/r0-open-dwg-read/1",
+        "schema": "pvec-gold/r0-open-dwg-read/2",
+        "layers": dump_layers(&doc),
         "reader": READER_ID,
         "dwg_sha256": sha_hex(&bytes),
         "dwg_version": format!("{:?}", doc.version),

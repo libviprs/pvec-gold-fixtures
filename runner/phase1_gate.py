@@ -35,7 +35,8 @@ def check_probe_classification(report_path):
     expected = {}
     for f in sorted((ROOT / "fixtures" / "known-truth").rglob("expected.math.json")):
         d = em.load(f)
-        expected[d["fixture_id"]] = [e["id"] for e in d["entities"]]
+        if q.is_converter_probe(d):
+            expected[d["fixture_id"]] = [e["id"] for e in d["entities"]]
     for pid, ents in expected.items():
         per = rep.get("probes", {}).get(pid)
         if not per:

@@ -164,7 +164,9 @@ def required_exclusions(ent):
         span = ks if ent["closure"]["periodic"] else ks[1:-1]
         return [canon.check_scalar(k["value"]) for k in span if k["multiplicity"] >= p]
     if cls == "polyline":
-        return [float(i) for i in range(1, len(g["vertices"]) - 1)]
+        # open: interior vertices; closed: every vertex of the unrolled domain except its two ends
+        last = len(g["vertices"]) if ent["closure"]["closed_by_endpoint"] else len(g["vertices"]) - 1
+        return [float(i) for i in range(1, last)]
     return []
 
 
