@@ -480,6 +480,7 @@ def assemble(raw, corpus, info):
         "own_readers": [{"reader": info["own_reader"], "source": info["writer_source"]}],
         "dwg_version": dwg_version,
         "container_images": info["images"],
+        "determinism": info.get("determinism"),
         "converters": "none",
         "evaluator": "none (no STEP evaluator ran; there is no STEP output)",
         "fixtures": fixtures,

@@ -6,5 +6,6 @@
   "images": {
     "writer_and_own_reader": "rust:1.99.1-bookworm sha256:e12566d5abc17a0da741628782cdb504b68b8961f5bfcf677936bf3e8b32de29 (linux/amd64, native x86_64 on MARS)",
     "cross_reader": "mcr.microsoft.com/dotnet/sdk:10.0.401-noble sha256:e70cdb7f80b0348f5cb85f19a8f670fca061f033d57eed12fa003d58b0e06317 (linux/amd64, native x86_64 on MARS)"
-  }
+  },
+  "determinism": "tools/r0-open/rust/run-write.sh writes every probe twice and compares the two DWGs byte for byte; 26 of 26 were identical on the run that produced this revision (a statement about the acadrust writer only, not about any vendor writer)"
 }
