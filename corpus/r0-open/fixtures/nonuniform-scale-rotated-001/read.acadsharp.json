@@ -1,0 +1,87 @@
+{
+  "blocks": [
+    {
+      "entities": [
+        {
+          "block": "PROBE_NONUNIFORM_SCALE_ROTATED_001_L1",
+          "insert_point": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "rotation": "0x3fedac670561bb50",
+          "scale": [
+            "0x3ff0000000000000",
+            "0x3ff0000000000000",
+            "0x3ff0000000000000"
+          ],
+          "type": "INSERT"
+        }
+      ],
+      "name": "*Model_Space"
+    },
+    {
+      "entities": [
+        {
+          "block": "PROBE_NONUNIFORM_SCALE_ROTATED_001_L2",
+          "insert_point": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "rotation": "0x0000000000000000",
+          "scale": [
+            "0x4008000000000000",
+            "0x3ff0000000000000",
+            "0x3ff0000000000000"
+          ],
+          "type": "INSERT"
+        }
+      ],
+      "name": "PROBE_NONUNIFORM_SCALE_ROTATED_001_L1"
+    },
+    {
+      "entities": [
+        {
+          "center": [
+            "0x3ff0000000000000",
+            "0x3ff0000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "radius": "0x4000000000000000",
+          "type": "CIRCLE"
+        }
+      ],
+      "name": "PROBE_NONUNIFORM_SCALE_ROTATED_001_L2"
+    }
+  ],
+  "dwg_sha256": "9fd8cc060c04daa78d1b31bab78e6c27dce4cba89f271840b6dc29dc2973c4a3",
+  "dwg_version": "AC1032",
+  "layers": [
+    {
+      "frozen": false,
+      "name": "0",
+      "on": true
+    }
+  ],
+  "reader": "ACadSharp@3.7.1+d7dc111",
+  "schema": "pvec-gold/r0-open-dwg-read/2"
+}

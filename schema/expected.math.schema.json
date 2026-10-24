@@ -198,6 +198,16 @@
         "sense_about_normal": { "enum": ["CCW", "CW", "NOT_APPLICABLE"] }
       }
     },
+    "layer_state": {
+      "type": "object",
+      "required": ["name", "on", "frozen"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "on": { "type": "boolean" },
+        "frozen": { "type": "boolean" }
+      }
+    },
     "rejection": {
       "type": "object",
       "required": ["classification", "disposition"],
@@ -228,7 +238,8 @@
             },
             "orientation": { "$ref": "#/$defs/orientation" },
             "world": { "$ref": "#/$defs/world_curve" },
-            "rejection": { "$ref": "#/$defs/rejection" }
+            "rejection": { "$ref": "#/$defs/rejection" },
+            "layer": { "$ref": "#/$defs/layer_state" }
           }
         }
       ],
@@ -243,7 +254,7 @@
         "kind": { "enum": ["STRUCTURAL", "GEOMETRIC"] },
         "entity": { "type": "string" },
         "claim": {
-          "enum": ["CLASS_PRESERVED", "DEGREE_PRESERVED", "CONTROL_POINTS_PRESERVED", "KNOTS_PRESERVED", "WEIGHTS_PRESERVED", "PARAMETERIZATION_PRESERVED", "VERTEX_ORDER_PRESERVED", "CLOSURE_KIND_PRESERVED", "TRANSFORM_PRESERVED", "ORIENTATION_PRESERVED", "WORLD_SPACE_RESULT", "REJECTED"]
+          "enum": ["CLASS_PRESERVED", "DEGREE_PRESERVED", "CONTROL_POINTS_PRESERVED", "KNOTS_PRESERVED", "WEIGHTS_PRESERVED", "PARAMETERIZATION_PRESERVED", "VERTEX_ORDER_PRESERVED", "CLOSURE_KIND_PRESERVED", "TRANSFORM_PRESERVED", "ORIENTATION_PRESERVED", "WORLD_SPACE_RESULT", "REJECTED", "LAYER_STATE_PRESERVED"]
         },
         "statement": { "type": "string", "minLength": 1 }
       }

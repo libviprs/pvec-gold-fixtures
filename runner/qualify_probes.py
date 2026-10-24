@@ -31,11 +31,11 @@ EXACT = (STRUCTURAL_EXACT, GEOMETRIC)
 # PVec v1 capabilities (docs/ISO_PROFILE.md in libviprs/pvec) and the probes that cover them.
 CAPABILITIES = {
     "line": ["line-001"],
-    "polyline": ["polyline-001", "large-coords-001"],
+    "polyline": ["polyline-001", "large-coords-001", "lwpolyline-closed-001", "polyline2d-001"],
     "circle": ["circle-001", "tiny-radius-001"],
     "ellipse": ["ellipse-001"],
     "trimmed_curve": ["arc-seam-001", "elliptical-arc-001"],
-    "composite_curve": ["bulge-arc-001"],
+    "composite_curve": ["bulge-arc-001", "bulge-arc-neg-001"],
     "bezier": ["bezier-d3-001"],
     "bspline": ["bspline-d3-001", "bspline-d5-001", "repeated-knot-c0-001", "closed-by-endpoint-001", "closed-periodic-001"],
     "nurbs": ["nurbs-d3-001", "nurbs-d2-offconic-001", "nonunit-weight-001"],
@@ -276,9 +276,17 @@ def load_outputs(root, probe, prefix):
     return ver, stat
 
 
+def is_converter_probe(doc):
+    """Layer state has no STEP form, so a probe that records it (layer-state-001) is a DWG reader-mapping
+    probe only and is not put through the converters."""
+    return not any("layer" in e for e in doc["entities"])
+
+
 def build_report(pol, probes, outputs_for, resolved=()):
     results = {}
     for pid, doc in probes.items():
+        if not is_converter_probe(doc):
+            continue
         results[pid] = qualify_probe(pol, doc, outputs_for(pid))
     return {"schema_version": "pvec-gold/probe-qualification/1", "numeric_policy_version": pol.version,
             "probes": results, "capabilities": capability_verdicts(pol, results, resolved)}

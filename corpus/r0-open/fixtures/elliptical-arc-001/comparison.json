@@ -1,0 +1,210 @@
+{
+  "checks": {
+    "cross": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "ELLIPSE",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "ELLIPSE"
+      },
+      {
+        "expected": "0x4000000000000000",
+        "field": "center[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "center[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "center[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "normal[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "normal[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "normal[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x40070a3d70a3d70a",
+        "field": "major_axis_vector[0]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x40070a3d70a3d70a"
+      },
+      {
+        "expected": "0x3feae147ae147ae2",
+        "field": "major_axis_vector[1]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3feae147ae147ae2"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "major_axis_vector[2]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3fef5c28f5c28f5c",
+        "field": "axis_ratio",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3fef5c28f5c28f5c"
+      },
+      {
+        "expected": "0x3fd3333333333333",
+        "field": "start_param",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fd3333333333333"
+      },
+      {
+        "expected": "0x4004000000000000",
+        "field": "end_param",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4004000000000000"
+      }
+    ],
+    "own": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "ELLIPSE",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "ELLIPSE"
+      },
+      {
+        "expected": "0x4000000000000000",
+        "field": "center[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "center[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "center[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "normal[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "normal[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "normal[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x40070a3d70a3d70a",
+        "field": "major_axis_vector[0]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x40070a3d70a3d70a"
+      },
+      {
+        "expected": "0x3feae147ae147ae2",
+        "field": "major_axis_vector[1]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3feae147ae147ae2"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "major_axis_vector[2]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3fef5c28f5c28f5c",
+        "field": "axis_ratio",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3fef5c28f5c28f5c"
+      },
+      {
+        "expected": "0x3fd3333333333333",
+        "field": "start_param",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fd3333333333333"
+      },
+      {
+        "expected": "0x4004000000000000",
+        "field": "end_param",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4004000000000000"
+      }
+    ]
+  },
+  "evidence": null,
+  "fixture_id": "elliptical-arc-001",
+  "numeric_policy_version": "PVec numeric policy v1",
+  "reader_vs_reader_differences": [],
+  "reason": null,
+  "verdict": "AGREE"
+}

@@ -93,6 +93,8 @@ class Curve:
         elif c == "polyline":
             self.vs = [_v(v) for v in self.g["vertices"]]
             self.bs = [canon.check_scalar(b) for b in self.g["bulges"]]
+            if self.closure["closed_by_endpoint"]:
+                self.vs.append(self.vs[0])   # a closed polyline has an implicit closing segment, so the domain is [0, n]
         elif c in ("circle", "circular_arc"):
             self.c0, self.n, self.x = _v(self.g["center"]), _unit(_v(self.g["normal"])), _unit(_v(self.g["x_axis"]))
             self.y = _cross(self.n, self.x)

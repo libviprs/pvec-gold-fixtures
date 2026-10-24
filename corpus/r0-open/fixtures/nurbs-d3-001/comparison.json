@@ -1,0 +1,630 @@
+{
+  "checks": {
+    "cross": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "SPLINE",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "SPLINE"
+      },
+      {
+        "expected": 3,
+        "field": "degree",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 3
+      },
+      {
+        "expected": 6,
+        "field": "control_point_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 6
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[0][0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[0][1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[0][2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "control_point[1][0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x4000000000000000",
+        "field": "control_point[1][1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[1][2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x4004000000000000",
+        "field": "control_point[2][0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4004000000000000"
+      },
+      {
+        "expected": "0xbff0000000000000",
+        "field": "control_point[2][1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0xbff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[2][2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x4010000000000000",
+        "field": "control_point[3][0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4010000000000000"
+      },
+      {
+        "expected": "0x4008000000000000",
+        "field": "control_point[3][1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4008000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[3][2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x4016000000000000",
+        "field": "control_point[4][0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4016000000000000"
+      },
+      {
+        "expected": "0x3fe0000000000000",
+        "field": "control_point[4][1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[4][2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x401c000000000000",
+        "field": "control_point[5][0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x401c000000000000"
+      },
+      {
+        "expected": "0x4000000000000000",
+        "field": "control_point[5][1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[5][2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": 10,
+        "field": "knot_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 10
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "knot[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "knot[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "knot[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "knot[3]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3fd999999999999a",
+        "field": "knot[4]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fd999999999999a"
+      },
+      {
+        "expected": "0x3fe6666666666666",
+        "field": "knot[5]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe6666666666666"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "knot[6]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "knot[7]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "knot[8]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "knot[9]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": true,
+        "field": "rational",
+        "mode": "EXACT",
+        "ok": true,
+        "read": true
+      },
+      {
+        "expected": 6,
+        "field": "weight_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 6
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "weight[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3fe6666666666666",
+        "field": "weight[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe6666666666666"
+      },
+      {
+        "expected": "0x3ffccccccccccccd",
+        "field": "weight[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ffccccccccccccd"
+      },
+      {
+        "expected": "0x3fdccccccccccccd",
+        "field": "weight[3]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fdccccccccccccd"
+      },
+      {
+        "expected": "0x3ff4cccccccccccd",
+        "field": "weight[4]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff4cccccccccccd"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "weight[5]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": false,
+        "field": "closed(by knots)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": false
+      },
+      {
+        "expected": false,
+        "field": "periodic",
+        "mode": "EXACT",
+        "ok": true,
+        "read": false
+      },
+      {
+        "expected": 0,
+        "field": "fit_points",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 0
+      }
+    ],
+    "own": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "SPLINE",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "SPLINE"
+      },
+      {
+        "expected": 3,
+        "field": "degree",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 3
+      },
+      {
+        "expected": 6,
+        "field": "control_point_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 6
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[0][0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[0][1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[0][2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "control_point[1][0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x4000000000000000",
+        "field": "control_point[1][1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[1][2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x4004000000000000",
+        "field": "control_point[2][0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4004000000000000"
+      },
+      {
+        "expected": "0xbff0000000000000",
+        "field": "control_point[2][1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0xbff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[2][2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x4010000000000000",
+        "field": "control_point[3][0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4010000000000000"
+      },
+      {
+        "expected": "0x4008000000000000",
+        "field": "control_point[3][1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4008000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[3][2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x4016000000000000",
+        "field": "control_point[4][0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4016000000000000"
+      },
+      {
+        "expected": "0x3fe0000000000000",
+        "field": "control_point[4][1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[4][2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x401c000000000000",
+        "field": "control_point[5][0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x401c000000000000"
+      },
+      {
+        "expected": "0x4000000000000000",
+        "field": "control_point[5][1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[5][2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": 10,
+        "field": "knot_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 10
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "knot[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "knot[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "knot[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "knot[3]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3fd999999999999a",
+        "field": "knot[4]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fd999999999999a"
+      },
+      {
+        "expected": "0x3fe6666666666666",
+        "field": "knot[5]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe6666666666666"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "knot[6]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "knot[7]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "knot[8]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "knot[9]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": true,
+        "field": "rational",
+        "mode": "EXACT",
+        "ok": true,
+        "read": true
+      },
+      {
+        "expected": 6,
+        "field": "weight_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 6
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "weight[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3fe6666666666666",
+        "field": "weight[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe6666666666666"
+      },
+      {
+        "expected": "0x3ffccccccccccccd",
+        "field": "weight[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ffccccccccccccd"
+      },
+      {
+        "expected": "0x3fdccccccccccccd",
+        "field": "weight[3]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fdccccccccccccd"
+      },
+      {
+        "expected": "0x3ff4cccccccccccd",
+        "field": "weight[4]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff4cccccccccccd"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "weight[5]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": false,
+        "field": "closed(by knots)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": false
+      },
+      {
+        "expected": false,
+        "field": "periodic",
+        "mode": "EXACT",
+        "ok": true,
+        "read": false
+      },
+      {
+        "expected": 0,
+        "field": "fit_points",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 0
+      }
+    ]
+  },
+  "evidence": null,
+  "fixture_id": "nurbs-d3-001",
+  "numeric_policy_version": "PVec numeric policy v1",
+  "reader_vs_reader_differences": [],
+  "reason": null,
+  "verdict": "AGREE"
+}

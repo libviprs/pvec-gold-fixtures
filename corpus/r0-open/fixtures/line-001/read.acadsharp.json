@@ -1,0 +1,34 @@
+{
+  "blocks": [
+    {
+      "entities": [
+        {
+          "end": [
+            "0x400e000000000000",
+            "0x4004000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "start": [
+            "0x3fe0000000000000",
+            "0x3fd0000000000000",
+            "0x0000000000000000"
+          ],
+          "type": "LINE"
+        }
+      ],
+      "name": "*Model_Space"
+    }
+  ],
+  "dwg_sha256": "3eca180bec811026d5b968ca979ceb0b36b3d4504f56f09aa635431801b2b957",
+  "dwg_version": "AC1032",
+  "layers": [
+    {
+      "frozen": false,
+      "name": "0",
+      "on": true
+    }
+  ],
+  "reader": "ACadSharp@3.7.1+d7dc111",
+  "schema": "pvec-gold/r0-open-dwg-read/2"
+}

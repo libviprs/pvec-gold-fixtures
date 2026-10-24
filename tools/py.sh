@@ -19,7 +19,7 @@ if [ "${1:-}" = "--done" ]; then
 fi
 if ! "${ssh[@]}" "docker image inspect $img >/dev/null 2>&1"; then
   tar -cf - -C "$here/docker/py" Dockerfile -C "$here" requirements.txt \
-    | "${ssh[@]}" "docker build -q --platform linux/amd64 -t $img -" >/dev/null
+    | "${ssh[@]}" "DOCKER_CONFIG=${DOCKER_CONFIG_REMOTE:-/tmp/dcgold} docker build -q --platform linux/amd64 -t $img -" >/dev/null
 fi
 "$nas" push "$here" "$name" >/dev/null
 "$nas" run "$name" "$img" "$*"

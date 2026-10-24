@@ -211,7 +211,7 @@ class EndToEnd(unittest.TestCase):
                     elif "rejection" not in next(e for e in probes[pid]["entities"] if e["id"] == c["entity"]):
                         self.assertIn(c["class"], q.EXACT, (pid, conv, c["entity"], c))
         covered = {p for ps in q.CAPABILITIES.values() for p in ps}
-        self.assertEqual(covered, set(probes))
+        self.assertEqual(covered, {p for p, d in probes.items() if q.is_converter_probe(d)})
         self.assertTrue(all(r["status"] in ("CERTIFIED", "BLOCKED") for r in rep["capabilities"]))
 
 

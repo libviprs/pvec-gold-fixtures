@@ -24,6 +24,9 @@ A probe whose expected outcome is a rejection (the singular, near-singular, shea
 transforms) is judged on expectation: emitting no geometry meets it, and emitting a curve is marked
 `UNEXPECTED_GEOMETRY` and fails it.
 
+`layer-state-001` records layer state, which has no STEP form, so it is a DWG reader-mapping probe for the open-writer
+corpus (ADR 0008) and is not put through the converters.
+
 ## Capability verdicts
 
 For each PVec v1 capability (the sections of `docs/ISO_PROFILE.md` in `libviprs/pvec`) and the

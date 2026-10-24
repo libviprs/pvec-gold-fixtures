@@ -79,8 +79,10 @@ def build_curve(s):
                 "parameter_domain": dom("0", "1"), "closure": dict(CL0)}
     if c == "polyline":
         vs = s["vertices"]
+        closed = s.get("closed", False)
+        cl = dict(CL0, closed_by_endpoint=True) if closed else dict(CL0)
         return {"class": c, "geometry": {"vertices": [P(v) for v in vs], "bulges": [S(b) for b in s.get("bulges", ["0"] * len(vs))]},
-                "parameter_domain": dom("0", str(len(vs) - 1)), "closure": dict(CL0)}
+                "parameter_domain": dom("0", str(len(vs) if closed else len(vs) - 1)), "closure": cl}
     if c == "circle":
         return {"class": c, "geometry": {"center": P(s["center"]), "normal": P(n), "x_axis": P(x), "radius": S(s["radius"])},
                 "parameter_domain": dom("0", two_pi),
@@ -120,14 +122,18 @@ def bulge_equivalent_arc(s):
     chord = sqrt(d[0] ** 2 + d[1] ** 2)
     u = [d[0] / chord, d[1] / chord]
     left = [-u[1], u[0]]
-    r = chord * (1 + b * b) / (4 * b)
+    r = chord * (1 + b * b) / (4 * abs(b))
     off = chord * (1 - b * b) / (4 * b)
     mid = [(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2]
     cen = [mid[0] + left[0] * off, mid[1] + left[1] * off]
-    a0 = atan2(p0[1] - cen[1], p0[0] - cen[0])
+    # DWG and PVec arcs run counter-clockwise only. A negative bulge is the same arc walked the other
+    # way, so the record carries the counter-clockwise arc (start at the polyline's second vertex) and
+    # the entity says its parameter direction is reversed against the source.
+    pa = p0 if b > 0 else p1
+    a0 = atan2(pa[1] - cen[1], pa[0] - cen[0])
     if a0 < 0:
         a0 += 2 * pi
-    sweep = 4 * atan(b)
+    sweep = 4 * atan(abs(b))
     return {"class": "circular_arc",
             "geometry": {"center": [S(cen[0]), S(cen[1]), S("0")], "normal": P(["0", "0", "1"]), "x_axis": P(["1", "0", "0"]),
                          "radius": S(r), "start_angle": S(a0), "sweep_angle": S(sweep)},
@@ -303,10 +309,23 @@ def build_fixture(path):
         ents = [ent]
         assertions = asserts
         asserts_by = [(ent["id"], a) for a in asserts]
+    elif s["kind"] == "layers":
+        ents, asserts_by = [], []
+        for item in s["layers"]:
+            rec = build_curve(dict(item["curve"], **{"class": "line"}))
+            eid = "%s.%s" % (s["id"], item["name"].lower().replace("_", "-"))
+            ents.append({"id": eid, **rec, "structure": "CURVE_ONLY",
+                         "layer": {"name": item["name"], "on": item["on"], "frozen": item["frozen"]}})
+            asserts_by.append((eid, ("STRUCTURAL", "LAYER_STATE_PRESERVED",
+                                     "The entity stays on layer %s, which is %s and %s; it is neither dropped nor moved to another layer."
+                                     % (item["name"], "on" if item["on"] else "off", "frozen" if item["frozen"] else "thawed"))))
     elif s["kind"] == "bulge_arc":
         poly = build_curve({"class": "polyline", "vertices": [s["p0"], s["p1"]], "bulges": [s["bulge"], "0"]})
         arc = bulge_equivalent_arc(s)
-        ents = [{"id": s["id"], **poly, "structure": "CURVE_ONLY"}, {"id": s["id"] + "-equivalent-arc", **arc, "structure": "CURVE_ONLY"}]
+        arc_ent = {"id": s["id"] + "-equivalent-arc", **arc, "structure": "CURVE_ONLY"}
+        if mpf(s["bulge"]) < 0:
+            arc_ent["orientation"] = {"parameter_direction": "REVERSED_AGAINST_SOURCE", "sense_about_normal": "CW"}
+        ents = [{"id": s["id"], **poly, "structure": "CURVE_ONLY"}, arc_ent]
         asserts_by = [(s["id"], ("STRUCTURAL", "VERTEX_ORDER_PRESERVED", "Two vertices with bulge %s kept as a bulge segment, not split or flattened." % s["bulge"])),
                       (s["id"] + "-equivalent-arc", ("GEOMETRIC", "WORLD_SPACE_RESULT", "The arc the bulge describes: neither a quarter nor a half circle."))]
     else:
