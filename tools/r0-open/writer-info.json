@@ -1,0 +1,10 @@
+{
+  "writer_source": "https://github.com/libviprs/acadrust at d35691f483534e4affc3a4065486e168c898ac7d (0.5.5 plus 132 commits), DwgWriter and DwgReader, via tools/r0-open/rust",
+  "own_reader": "acadrust@0.5.5+d35691f",
+  "cross_reader": "ACadSharp@3.7.1+d7dc111",
+  "cross_reader_source": "https://github.com/DomCR/ACadSharp at d7dc111023477d8a9fffc2153139459c95b4f345 (upstream 3.7.1, built from source, JIT, DwgReader.Read), via tools/r0-open/acadsharp-dump. This is the C# source acadsharp-rs wraps, without libviprs-dep's NativeAOT build and patches.",
+  "images": {
+    "writer_and_own_reader": "rust:1.99.1-bookworm sha256:e12566d5abc17a0da741628782cdb504b68b8961f5bfcf677936bf3e8b32de29 (linux/amd64, native x86_64 on MARS)",
+    "cross_reader": "mcr.microsoft.com/dotnet/sdk:10.0.401-noble sha256:e70cdb7f80b0348f5cb85f19a8f670fca061f033d57eed12fa003d58b0e06317 (linux/amd64, native x86_64 on MARS)"
+  }
+}

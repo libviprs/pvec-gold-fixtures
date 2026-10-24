@@ -1,0 +1,16 @@
+[package]
+name = "r0open"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "Writes the r0-open probe DWGs with acadrust's DwgWriter and dumps what acadrust's reader sees"
+
+[dependencies]
+# libviprs/acadrust at the commit below, which is 0.5.5 plus 132 commits. The pin is a sha, not a
+# branch, so the writer named in the corpus manifest is one exact tree.
+acadrust = { git = "https://github.com/libviprs/acadrust", rev = "d35691f483534e4affc3a4065486e168c898ac7d" }
+serde_json = "1"
+sha2 = "0.10"
+
+[profile.release]
+debug = false

@@ -1,0 +1,140 @@
+{
+  "checks": {
+    "cross": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "CIRCLE",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "CIRCLE"
+      },
+      {
+        "expected": "0x3ff8000000000000",
+        "field": "center[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff8000000000000"
+      },
+      {
+        "expected": "0xc002000000000000",
+        "field": "center[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0xc002000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "center[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x4006000000000000",
+        "field": "radius",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4006000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "normal[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "normal[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "normal[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      }
+    ],
+    "own": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "CIRCLE",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "CIRCLE"
+      },
+      {
+        "expected": "0x3ff8000000000000",
+        "field": "center[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff8000000000000"
+      },
+      {
+        "expected": "0xc002000000000000",
+        "field": "center[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0xc002000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "center[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x4006000000000000",
+        "field": "radius",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4006000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "normal[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "normal[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "normal[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      }
+    ]
+  },
+  "evidence": null,
+  "fixture_id": "circle-001",
+  "numeric_policy_version": "PVec numeric policy v1",
+  "reader_vs_reader_differences": [],
+  "reason": null,
+  "verdict": "AGREE"
+}

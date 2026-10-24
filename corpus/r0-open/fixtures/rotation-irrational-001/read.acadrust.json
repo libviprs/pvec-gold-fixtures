@@ -1,0 +1,51 @@
+{
+  "blocks": [
+    {
+      "entities": [
+        {
+          "block": "PROBE_ROTATION_IRRATIONAL_001_L1",
+          "insert_point": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x0000000000000000"
+          ],
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "rotation": "0x3ff0000000000000",
+          "scale": [
+            "0x3ff0000000000000",
+            "0x3ff0000000000000",
+            "0x3ff0000000000000"
+          ],
+          "type": "INSERT"
+        }
+      ],
+      "name": "*Model_Space"
+    },
+    {
+      "entities": [
+        {
+          "end": [
+            "0x400e000000000000",
+            "0x4004000000000000",
+            "0x0000000000000000"
+          ],
+          "start": [
+            "0x3fe0000000000000",
+            "0x3fd0000000000000",
+            "0x0000000000000000"
+          ],
+          "type": "LINE"
+        }
+      ],
+      "name": "PROBE_ROTATION_IRRATIONAL_001_L1"
+    }
+  ],
+  "dwg_sha256": "07066e4133da04a520d2c682ddbe30a5b9fd6134a96c72902b5adce893d86349",
+  "dwg_version": "AC1032",
+  "reader": "acadrust@0.5.5+d35691f",
+  "schema": "pvec-gold/r0-open-dwg-read/1"
+}

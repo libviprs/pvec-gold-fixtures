@@ -16,6 +16,11 @@ evaluator and the expected side of the probes are done and tested. What waits on
 converters (their images, the probe DWGs, the probe qualification) is listed in
 [docs/phase1-converter-qualification.md](docs/phase1-converter-qualification.md).
 
+There is also a candidate corpus revision that doesn't wait on the converters: `r0-open`
+([corpus/r0-open](corpus/r0-open/README.md), [ADR 0008](docs/adr/0008-open-writer-known-truth-corpus.md)).
+It is DWGs written by an open writer and cross-read by a second open reader, with no STEP oracle, so it is
+`KNOWN_TRUTH_EXACT` for reader mapping only and doesn't turn the phase 1 exit gate green.
+
 Three phases and 27 issues under [#1](https://github.com/libviprs/pvec-gold-fixtures/issues/1).
 Phase 1 proves the methodology — including validating the STEP validator itself against hand-known
 primitives — before any mass fixture generation.

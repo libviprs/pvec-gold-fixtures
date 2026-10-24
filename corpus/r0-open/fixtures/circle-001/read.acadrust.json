@@ -1,0 +1,27 @@
+{
+  "blocks": [
+    {
+      "entities": [
+        {
+          "center": [
+            "0x3ff8000000000000",
+            "0xc002000000000000",
+            "0x0000000000000000"
+          ],
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "radius": "0x4006000000000000",
+          "type": "CIRCLE"
+        }
+      ],
+      "name": "*Model_Space"
+    }
+  ],
+  "dwg_sha256": "27e9ce322e461d4d0cafa49ce823b0a88db254710bb0878d2eafa5657c7270e2",
+  "dwg_version": "AC1032",
+  "reader": "acadrust@0.5.5+d35691f",
+  "schema": "pvec-gold/r0-open-dwg-read/1"
+}

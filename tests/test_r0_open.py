@@ -60,7 +60,7 @@ class ManifestHeader(unittest.TestCase):
         self.assertIn(family(m["writer"]), OPEN_FAMILIES)
 
     def test_numeric_policy_is_stamped(self):
-        self.assertEqual(manifest()["numeric_policy"]["policy_version"], "PVec numeric policy v1")
+        self.assertEqual(manifest()["numeric_policy_version"], "PVec numeric policy v1")
 
     def test_adr_exists_and_states_the_rules(self):
         self.assertTrue(ADR.is_file(), "ADR 0008 does not exist yet")
@@ -142,7 +142,8 @@ class EveryFixture(unittest.TestCase):
         for f in manifest()["fixtures"]:
             if f["cross_read"]["verdict"] != "AGREE":
                 self.assertEqual(f["evidence_class"], "QUARANTINED", f["id"])
-                self.assertEqual(f["quarantine"]["reason"], "UNRESOLVED_DISAGREEMENT", f["id"])
+                want = {"DISAGREE": "UNRESOLVED_DISAGREEMENT", "UNREADABLE": "MALFORMED_FIXTURE"}
+                self.assertEqual(f["quarantine"]["reason"], want[f["cross_read"]["verdict"]], f["id"])
 
     def test_checksums_verify(self):
         sums = CORPUS / "SHA256SUMS"
@@ -150,6 +151,90 @@ class EveryFixture(unittest.TestCase):
         for line in sums.read_text().splitlines():
             digest, name = line.split("  ", 1)
             self.assertEqual(sha(CORPUS / name), digest, name)
+
+
+class VerdictsRecompute(unittest.TestCase):
+    """The verdicts are not taken on trust: they are recomputed from the stored read records."""
+
+    def test_check_passes_on_the_corpus(self):
+        from runner import r0_open
+        self.assertEqual(r0_open.check(CORPUS), [])
+
+    def _record(self, fid, which="acadsharp"):
+        return json.loads((CORPUS / "fixtures" / fid / ("read.%s.json" % which)).read_text())
+
+    def _verdict(self, fid, own, cross):
+        from runner import numeric, r0_open
+        return r0_open.verdict(numeric.load_policy(), fid, "acadrust@x", own, cross)
+
+    def test_the_corpus_verdicts_are_agree_on_untouched_records(self):
+        v = self._verdict("bspline-d3-001", self._record("bspline-d3-001", "acadrust"), self._record("bspline-d3-001"))
+        self.assertEqual(v["verdict"], "AGREE")
+
+    def test_a_changed_control_point_in_the_cross_read_quarantines(self):
+        own, cross = self._record("bspline-d3-001", "acadrust"), self._record("bspline-d3-001")
+        cross["blocks"][0]["entities"][0]["control_points"][2][0] = "0x4000000000000001"
+        v = self._verdict("bspline-d3-001", own, cross)
+        self.assertEqual((v["verdict"], v["reason"]), ("DISAGREE", "UNRESOLVED_DISAGREEMENT"))
+
+    def test_a_weight_renormalised_to_one_is_caught(self):
+        own, cross = self._record("nonunit-weight-001", "acadrust"), self._record("nonunit-weight-001")
+        cross["blocks"][0]["entities"][0]["weights"] = ["0x3ff0000000000000"] * len(cross["blocks"][0]["entities"][0]["weights"])
+        self.assertEqual(self._verdict("nonunit-weight-001", own, cross)["verdict"], "DISAGREE")
+
+    def test_a_collapsed_knot_is_caught(self):
+        own, cross = self._record("repeated-knot-c0-001", "acadrust"), self._record("repeated-knot-c0-001")
+        ks = cross["blocks"][0]["entities"][0]["knots"]
+        ks[4] = ks[2] = ks[3] = "0x3fe0000000000001"
+        self.assertEqual(self._verdict("repeated-knot-c0-001", own, cross)["verdict"], "DISAGREE")
+
+    def test_both_readers_agreeing_with_each_other_but_not_the_truth_still_quarantines(self):
+        own, cross = self._record("circle-001", "acadrust"), self._record("circle-001")
+        for r in (own, cross):
+            r["blocks"][0]["entities"][0]["radius"] = "0x4000000000000000"
+        v = self._verdict("circle-001", own, cross)
+        self.assertEqual(v["reader_vs_reader_differences"], [])
+        self.assertEqual(v["verdict"], "DISAGREE")
+
+    def test_the_two_readers_disagreeing_quarantines_even_when_each_is_near_the_truth(self):
+        own, cross = self._record("arc-seam-001", "acadrust"), self._record("arc-seam-001")
+        e = cross["blocks"][0]["entities"][0]
+        e["end_angle"] = "0x%016x" % (int(e["end_angle"], 16) + 1)  # one ulp, inside the policy
+        v = self._verdict("arc-seam-001", own, cross)
+        self.assertEqual(v["verdict"], "DISAGREE")
+        self.assertTrue(v["reader_vs_reader_differences"])
+
+    def test_an_unopenable_file_is_malformed_not_accepted(self):
+        v = self._verdict("line-001", self._record("line-001", "acadrust"), None)
+        self.assertEqual((v["verdict"], v["reason"]), ("UNREADABLE", "MALFORMED_FIXTURE"))
+
+    def test_a_reflection_reversed_is_caught(self):
+        own, cross = self._record("reflection-001", "acadrust"), self._record("reflection-001")
+        for r in (own, cross):
+            ins = r["blocks"][0]["entities"][0]
+            ins["scale"][0] = "0x3ff0000000000000"  # the reflection silently dropped
+        self.assertEqual(self._verdict("reflection-001", own, cross)["verdict"], "DISAGREE")
+
+    def test_the_nested_chain_order_matters(self):
+        own, cross = self._record("nested-blocks-001", "acadrust"), self._record("nested-blocks-001")
+        for r in (own, cross):
+            names = {b["name"]: b for b in r["blocks"]}
+            ms = names["*Model_Space"]["entities"][0]
+            inner = [b for b in r["blocks"] if b["name"] != "*Model_Space" and b["entities"][0]["type"] == "INSERT"]
+            # swap the insert parameters of the outermost level and the next one
+            a, b = ms, inner[0]["entities"][0]
+            for k in ("insert_point", "scale", "rotation"):
+                a[k], b[k] = b[k], a[k]
+        self.assertEqual(self._verdict("nested-blocks-001", own, cross)["verdict"], "DISAGREE")
+
+
+class ExpectedRecordsAreUntouched(unittest.TestCase):
+    def test_the_manifest_pins_every_expected_record_and_parameter_file(self):
+        for f in manifest()["fixtures"]:
+            self.assertEqual(sha(ROOT / f["parameter_file"]["path"]), f["parameter_file"]["sha256"], f["id"])
+            rec = json.loads((ROOT / f["expected"]["path"]).read_text())
+            self.assertEqual(rec["provenance"]["parameter_file_sha256"], f["parameter_file"]["sha256"], f["id"])
+            self.assertNotIn("source.dwg", json.dumps(rec), f["id"])
 
 
 if __name__ == "__main__":

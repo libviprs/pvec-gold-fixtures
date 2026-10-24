@@ -1,0 +1,96 @@
+# ADR 0008: open-writer known-truth corpus
+
+Status: proposed, and a panel decision. It is not frozen by the phase 1 exit gate, because it is a way
+round that gate's blockers and not part of it. Panel findings answered: 1 (an agreement between two
+tools is weaker than known truth, so I say exactly how weak this one is) and 2 (the truth is authored
+before any DWG exists).
+
+## Context
+
+Epic O (#1) is blocked. Every task that needs a DWG waits on a vendor DWG writer (the ODA Drawings SDK)
+or a STEP converter (CAD Exchanger, ODA STEP), and none of them is qualified, so O1.5 and O1.6 have
+`expected.math.json` records and no `source.dwg` anywhere. The downstream repositories (`pvec`,
+`libviprs`, `maplibre-pvec`) need something real to read, and a corpus that can be built today by an
+open writer is better than a pipeline that waits on a licence.
+
+The catch is that an open writer proves much less than the pipeline in #1 was designed to prove, and I
+don't want the corpus to look stronger than it is.
+
+## Decision
+
+I build corpus revision `r0-open`, a candidate revision (O2.9 is the freeze, and this isn't it), from
+DWGs written by an open writer, and I state its limits in the manifest itself.
+
+**Writer.** `acadrust`'s `DwgWriter`, pinned to one commit of `libviprs/acadrust`, writing DWG version
+AC1032. The manifest records `writer: acadrust@<version>` and where the source came from. A probe the
+writer can't store exactly is not written as a lookalike: it is excluded and listed with the reason
+(`UNSUPPORTED_ENTITY`, ADR 0006). In the first run those are `shear-001` and `general-affine-001`, since
+an INSERT carries translation, one rotation and three scales and no shear, and `singular-001`, since
+acadrust's scale setter rewrites a zero scale to 1e-12, which would turn it into a different probe. (I
+also read ACadSharp's `Insert.XScale` setter, which refuses zero by throwing, so I don't expect that
+family to store it either. That is a reading of its source, not a run.)
+
+**Truth.** The `expected.math.json` records and parameter files that O1.5a and O1.6a already recorded.
+They were authored before any DWG existed and r0-open never edits them. The manifest holds each file's
+SHA-256, and `python3 -m runner.r0_open check` fails if either changes. The writer takes the exact f64
+bits from the records' `f64_hex` fields, and the transform operations from the decimal strings of the
+parameter files. That has a consequence I'd rather state than hide: the writer's input is the truth, so
+the check can't catch a mistake in the authoring. It checks the path from the authored numbers through a
+DWG file and back out of two independent decoders.
+
+**Cross-read rule.** Every probe DWG written by one open family is also read by the other family's
+reader: acadrust-written files are read by ACadSharp's reader (upstream ACadSharp built from source at a
+pinned commit, which is the C# the `acadsharp-rs` crate wraps, without `libviprs-dep`'s NativeAOT build),
+and a file written by ACadSharp's writer would be read by acadrust's reader. A probe is `AGREE` only if
+all three of these hold:
+
+1. the other family's reader returns the authored mathematics,
+2. the writer family's own reader returns it too, and
+3. the two readers' decoded records of the DWG are identical, field for field.
+
+If one fails, the probe is `QUARANTINED` with `UNRESOLVED_DISAGREEMENT` and the evidence (the fields
+that differ). If the other family's reader can't open the file, it is quarantined as `MALFORMED_FIXTURE`.
+A probe is never accepted on the writer's say-so, and never accepted because the two readers agree with
+each other while both differ from the truth. Both read records are stored with the DWG, so the verdict is
+recomputed from them, without a DWG library, by `runner/r0_open.py check`.
+
+**Two comparison modes, per field.** `EXACT` where the DWG stores the authored f64 verbatim (points,
+radii, control points, knots, weights, bulges, scales, insert points) and both readers must return the
+same bits. `POLICY` where the DWG stores a derived value (an arc's end angle, an ellipse's major axis
+vector and ratio, an INSERT's rotation angle), compared with PVec numeric policy v1 (`near`, NP-05). The
+mode is written next to every field in `comparison.json`. The world-space results of the transform
+probes are computed by the harness from the read-back chain and compared with the record, so they say
+nothing about what a reader reports.
+
+**What the corpus says about itself, and what is forbidden.**
+
+- The manifest says `oracles: none` and `step_oracle: none`. No STEP file exists in the revision, and
+  none may be added to it.
+- Nothing is attributed to CAD Exchanger or ODA, in any file or field. Their outputs and their writer
+  are absent from this revision, and any mention is of what is missing.
+- No fixture is `DUAL_ORACLE_EQUIVALENT` (ADR 0003). That class needs two converters, and there are none.
+- The class of an accepted fixture is `KNOWN_TRUTH_EXACT` with the scope field `evidence_scope:
+  READER_MAPPING_ONLY`. ADR 0001 defines `KNOWN_TRUTH_EXACT` as authored mathematics plus a converted output
+  that agrees. This revision has no converted output, so the scope field is what narrows the claim, and
+  the manifest and every fixture README say so in words: there is no STEP oracle. A consumer that needs
+  STEP exactness must not take it from this revision.
+- Every artifact names the container image digest that produced it (writer image and reader image), and
+  every result is from native x86_64 (MARS).
+
+## What this unblocks, and what it doesn't
+
+It gives the downstream repositories real DWGs, with authored truth for what a DWG reader should return,
+which is what a DWG reader mapping test needs. It does not say how any converter or STEP path treats these
+drawings, that the authored mathematics is what an AutoCAD-class application would draw from them, or
+anything about the STEP evaluator. The vendor-qualified part of O1.5 and O1.6 (the ODA writer, STEP
+verdicts, byte-identical regeneration under it, the discrimination criteria that inject into STEP
+outputs) is tracked in #42, and a later revision supersedes `r0-open`, with `corpus/CHANGELOG.md`
+explaining each fixture's class change.
+
+## Consequences
+
+`r0-open` can be rebuilt by anyone with Docker (`tools/r0-open/run.sh`), and read by anyone with Python
+(`runner/r0_open.py check`). The honesty rules are executable: `tests/test_r0_open.py` fails if a STEP file
+appears, a vendor is named as a producer, a fixture takes the `DUAL_ORACLE_EQUIVALENT` class, or a verdict
+doesn't recompute. A second open writer (ACadSharp's `DwgWriter`, read by acadrust) is the natural next
+revision, and it would test the other direction of the rule.
