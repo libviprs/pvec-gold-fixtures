@@ -243,7 +243,7 @@ class NamedConverters(unittest.TestCase):
         rep = q.build_report(POL, probes, outs)
         self.assertEqual(sorted(rep["probes"]["line-001"]), sorted(OPEN_IDS))
         row = next(r for r in rep["capabilities"] if r["capability"] == "line")
-        self.assertEqual((row["status"], row[OPEN_IDS[0]], row[OPEN_IDS[1]]), ("CERTIFIED", q.STRUCTURAL_EXACT, q.STRUCTURAL_EXACT))
+        self.assertEqual((row["status"], row["by_converter"]), ("CERTIFIED", {OPEN_IDS[0]: q.STRUCTURAL_EXACT, OPEN_IDS[1]: q.STRUCTURAL_EXACT}))
         self.assertEqual(list(rep["converters"].values()), list(OPEN_IDS))
         with tempfile.TemporaryDirectory() as t:
             out = str(Path(t) / "r.json")
@@ -251,9 +251,13 @@ class NamedConverters(unittest.TestCase):
             ok = q.main(base + ["--primary", OPEN_IDS[0], t, "--secondary", OPEN_IDS[1], t,
                                 "--lineage", OPEN_IDS[0] + "=ACadSharp", "--lineage", OPEN_IDS[1] + "=LibreDWG"])
             self.assertEqual(ok, 0)
-            self.assertEqual(list(json.loads(Path(out).read_text())["converters"].values()), list(OPEN_IDS))
+            written = json.loads(Path(out).read_text())
+            self.assertEqual(list(written["converters"].values()), list(OPEN_IDS))
+            self.assertEqual(written["lineages"], {OPEN_IDS[0]: "ACadSharp", OPEN_IDS[1]: "LibreDWG"})
             for bad in (["--primary", "a", t, "--secondary", "b", t, "--lineage", "a=LibreDWG", "--lineage", "b=LibreDWG"],
-                        ["--primary", "a", t, "--secondary", "a", t]):
+                        ["--primary", "a", t, "--secondary", "a", t, "--lineage", "a=X"],
+                        ["--primary", "a", t, "--secondary", "b", t],
+                        ["--primary", "a", t, "--secondary", "b", t, "--lineage", "a=ACadSharp"]):
                 with self.assertRaises(SystemExit):
                     q.main(base + bad)
 
@@ -268,13 +272,21 @@ class NamedConverters(unittest.TestCase):
                        ids[1]: [{"entity": "x", "class": q.BOUNDED, "evidence": {}}]} for p in q.CAPABILITIES["line"]}
             self.assertIn("unresolved converter discrepancy", " ".join(q.capability_verdicts(POL, res)[0]["reasons"]), ids)
 
+    def test_a_converter_id_cannot_overwrite_a_capability_row_key(self):
+        ids = ("status", "reasons")
+        res = {p: {i: [{"entity": "x", "class": q.STRUCTURAL_EXACT, "evidence": {}}] for i in ids} for p in q.CAPABILITIES["line"]}
+        r = q.capability_verdicts(POL, res)[0]
+        self.assertEqual((r["status"], r["reasons"]), ("CERTIFIED", []))
+        self.assertEqual(r["by_converter"], {i: q.STRUCTURAL_EXACT for i in ids})
+
     def test_the_gate_reads_the_converter_ids_from_the_report(self):
         from runner import phase1_gate as g
         probes = {}
         for f in sorted(KT.rglob("expected.math.json")):
             d = em.load(f)
             probes[d["fixture_id"]] = {c: [{"entity": e["id"], "class": q.STRUCTURAL_EXACT, "evidence": {"fields_compared": 1}} for e in d["entities"]] for c in OPEN_IDS}
-        rep = {"numeric_policy_version": POL.version, "converters": {"primary": OPEN_IDS[0], "secondary": OPEN_IDS[1]}, "probes": probes}
+        rep = {"numeric_policy_version": POL.version, "converters": {"primary": OPEN_IDS[0], "secondary": OPEN_IDS[1]},
+               "lineages": {OPEN_IDS[0]: "ACadSharp", OPEN_IDS[1]: "LibreDWG"}, "probes": probes}
         with tempfile.TemporaryDirectory() as t:
             p = Path(t) / "r.json"
             p.write_text(json.dumps(rep))
@@ -282,6 +294,26 @@ class NamedConverters(unittest.TestCase):
             del rep["probes"]["line-001"][OPEN_IDS[1]]
             p.write_text(json.dumps(rep))
             self.assertTrue(any("line-001" in e and OPEN_IDS[1] in e for e in g.check_probe_classification(p)))
+
+    def test_the_gate_is_red_when_the_report_does_not_show_two_lineages(self):
+        from runner import phase1_gate as g
+        probes = {}
+        for f in sorted(KT.rglob("expected.math.json")):
+            d = em.load(f)
+            probes[d["fixture_id"]] = {c: [{"entity": e["id"], "class": q.STRUCTURAL_EXACT, "evidence": {"fields_compared": 1}} for e in d["entities"]] for c in OPEN_IDS}
+        base = {"numeric_policy_version": POL.version, "converters": {"primary": OPEN_IDS[0], "secondary": OPEN_IDS[1]}, "probes": probes}
+        for name, extra in (("none", {}), ("one", {"lineages": {OPEN_IDS[0]: "ACadSharp"}}),
+                            ("same", {"lineages": {OPEN_IDS[0]: "LibreDWG", OPEN_IDS[1]: "libredwg"}})):
+            with tempfile.TemporaryDirectory() as t:
+                p = Path(t) / "r.json"
+                p.write_text(json.dumps(dict(base, **extra)))
+                self.assertTrue(any("lineage" in e for e in g.check_probe_classification(p)), name)
+
+    def test_the_qualification_doc_names_the_new_flags(self):
+        t = (ROOT / "docs" / "phase1-converter-qualification.md").read_text()
+        self.assertNotIn("--cadex", t)
+        self.assertNotIn("--oda", t)
+        self.assertIn("--primary cadex DIR --secondary oda DIR", t)
 
 
 class StatusRecord(unittest.TestCase):
