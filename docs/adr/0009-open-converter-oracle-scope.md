@@ -34,19 +34,24 @@ status record's `converter` field takes the same id.
 
 **`evidence_scope`** gains `STEP_ORACLE` next to `READER_MAPPING_ONLY`. A fixture with `STEP_ORACLE` needs
 an `oracle_scope` other than `NONE`, and the manifest has to list at least two named converters with
-distinct lineages. `DUAL_ORACLE_EQUIVALENT` likewise needs an `oracle_scope` other than `NONE`.
+distinct lineages. `DUAL_ORACLE_EQUIVALENT` likewise needs `STEP_ORACLE` evidence and an `oracle_scope` other than `NONE`.
 
 The four class names and their ADR 0001 definitions don't change. A consumer that needs vendor agreement
 filters on `oracle_scope` instead of reading a class as more than it says.
 
 `runner/r0_open.py` holds the vocabulary (`ORACLE_SCOPES`, `EVIDENCE_SCOPES`) and `scope_problems`, which
 checks a manifest against these rules. `runner/qualify_probes.py` takes `--primary ID DIR --secondary ID DIR`,
-refuses two equal ids (or two equal lineages when `--lineage` gives them), and keeps every verdict rule: the
-rules never look at the ids.
+needs `--lineage ID=NAME` for both, refuses two equal ids or two equal lineages, writes the lineages into the
+report (the gate checks them again), and keeps every verdict rule: the rules never look at the ids.
+`DUAL_ORACLE_EQUIVALENT` needs `STEP_ORACLE` evidence, and `VENDOR_CONVERTERS` needs converters that name a vendor.
 
-**Common mode.** The common-mode caveat is named here. Both STEP serialisers are thin and hand-written, so a shared mistake in how a curve is
-written to Part 21 is possible. The independence is in the decoders, which share no code, and that is what
-the lineage field records. This is the open route's version of the caveat in ADR 0003, not a way round it.
+**Common mode.** The common-mode statement: what the two converters share, said plainly. Both implement the same DWG specification,
+so a shared misreading of it would pass (the cross-read in ADR 0008 has the same limit). Both read the
+same source DWGs, written by one open writer. Both STEP serialisers are thin and hand-written, so a shared
+mistake in how a curve is written to Part 21 is possible. And both outputs go through the same evaluator,
+built on Open CASCADE (ADR 0004). What differs is the decoder code, which shares nothing between the two
+lineages, and that is all the lineage field records. This is the open route's version of the caveat in
+ADR 0003, not a way round it.
 
 ## Consequences
 

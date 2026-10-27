@@ -20,6 +20,7 @@ import tempfile
 from pathlib import Path
 
 from . import expected_math as em, numeric, qualify_probes as q, structural, verification
+from .r0_open import lineage_problems
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -33,6 +34,9 @@ def check_probe_classification(report_path):
     if rep.get("numeric_policy_version") != numeric.load_policy().version:
         errs.append("report carries policy version %r, adopted %r" % (rep.get("numeric_policy_version"), numeric.load_policy().version))
     conv_ids = list(rep["converters"].values()) if rep.get("converters") else list(q.CONVERTERS)
+    if rep.get("converters"):
+        lin = rep.get("lineages") or {}
+        errs += lineage_problems([{"id": i, "lineage": lin.get(i, "")} for i in conv_ids])
     expected = {}
     for f in sorted((ROOT / "fixtures" / "known-truth").rglob("expected.math.json")):
         d = em.load(f)

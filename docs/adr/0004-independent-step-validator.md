@@ -1,7 +1,7 @@
 # ADR 0004: one independent STEP validator, itself validated
 
-Status: proposed, and **not yet freezable**: the independence claim below still needs checking
-against the two vendors' own component lists. Panel finding answered: 5.
+Status: proposed. It can be frozen for the open route (see the amendment); for a vendor path it is **still open**, because the independence claim below still
+needs checking against the two vendors' own component lists. Panel finding answered: 5.
 
 ## Context
 
@@ -32,7 +32,7 @@ differences are named rather than hidden (`docs/validator/step-evaluator.md`).
 ## Amendment (ADR 0009)
 
 For the open route the independence claim is settled: neither open converter links Open CASCADE (the
-ACadSharp one is C# code and the LibreDWG one is Python over `dwgread` output), so the evaluator shares
+ACadSharp one is C# code; LibreDWG is C, and the converter is Python over dwgread JSON), so the evaluator shares
 no STEP code with either. Each converter entry in a manifest states `links_occt`, and an `OPEN_CONVERTERS`
 revision with anything but `false` there is refused. That lets this ADR be frozen for the open route.
 It stays open for any vendor path, where the component-list check above still has to be done.

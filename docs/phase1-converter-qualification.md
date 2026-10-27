@@ -73,7 +73,7 @@ about what either converter actually does.
 1. The CAD Exchanger and ODA images (`docs/converters/*-qualification.md` list the exact blockers).
 2. `source.dwg` for each probe, written by the ODA Drawings SDK writer.
 3. Running both converters on every probe on native x86_64, evaluating both outputs with `step_eval`,
-   and `python3 -m runner.qualify_probes --cadex DIR --oda DIR`.
+   and `python3 -m runner.qualify_probes --primary cadex DIR --secondary oda DIR --lineage cadex=NAME --lineage oda=NAME`.
 4. The probe-by-converter matrix and the per-capability verdict table, written into this file from the
    report, with every cell's deciding evidence.
 5. A statement of which PVec v1 capabilities have no exact representation (phase 2 blockers).

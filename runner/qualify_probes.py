@@ -1,12 +1,13 @@
 """Classify each converter's output for each probe, and roll the cells up per PVec capability.
 
     python3 -m runner.qualify_probes --probes fixtures/known-truth --primary ID DIR --secondary ID DIR \
-        [--lineage ID=NAME --lineage ID=NAME] --out reports/phase1/probe-qualification.json [--resolved FILE]
+        --lineage ID=NAME --lineage ID=NAME --out reports/phase1/probe-qualification.json [--resolved FILE]
 
 ID is the converter's name in the report (for example acadsharp-dwg2step, libredwg-dwg2step, cadex or oda).
 DIR holds <probe-id>/primary.verification.json (+ primary.status.json) for the primary converter and
 <probe-id>/secondary.verification.json (+ secondary.status.json) for the secondary one. With --lineage for
-both, two converters of one lineage are refused as a dual oracle (ADR 0009); two equal ids always are.
+both ids is required: two converters of one lineage, or two equal ids, are refused as a dual oracle (ADR 0009),
+and the report records the lineages so a verdict always shows whose decoders produced it.
 Comparison reads the normalised evaluator records, never STEP text, and every threshold comes from the
 vendored policy. The verdict rules do not look at the ids.
 
@@ -261,7 +262,7 @@ def capability_verdicts(pol, results, resolved=()):
             reasons.append("unresolved converter discrepancy on: %s" % ", ".join(disc))
         if rej_fail:
             reasons.append("a rejection probe was not honoured: %s" % ", ".join(rej_fail))
-        rows.append({"capability": cap, "probes": probes, "converters": convs, **per_conv,
+        rows.append({"capability": cap, "probes": probes, "converters": convs, "by_converter": per_conv,
                      "certified_structural": cert_struct, "certified_geometric": cert_geom,
                      "status": "CERTIFIED" if cert_geom else "BLOCKED", "reasons": reasons})
     return rows
@@ -312,7 +313,7 @@ def main(argv):
     if pid_ == sid_:
         raise SystemExit("--primary and --secondary name the same converter %r: that is one oracle, not two" % pid_)
     lin = dict(x.split("=", 1) for x in a.lineage)
-    bad = lineage_problems([{"id": i, "lineage": lin[i]} for i in (pid_, sid_) if i in lin])
+    bad = lineage_problems([{"id": i, "lineage": lin.get(i, "")} for i in (pid_, sid_)])
     if bad:
         raise SystemExit(bad[0])
     pol = numeric.load_policy()
@@ -323,10 +324,11 @@ def main(argv):
     resolved = json.loads(Path(a.resolved).read_text()) if a.resolved else []
     outputs_for = lambda pid: {pid_: load_outputs(pdir, pid, "primary"), sid_: load_outputs(sdir, pid, "secondary")}  # noqa: E731
     rep = build_report(pol, probes, outputs_for, resolved)
+    rep["lineages"] = {pid_: lin[pid_], sid_: lin[sid_]}
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     Path(a.out).write_text(json.dumps(rep, indent=2) + "\n")
     for r in rep["capabilities"]:
-        print("%-18s %-10s %s=%-32s %s=%-32s %s" % (r["capability"], r["status"], pid_, r[pid_], sid_, r[sid_], "; ".join(r["reasons"])))
+        print("%-18s %-10s %s=%-32s %s=%-32s %s" % (r["capability"], r["status"], pid_, r["by_converter"][pid_], sid_, r["by_converter"][sid_], "; ".join(r["reasons"])))
     return 0
 
 
