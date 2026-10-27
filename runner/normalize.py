@@ -165,6 +165,8 @@ def sort_key(entity):
 
 def normalize(rec):
     k = _f(rec["units"]["scale_to_canonical"])
+    if not k > 0:
+        raise ValueError("units.scale_to_canonical must be positive, got %s" % rec["units"]["scale_to_canonical"]["decimal"])
     ents = sorted((_entity(e, k) for e in rec["entities"]), key=sort_key)
     return {
         "schema_version": SCHEMA_VERSION,
@@ -232,7 +234,10 @@ def run(src, dst):
     errs = verification.validate_doc(rec)
     if errs:
         return errs
-    sig = normalize(rec)
+    try:
+        sig = normalize(rec)
+    except ValueError as ex:
+        return [str(ex)]
     errs = validate_doc(sig)
     if errs:
         return errs

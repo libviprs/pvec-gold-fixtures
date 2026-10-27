@@ -67,23 +67,56 @@ There are two kinds of value, and they are told apart by how many digits they ke
   domains) keep their f64 bits. The decimal is the shortest text that round-trips, so
   `precision` is at most 17.
 - Evaluated values (sample parameters, points, tangents, curvatures) are rounded to 12
-  significant digits and `f64_hex` is the bits of that rounded decimal, so `precision` is 12.
-  OCCT's rational evaluation gives last-digit differences between arm64 and x86_64 (see
-  `docs/validator/step-evaluator.md`); rounding is what lets two architectures, and two
-  converters that mean the same curve, produce the same signature. A value that lands exactly
-  on a rounding boundary could still split across architectures, and the cross-architecture
-  check below is what would show it.
+  significant digits and `precision` is 12. `f64_hex` of such a scalar is the bits of the
+  rounded decimal, not what the evaluator computed, so a consumer that wants the evaluator's
+  own bits cannot get them from a signature; only stored values are bit-for-bit.
+
+Rounding is what absorbs the last-digit differences OCCT's rational evaluation shows between
+arm64 and x86_64 (see `docs/validator/step-evaluator.md`), but it does not remove them in every
+case, and I would rather say where it fails than let the byte equality look stronger than it is:
+
+- A value near a rounding boundary can split. `1.234567890125` rounds to `1.23456789012e+0`,
+  and the next f64 up rounds to `1.23456789013e+0`. If two architectures differ by one ulp on a
+  value that sits that close to a boundary, the signatures differ. Because entities are sorted
+  by a hash that includes their samples, one such value can also change the entity order.
+- Noise around zero is not absorbed. Twelve significant digits are relative, so `0` and `1e-17`
+  stay different. A true zero on one architecture and rounding noise on the other (tangent
+  components of an axis-aligned curve are the likely place) would split. I haven't seen this
+  across architectures, but I haven't ruled it out.
+- Byte equality across architectures is measured on six files only: the self-test files in
+  `fixtures/validator-selftest/`, where all six signatures were identical on native x86_64 and
+  native arm64. It is not a guarantee for other inputs.
+
+So a consumer compares derived scalars under the numeric policy tolerance, never by bytes across
+architectures. Byte equality is a same-architecture property (regenerating gives the same file)
+plus those six measured cases. Stored values are exact and can be compared bit for bit.
 
 There is no tolerance anywhere. The signature rounds to a fixed number of digits, which is a
 format, not a comparison; whether two signatures are equivalent under the numeric policy is for
 the comparison stage.
+
+## Arc length and bounds are not carried
+
+The tracker text for O2.4 lists arc length and bounds among the evaluated signatures. The
+`step_eval` record has neither, and the normaliser only reads that record, so signature v1
+carries samples and no arc length or bounds. This costs the consumers nothing:
+`plan_from_signature` needs the class, structure, geometry, domain, closure, composed transform
+and samples, and anything else a consumer wants (a bound, a length) it derives from the geometry
+and the samples. If an arc length or bounds ever have to be in the signature, the way to add
+them is a change to the evaluator, so that OCCT computes them and they appear in the
+verification record, followed by a schema version bump here. The normaliser does not compute
+geometry of its own.
 
 ## Checks
 
 `tests/test_normalize.py` covers the acceptance criteria of issue 49:
 
 - renumbering every `#nnn` and shuffling the DATA section of each self-test file leaves the
-  signature byte-identical (this one needs `step_eval`, so it runs in the step-validator image);
+  signature byte-identical (this one needs `step_eval`, so it runs in the step-validator image).
+  Every self-test STEP file holds a single curve, so this test does not exercise entity ordering;
+  that is covered at record level, with two entities combined by hand and flipped (a two-curve STEP
+  file would close the gap and is not there yet);
+- a zero or negative `scale_to_canonical` is refused with a message, not a traceback;
 - one moved knot, weight or control point changes the signature, and the differing field is named;
 - no field carries an entity id, a file offset or a converter name;
 - every scalar declares `precision` equal to its digits;
