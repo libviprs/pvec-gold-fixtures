@@ -306,6 +306,14 @@ class AcrossArchitectures(unittest.TestCase):
         self.assertEqual(norm().differing_fields(a, b), ["entities[0].geometry.knots[1].value"])
 
 
+class Goldens(unittest.TestCase):
+    def test_the_committed_selftest_signatures_are_what_the_normaliser_writes(self):
+        for name in NAMES:
+            golden = (SELFTEST / "signatures" / ("%s.signature.json" % name)).read_text()
+            for arch in ("x64", "arm64"):
+                self.assertEqual(golden, sig_bytes(record(arch, name)), "%s from %s" % (name, arch))
+
+
 class Docs(unittest.TestCase):
     def test_the_doc_exists_and_names_the_schema_version(self):
         text = (ROOT / "docs" / "fixtures" / "signature.md").read_text()
