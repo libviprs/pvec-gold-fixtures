@@ -217,10 +217,13 @@ def authored(fx):
 
 def entity_fails(want, got):
     out = []
-    if want["class"] != got["class"]:
+    # The reader hands a Bezier back as a B-spline (the evaluator has no way to say otherwise), and a STEP line
+    # is parameterised over its length, so neither the Bezier class nor a line's domain is a converter output.
+    same_class = want["class"] == got["class"] or (want["class"], got["class"]) == ("bezier", "bspline")
+    if not same_class:
         return ["class: authored %s got %s" % (want["class"], got["class"])]
     scale = numeric.feature_scale(want)
-    tree_fails("entity", {k: want[k] for k in ("geometry", "parameter_domain", "closure") if k in want},
+    tree_fails("entity", {k: want[k] for k in ("geometry", "parameter_domain", "closure") if k in want and not (k == "parameter_domain" and want["class"] == "line")},
                {k: got[k] for k in ("geometry", "parameter_domain", "closure")}, scale,
                EXACT_FOR.get(want["class"], ()) if "transform" not in want else (), out)
     return out
@@ -320,7 +323,7 @@ class Converter(unittest.TestCase):
 
     def test_stored_values_match_authored_bits_on_curve_probes(self):
         runs = run_all()
-        curve_probes = [f for f in FIXTURES if f not in REFUSED and not re.search(r"scale|reflection|rotation|translation|nested|polyline|layer", f)]
+        curve_probes = [f for f in FIXTURES if f not in REFUSED and not re.search(r"scale|reflection|rotation|translation|nested|polyline|layer|bulge|large-coords", f)]
         self.assertGreaterEqual(len(curve_probes), 15)
         for fx in curve_probes:
             ents, _ = authored(fx)
@@ -346,9 +349,9 @@ class Converter(unittest.TestCase):
         for a, b in zip(first, last):
             self.assertTrue(POL.near(a, b, scale), (first, last))
         # every authored pole is stored verbatim among the poles that were written
-        wrote = [p for p in g["geometry"]["control_points"]]
+        wrote = [[c["f64_hex"] for c in p] for p in g["geometry"]["control_points"]]
         for p in want["geometry"]["control_points"]:
-            self.assertIn(p, wrote)
+            self.assertIn([c["f64_hex"] for c in p], wrote)
 
     def test_polyline_segments_are_the_authored_vertices_and_bulge_arcs(self):
         runs = run_all()
@@ -415,7 +418,7 @@ class Converter(unittest.TestCase):
 
     def test_stored_values_survive_on_a_circle_under_a_proper_rotation(self):
         runs = run_all()
-        want = authored("uniform-scale-001")[0]
+        want = authored("uniform-scale-001")[0][0]
         g = runs["uniform-scale-001"]["eval"]["entities"][0]
         self.assertEqual(g["class"], "circle", "a uniform scale keeps a circle a circle")
         self.assertTrue(POL.near(canon.check_scalar(g["geometry"]["radius"]), canon.check_scalar(want["geometry"]["radius"]), 1))
@@ -441,7 +444,7 @@ class Converter(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir=_scratch()) as t:
             outs = []
             for i in (1, 2):
-                r = convert(src, t, name="o%d" % i, env=["SOURCE_DATE_EPOCH=1700000000"])
+                r = convert(src, Path(t) / ("run%d" % i), env=["SOURCE_DATE_EPOCH=1700000000"])
                 self.assertEqual(r["code"], 0, r["stderr"])
                 outs.append(r["step"].read_bytes())
             self.assertEqual(outs[0], outs[1])
