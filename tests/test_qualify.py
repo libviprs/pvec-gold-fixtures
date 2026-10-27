@@ -1,7 +1,11 @@
 import copy
+import json
 import math
+import tempfile
 import unittest
 from pathlib import Path
+
+import jsonschema
 
 from runner import canon, curves, expected_math as em, numeric, qualify_probes as q
 
@@ -213,6 +217,84 @@ class EndToEnd(unittest.TestCase):
         covered = {p for ps in q.CAPABILITIES.values() for p in ps}
         self.assertEqual(covered, {p for p, d in probes.items() if q.is_converter_probe(d)})
         self.assertTrue(all(r["status"] in ("CERTIFIED", "BLOCKED") for r in rep["capabilities"]))
+
+
+OPEN_IDS = ("acadsharp-dwg2step", "libredwg-dwg2step")
+
+
+def status_record(converter):
+    return {"schema_version": "pvec-gold/converter-status/1", "converter": converter, "status": "OK", "exit_code": 0,
+            "input": {"path": "in.dwg", "sha256": "0" * 64}, "output": {"path": "out.step", "sha256": "1" * 64},
+            "product": {"name": "dwg2step", "version": "0.1.0"}, "declared_schema": "AP242", "wall_time_seconds": "0.123",
+            "warnings": [], "error": None}
+
+
+class NamedConverters(unittest.TestCase):
+    """The qualification no longer assumes the two vendors: the converters are whichever ids the run names."""
+
+    def outputs(self, ids):
+        probes = {"line-001": probe("line-001")}
+        e = probes["line-001"]["entities"][0]
+        v = ver(curve_of(e))
+        return probes, (lambda pid: {ids[0]: (v, None), ids[1]: (v, None)})
+
+    def test_qualify_accepts_named_converters_and_rejects_two_with_one_lineage(self):
+        probes, outs = self.outputs(OPEN_IDS)
+        rep = q.build_report(POL, probes, outs)
+        self.assertEqual(sorted(rep["probes"]["line-001"]), sorted(OPEN_IDS))
+        row = next(r for r in rep["capabilities"] if r["capability"] == "line")
+        self.assertEqual((row["status"], row[OPEN_IDS[0]], row[OPEN_IDS[1]]), ("CERTIFIED", q.STRUCTURAL_EXACT, q.STRUCTURAL_EXACT))
+        self.assertEqual(list(rep["converters"].values()), list(OPEN_IDS))
+        with tempfile.TemporaryDirectory() as t:
+            out = str(Path(t) / "r.json")
+            base = ["--probes", str(KT), "--out", out]
+            ok = q.main(base + ["--primary", OPEN_IDS[0], t, "--secondary", OPEN_IDS[1], t,
+                                "--lineage", OPEN_IDS[0] + "=ACadSharp", "--lineage", OPEN_IDS[1] + "=LibreDWG"])
+            self.assertEqual(ok, 0)
+            self.assertEqual(list(json.loads(Path(out).read_text())["converters"].values()), list(OPEN_IDS))
+            for bad in (["--primary", "a", t, "--secondary", "b", t, "--lineage", "a=LibreDWG", "--lineage", "b=LibreDWG"],
+                        ["--primary", "a", t, "--secondary", "a", t]):
+                with self.assertRaises(SystemExit):
+                    q.main(base + bad)
+
+    def test_the_verdict_rules_do_not_depend_on_the_ids(self):
+        for ids in (OPEN_IDS, ("cadex", "oda")):
+            res = {p: {ids[0]: [{"entity": "x", "class": q.BOUNDED, "evidence": {}}],
+                       ids[1]: [{"entity": "x", "class": q.BOUNDED, "evidence": {}}]} for p in q.CAPABILITIES["line"]}
+            r = q.capability_verdicts(POL, res)[0]
+            self.assertEqual(r["status"], "BLOCKED", ids)
+            self.assertIn("not certified even though they agree", " ".join(r["reasons"]), ids)
+            res = {p: {ids[0]: [{"entity": "x", "class": q.STRUCTURAL_EXACT, "evidence": {}}],
+                       ids[1]: [{"entity": "x", "class": q.BOUNDED, "evidence": {}}]} for p in q.CAPABILITIES["line"]}
+            self.assertIn("unresolved converter discrepancy", " ".join(q.capability_verdicts(POL, res)[0]["reasons"]), ids)
+
+    def test_the_gate_reads_the_converter_ids_from_the_report(self):
+        from runner import phase1_gate as g
+        probes = {}
+        for f in sorted(KT.rglob("expected.math.json")):
+            d = em.load(f)
+            probes[d["fixture_id"]] = {c: [{"entity": e["id"], "class": q.STRUCTURAL_EXACT, "evidence": {"fields_compared": 1}} for e in d["entities"]] for c in OPEN_IDS}
+        rep = {"numeric_policy_version": POL.version, "converters": {"primary": OPEN_IDS[0], "secondary": OPEN_IDS[1]}, "probes": probes}
+        with tempfile.TemporaryDirectory() as t:
+            p = Path(t) / "r.json"
+            p.write_text(json.dumps(rep))
+            self.assertEqual(g.check_probe_classification(p), [])
+            del rep["probes"]["line-001"][OPEN_IDS[1]]
+            p.write_text(json.dumps(rep))
+            self.assertTrue(any("line-001" in e and OPEN_IDS[1] in e for e in g.check_probe_classification(p)))
+
+
+class StatusRecord(unittest.TestCase):
+    schema = json.loads((ROOT / "schema" / "converter-status.schema.json").read_text())
+
+    def errors(self, rec):
+        return list(jsonschema.Draft202012Validator(self.schema).iter_errors(rec))
+
+    def test_status_record_converter_is_a_named_id(self):
+        for ok in ("acadsharp-dwg2step", "libredwg-dwg2step", "cadex", "oda"):
+            self.assertEqual(self.errors(status_record(ok)), [], ok)
+        for bad in ("", "CAD Exchanger", "Has_Upper", "-lead", "a" * 65, 7, None):
+            self.assertTrue(self.errors(status_record(bad)), repr(bad))
 
 
 if __name__ == "__main__":
