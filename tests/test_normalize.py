@@ -239,6 +239,21 @@ class Content(unittest.TestCase):
         self.assertNotIn("INCH", text.upper())
         self.assertEqual(sig["units"], {"canonical": "metre"})
 
+    def test_a_zero_or_negative_unit_scale_is_refused_cleanly(self):
+        for bad in ("0", "-0.0254"):
+            rec = record("x64", "circle")
+            rec["units"]["scale_to_canonical"] = canon.scalar(bad)
+            with self.assertRaises(ValueError):
+                norm().normalize(rec)
+            with tempfile.TemporaryDirectory() as t:
+                src, out = Path(t) / "r.verification.json", Path(t) / "o.signature.json"
+                src.write_text(json.dumps(rec))
+                r = subprocess.run(["python3", "-m", "runner.normalize", str(src), str(out)], cwd=ROOT, capture_output=True, text=True)
+                self.assertEqual(r.returncode, 1, bad)
+                self.assertNotIn("Traceback", r.stderr, bad)
+                self.assertIn("scale_to_canonical", r.stdout + r.stderr, bad)
+                self.assertFalse(out.exists(), bad)
+
     def test_unsupported_entities_keep_their_occt_type(self):
         rec = record("x64", "line")
         e = rec["entities"][0]
