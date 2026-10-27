@@ -28,3 +28,11 @@ Debian package version and base-image digest, and has no converter SDK in it.
 
 The validator is part of the trust base, so changing it re-runs the self-test, and its arm64 and x64
 differences are named rather than hidden (`docs/validator/step-evaluator.md`).
+
+## Amendment (ADR 0009)
+
+For the open route the independence claim is settled: neither open converter links Open CASCADE (the
+ACadSharp one is C# code and the LibreDWG one is Python over `dwgread` output), so the evaluator shares
+no STEP code with either. Each converter entry in a manifest states `links_occt`, and an `OPEN_CONVERTERS`
+revision with anything but `false` there is refused. That lets this ADR be frozen for the open route.
+It stays open for any vendor path, where the component-list check above still has to be done.

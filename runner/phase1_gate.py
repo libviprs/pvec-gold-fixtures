@@ -32,6 +32,7 @@ def check_probe_classification(report_path):
     errs = []
     if rep.get("numeric_policy_version") != numeric.load_policy().version:
         errs.append("report carries policy version %r, adopted %r" % (rep.get("numeric_policy_version"), numeric.load_policy().version))
+    conv_ids = list(rep["converters"].values()) if rep.get("converters") else list(q.CONVERTERS)
     expected = {}
     for f in sorted((ROOT / "fixtures" / "known-truth").rglob("expected.math.json")):
         d = em.load(f)
@@ -42,7 +43,7 @@ def check_probe_classification(report_path):
         if not per:
             errs.append("probe %s is not in the report" % pid)
             continue
-        for conv in q.CONVERTERS:
+        for conv in conv_ids:
             cells = {c["entity"]: c for c in per.get(conv, [])}
             for eid in ents:
                 c = cells.get(eid)

@@ -545,7 +545,7 @@ class Adr0009AndAmendments(unittest.TestCase):
                    "0007-*.md": ["open images", "digest", "pvec-oracle-libredwg", "never a build context"]}
         for name, extra in needles.items():
             t = self.text(name)
-            self.assertRegex(t, r"(?m)^## Amendment.*\n(?:.*\n)*?.*ADR 0009", name)
+            self.assertRegex(t, r"(?m)^## Amendment \(ADR 0009\)$", name)
             for n in extra:
                 self.assertIn(n, t, (name, n))
 
