@@ -90,7 +90,7 @@ public sealed class Step21
 
     public int CurveCount => _curves.Count;
 
-    /// <summary>The unit declared in the file. Values are never rescaled, only labelled.</summary>
+    /// <summary>The unit the file declares. Program.cs has already scaled inches and feet to metre, the others are only labelled.</summary>
     public string Document(string fileName, string timeStamp, string description, string lengthUnit)
     {
         var sb = new StringBuilder();
