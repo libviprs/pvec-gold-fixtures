@@ -91,7 +91,7 @@ arm64 container) and diffed every `f64_hex` with `validator/compare_platforms.py
 axes) and every sample point. The 11 that diverge are all in `rational-bspline`: tangent
 components at samples 5, 8, 9 and 15, and curvature at samples 5, 9, 11, 12, 13 and 15. They are
 last-digit differences, from 1 ulp up to about 9 ulp in the largest curvature value. These are
-derived derivative values from OCCT's rational evaluation; my guess is that the distribution's OCCT
-library is compiled with a different floating-point contraction on arm64, but I haven't checked
-that. They fall well inside what the policy comparison is for, and nothing downstream may compare
+derived derivative values from OCCT's rational evaluation. The cause is FMA contraction in the Debian
+OCCT build on arm64: with OCCT built from source with `-ffp-contract=off`, none of the 1219 values
+diverge (`occt-from-source.md`). They fall well inside what the policy comparison is for, and nothing downstream may compare
 derived samples bit for bit across platforms.
