@@ -1,0 +1,168 @@
+{
+  "checks": {
+    "cross": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "ARC",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "ARC"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "center[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "center[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "center[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x408f400000000000",
+        "field": "radius",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x408f400000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "normal[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "normal[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "normal[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "start_angle",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3eb0c6f7a0b5ed8d",
+        "field": "end_angle",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3eb0c6f7a0b5ed8d"
+      }
+    ],
+    "own": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "ARC",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "ARC"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "center[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "center[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "center[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x408f400000000000",
+        "field": "radius",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x408f400000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "normal[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "normal[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "normal[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "start_angle",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3eb0c6f7a0b5ed8d",
+        "field": "end_angle",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3eb0c6f7a0b5ed8d"
+      }
+    ]
+  },
+  "evidence": null,
+  "fixture_id": "arc-tiny-sweep-001",
+  "numeric_policy_version": "PVec numeric policy v1",
+  "reader_vs_reader_differences": [],
+  "reason": null,
+  "verdict": "AGREE"
+}

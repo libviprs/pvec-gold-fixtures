@@ -1,0 +1,16 @@
+{
+  "class_histogram": {
+    "AttributeDefinition": 2,
+    "Circle": 1,
+    "Line": 3,
+    "LwPolyline": 2,
+    "Wall": 1
+  },
+  "discipline": "architectural",
+  "dwg_version": "AC1032",
+  "entity_count": 9,
+  "largest_extent_side": 4.199999999996363,
+  "max_abs_coordinate": 2.2000000000000006,
+  "max_block_depth": 0,
+  "spline_count": 0
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": "pvec-gold/expected.classification/1",
+  "fixture_id": "proxy-001",
+  "evidence_class": "QUARANTINED",
+  "quarantine_reason": "UNSUPPORTED_ENTITY",
+  "entities": [
+    {
+      "dwg_type": "ACAD_PROXY_ENTITY",
+      "count": 1,
+      "outcome": "MISSING",
+      "reason": "A proxy or custom entity is opaque application data with no decodable geometry, and a reader that cannot instantiate it returns nothing for it. The converter is expected to emit nothing, which is different from recognising and refusing it."
+    }
+  ],
+  "converter_emits_nothing": true,
+  "outcome": "MISSING",
+  "reason": "A proxy or custom entity is opaque application data with no decodable geometry, and a reader that cannot instantiate it returns nothing for it. The converter is expected to emit nothing, which is different from recognising and refusing it.",
+  "accepted_geometry": [],
+  "provenance": {
+    "derivation": "AUTHORING_PARAMETERS",
+    "authoring_script": "tools/authoring/author_corpus.py",
+    "parameter_file": "tools/authoring/corpus-params/negative/proxy-001.json",
+    "parameter_file_sha256": "90b247b1c8ec3790fd4b26c3eb9e6fca88fbb1df1e165c19199825ff260171f2"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "schema": "pvec-gold/dwg-census/1",
+  "reader": "ACadSharp@3.7.1\u002Bd7dc111",
+  "dwg_sha256": "c09f6c0f55bbeee472849f3546a6a9106721461b2c9353be8e68841155c52d67",
+  "dwg_version": "AC1032",
+  "summary": {
+    "entity_count": 1,
+    "class_histogram": {
+      "MText": 1
+    },
+    "max_block_depth": 0,
+    "spline_count": 0,
+    "max_abs_coordinate": 1,
+    "extent": {
+      "min": [
+        1,
+        1,
+        0
+      ],
+      "max": [
+        1,
+        1,
+        0
+      ],
+      "largest_side": 0
+    },
+    "bounding_box_unavailable": 0
+  },
+  "blocks": [
+    {
+      "name": "*Model_Space",
+      "xref": false,
+      "entities": [
+        {
+          "type": "MText",
+          "layer": "0"
+        }
+      ]
+    }
+  ]
+}

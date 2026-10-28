@@ -1,0 +1,17 @@
+{
+  "schema_version": "pvec-gold/expected.classification/1",
+  "fixture_id": "empty-001",
+  "evidence_class": "QUARANTINED",
+  "quarantine_reason": "UNSUPPORTED_ENTITY",
+  "entities": [],
+  "converter_emits_nothing": true,
+  "outcome": "MISSING",
+  "reason": "The drawing holds no entity at all, so the converter is expected to emit nothing.",
+  "accepted_geometry": [],
+  "provenance": {
+    "derivation": "AUTHORING_PARAMETERS",
+    "authoring_script": "tools/authoring/author_corpus.py",
+    "parameter_file": "tools/authoring/corpus-params/negative/empty-001.json",
+    "parameter_file_sha256": "ddfbc86f4dcb88e2b482071ca411666ea37c5fa05a94b403cc57b75a4024ce97"
+  }
+}

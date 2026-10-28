@@ -1,0 +1,24 @@
+{
+  "schema_version": "pvec-gold/expected.classification/1",
+  "fixture_id": "table-001",
+  "evidence_class": "QUARANTINED",
+  "quarantine_reason": "UNSUPPORTED_ENTITY",
+  "entities": [
+    {
+      "dwg_type": "ACAD_TABLE",
+      "count": 1,
+      "outcome": "UNSUPPORTED",
+      "reason": "A table is a grid of generated lines and text with a style. v1 has no table entity and does not explode one."
+    }
+  ],
+  "converter_emits_nothing": false,
+  "outcome": "UNSUPPORTED",
+  "reason": "A table is a grid of generated lines and text with a style. v1 has no table entity and does not explode one.",
+  "accepted_geometry": [],
+  "provenance": {
+    "derivation": "AUTHORING_PARAMETERS",
+    "authoring_script": "tools/authoring/author_corpus.py",
+    "parameter_file": "tools/authoring/corpus-params/negative/table-001.json",
+    "parameter_file_sha256": "d3e47d8502389e1ca77a602d6d918fbc088148d671ccebac418e762cbd8791f9"
+  }
+}

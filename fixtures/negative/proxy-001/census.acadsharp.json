@@ -1,0 +1,22 @@
+{
+  "schema": "pvec-gold/dwg-census/1",
+  "reader": "ACadSharp@3.7.1\u002Bd7dc111",
+  "dwg_sha256": "127449daa46deac73968e67eb27b34ae0b3a14b1cb6193398f2a6564442dcf55",
+  "dwg_version": "AC1032",
+  "summary": {
+    "entity_count": 0,
+    "class_histogram": {},
+    "max_block_depth": 0,
+    "spline_count": 0,
+    "max_abs_coordinate": null,
+    "extent": null,
+    "bounding_box_unavailable": 0
+  },
+  "blocks": [
+    {
+      "name": "*Model_Space",
+      "xref": false,
+      "entities": []
+    }
+  ]
+}

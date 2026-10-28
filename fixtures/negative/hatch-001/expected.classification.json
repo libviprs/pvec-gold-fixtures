@@ -1,0 +1,24 @@
+{
+  "schema_version": "pvec-gold/expected.classification/1",
+  "fixture_id": "hatch-001",
+  "evidence_class": "QUARANTINED",
+  "quarantine_reason": "UNSUPPORTED_ENTITY",
+  "entities": [
+    {
+      "dwg_type": "HATCH",
+      "count": 1,
+      "outcome": "IGNORED",
+      "reason": "A pattern fill is presentation. It has no stroke of its own and the boundary it fills is not asserted as a curve, so v1 drops it by policy."
+    }
+  ],
+  "converter_emits_nothing": false,
+  "outcome": "IGNORED",
+  "reason": "A pattern fill is presentation. It has no stroke of its own and the boundary it fills is not asserted as a curve, so v1 drops it by policy.",
+  "accepted_geometry": [],
+  "provenance": {
+    "derivation": "AUTHORING_PARAMETERS",
+    "authoring_script": "tools/authoring/author_corpus.py",
+    "parameter_file": "tools/authoring/corpus-params/negative/hatch-001.json",
+    "parameter_file_sha256": "8506a09725041fdd9b38bd3ba16f2df1b892ade3d4afa61dc913d06865c08dab"
+  }
+}

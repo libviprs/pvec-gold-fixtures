@@ -1,0 +1,14 @@
+{
+  "expected_rejection": {
+    "classification": "DEGENERATE_ZERO_LENGTH_SEGMENT",
+    "disposition": "REJECT",
+    "geometry_emitted": false
+  },
+  "fixture_id": "zero-length-segment-001",
+  "problems": [],
+  "produced_rejection": {
+    "acadrust": "DEGENERATE_ZERO_LENGTH_SEGMENT",
+    "acadsharp": "DEGENERATE_ZERO_LENGTH_SEGMENT"
+  },
+  "verdict": "AGREE"
+}

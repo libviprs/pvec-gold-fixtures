@@ -1,0 +1,16 @@
+[package]
+name = "corpus-writer"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "Writes the edge, degenerate, mixed-entity and negative corpus DWGs with acadrust's DwgWriter"
+build = "build.rs"
+
+[dependencies]
+# Same pin as tools/r0-open/rust, so the writer named in a manifest is one exact tree.
+acadrust = { git = "https://github.com/libviprs/acadrust", rev = "d35691f483534e4affc3a4065486e168c898ac7d" }
+serde_json = "1"
+sha2 = "0.10"
+
+[profile.release]
+debug = false

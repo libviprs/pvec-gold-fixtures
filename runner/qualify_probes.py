@@ -35,14 +35,15 @@ EXACT = (STRUCTURAL_EXACT, GEOMETRIC)
 
 # PVec v1 capabilities (docs/ISO_PROFILE.md in libviprs/pvec) and the probes that cover them.
 CAPABILITIES = {
-    "line": ["line-001"],
+    "line": ["line-001", "tiny-extent-001"],
     "polyline": ["polyline-001", "large-coords-001", "lwpolyline-closed-001", "polyline2d-001"],
-    "circle": ["circle-001", "tiny-radius-001"],
+    "circle": ["circle-001", "tiny-radius-001", "huge-extent-001"],
     "ellipse": ["ellipse-001"],
-    "trimmed_curve": ["arc-seam-001", "elliptical-arc-001"],
+    "trimmed_curve": ["arc-seam-001", "elliptical-arc-001", "arc-tiny-sweep-001"],
     "composite_curve": ["bulge-arc-001", "bulge-arc-neg-001"],
     "bezier": ["bezier-d3-001"],
-    "bspline": ["bspline-d3-001", "bspline-d5-001", "repeated-knot-c0-001", "closed-by-endpoint-001", "closed-periodic-001"],
+    "bspline": ["bspline-d3-001", "bspline-d5-001", "repeated-knot-c0-001", "closed-by-endpoint-001", "closed-periodic-001",
+                "bspline-nonunit-domain-001"],
     "nurbs": ["nurbs-d3-001", "nurbs-d2-offconic-001", "nonunit-weight-001"],
     "affine_transform": ["translation-001", "rotation-irrational-001", "uniform-scale-001", "nonuniform-scale-circle-001",
                          "nonuniform-scale-rotated-001", "reflection-001", "shear-001", "general-affine-001",

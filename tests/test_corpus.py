@@ -171,6 +171,15 @@ class Degenerate(unittest.TestCase):
         self.assertEqual(c.degenerate_reason({"type": "SPLINE", "control_points": [p0, p0, p0]}), "DEGENERATE_COINCIDENT_CONTROL_POINTS")
         self.assertIsNone(c.degenerate_reason({"type": "SPLINE", "control_points": [p0, p1, p0]}))
 
+    def test_the_refusal_follows_the_numeric_policy_not_exact_zero(self):
+        c = corpus()
+        import struct
+        h = lambda x: "0x%016x" % struct.unpack(">Q", struct.pack(">d", x))[0]
+        # a reader that clamps a zero radius up to 1e-12 is still refused (NP-06); a 5e-9 segment is valid
+        self.assertEqual(c.degenerate_reason({"type": "CIRCLE", "radius": h(float("1e-12"))}), "DEGENERATE_ZERO_RADIUS")
+        tiny = {"type": "LINE", "start": [h(0.0)] * 3, "end": [h(float("3e-9")), h(float("4e-9")), h(0.0)]}
+        self.assertIsNone(c.degenerate_reason(tiny))
+
     def test_a_pipeline_that_produces_geometry_for_a_degenerate_fixture_is_a_failure(self):
         c = corpus()
         want = {"expected_rejection": {"classification": "DEGENERATE_ZERO_RADIUS", "disposition": "REJECT", "geometry_emitted": False}}
@@ -186,17 +195,17 @@ class EdgeAndMixed(unittest.TestCase):
         huge = load(KT / "edge/huge-extent-001/expected.math.json")["entities"][0]["geometry"]
         self.assertGreater(float(huge["radius"]["decimal"]), 1e6)
         tiny = load(KT / "edge/tiny-extent-001/expected.math.json")["entities"][0]["geometry"]
-        self.assertLess(abs(float(tiny["end"][0]["decimal"])), 1e-8)
+        self.assertLess(abs(float(tiny["end"][0]["decimal"])), float("1e-8"))
 
     def test_mixed_drawing_has_five_classes_transforms_and_nested_blocks(self):
-        doc = load(KT / "mixed/mixed-entity-001/expected.math.json")
+        doc = load(FX / "mixed/mixed-entity-001/expected.math.json")
         classes = {e["class"] for e in doc["entities"]}
         self.assertGreaterEqual(len(classes), 5, classes)
         self.assertTrue(any("transform_chain" in e and len(e["transform_chain"]["transforms"]) >= 3 for e in doc["entities"]))
         self.assertTrue(any("transform" in e for e in doc["entities"]))
 
     def test_edge_and_mixed_fixtures_are_complete_and_both_readers_agree_with_the_record(self):
-        found = dirs(KT / "edge") + dirs(KT / "mixed")
+        found = dirs(KT / "edge") + dirs(FX / "mixed")
         self.assertGreaterEqual(len(found), 5)
         for d in found:
             for name in ("expected.math.json", "README.md", "params.json", "source.dwg", "read.acadrust.json", "read.acadsharp.json", "comparison.json"):

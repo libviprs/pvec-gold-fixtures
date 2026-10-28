@@ -1,0 +1,55 @@
+{
+  "schema_version": "pvec-gold/expected.rejection/1",
+  "fixture_id": "zero-radius-001",
+  "evidence_class": "QUARANTINED",
+  "quarantine_reason": "MALFORMED_FIXTURE",
+  "authored": {
+    "dwg_entity": "CIRCLE",
+    "geometry": {
+      "center": [
+        {
+          "decimal": "3.0",
+          "f64_hex": "0x4008000000000000"
+        },
+        {
+          "decimal": "2.0",
+          "f64_hex": "0x4000000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        }
+      ],
+      "radius": {
+        "decimal": "0.0",
+        "f64_hex": "0x0000000000000000"
+      }
+    }
+  },
+  "expected_rejection": {
+    "classification": "DEGENERATE_ZERO_RADIUS",
+    "disposition": "REJECT",
+    "geometry_emitted": false
+  },
+  "provenance": {
+    "derivation": "AUTHORING_PARAMETERS",
+    "authoring_script": "tools/authoring/author_corpus.py",
+    "parameter_file": "tools/authoring/corpus-params/degenerate/zero-radius-001.json",
+    "parameter_file_sha256": "cfcded46a0b5de02edc93dcf7be3d9885ce0b2375775adc0cddc253ae75c770a",
+    "parameters": {
+      "id": "zero-radius-001",
+      "kind": "degenerate",
+      "group": "degenerate",
+      "dwg_entity": "CIRCLE",
+      "reason": "ZERO_RADIUS",
+      "description": "A CIRCLE of radius 0 at (3, 2, 0). It is a point, and a circle of radius zero has no normal frame.",
+      "center": [
+        "3",
+        "2",
+        "0"
+      ],
+      "radius": "0"
+    }
+  },
+  "assertion": "A pipeline that produces geometry for this fixture has failed. Mathematics cannot state this entity as a curve, so there is no expected.math.json, and the fixture is quarantined by design (ADR 0006), never accepted."
+}

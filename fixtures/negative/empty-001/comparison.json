@@ -1,0 +1,16 @@
+{
+  "expected": {
+    "converter_emits_nothing": true,
+    "entities": []
+  },
+  "fixture_id": "empty-001",
+  "problems": [],
+  "produced": {
+    "accepted_geometry": [],
+    "converter_emits_nothing": true,
+    "entities": [],
+    "unclassified": []
+  },
+  "reader": "ACadSharp@3.7.1+d7dc111",
+  "verdict": "MATCH"
+}

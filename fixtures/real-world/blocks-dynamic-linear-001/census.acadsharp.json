@@ -1,0 +1,58 @@
+{
+  "schema": "pvec-gold/dwg-census/1",
+  "reader": "ACadSharp@3.7.1\u002Bd7dc111",
+  "dwg_sha256": "36dc72bad541b911b051936287eeb8abf9a9e80e92f371033dfc1d49a0e965bf",
+  "dwg_version": "AC1032",
+  "summary": {
+    "entity_count": 3,
+    "class_histogram": {
+      "Circle": 1,
+      "Insert": 2
+    },
+    "max_block_depth": 1,
+    "spline_count": 0,
+    "max_abs_coordinate": 22.5,
+    "extent": {
+      "min": [
+        -5,
+        -7.5,
+        0
+      ],
+      "max": [
+        22.5,
+        7.5,
+        0
+      ],
+      "largest_side": 27.5
+    },
+    "bounding_box_unavailable": 0
+  },
+  "blocks": [
+    {
+      "name": "*Model_Space",
+      "xref": false,
+      "entities": [
+        {
+          "type": "Insert",
+          "layer": "0",
+          "block": "LINEAR_PARAM"
+        },
+        {
+          "type": "Insert",
+          "layer": "0",
+          "block": "*U3"
+        }
+      ]
+    },
+    {
+      "name": "LINEAR_PARAM",
+      "xref": false,
+      "entities": [
+        {
+          "type": "Circle",
+          "layer": "0"
+        }
+      ]
+    }
+  ]
+}

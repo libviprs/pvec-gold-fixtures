@@ -1,0 +1,24 @@
+{
+  "schema_version": "pvec-gold/expected.classification/1",
+  "fixture_id": "ole-001",
+  "evidence_class": "QUARANTINED",
+  "quarantine_reason": "UNSUPPORTED_ENTITY",
+  "entities": [
+    {
+      "dwg_type": "OLE2FRAME",
+      "count": 1,
+      "outcome": "UNSUPPORTED",
+      "reason": "An embedded OLE object is a foreign document, not geometry. It is recognised and refused."
+    }
+  ],
+  "converter_emits_nothing": false,
+  "outcome": "UNSUPPORTED",
+  "reason": "An embedded OLE object is a foreign document, not geometry. It is recognised and refused.",
+  "accepted_geometry": [],
+  "provenance": {
+    "derivation": "AUTHORING_PARAMETERS",
+    "authoring_script": "tools/authoring/author_corpus.py",
+    "parameter_file": "tools/authoring/corpus-params/negative/ole-001.json",
+    "parameter_file_sha256": "955df4f8f3acc1b8a9d739b84ec9a6b845472e12c2fd3876a1bc2d59c7b847a3"
+  }
+}
