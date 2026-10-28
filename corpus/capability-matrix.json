@@ -614,6 +614,16 @@
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
+          "id": "singular-001",
+          "step_evidence": {
+            "class": "UNSUPPORTED",
+            "converter": "acadsharp-dwg2step",
+            "source": "fixtures/edge/singular-001/open-route.json"
+          }
+        },
+        {
+          "evidence_class": "KNOWN_TRUTH_EXACT",
+          "evidence_scope": "READER_MAPPING_ONLY",
           "id": "translation-001",
           "step_evidence": {
             "class": "GEOMETRIC_EXACT_REPARAMETERIZED",

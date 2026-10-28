@@ -494,6 +494,12 @@ class Converter(unittest.TestCase):
             self.assertFalse(r["step"].exists())
             self.assertEqual(r["status"]["error"]["class"], "CONVERSION_FAILED")
             self.assertIn("NEAR_SINGULAR_TRANSFORM", r["status"]["error"]["message"])
+            # 15 again for a scale of exactly zero (singular-001, #70), named SINGULAR_TRANSFORM and not near
+            r = convert(ROOT / "fixtures" / "edge" / "singular-001" / "source.dwg", d / "o15s")
+            self.assertEqual(r["code"], 15, r["stderr"])
+            self.assertFalse(r["step"].exists())
+            self.assertIn("SINGULAR_TRANSFORM", r["status"]["error"]["message"])
+            self.assertNotIn("NEAR_SINGULAR", r["status"]["error"]["message"])
 
     def test_the_status_record_carries_input_hash_product_and_schema(self):
         a = run_all()["circle-001"]["a"]["status"]

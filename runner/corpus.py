@@ -19,7 +19,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-from . import corpus_release, numeric, qualify_probes as q, r0_open as r0
+from . import corpus_release, numeric, qualify_probes as q, r0_open as r0, singular_probe
 
 ROOT = Path(__file__).resolve().parent.parent
 REVISION = "r1-open"
@@ -402,7 +402,7 @@ EXTRA = {
     "composite_curve": ["mixed-entity-001"],
     "bspline": ["bspline-nonunit-domain-001"],
     "nurbs": ["mixed-entity-001"],
-    "affine_transform": ["mixed-entity-001", "shear-chain-001", "general-affine-chain-001"],
+    "affine_transform": ["mixed-entity-001", "shear-chain-001", "general-affine-chain-001", "singular-001"],
 }
 REFUSED = {"line": ["zero-length-segment-001"], "circle": ["zero-radius-001"], "bspline": ["coincident-control-points-001"]}
 
@@ -481,6 +481,8 @@ def fixture_entry(root, group, d, prov):
         ok = cmp_["verdict"] == "AGREE"
         entry["evidence_class"] = "KNOWN_TRUTH_EXACT" if ok else "QUARANTINED"
         entry["dwg_version"] = load(d / "read.acadsharp.json")["dwg_version"]
+        if (d / "writer.json").is_file():   # a fixture the shared acadrust pin cannot write names its own writer
+            entry["dwg_writer"] = load(d / "writer.json")["writer"]
         if not ok:
             entry["quarantine"] = {"reason": cmp_["reason"], "evidence": cmp_["evidence"]}
     elif group == "degenerate":
@@ -541,9 +543,20 @@ def build_manifest(root, info):
 
 def build_quarantine(root, manifest):
     r0q = load(Path(root) / "corpus" / "r0-open" / "quarantine.json")
-    q = [{"id": f["id"], "group": f["group"], "reason": f["quarantine"]["reason"], "evidence": f["quarantine"]["evidence"]}
+    quarantined = [{"id": f["id"], "group": f["group"], "reason": f["quarantine"]["reason"], "evidence": f["quarantine"]["evidence"]}
          for f in manifest["fixtures"] if f["evidence_class"] == "QUARANTINED"]
-    return {"corpus_revision": REVISION, "quarantined": q, "excluded": r0q["excluded"]}
+    have = {f["id"] for f in manifest["fixtures"]}
+    excluded = []
+    for e in r0q["excluded"]:
+        if e["id"] in have:   # this revision holds a DWG for it (singular-001, issue 70)
+            continue
+        if e["id"] in q.PROFILE_ONLY:   # issue 69: no DWG on purpose, the chain probe carries the map
+            e = {"id": e["id"], "reason": "PROFILE_ONLY", "file": None,
+                 "evidence": "a single INSERT stores a translation, one rotation and three scales and no shear, so no writer can store this matrix in one; "
+                             "the record states what pvec must do with a single stored matrix, and %s in the edge group carries the same map through a "
+                             "chain of INSERTs (r0-open's record of the chain as untried is out of date)" % q.PROFILE_ONLY[e["id"]]}
+        excluded.append(e)
+    return {"corpus_revision": REVISION, "quarantined": quarantined, "excluded": excluded}
 
 
 def write_sums(rev):
@@ -672,6 +685,7 @@ def check(root=ROOT):
             if v != "AGREE":
                 out.append("%s %s: comparison verdict is %s" % (g, d.name, v))
     out += mutual_exclusion_problems(root)
+    out += singular_probe.check(root)
     prov = provenance(root)
     for d in fixture_dirs(root, "real-world"):
         try:
