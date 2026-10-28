@@ -21,8 +21,8 @@ POL = numeric.load_policy()
 REC = ROOT / "fixtures" / "validator-selftest" / "verification"
 NAMES = ["bspline", "circle", "ellipse", "line", "rational-bspline", "trimmed-arc"]
 CONVERTERS = [
-    {"id": "acadsharp-dwg2step", "version": "1.0.0", "source_commit": "d7dc111", "lineage": "acadsharp", "image_digest": "sha256:" + "a" * 64},
-    {"id": "libredwg-dwg2step", "version": "0.13.3", "source_commit": "9f2c1aa", "lineage": "libredwg", "image_digest": "sha256:" + "b" * 64},
+    {"id": "acadsharp-dwg2step", "version": "1.0.0", "source_commit": "d7dc111", "lineage": "acadsharp", "links_occt": False, "image_digest": "sha256:" + "a" * 64},
+    {"id": "libredwg-dwg2step", "version": "0.13.3", "source_commit": "9f2c1aa", "lineage": "libredwg", "links_occt": False, "image_digest": "sha256:" + "b" * 64},
 ]
 MANIFEST = {"corpus_revision": "r1-open-step", "oracle_scope": "OPEN_CONVERTERS", "evidence_scope": "STEP_ORACLE",
             "oracles": "open", "step_oracle": "open", "converters": CONVERTERS}

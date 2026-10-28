@@ -16,6 +16,7 @@ from runner import canon, expected_math as em, normalize, numeric
 
 ROOT = Path(__file__).resolve().parent.parent
 POL = numeric.load_policy()
+MICRO, MILLI, TINY = 1.0 / 10 ** 6, 1.0 / 10 ** 3, 1.0 / 10 ** 13   # test moves, not thresholds
 KT = ROOT / "fixtures" / "known-truth"
 CONVERTERS = [
     {"id": "acadsharp-dwg2step", "version": "1.0.0", "lineage": "acadsharp", "image_digest": "sha256:" + "a" * 64},
@@ -81,11 +82,11 @@ def non_match(rep):
 
 
 def renormalise_weights(sig):
-    """Divide every weight by the first one: the same rational curve, written with different weights."""
+    """Divide every weight by the largest one: the same rational curve, written with different weights."""
     out = copy.deepcopy(sig)
     g = out["entities"][0]["geometry"]
-    w0 = sc(g["weights"][0])
-    g["weights"] = [scal(sc(w) / w0) for w in g["weights"]]
+    top = max(sc(w) for w in g["weights"])
+    g["weights"] = [scal(sc(w) / top) for w in g["weights"]]
     return out
 
 
@@ -233,15 +234,15 @@ class Geometric(unittest.TestCase):
         self.assertTrue({"endpoint_start", "endpoint_end", "bounds", "curve_deviation", "arc_length"} <= names, names)
 
     def test_a_1e6_translation_turns_endpoints_and_bounds_red(self):
-        rep = ge().compare(POL, expected("line-001"), shift_x(signature("line-001"), 1e-6))
+        rep = ge().compare(POL, expected("line-001"), shift_x(signature("line-001"), MICRO))
         self.assertEqual(rep["class"], "BOUNDED_APPROXIMATION")
-        self.assertGreater(rep["bound"], 9e-7)
+        self.assertGreater(rep["bound"], (0.9 * MICRO))
         self.assertFalse(quantity(rep, "endpoint_start")[0]["admitted"])
         self.assertFalse(quantity(rep, "endpoint_end")[0]["admitted"])
         self.assertFalse(quantity(rep, "bounds")[0]["admitted"])
 
     def test_the_policy_tolerance_admits_a_sub_tolerance_move(self):
-        rep = ge().compare(POL, expected("line-001"), shift_x(signature("line-001"), 1e-13))
+        rep = ge().compare(POL, expected("line-001"), shift_x(signature("line-001"), TINY))
         self.assertEqual(rep["class"], "GEOMETRIC_EXACT_REPARAMETERIZED")
 
     def test_sampling_converges_and_says_where(self):
@@ -290,12 +291,12 @@ class Geometric(unittest.TestCase):
             "tangent": None, "curvature": None, "derivative_exclusion": "C0 knot"}]
         rep = ge().compare(POL, expected("circle-001"), sig)
         self.assertEqual([q for q in rep["entities"][0]["quantities"] if q["quantity"] in ("tangent", "curvature")], [])
-        self.assertEqual(rep["entities"][0]["samples_excluded"][0]["parameter"]["decimal"], "5e-1")
+        self.assertEqual(canon.hex_to_f64(rep["entities"][0]["samples_excluded"][0]["parameter"]["f64_hex"]), 0.5)
 
     def test_the_policy_version_is_in_the_report_and_it_validates(self):
         schema = json.loads((ROOT / "schema" / "geometric-report.schema.json").read_text())
         v = Draft202012Validator(schema)
-        for s in (signature("line-001"), shift_x(signature("line-001"), 1e-6)):
+        for s in (signature("line-001"), shift_x(signature("line-001"), MICRO)):
             rep = ge().compare(POL, expected("line-001"), s)
             self.assertEqual(rep["numeric_policy_version"], POL.version)
             self.assertEqual([e.message for e in v.iter_errors(rep)], [])
@@ -305,9 +306,9 @@ class Geometric(unittest.TestCase):
             ge().compare(POL, None, signature("line-001"))
 
     def test_a_bounded_result_carries_its_measured_bound(self):
-        rep = ge().compare(POL, expected("line-001"), shift_x(signature("line-001"), 1e-3))
+        rep = ge().compare(POL, expected("line-001"), shift_x(signature("line-001"), MILLI))
         self.assertEqual(rep["class"], "BOUNDED_APPROXIMATION")
-        self.assertAlmostEqual(rep["bound"], 1e-3, places=9)
+        self.assertAlmostEqual(rep["bound"], MILLI, places=9)
 
 
 def polyline_for_line(sig):
@@ -316,6 +317,7 @@ def polyline_for_line(sig):
     e = out["entities"][0]
     g = e["geometry"]
     e["class"] = "polyline"
+    e["parameter_domain"] = {"start": scal(0.0), "end": scal(1.0)}
     e["geometry"] = {"vertices": [g["start"], g["end"]], "bulges": [scal(0.0)]}
     return out
 
@@ -335,7 +337,7 @@ class Converters(unittest.TestCase):
         self.assertIsNone(s["quarantine"])
 
     def test_both_agree_and_both_contradict_the_truth_is_classified_against_the_truth(self):
-        bad = shift_x(signature("line-001"), 1e-3)
+        bad = shift_x(signature("line-001"), MILLI)
         s = self.classify(expected("line-001"), bad, copy.deepcopy(bad))
         self.assertEqual(s["class"], "MATERIAL_DIFFERENCE")
         self.assertEqual(s["governing"], "KNOWN_TRUTH")
@@ -354,10 +356,10 @@ class Converters(unittest.TestCase):
         self.assertEqual(s["evidence"]["class"], "DUAL_ORACLE_EQUIVALENT")
 
     def test_one_exact_one_wrong_is_material(self):
-        s = self.classify(expected("line-001"), signature("line-001"), shift_x(signature("line-001"), 1e-3))
+        s = self.classify(expected("line-001"), signature("line-001"), shift_x(signature("line-001"), MILLI))
         self.assertEqual(s["class"], "MATERIAL_DIFFERENCE")
         self.assertEqual(s["deciding"]["converter"], "secondary")
-        self.assertAlmostEqual(s["deciding"]["deviation"], 1e-3, places=9)
+        self.assertAlmostEqual(s["deciding"]["deviation"], MILLI, places=9)
 
     def test_without_a_truth_identical_signatures_match(self):
         s = self.classify(None, signature("circle-001"), signature("circle-001"))
@@ -376,14 +378,14 @@ class Converters(unittest.TestCase):
         self.assertEqual(s["deciding"]["field"], "class")
 
     def test_without_a_truth_a_move_is_a_material_difference_with_its_deviation(self):
-        s = self.classify(None, signature("line-001"), shift_x(signature("line-001"), 1e-3))
+        s = self.classify(None, signature("line-001"), shift_x(signature("line-001"), MILLI))
         self.assertEqual(s["class"], "MATERIAL_DIFFERENCE")
         self.assertIsNone(s["evidence"])
-        self.assertAlmostEqual(s["deciding"]["deviation"], 1e-3, places=9)
+        self.assertAlmostEqual(s["deciding"]["deviation"], MILLI, places=9)
         self.assertIn("at_unit_parameter", s["deciding"])
 
     def test_every_material_difference_is_quarantined_with_a_named_reason(self):
-        s = self.classify(None, signature("line-001"), shift_x(signature("line-001"), 1e-3))
+        s = self.classify(None, signature("line-001"), shift_x(signature("line-001"), MILLI))
         q = s["quarantine"]
         self.assertEqual(q["reason"], "UNRESOLVED_DISAGREEMENT")
         self.assertNotIn("unknown", q["detail"].lower())
@@ -435,10 +437,19 @@ class Converters(unittest.TestCase):
         self.assertIn("a-001", text)
         self.assertNotIn(" — ", text)
 
+    def test_a_rejection_fixture_is_honoured_by_emitting_nothing(self):
+        exp = expected("shear-001")
+        empty = {"schema_version": normalize.SCHEMA_VERSION, "units": {"canonical": "metre"}, "entities": [],
+                 "versions": {"evaluator": "1", "occt": "7.6.3", "schema": normalize.SCHEMA_VERSION, "policy": POL.version}}
+        self.assertEqual(self.classify(exp, empty, empty)["class"], "MATCH")
+        s = self.classify(exp, signature("line-001"), empty)
+        self.assertEqual(s["class"], "MATERIAL_DIFFERENCE")
+        self.assertEqual(s["deciding"]["converter"], "primary")
+
     def test_the_section_validates_against_its_schema(self):
         schema = json.loads((ROOT / "schema" / "converter-section.schema.json").read_text())
         v = Draft202012Validator(schema)
-        for a, b in ((signature("line-001"), signature("line-001")), (signature("line-001"), shift_x(signature("line-001"), 1e-3))):
+        for a, b in ((signature("line-001"), signature("line-001")), (signature("line-001"), shift_x(signature("line-001"), MILLI))):
             s = self.classify(expected("line-001"), a, b)
             self.assertEqual([e.message for e in v.iter_errors(s)], [])
 

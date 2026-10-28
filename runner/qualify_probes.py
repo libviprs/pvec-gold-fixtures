@@ -147,17 +147,18 @@ def refine_maximum(h, at, width):
 
 
 def deviation(pol, src, targets, scale):
-    """Max distance from points of src to the union of targets, refined until stable by the policy."""
+    """Max distance from points of src to the union of targets, refined until stable by the policy.
+    Returns (deviation, unit parameter, stable, refinement level)."""
     f = lambda u: src.at(u)  # noqa: E731
     g = lambda u: nearest_on_all(targets, src.at(u))  # noqa: E731
     h = lambda u: curves.dist(f(u), g(u))  # noqa: E731
     try:
         dev, at, lvl = pol.adaptive_max_deviation(f, g, 0.0, 1.0, curves.dist, scale, max_levels=7)
-        stable, width = True, 1.0 / (8 * 2 ** (lvl - 1))
+        stable = True
     except numeric.UnstableEstimate as e:
-        dev, at, stable, width = e.best, e.at, False, 1.0 / (8 * 2 ** (e.levels - 1))
-    dev2, at2 = refine_maximum(h, at, width)
-    return (dev2, at2, stable) if dev2 > dev else (dev, at, stable)
+        dev, at, lvl, stable = e.best, e.at, e.levels, False
+    dev2, at2 = refine_maximum(h, at, 1.0 / (8 * 2 ** (lvl - 1)))
+    return (dev2, at2, stable, lvl) if dev2 > dev else (dev, at, stable, lvl)
 
 
 def classify_entity(pol, ent, actual_doc, status):
@@ -196,10 +197,10 @@ def classify_entity(pol, ent, actual_doc, status):
             sdiff = sdiff + ["transform (expected a bare curve)"]
         if not sdiff:
             return cell(STRUCTURAL_EXACT, {"fields_compared": len(structural.fields(core(a)))}, None)
-    d1, at1, st1 = deviation(pol, exp, placed, scale)
+    d1, at1, st1, _ = deviation(pol, exp, placed, scale)
     worst, where, stable, which = d1, at1, st1, "EXPECTED_TO_ACTUAL"
     for a in placed:
-        d2, at2, st2 = deviation(pol, a, [exp], scale)
+        d2, at2, st2, _ = deviation(pol, a, [exp], scale)
         if d2 > worst:
             worst, where, stable, which = d2, at2, st2, "ACTUAL_TO_EXPECTED"
     ev = {"structural_diff": sdiff if sdiff is not None else ["different number of curves: %d" % len(placed)],
