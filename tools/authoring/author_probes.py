@@ -238,7 +238,7 @@ def build_transform_fixture(s):
         ent["transform_chain"] = {"order": "OUTERMOST_FIRST", "transforms": recs, "composed": comp}
         top = comp
     exp = s["expect"]
-    asserts = [("STRUCTURAL", "TRANSFORM_PRESERVED", "The source keeps an instance plus the stated transform; the matrix and determinant survive as written.")]
+    asserts = [("SOURCE_MAPPING", "TRANSFORM_PRESERVED", "Checked in the source mapping, not in the artifact (pvec ADR 0017: PVec is curve-only): the mapping reads the instance plus the stated transform and keeps the matrix and determinant as written while it flattens the instance to the world-space curve.")]
     det_neg = canon.exact(top["determinant"]) < 0
     if exp == "reject":
         ent["rejection"] = dict(s["rejection"])

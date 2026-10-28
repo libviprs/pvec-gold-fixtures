@@ -252,6 +252,14 @@ def semantic_check(doc):
         seen.add(a["id"])
         if a["entity"] not in ids:
             errs.append("assertion %s names unknown entity %s" % (a["id"], a["entity"]))
+        if a["claim"] == "TRANSFORM_PRESERVED" and a["kind"] != "SOURCE_MAPPING":
+            errs.append("assertion %s: TRANSFORM_PRESERVED is a source-mapping assertion (pvec ADR 0017), kind must be SOURCE_MAPPING" % a["id"])
+        if a["kind"] == "SOURCE_MAPPING" and a["claim"] != "TRANSFORM_PRESERVED":
+            errs.append("assertion %s: SOURCE_MAPPING is only for TRANSFORM_PRESERVED" % a["id"])
+    world_claims = {a["entity"] for a in doc["assertions"] if a["claim"] == "WORLD_SPACE_RESULT" and a["kind"] == "GEOMETRIC"}
+    for ent in doc["entities"]:
+        if ent.get("structure") == "INSTANCE_PLUS_TRANSFORM" and "world" in ent and ent["id"] not in world_claims:
+            errs.append("entity %s is an instance with a world-space curve but no GEOMETRIC WORLD_SPACE_RESULT assertion (the artifact is curve-only, pvec ADR 0017)" % ent["id"])
     return errs
 
 

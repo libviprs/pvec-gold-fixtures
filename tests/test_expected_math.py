@@ -138,7 +138,9 @@ class Transforms(unittest.TestCase):
     def doc(self, ent):
         d = base()
         d["entities"] = [ent]
-        d["assertions"] = [{"id": "a", "kind": "STRUCTURAL", "entity": ent["id"], "claim": "TRANSFORM_PRESERVED", "statement": "x"}]
+        d["assertions"] = [{"id": "a", "kind": "SOURCE_MAPPING", "entity": ent["id"], "claim": "TRANSFORM_PRESERVED", "statement": "x"}]
+        if "world" in ent:
+            d["assertions"].append({"id": "b", "kind": "GEOMETRIC", "entity": ent["id"], "claim": "WORLD_SPACE_RESULT", "statement": "x"})
         return d
 
     def world_line(self):
