@@ -423,3 +423,186 @@ class WordingAndDispositions(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# ---- ADR 0009: oracle scope ------------------------------------------------------------------
+
+DOCS = ROOT / "docs" / "adr"
+NO_AI_WORDS = re.compile(r"claude|anthropic|\bAI\b|\bLLM\b|co-authored|generated with", re.I)
+
+
+def open_converters():
+    return [
+        {"id": "acadsharp-dwg2step", "version": "0.1.0", "source_commit": "0123456789abcdef0123456789abcdef01234567",
+         "lineage": "ACadSharp", "links_occt": False, "image_digest": "sha256:" + "a" * 64},
+        {"id": "libredwg-dwg2step", "version": "0.1.0", "source_commit": "89abcdef0123456789abcdef0123456789abcdef",
+         "lineage": "LibreDWG", "links_occt": False, "image_digest": "sha256:" + "b" * 64},
+    ]
+
+
+def r1_manifest(**over):
+    m = {"schema_version": "pvec-gold/corpus-manifest/2", "corpus_revision": "r1-open-step", "oracles": "open",
+         "step_oracle": "open", "evidence_scope": "STEP_ORACLE", "oracle_scope": "OPEN_CONVERTERS",
+         "converters": open_converters(),
+         "fixtures": [{"id": "line-001", "evidence_class": "KNOWN_TRUTH_EXACT", "evidence_scope": "STEP_ORACLE",
+                       "oracle_scope": "OPEN_CONVERTERS"}]}
+    m.update(over)
+    return m
+
+
+class OracleScope(unittest.TestCase):
+    @property
+    def r0(self):
+        from runner import r0_open
+        return r0_open
+
+    def problems(self, m):
+        return self.r0.scope_problems(m)
+
+    def test_the_vocabulary_is_the_one_adr_0009_names(self):
+        self.assertEqual(self.r0.ORACLE_SCOPES, ("NONE", "OPEN_CONVERTERS", "VENDOR_CONVERTERS"))
+        self.assertEqual(self.r0.EVIDENCE_SCOPES, ("READER_MAPPING_ONLY", "STEP_ORACLE"))
+
+    def test_a_well_formed_open_manifest_has_no_problems(self):
+        self.assertEqual(self.problems(r1_manifest()), [])
+
+    def test_a_fixture_with_step_oracle_scope_needs_two_named_converters(self):
+        for conv in ("none", [], open_converters()[:1], [open_converters()[0], dict(open_converters()[1], id="")],
+                     [open_converters()[0], {k: v for k, v in open_converters()[1].items() if k != "version"}],
+                     [open_converters()[0], dict(open_converters()[1], image_digest="latest")]):
+            probs = self.problems(r1_manifest(converters=conv))
+            self.assertTrue(probs, repr(conv))
+            self.assertTrue(any("converter" in p for p in probs), probs)
+
+    def test_open_converters_scope_never_names_a_vendor(self):
+        for field, val in (("id", "cadex-dwg2step"), ("id", "oda-step"), ("lineage", "CAD Exchanger"), ("lineage", "Open Design Alliance")):
+            conv = open_converters()
+            conv[1] = dict(conv[1], **{field: val})
+            probs = self.problems(r1_manifest(converters=conv))
+            self.assertTrue(any("vendor" in p for p in probs), (field, val, probs))
+        self.assertTrue(any("vendor" in p for p in self.problems(r1_manifest(oracles="vendor"))))
+
+    def test_two_converters_of_one_lineage_are_refused_for_dual_oracle(self):
+        conv = open_converters()
+        conv[1] = dict(conv[1], lineage=conv[0]["lineage"])
+        self.assertTrue(any("lineage" in p for p in self.problems(r1_manifest(converters=conv))))
+        self.assertTrue(any("lineage" in p for p in self.r0.lineage_problems(conv)))
+        self.assertEqual(self.r0.lineage_problems(open_converters()), [])
+
+    def test_converters_without_a_lineage_are_reported_not_raised(self):
+        conv = [{k: v for k, v in c.items() if k != "lineage"} for c in open_converters()]
+        probs = self.problems(r1_manifest(converters=conv))
+        self.assertTrue(any("lineage" in p for p in probs), probs)
+        self.assertTrue(any("lineage" in p for p in self.r0.lineage_problems(conv)))
+
+    def test_vendor_converters_scope_needs_vendor_converters(self):
+        self.assertTrue(any("vendor" in p for p in self.problems(r1_manifest(oracle_scope="VENDOR_CONVERTERS", oracles="open"))))
+        m = r1_manifest(oracle_scope="VENDOR_CONVERTERS", oracles="vendor", step_oracle="vendor")
+        m["fixtures"][0]["oracle_scope"] = "VENDOR_CONVERTERS"
+        self.assertTrue(any("vendor" in p for p in self.problems(m)), "the open pair must not carry VENDOR_CONVERTERS")
+        conv = [dict(open_converters()[0], id="cadex", lineage="CAD Exchanger"), dict(open_converters()[1], id="oda", lineage="ODA")]
+        m = r1_manifest(oracle_scope="VENDOR_CONVERTERS", oracles="vendor", step_oracle="vendor", converters=conv)
+        m["fixtures"][0]["oracle_scope"] = "VENDOR_CONVERTERS"
+        self.assertEqual(self.problems(m), [])
+
+    def test_a_vendor_name_is_caught_at_the_start_of_a_token(self):
+        for val in ("odafoo", "oda", "cadexpro", "oda-step"):
+            conv = open_converters()
+            conv[1] = dict(conv[1], id=val)
+            self.assertTrue(any("vendor" in p for p in self.problems(r1_manifest(converters=conv))), val)
+        conv = open_converters()
+        conv[1] = dict(conv[1], lineage="geodata-reader")
+        self.assertEqual(self.problems(r1_manifest(converters=conv)), [])
+
+    def test_dual_oracle_class_needs_step_oracle_evidence(self):
+        m = r1_manifest()
+        m["fixtures"][0].update(evidence_class="DUAL_ORACLE_EQUIVALENT", evidence_scope="READER_MAPPING_ONLY")
+        self.assertTrue(any("DUAL_ORACLE_EQUIVALENT" in p and "STEP_ORACLE" in p for p in self.problems(m)))
+        m["fixtures"][0]["evidence_scope"] = "STEP_ORACLE"
+        self.assertEqual(self.problems(m), [])
+
+    def test_an_open_converter_that_links_occt_is_refused(self):
+        conv = open_converters()
+        conv[0] = dict(conv[0], links_occt=True)
+        self.assertTrue(any("OCCT" in p for p in self.problems(r1_manifest(converters=conv))))
+
+    def test_scope_values_must_be_known_and_a_fixture_may_not_claim_more_than_its_revision(self):
+        self.assertTrue(self.problems(r1_manifest(oracle_scope="EVERYTHING")))
+        self.assertTrue(self.problems(r1_manifest(evidence_scope="PROVEN")))
+        m = r1_manifest()
+        m["fixtures"][0]["oracle_scope"] = "VENDOR_CONVERTERS"
+        self.assertTrue(any("fixture" in p for p in self.problems(m)))
+        m = r1_manifest()
+        m["fixtures"][0]["evidence_scope"] = "NOT_A_SCOPE"
+        self.assertTrue(self.problems(m))
+
+    def test_step_oracle_evidence_and_dual_oracle_class_need_an_oracle_scope(self):
+        m = r1_manifest(oracle_scope="NONE", oracles="none", converters="none")
+        self.assertTrue(any("STEP_ORACLE" in p for p in self.problems(m)))
+        m = r1_manifest(oracle_scope="NONE", oracles="none", converters="none", evidence_scope="READER_MAPPING_ONLY")
+        m["fixtures"][0].update(evidence_scope="READER_MAPPING_ONLY", oracle_scope="NONE", evidence_class="DUAL_ORACLE_EQUIVALENT")
+        self.assertTrue(any("DUAL_ORACLE_EQUIVALENT" in p for p in self.problems(m)))
+
+    def test_r0_open_keeps_oracle_scope_none(self):
+        m = manifest()
+        self.assertEqual(self.r0.oracle_scope_of(m), "NONE")
+        self.assertEqual(m["oracles"], "none")
+        for f in m["fixtures"]:
+            self.assertEqual(self.r0.oracle_scope_of(f), "NONE", f["id"])
+        self.assertEqual(self.problems(m), [])
+        self.assertEqual(self.r0.oracle_scope_of({"oracles": "open"}), None)
+
+
+class Adr0009AndAmendments(unittest.TestCase):
+    def text(self, name):
+        p = next(DOCS.glob(name), None)
+        self.assertIsNotNone(p, name + " does not exist")
+        return p.read_text()
+
+    def test_adr_0009_defines_the_scope_fields(self):
+        t = self.text("0009-*.md")
+        for needle in ("oracle_scope", "NONE", "OPEN_CONVERTERS", "VENDOR_CONVERTERS", "evidence_scope", "STEP_ORACLE",
+                       "READER_MAPPING_ONLY", "lineage", "ADR 0001", "image digest", "common-mode"):
+            self.assertIn(needle, t, needle)
+
+    def test_adr_0009_common_mode_names_every_shared_source(self):
+        t = " ".join(self.text("0009-*.md").split())
+        for needle in ("same DWG specification", "source DWGs", "evaluator", "Open CASCADE"):
+            self.assertIn(needle, t, needle)
+
+    def test_adr_0004_is_freezable_for_the_open_route_and_says_what_the_converters_are(self):
+        t = " ".join(self.text("0004-*.md").split())
+        self.assertNotIn("not yet freezable", t)
+        for needle in ("LibreDWG is C", "dwgread JSON"):
+            self.assertIn(needle, t, needle)
+
+    def test_adr_0001_keeps_its_four_classes(self):
+        t = self.text("0001-*.md")
+        for c in ("KNOWN_TRUTH_EXACT", "DUAL_ORACLE_EQUIVALENT", "REAL_WORLD_DIFFERENTIAL", "QUARANTINED"):
+            self.assertIn("- `%s`:" % c, t, c)
+        self.assertNotIn("ADR 0009", t)
+
+    def test_adrs_0003_0004_0007_carry_an_amendment_that_cites_adr_0009(self):
+        needles = {"0003-*.md": ["whichever"],
+                   "0004-*.md": ["links Open CASCADE", "open route"],
+                   "0007-*.md": ["open images", "digest", "pvec-oracle-libredwg", "never a build context"]}
+        for name, extra in needles.items():
+            t = self.text(name)
+            self.assertRegex(t, r"(?m)^## Amendment \(ADR 0009\)$", name)
+            for n in extra:
+                self.assertIn(n, t, (name, n))
+
+    def test_new_prose_has_no_em_dash_and_no_tool_attribution(self):
+        for name in ("0009-*.md", "0003-*.md", "0004-*.md", "0007-*.md"):
+            t = self.text(name)
+            self.assertNotIn("—", t, name)
+            self.assertIsNone(NO_AI_WORDS.search(t), name)
+
+    def test_the_licence_file_is_the_mit_file_libviprs_uses(self):
+        p = ROOT / "LICENSE"
+        self.assertTrue(p.is_file(), "LICENSE does not exist")
+        t = p.read_text()
+        self.assertTrue(t.startswith("MIT License\n\nCopyright (c) 2026 Roman Goldmann\n"))
+        for needle in ("Permission is hereby granted, free of charge", 'THE SOFTWARE IS PROVIDED "AS IS"'):
+            self.assertIn(needle, t)
+        self.assertIsNone(NO_AI_WORDS.search(t))
