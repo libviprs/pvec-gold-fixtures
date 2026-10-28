@@ -140,10 +140,15 @@ class FrozenDocs(unittest.TestCase):
         self.assertIn("Exit statement", t)
         self.assertNotIn("Status: **not run", t)
 
+    def test_the_exit_gate_run_is_recorded_green(self):
+        t = self.read("reports/phase1/exit-gate.txt")
+        for name in ("probe-classification", "evaluator-selftest", "expected-math-roundtrip"):
+            self.assertIn("GREEN " + name, t)
+        self.assertIn("phase 1 exit gate: GREEN", t)
+
     def test_vendor_deferred_names_issues_2_and_6(self):
         t = self.read("docs/vendor-deferred.md")
-        self.assertRegex(t, r"(?m)^## .*#2\b")
-        self.assertRegex(t, r"(?m)^## .*#6\b")
+        self.assertRegex(t, r"(?m)^## .*issues 2 and 6")
         for word in ("CAD Exchanger", "ODA", "second oracle", "discrimination"):
             self.assertIn(word, t)
 

@@ -1,6 +1,6 @@
 # ADR 0001: evidence classes
 
-Status: proposed. It is frozen by the phase 1 exit gate (see `docs/phase1-converter-qualification.md`).
+Status: frozen at the phase 1 exit gate (`docs/phase1-converter-qualification.md`, open route, 2026-10-28).
 Panel finding answered: 1 (dual-converter agreement is not absolute truth) and 2 (add independently
 specified source mathematics).
 

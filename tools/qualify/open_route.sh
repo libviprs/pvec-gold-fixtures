@@ -20,7 +20,7 @@ vol=gold-qual-$arch
 drv=gold-acs-driver:$arch
 r() { "${ssh[@]}" "$cfg $*"; }
 if [ "${1:-}" = "--done" ]; then
-  r "$dk volume rm $vol >/dev/null 2>&1; $dk rmi $drv gold-dwg2step-acadsharp:qualify-$arch gold-stepval:$arch >/dev/null 2>&1; true"
+  r "$dk volume rm $vol >/dev/null 2>&1; $dk rmi $drv gold-dwg2step-acadsharp:qualify-$arch gold-stepval:$arch gold-stepval-test:$arch >/dev/null 2>&1; true"
   exit 0
 fi
 r "$dk volume rm $vol >/dev/null 2>&1; $dk volume create $vol >/dev/null"

@@ -51,7 +51,15 @@ def main():
     r = subprocess.run([sys.executable, "-m", "runner.qualify_probes", "--primary", ID, str(OUT), "--lineage", ID + "=ACadSharp",
                         "--excluded", str(ROOT / "corpus/r0-open/quarantine.json"), "--platform", PLAT,
                         "--out", str(ROOT / "reports/phase1/probe-qualification.json")], cwd=ROOT)
-    sys.exit(r.returncode)
+    if r.returncode:
+        sys.exit(r.returncode)
+    # the exit gate: checks 2 and 3 need step_eval, so it runs in the evaluator image with the python deps
+    gate_img = "gold-stepval-test:" + ARCH
+    docker("build", "-q", "--platform", PLAT, "--target", "test", "-f", str(ROOT / "docker/step-validator/Dockerfile"), "-t", gate_img, str(ROOT))
+    g = docker("run", "--rm", "--platform", PLAT, "-v", VOL + ":/v", "-w", "/v", "-e", "PYTHONPATH=/v", gate_img, "python3", "-m", "runner.phase1_gate", check=False)
+    (ROOT / "reports/phase1/exit-gate.txt").write_text(g.stdout + g.stderr)
+    print(g.stdout + g.stderr)
+    sys.exit(g.returncode)
 
 
 main()

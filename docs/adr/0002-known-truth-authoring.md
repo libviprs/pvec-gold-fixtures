@@ -1,6 +1,6 @@
 # ADR 0002: known-truth authoring
 
-Status: proposed, frozen by the phase 1 exit gate. Panel findings answered: 2 and 6.
+Status: frozen at the phase 1 exit gate (open route, 2026-10-28). Panel findings answered: 2 and 6.
 
 ## Context
 

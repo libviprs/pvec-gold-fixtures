@@ -136,8 +136,8 @@
               "parameter_domain.end",
               "parameter_domain.start"
             ],
-            "max_deviation": 2.589462819655575e-15,
-            "at_unit_parameter": 0.6286312223441145,
+            "max_deviation": 2.220446049250313e-15,
+            "at_unit_parameter": 0.6180339887498949,
             "measured_in": "EXPECTED_TO_ACTUAL",
             "estimate_stable": true,
             "scale": 3.913118960624632,
@@ -241,8 +241,8 @@
             "structural_diff": [
               "geometry.x_axis[2]"
             ],
-            "max_deviation": 4.884981308350689e-15,
-            "at_unit_parameter": 0.9940870777261372,
+            "max_deviation": 2.6645352591003757e-15,
+            "at_unit_parameter": 0.9930339887498949,
             "measured_in": "EXPECTED_TO_ACTUAL",
             "estimate_stable": true,
             "scale": 2.75,
@@ -323,9 +323,9 @@
             "structural_diff": [
               "different number of curves: 3"
             ],
-            "max_deviation": 3.725290298461914e-09,
-            "at_unit_parameter": 0.9305339887498949,
-            "measured_in": "ACTUAL_TO_EXPECTED",
+            "max_deviation": 1.862645149230957e-09,
+            "at_unit_parameter": 0.6805339887498949,
+            "measured_in": "EXPECTED_TO_ACTUAL",
             "estimate_stable": true,
             "scale": 0.00022360641790187212,
             "magnitude": 10000000.0003
@@ -362,9 +362,9 @@
             "structural_diff": [
               "different number of curves: 4"
             ],
-            "max_deviation": 9.930136612989092e-16,
-            "at_unit_parameter": 0.9305339887498949,
-            "measured_in": "ACTUAL_TO_EXPECTED",
+            "max_deviation": 1.7763568394002505e-15,
+            "at_unit_parameter": 0.7428965258182785,
+            "measured_in": "EXPECTED_TO_ACTUAL",
             "estimate_stable": true,
             "scale": 5.3967582862307255,
             "magnitude": 5.0
@@ -414,8 +414,8 @@
             "structural_diff": [
               "different number of curves: 4"
             ],
-            "max_deviation": 9.930136612989092e-16,
-            "at_unit_parameter": 0.8680339887498949,
+            "max_deviation": 1.2947314098277875e-15,
+            "at_unit_parameter": 0.018237274986317886,
             "measured_in": "ACTUAL_TO_EXPECTED",
             "estimate_stable": true,
             "scale": 4.190763653560053,
@@ -433,8 +433,8 @@
             "structural_diff": [
               "different number of curves: 4"
             ],
-            "max_deviation": 1.4043333874306805e-15,
-            "at_unit_parameter": 0.9522552239522761,
+            "max_deviation": 2.318213734067276e-15,
+            "at_unit_parameter": 0.9622002148987963,
             "measured_in": "ACTUAL_TO_EXPECTED",
             "estimate_stable": true,
             "scale": 4.422951503238533,
@@ -463,8 +463,8 @@
             "structural_diff": [
               "geometry.x_axis[2]"
             ],
-            "max_deviation": 2.220446049250313e-16,
-            "at_unit_parameter": 0.1783180520161185,
+            "max_deviation": 1.1102230246251565e-16,
+            "at_unit_parameter": 0.1180339887498949,
             "measured_in": "EXPECTED_TO_ACTUAL",
             "estimate_stable": true,
             "scale": 1e-05,
@@ -555,8 +555,8 @@
               "geometry.x_axis[2]",
               "transform"
             ],
-            "max_deviation": 5.687116766346677e-15,
-            "at_unit_parameter": 0.7588045805486373,
+            "max_deviation": 5.515473566030869e-15,
+            "at_unit_parameter": 0.7430339887498949,
             "measured_in": "EXPECTED_TO_ACTUAL",
             "estimate_stable": true,
             "scale": 6.0,
@@ -603,9 +603,9 @@
               "parameter_domain.end",
               "transform"
             ],
-            "max_deviation": 8.920730087951354e-16,
+            "max_deviation": 8.899114524108741e-16,
             "at_unit_parameter": 0.9305339887498949,
-            "measured_in": "EXPECTED_TO_ACTUAL",
+            "measured_in": "ACTUAL_TO_EXPECTED",
             "estimate_stable": true,
             "scale": 3.9528470752104745,
             "magnitude": 4.506271957699961,

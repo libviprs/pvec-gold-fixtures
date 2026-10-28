@@ -78,9 +78,9 @@ class Placed:
     def nearest(self, q):
         pts = self.samples()
         ds = [curves.dist(p, q) for p in pts]
-        # On a closed curve the first and last samples are one point, so the nearest sample can be a tie
-        # and the true nearest point sits next to either of them. Refine around every tied sample.
-        near = [k for k, d in enumerate(ds) if d <= min(ds) * (1 + 1e-9)]
+        # On a closed curve the first and last samples are one point, so the nearest sample can be a near tie
+        # and the true nearest point sits next to either end. Refine around the four closest samples.
+        near = sorted(range(len(ds)), key=ds.__getitem__)[:4]
         best = None
         for i in near:
             cand = self._refine(q, i)

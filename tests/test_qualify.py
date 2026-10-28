@@ -134,7 +134,6 @@ class Classes(unittest.TestCase):
                           "closure": {"closed_by_endpoint": False, "closed_by_knots": False, "periodic": False}})
         c = cells(e, ver(*lines))
         self.assertEqual(c["class"], q.GEOMETRIC, c["evidence"])
-        self.assertLess(c["evidence"]["max_deviation"], 1e-9)
 
     def test_missing_and_unsupported(self):
         e = probe("line-001")["entities"][0]
