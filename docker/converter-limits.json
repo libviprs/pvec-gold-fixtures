@@ -1,0 +1,6 @@
+{
+  "note": "Most converter containers that may run at once. The scheduler (runner/scheduler.py) refuses a request above this and caps the pool at it. A converter not listed here, or listed with null, gets 1: an unknown licence limit is never read as unlimited. The vendor numbers are unknown in this repository (no licence), see docs/vendor-deferred.md.",
+  "acadsharp-dwg2step": 8,
+  "cadex": null,
+  "oda": null
+}
