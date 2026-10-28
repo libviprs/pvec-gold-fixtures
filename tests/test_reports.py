@@ -435,7 +435,7 @@ class Converters(unittest.TestCase):
         self.assertRegex(text, r"(?m)^## EXACT_REPARAMETERIZATION")
         self.assertRegex(text, r"(?m)^## EQUIVALENT_GEOMETRY")
         self.assertIn("a-001", text)
-        self.assertNotIn(" — ", text)
+        self.assertNotIn(chr(0x2014), text)
 
     def test_a_rejection_fixture_is_honoured_by_emitting_nothing(self):
         exp = expected("shear-001")
