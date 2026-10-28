@@ -4,7 +4,7 @@
 # driver container with the host's socket builds the converter and evaluator images and runs
 # tools/qualify/open_route.py, and the report and the per-probe records are copied back here.
 #
-#   tools/qualify/open_route.sh mars|mercury
+#   LIBREDWG_IMAGE=<digest ref or local image id> tools/qualify/open_route.sh mars|mercury
 #   tools/qualify/open_route.sh mars|mercury --done      remove the images this made
 set -euo pipefail
 here=$(cd "$(dirname "$0")/../.." && pwd)
@@ -31,7 +31,7 @@ fi
 tar --exclude='.git' --exclude='__pycache__' --exclude='.out-*' -cf - -C "$here" . \
   | r "$dk run --rm -i --platform $plat -v $vol:/work alpine:3.20 sh -c 'tar -xf - -C /work'"
 set +e
-r "$dk run --rm --platform $plat -v /var/run/docker.sock:/var/run/docker.sock -v $vol:/work -w /work -e GOLD_VOLUME=$vol \
+r "$dk run --rm --platform $plat -v /var/run/docker.sock:/var/run/docker.sock -v $vol:/work -w /work -e GOLD_VOLUME=$vol -e LIBREDWG_IMAGE=${LIBREDWG_IMAGE:?set LIBREDWG_IMAGE to the digest or local id} \
    $drv sh -c 'mkdir -p reports/phase1 && PYTHONPATH=/work python3 tools/qualify/open_route.py'"
 rc=$?
 mkdir -p "$here/.out-qualify" "$here/reports/phase1"
