@@ -1,11 +1,15 @@
 """Classify each converter's output for each probe, and roll the cells up per PVec capability.
 
-    python3 -m runner.qualify_probes --probes fixtures/known-truth --cadex DIR --oda DIR \
-        --out reports/phase1/probe-qualification.json [--resolved FILE]
+    python3 -m runner.qualify_probes --probes fixtures/known-truth --primary ID DIR --secondary ID DIR \
+        --lineage ID=NAME --lineage ID=NAME --out reports/phase1/probe-qualification.json [--resolved FILE]
 
-DIR holds <probe-id>/primary.verification.json (+ primary.status.json) for CAD Exchanger and
-<probe-id>/secondary.verification.json (+ secondary.status.json) for ODA. Comparison reads the
-normalised evaluator records, never STEP text, and every threshold comes from the vendored policy.
+ID is the converter's name in the report (for example acadsharp-dwg2step, libredwg-dwg2step, cadex or oda).
+DIR holds <probe-id>/primary.verification.json (+ primary.status.json) for the primary converter and
+<probe-id>/secondary.verification.json (+ secondary.status.json) for the secondary one. With --lineage for
+both ids is required: two converters of one lineage, or two equal ids, are refused as a dual oracle (ADR 0009),
+and the report records the lineages so a verdict always shows whose decoders produced it.
+Comparison reads the normalised evaluator records, never STEP text, and every threshold comes from the
+vendored policy. The verdict rules do not look at the ids.
 
 Classes: STRUCTURAL_EXACT, GEOMETRIC_EXACT_REPARAMETERIZED, BOUNDED_APPROXIMATION, MISSING,
 UNSUPPORTED. UNEXPECTED_GEOMETRY is a failure marker outside those five, for a probe whose expected
@@ -18,6 +22,7 @@ import sys
 from pathlib import Path
 
 from . import canon, curves, expected_math as em, numeric, structural, verification
+from .r0_open import lineage_problems
 
 STRUCTURAL_EXACT = "STRUCTURAL_EXACT"
 GEOMETRIC = "GEOMETRIC_EXACT_REPARAMETERIZED"
@@ -43,7 +48,7 @@ CAPABILITIES = {
                          "nonuniform-scale-rotated-001", "reflection-001", "shear-001", "general-affine-001",
                          "nested-blocks-001", "near-singular-001", "singular-001"],
 }
-CONVERTERS = {"cadex": "primary", "oda": "secondary"}
+CONVERTERS = {"cadex": "primary", "oda": "secondary"}   # the ids of the licensed pair; the default when a report names none
 SAMPLES = 256   # sampling resolution for nearest-point search; refinement below does the precision work
 GOLDEN = (math.sqrt(5.0) - 1.0) / 2.0
 
@@ -232,22 +237,24 @@ def probe_class(cells):
 
 
 def capability_verdicts(pol, results, resolved=()):
+    """results: {probe: {converter id: [cell]}}. The ids are whatever the run named, in the order given."""
+    convs = list(next(iter(results.values()))) if results else list(CONVERTERS)
     rows = []
     for cap, probes in CAPABILITIES.items():
         per_conv = {}
-        for conv in CONVERTERS:
+        for conv in convs:
             classes = [probe_class(results[p][conv]) for p in probes if p in results]
             per_conv[conv] = max(classes, key=lambda k: RANK[k]) if classes else MISSING
         # rejection probes are judged by expectation, not by class
-        rej = [p for p in probes if p in results and all("expectation_met" in c for conv in CONVERTERS for c in results[p][conv])]
-        rej_fail = [p for p in rej if not all(c["expectation_met"] for conv in CONVERTERS for c in results[p][conv])]
+        rej = [p for p in probes if p in results and all("expectation_met" in c for conv in convs for c in results[p][conv])]
+        rej_fail = [p for p in rej if not all(c["expectation_met"] for conv in convs for c in results[p][conv])]
         best = min(per_conv.values(), key=lambda k: RANK[k])
         disc = [p for p in probes if p in results and p not in rej
-                and (probe_class(results[p]["cadex"]) in EXACT) != (probe_class(results[p]["oda"]) in EXACT) and p not in resolved]
+                and len({probe_class(results[p][conv]) in EXACT for conv in convs}) > 1 and p not in resolved]
         cert_struct = best == STRUCTURAL_EXACT and not disc and not rej_fail
         cert_geom = best in EXACT and not disc and not rej_fail
         reasons = []
-        if per_conv["cadex"] == BOUNDED and per_conv["oda"] == BOUNDED:
+        if per_conv and all(k == BOUNDED for k in per_conv.values()):
             reasons.append("both converters land in BOUNDED_APPROXIMATION: not certified even though they agree")
         if best not in EXACT and not reasons:
             reasons.append("no converter produced an exact representation (best: %s)" % best)
@@ -255,7 +262,7 @@ def capability_verdicts(pol, results, resolved=()):
             reasons.append("unresolved converter discrepancy on: %s" % ", ".join(disc))
         if rej_fail:
             reasons.append("a rejection probe was not honoured: %s" % ", ".join(rej_fail))
-        rows.append({"capability": cap, "probes": probes, "cadex": per_conv["cadex"], "oda": per_conv["oda"],
+        rows.append({"capability": cap, "probes": probes, "converters": convs, "by_converter": per_conv,
                      "certified_structural": cert_struct, "certified_geometric": cert_geom,
                      "status": "CERTIFIED" if cert_geom else "BLOCKED", "reasons": reasons})
     return rows
@@ -288,30 +295,40 @@ def build_report(pol, probes, outputs_for, resolved=()):
         if not is_converter_probe(doc):
             continue
         results[pid] = qualify_probe(pol, doc, outputs_for(pid))
+    ids = list(next(iter(results.values()))) if results else []
     return {"schema_version": "pvec-gold/probe-qualification/1", "numeric_policy_version": pol.version,
-            "probes": results, "capabilities": capability_verdicts(pol, results, resolved)}
+            "converters": dict(zip(("primary", "secondary"), ids)), "probes": results, "capabilities": capability_verdicts(pol, results, resolved)}
 
 
 def main(argv):
     ap = argparse.ArgumentParser()
     ap.add_argument("--probes", default="fixtures/known-truth")
-    ap.add_argument("--cadex")
-    ap.add_argument("--oda")
+    ap.add_argument("--primary", nargs=2, metavar=("ID", "DIR"), required=True)
+    ap.add_argument("--secondary", nargs=2, metavar=("ID", "DIR"), required=True)
+    ap.add_argument("--lineage", action="append", default=[], metavar="ID=NAME")
     ap.add_argument("--out", default="reports/phase1/probe-qualification.json")
     ap.add_argument("--resolved")
     a = ap.parse_args(argv)
+    (pid_, pdir), (sid_, sdir) = a.primary, a.secondary
+    if pid_ == sid_:
+        raise SystemExit("--primary and --secondary name the same converter %r: that is one oracle, not two" % pid_)
+    lin = dict(x.split("=", 1) for x in a.lineage)
+    bad = lineage_problems([{"id": i, "lineage": lin.get(i, "")} for i in (pid_, sid_)])
+    if bad:
+        raise SystemExit(bad[0])
     pol = numeric.load_policy()
     probes = {}
     for f in sorted(Path(a.probes).rglob("expected.math.json")):
         d = em.load(f)
         probes[d["fixture_id"]] = d
     resolved = json.loads(Path(a.resolved).read_text()) if a.resolved else []
-    outputs_for = lambda pid: {"cadex": load_outputs(a.cadex, pid, "primary"), "oda": load_outputs(a.oda, pid, "secondary")}  # noqa: E731
+    outputs_for = lambda pid: {pid_: load_outputs(pdir, pid, "primary"), sid_: load_outputs(sdir, pid, "secondary")}  # noqa: E731
     rep = build_report(pol, probes, outputs_for, resolved)
+    rep["lineages"] = {pid_: lin[pid_], sid_: lin[sid_]}
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     Path(a.out).write_text(json.dumps(rep, indent=2) + "\n")
     for r in rep["capabilities"]:
-        print("%-18s %-10s cadex=%-32s oda=%-32s %s" % (r["capability"], r["status"], r["cadex"], r["oda"], "; ".join(r["reasons"])))
+        print("%-18s %-10s %s=%-32s %s=%-32s %s" % (r["capability"], r["status"], pid_, r["by_converter"][pid_], sid_, r["by_converter"][sid_], "; ".join(r["reasons"])))
     return 0
 
 
