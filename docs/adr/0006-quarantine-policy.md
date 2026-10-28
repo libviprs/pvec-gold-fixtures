@@ -1,6 +1,6 @@
 # ADR 0006: quarantine policy
 
-Status: proposed, frozen by the phase 1 exit gate. Panel findings answered: 1 (a disagreement stays visible
+Status: frozen at the phase 1 exit gate (open route, 2026-10-28). Panel findings answered: 1 (a disagreement stays visible
 instead of being averaged away) and 8 (provenance and licence problems are first-class).
 
 ## Context

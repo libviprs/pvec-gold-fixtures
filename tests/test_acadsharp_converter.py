@@ -34,7 +34,7 @@ from runner import canon, expected_math as em, numeric, step_normalise, verifica
 ROOT = Path(__file__).resolve().parent.parent
 TOOL = ROOT / "tools" / "converters" / "acadsharp"
 CORPUS = ROOT / "corpus" / "r0-open"
-CONVERTER_ID = "acadsharp-dwg2step"   # stub: issue 47 makes `converter` a string id in the status schema
+CONVERTER_ID = "acadsharp-dwg2step"   # the named id ADR 0009 allows in the status schema
 IMAGE_NAME = "ghcr.io/libviprs/pvec-gold-dwg2step-acadsharp"
 POL = numeric.load_policy()
 
@@ -120,10 +120,7 @@ def evaluate(step):
 
 
 def status_schema():
-    s = json.loads((ROOT / "schema" / "converter-status.schema.json").read_text())
-    # Until the ADR 0009 change lands, `converter` is an enum of the two vendors. A named id is what that change allows.
-    s["properties"]["converter"] = {"type": "string", "minLength": 1}
-    return s
+    return json.loads((ROOT / "schema" / "converter-status.schema.json").read_text())
 
 
 _cache = {}

@@ -25,6 +25,14 @@ Three phases and 27 issues under [#1](https://github.com/libviprs/pvec-gold-fixt
 Phase 1 proves the methodology — including validating the STEP validator itself against hand-known
 primitives — before any mass fixture generation.
 
+## Regenerating a fixture
+
+`docker compose run --rm fixture-runner generate [fixture-id ...]` converts `fixtures/<id>/source.dwg` with two
+converter services, evaluates both outputs, normalises, compares, classifies and writes
+`fixtures/<id>/generated/` (see `runner/generate.py`). Containers are torn down on every exit path. Pass
+`--primary`/`--secondary` and `--oracle-scope OPEN_CONVERTERS` for the open route. The container wiring for the pvec
+corpus tests is `corpus/container.pin.json` and `runner/container_wiring.py`.
+
 ## Evidence classes
 
 The four classes (`KNOWN_TRUTH_EXACT`, `DUAL_ORACLE_EQUIVALENT`, `REAL_WORLD_DIFFERENTIAL`,
@@ -44,3 +52,5 @@ intended `f64`, for example `{"decimal": "0.70710678118654757", "f64_hex": "0x3f
   containers, always with an explicit `--platform`, and every write-up says which results are
   native x64 and which arm64.
 - No credential is written to a file, echoed, or copied to a build host.
+
+The structural and geometric reports, the converter comparison and the generator input for real-world fixtures are described in [docs/reports](docs/reports/structural.md) and [docs/fixtures/generator-input.md](docs/fixtures/generator-input.md). What waits on a licence or another repository is in [docs/vendor-deferred.md](docs/vendor-deferred.md).
