@@ -93,6 +93,9 @@ services:
     working_dir: ${PWD}
     environment:
       FIXTURE_DIR: ${FIXTURE_DIR:-${PWD}/fixtures}
+      # the runner asks compose for the converter images itself, so the choices have to reach it
+      LIBREDWG_IMAGE: ${LIBREDWG_IMAGE:-pvec-oracle-libredwg:local}
+      LIBREDWG_PLATFORM: ${LIBREDWG_PLATFORM:-linux/amd64}
     volumes:
       - ${PWD}:${PWD}
       - /var/run/docker.sock:/var/run/docker.sock
