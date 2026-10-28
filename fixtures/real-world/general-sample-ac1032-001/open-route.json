@@ -1,0 +1,20 @@
+{
+  "converter": "acadsharp-dwg2step",
+  "curves_evaluated": 0,
+  "differential": "SINGLE_OPEN_CONVERTER_ONLY",
+  "error": {
+    "class": "CONVERSION_FAILED",
+    "code": 15,
+    "message": "SPLINE with fit points only (no control points) is not supported"
+  },
+  "exit_code": 15,
+  "numeric_policy_version": "PVec numeric policy v1",
+  "oracle_scope": "OPEN_CONVERTERS",
+  "product": {
+    "name": "ACadSharp",
+    "version": "3.7.1+d7dc111"
+  },
+  "single_oracle": true,
+  "status": "ERROR",
+  "step_emitted": false
+}

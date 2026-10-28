@@ -1,0 +1,13 @@
+{
+  "schema_version": "pvec-gold/converter-status/1",
+  "converter": "acadsharp-dwg2step",
+  "status": "OK",
+  "exit_code": 0,
+  "input": {"path": "/v/fixtures/mixed/mixed-entity-001/source.dwg", "sha256": "2e506489009126345c45b1fff28e8fae89a8277561107a65a5f9f637795c4e4b"},
+  "output": {"path": "/v/.out-corpus-open/mixed/mixed-entity-001/primary.step", "sha256": "5c7d550ad0b5f22e5cdf9e15217c5c2ec0dcc90ba11e31b0741ff0da71f5921b"},
+  "product": {"name": "ACadSharp", "version": "3.7.1\u002Bd7dc111"},
+  "declared_schema": "AP242_MANAGED_MODEL_BASED_3D_ENGINEERING_MIM_LF { 1 0 10303 442 1 1 4 }",
+  "wall_time_seconds": "0.121",
+  "warnings": ["INSUNITS is unitless: values are written unscaled and labelled metre"],
+  "error": null
+}

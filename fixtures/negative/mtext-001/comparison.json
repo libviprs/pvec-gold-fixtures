@@ -1,0 +1,29 @@
+{
+  "expected": {
+    "converter_emits_nothing": false,
+    "entities": [
+      {
+        "count": 1,
+        "dwg_type": "MTEXT",
+        "outcome": "IGNORED",
+        "reason": "Multiline text is not geometry v1 carries, and no glyph outline is promised. It is dropped by policy."
+      }
+    ]
+  },
+  "fixture_id": "mtext-001",
+  "problems": [],
+  "produced": {
+    "accepted_geometry": [],
+    "converter_emits_nothing": false,
+    "entities": [
+      {
+        "count": 1,
+        "dwg_type": "MTEXT",
+        "outcome": "IGNORED"
+      }
+    ],
+    "unclassified": []
+  },
+  "reader": "ACadSharp@3.7.1+d7dc111",
+  "verdict": "MATCH"
+}

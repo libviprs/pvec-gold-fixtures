@@ -1,0 +1,14 @@
+{
+  "expected_rejection": {
+    "classification": "DEGENERATE_ZERO_RADIUS",
+    "disposition": "REJECT",
+    "geometry_emitted": false
+  },
+  "fixture_id": "zero-radius-001",
+  "problems": [],
+  "produced_rejection": {
+    "acadrust": "DEGENERATE_ZERO_RADIUS",
+    "acadsharp": "DEGENERATE_ZERO_RADIUS"
+  },
+  "verdict": "AGREE"
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": "pvec-gold/converter-status/1",
+  "converter": "acadsharp-dwg2step",
+  "status": "ERROR",
+  "exit_code": 15,
+  "input": {"path": "/v/fixtures/negative/empty-001/source.dwg", "sha256": "ee0d0622437de96b62baf81776ce58a11b0f937d84b00f1c1f310d19d7433c46"},
+  "output": null,
+  "product": {"name": "ACadSharp", "version": "3.7.1\u002Bd7dc111"},
+  "declared_schema": null,
+  "wall_time_seconds": "0.109",
+  "warnings": [],
+  "error": {"code": 15, "class": "CONVERSION_FAILED", "message": "no supported curve in model space"}
+}

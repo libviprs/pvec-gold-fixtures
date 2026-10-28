@@ -1,0 +1,863 @@
+{
+  "schema": "pvec-gold/dwg-census/1",
+  "reader": "ACadSharp@3.7.1\u002Bd7dc111",
+  "dwg_sha256": "0e8faaca949c9429c92240082d9ea4d3524aca5baf7c7815ec439245c321b528",
+  "dwg_version": "AC1032",
+  "summary": {
+    "entity_count": 183,
+    "class_histogram": {
+      "Arc": 1,
+      "AttributeDefinition": 5,
+      "Circle": 11,
+      "DimensionAligned": 2,
+      "DimensionAngular2Line": 1,
+      "DimensionAngular3Pt": 1,
+      "DimensionDiameter": 1,
+      "DimensionLinear": 3,
+      "DimensionOrdinate": 2,
+      "DimensionRadius": 1,
+      "Ellipse": 1,
+      "Face3D": 1,
+      "Hatch": 8,
+      "Insert": 6,
+      "Leader": 1,
+      "Line": 36,
+      "LwPolyline": 23,
+      "MLine": 3,
+      "MText": 5,
+      "Mesh": 2,
+      "MultiLeader": 15,
+      "PdfUnderlay": 1,
+      "Point": 6,
+      "PolyfaceMesh": 1,
+      "Polyline3D": 1,
+      "RasterImage": 1,
+      "Ray": 1,
+      "Region": 1,
+      "Shape": 1,
+      "Solid": 1,
+      "Solid3D": 2,
+      "Spline": 2,
+      "TableEntity": 2,
+      "TextEntity": 29,
+      "Tolerance": 3,
+      "Wipeout": 1,
+      "XLine": 1
+    },
+    "max_block_depth": 1,
+    "spline_count": 2,
+    "max_abs_coordinate": 1852.1856335495922,
+    "extent": {
+      "min": [
+        -649.4723055577938,
+        -566.1685822008872,
+        -5.091688756873282
+      ],
+      "max": [
+        1852.1856335495922,
+        979.5,
+        5.47860020423747
+      ],
+      "largest_side": 2501.657939107386
+    },
+    "bounding_box_unavailable": 0
+  },
+  "blocks": [
+    {
+      "name": "*Model_Space",
+      "xref": false,
+      "entities": [
+        {
+          "type": "Point",
+          "layer": "0"
+        },
+        {
+          "type": "Point",
+          "layer": "0"
+        },
+        {
+          "type": "Point",
+          "layer": "Layer_Lock"
+        },
+        {
+          "type": "Point",
+          "layer": "0"
+        },
+        {
+          "type": "Point",
+          "layer": "0"
+        },
+        {
+          "type": "Point",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "Circle",
+          "layer": "0"
+        },
+        {
+          "type": "Arc",
+          "layer": "0"
+        },
+        {
+          "type": "Ellipse",
+          "layer": "0"
+        },
+        {
+          "type": "Face3D",
+          "layer": "0"
+        },
+        {
+          "type": "Mesh",
+          "layer": "0"
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "Hatch",
+          "layer": "0",
+          "gradient": false
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "Hatch",
+          "layer": "0",
+          "gradient": false
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "Hatch",
+          "layer": "0",
+          "gradient": true
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "Hatch",
+          "layer": "0",
+          "gradient": true
+        },
+        {
+          "type": "Mesh",
+          "layer": "Layer_color_80"
+        },
+        {
+          "type": "XLine",
+          "layer": "0"
+        },
+        {
+          "type": "Ray",
+          "layer": "0"
+        },
+        {
+          "type": "MLine",
+          "layer": "0"
+        },
+        {
+          "type": "MLine",
+          "layer": "Layer_true_color"
+        },
+        {
+          "type": "MLine",
+          "layer": "Layer_true_color"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "MText",
+          "layer": "0"
+        },
+        {
+          "type": "MText",
+          "layer": "0"
+        },
+        {
+          "type": "MText",
+          "layer": "0"
+        },
+        {
+          "type": "PolyfaceMesh",
+          "layer": "0"
+        },
+        {
+          "type": "Polyline3D",
+          "layer": "0"
+        },
+        {
+          "type": "Solid",
+          "layer": "0"
+        },
+        {
+          "type": "Spline",
+          "layer": "0"
+        },
+        {
+          "type": "Spline",
+          "layer": "0"
+        },
+        {
+          "type": "Wipeout",
+          "layer": "0"
+        },
+        {
+          "type": "Leader",
+          "layer": "Layer1"
+        },
+        {
+          "type": "MText",
+          "layer": "Layer1"
+        },
+        {
+          "type": "DimensionLinear",
+          "layer": "Layer1"
+        },
+        {
+          "type": "DimensionAngular3Pt",
+          "layer": "Layer1"
+        },
+        {
+          "type": "DimensionAngular2Line",
+          "layer": "Layer1"
+        },
+        {
+          "type": "Line",
+          "layer": "Layer2"
+        },
+        {
+          "type": "Line",
+          "layer": "Layer2"
+        },
+        {
+          "type": "Line",
+          "layer": "Layer2"
+        },
+        {
+          "type": "Line",
+          "layer": "Layer2"
+        },
+        {
+          "type": "Line",
+          "layer": "Layer2"
+        },
+        {
+          "type": "Line",
+          "layer": "Layer2"
+        },
+        {
+          "type": "Circle",
+          "layer": "Layer2"
+        },
+        {
+          "type": "Circle",
+          "layer": "Layer2"
+        },
+        {
+          "type": "DimensionRadius",
+          "layer": "Layer1"
+        },
+        {
+          "type": "DimensionDiameter",
+          "layer": "Layer1"
+        },
+        {
+          "type": "DimensionOrdinate",
+          "layer": "Layer1"
+        },
+        {
+          "type": "DimensionOrdinate",
+          "layer": "Layer1"
+        },
+        {
+          "type": "DimensionAligned",
+          "layer": "Layer1"
+        },
+        {
+          "type": "TableEntity",
+          "layer": "Layer1",
+          "block": "*T9"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "Layer_Lt_dash"
+        },
+        {
+          "type": "Line",
+          "layer": "Layer_Lt_dash"
+        },
+        {
+          "type": "Line",
+          "layer": "Layer_Lt_dash"
+        },
+        {
+          "type": "Line",
+          "layer": "Layer_Lt_dash"
+        },
+        {
+          "type": "Line",
+          "layer": "Layer_Lt_dash"
+        },
+        {
+          "type": "Line",
+          "layer": "Layer_Lt_dash"
+        },
+        {
+          "type": "Insert",
+          "layer": "Layer1",
+          "block": "MyBlock"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "Layer2"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "Layer_color_80"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "Layer_true_color"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "Layer_color_book"
+        },
+        {
+          "type": "MText",
+          "layer": "0"
+        },
+        {
+          "type": "Insert",
+          "layer": "0",
+          "block": "my_block_v2"
+        },
+        {
+          "type": "Insert",
+          "layer": "0",
+          "block": "my_block_v2"
+        },
+        {
+          "type": "MultiLeader",
+          "layer": "0"
+        },
+        {
+          "type": "Tolerance",
+          "layer": "0"
+        },
+        {
+          "type": "Tolerance",
+          "layer": "0"
+        },
+        {
+          "type": "Tolerance",
+          "layer": "0"
+        },
+        {
+          "type": "Shape",
+          "layer": "0"
+        },
+        {
+          "type": "RasterImage",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Circle",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "DimensionAligned",
+          "layer": "0"
+        },
+        {
+          "type": "TableEntity",
+          "layer": "0",
+          "block": "*T16"
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "Insert",
+          "layer": "0",
+          "block": "*U18"
+        },
+        {
+          "type": "Insert",
+          "layer": "0",
+          "block": "*U19"
+        },
+        {
+          "type": "MultiLeader",
+          "layer": "0"
+        },
+        {
+          "type": "MultiLeader",
+          "layer": "0"
+        },
+        {
+          "type": "MultiLeader",
+          "layer": "0"
+        },
+        {
+          "type": "MultiLeader",
+          "layer": "0"
+        },
+        {
+          "type": "MultiLeader",
+          "layer": "0"
+        },
+        {
+          "type": "MultiLeader",
+          "layer": "0"
+        },
+        {
+          "type": "MultiLeader",
+          "layer": "0"
+        },
+        {
+          "type": "MultiLeader",
+          "layer": "0"
+        },
+        {
+          "type": "MultiLeader",
+          "layer": "0"
+        },
+        {
+          "type": "MultiLeader",
+          "layer": "0"
+        },
+        {
+          "type": "MultiLeader",
+          "layer": "0"
+        },
+        {
+          "type": "MultiLeader",
+          "layer": "0"
+        },
+        {
+          "type": "MultiLeader",
+          "layer": "0"
+        },
+        {
+          "type": "MultiLeader",
+          "layer": "0"
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "Hatch",
+          "layer": "0",
+          "gradient": false
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "Hatch",
+          "layer": "0",
+          "gradient": false
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "Hatch",
+          "layer": "0",
+          "gradient": false
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "Hatch",
+          "layer": "0",
+          "gradient": false
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "DimensionLinear",
+          "layer": "0"
+        },
+        {
+          "type": "DimensionLinear",
+          "layer": "0"
+        },
+        {
+          "type": "PdfUnderlay",
+          "layer": "0"
+        },
+        {
+          "type": "Insert",
+          "layer": "0",
+          "block": "my_block"
+        },
+        {
+          "type": "Solid3D",
+          "layer": "0"
+        },
+        {
+          "type": "Region",
+          "layer": "0"
+        },
+        {
+          "type": "Solid3D",
+          "layer": "0"
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "TextEntity",
+          "layer": "0"
+        },
+        {
+          "type": "Circle",
+          "layer": "0"
+        },
+        {
+          "type": "Circle",
+          "layer": "0"
+        },
+        {
+          "type": "Circle",
+          "layer": "0"
+        },
+        {
+          "type": "Circle",
+          "layer": "0"
+        }
+      ]
+    },
+    {
+      "name": "MyBlock",
+      "xref": false,
+      "entities": [
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Circle",
+          "layer": "0"
+        },
+        {
+          "type": "AttributeDefinition",
+          "layer": "0"
+        }
+      ]
+    },
+    {
+      "name": "_ArchTick",
+      "xref": false,
+      "entities": [
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        }
+      ]
+    },
+    {
+      "name": "_BoxBlank",
+      "xref": false,
+      "entities": [
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        }
+      ]
+    },
+    {
+      "name": "_ClosedBlank",
+      "xref": false,
+      "entities": [
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        }
+      ]
+    },
+    {
+      "name": "my-dynamic-block",
+      "xref": false,
+      "entities": [
+        {
+          "type": "Circle",
+          "layer": "0"
+        }
+      ]
+    },
+    {
+      "name": "my_block",
+      "xref": false,
+      "entities": [
+        {
+          "type": "Circle",
+          "layer": "0"
+        }
+      ]
+    },
+    {
+      "name": "my_block_v2",
+      "xref": false,
+      "entities": [
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "AttributeDefinition",
+          "layer": "0"
+        },
+        {
+          "type": "AttributeDefinition",
+          "layer": "0"
+        },
+        {
+          "type": "AttributeDefinition",
+          "layer": "0"
+        },
+        {
+          "type": "AttributeDefinition",
+          "layer": "0"
+        }
+      ]
+    }
+  ]
+}

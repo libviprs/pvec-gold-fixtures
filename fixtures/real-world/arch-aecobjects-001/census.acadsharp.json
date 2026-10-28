@@ -1,0 +1,101 @@
+{
+  "schema": "pvec-gold/dwg-census/1",
+  "reader": "ACadSharp@3.7.1\u002Bd7dc111",
+  "dwg_sha256": "dc196e99b8944d169493c9f3205d45f8a579c0c96e81dbc7fc2f90cd971f7a7e",
+  "dwg_version": "AC1032",
+  "summary": {
+    "entity_count": 9,
+    "class_histogram": {
+      "AttributeDefinition": 2,
+      "Circle": 1,
+      "Line": 3,
+      "LwPolyline": 2,
+      "Wall": 1
+    },
+    "max_block_depth": 0,
+    "spline_count": 0,
+    "max_abs_coordinate": 2.2000000000000006,
+    "extent": {
+      "min": [
+        -2.2000000000000006,
+        -1.999999999996362,
+        0
+      ],
+      "max": [
+        1.999999999996362,
+        0.5000002699998731,
+        0
+      ],
+      "largest_side": 4.199999999996363
+    },
+    "bounding_box_unavailable": 1
+  },
+  "blocks": [
+    {
+      "name": "*Model_Space",
+      "xref": false,
+      "entities": [
+        {
+          "type": "Wall",
+          "layer": "A-Wall"
+        }
+      ]
+    },
+    {
+      "name": "M_Aec8_Room_Tag_Basic_P",
+      "xref": false,
+      "entities": [
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        },
+        {
+          "type": "AttributeDefinition",
+          "layer": "0"
+        },
+        {
+          "type": "AttributeDefinition",
+          "layer": "0"
+        }
+      ]
+    },
+    {
+      "name": "_ArchTick",
+      "xref": false,
+      "entities": [
+        {
+          "type": "LwPolyline",
+          "layer": "0"
+        }
+      ]
+    },
+    {
+      "name": "_Open90",
+      "xref": false,
+      "entities": [
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        },
+        {
+          "type": "Line",
+          "layer": "0"
+        }
+      ]
+    },
+    {
+      "name": "_Small",
+      "xref": false,
+      "entities": [
+        {
+          "type": "Circle",
+          "layer": "0"
+        }
+      ]
+    }
+  ]
+}

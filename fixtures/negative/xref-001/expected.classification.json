@@ -1,0 +1,24 @@
+{
+  "schema_version": "pvec-gold/expected.classification/1",
+  "fixture_id": "xref-001",
+  "evidence_class": "QUARANTINED",
+  "quarantine_reason": "UNSUPPORTED_ENTITY",
+  "entities": [
+    {
+      "dwg_type": "XREF",
+      "count": 1,
+      "outcome": "UNSUPPORTED",
+      "reason": "An external reference points at geometry in another file that the pipeline does not resolve. It is recognised and refused."
+    }
+  ],
+  "converter_emits_nothing": false,
+  "outcome": "UNSUPPORTED",
+  "reason": "An external reference points at geometry in another file that the pipeline does not resolve. It is recognised and refused.",
+  "accepted_geometry": [],
+  "provenance": {
+    "derivation": "AUTHORING_PARAMETERS",
+    "authoring_script": "tools/authoring/author_corpus.py",
+    "parameter_file": "tools/authoring/corpus-params/negative/xref-001.json",
+    "parameter_file_sha256": "c9bfc3ee959f3c97ddf86ac2ecdd56b15626388de44433e02a276e32b8e41a53"
+  }
+}

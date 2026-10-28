@@ -21,6 +21,9 @@ There is also a candidate corpus revision that doesn't wait on the converters: `
 It is DWGs written by an open writer and cross-read by a second open reader, with no STEP oracle, so it is
 `KNOWN_TRUTH_EXACT` for reader mapping only and doesn't turn the phase 1 exit gate green.
 
+The next candidate, `r1-open` ([corpus/r1-open](corpus/r1-open/README.md)), adds edge, mixed-entity, degenerate, negative
+and real-world fixtures with a capability matrix and a public release set; `python3 -m runner.corpus check` re-checks it.
+
 Three phases and 27 issues under [#1](https://github.com/libviprs/pvec-gold-fixtures/issues/1).
 Phase 1 proves the methodology — including validating the STEP validator itself against hand-known
 primitives — before any mass fixture generation.

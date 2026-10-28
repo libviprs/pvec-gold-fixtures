@@ -1,0 +1,29 @@
+{
+  "expected": {
+    "converter_emits_nothing": false,
+    "entities": [
+      {
+        "count": 1,
+        "dwg_type": "DIMENSION",
+        "outcome": "UNSUPPORTED",
+        "reason": "A dimension is an annotation whose lines and arrowheads live in a generated anonymous block and a style. v1 has no annotation entity and does not explode one."
+      }
+    ]
+  },
+  "fixture_id": "dimension-001",
+  "problems": [],
+  "produced": {
+    "accepted_geometry": [],
+    "converter_emits_nothing": false,
+    "entities": [
+      {
+        "count": 1,
+        "dwg_type": "DIMENSION",
+        "outcome": "UNSUPPORTED"
+      }
+    ],
+    "unclassified": []
+  },
+  "reader": "ACadSharp@3.7.1+d7dc111",
+  "verdict": "MATCH"
+}

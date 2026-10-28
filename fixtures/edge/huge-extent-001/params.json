@@ -1,0 +1,1 @@
+{"id":"huge-extent-001","group":"edge","kind":"circle","description":"A circle of radius 2.5e6 m centred 1.5e6 m east and 2.2e6 m south of the origin, so the drawing extent is above 1e6 in both directions and the centre alone is beyond the exact integer range a float32 keeps.","center":["1500000.5","-2200000.25","0"],"radius":"2500000.125"}

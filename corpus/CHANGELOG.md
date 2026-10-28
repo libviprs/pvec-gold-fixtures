@@ -1,5 +1,25 @@
 # corpus changelog
 
+## r1-open (candidate)
+
+Adds fixtures on top of `r0-open` (included by hash) without touching it (issues #11 and #18).
+
+- `edge`: four valid extreme and boundary cases (a spline on the domain [2, 5], a 5e-9 segment, a circle of radius
+  2.5e6 centred beyond 1e6, an arc with a 1e-6 sweep). `mixed`: one drawing with seven curve classes, a three-level
+  nested block chain and a uniform scale. Both are `KNOWN_TRUTH_EXACT` for reader mapping only.
+- `degenerate`: a zero-length line, a zero-radius circle and a spline with coincident control points. They are
+  `QUARANTINED` by design with an expected refusal. ACadSharp clamps a zero radius up to 1e-12, so the refusal rule
+  uses NP-06 and not exact zero.
+- `negative`: fifteen fixtures, one per entity class outside v1 (hatch, gradient hatch, dimension, text, MTEXT, 3D solid,
+  mesh, region, proxy, OLE, wipeout, table, image, external reference) plus an empty drawing. `QUARANTINED` with reason
+  `UNSUPPORTED_ENTITY`, each with an expected `UNSUPPORTED`, `IGNORED` or `MISSING`.
+- `real-world`: three public drawings from ACadSharp's samples (MIT), `REAL_WORLD_DIFFERENTIAL`. The open converter
+  refuses all three, for reasons recorded per fixture.
+- Open converter: `acadsharp-dwg2step` ran over every fixture. It wrote no STEP for any negative fixture, and its STEP held
+  evaluable geometry for two degenerate fixtures, which is listed as a failure. `oracle_scope` stays `NONE` (one converter).
+- `fixtures/negative/mesh-001/source.dwg` is not byte-reproducible (the acadrust mesh writer varies between runs), so its
+  hash is pinned and the file is not regenerated.
+
 ## r0-open (candidate)
 
 First revision. It exists because Epic O has no qualified vendor writer or STEP SDK, so I built it from DWGs

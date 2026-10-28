@@ -1,0 +1,14 @@
+{
+  "expected_rejection": {
+    "classification": "DEGENERATE_COINCIDENT_CONTROL_POINTS",
+    "disposition": "REJECT",
+    "geometry_emitted": false
+  },
+  "fixture_id": "coincident-control-points-001",
+  "problems": [],
+  "produced_rejection": {
+    "acadrust": "DEGENERATE_COINCIDENT_CONTROL_POINTS",
+    "acadsharp": "DEGENERATE_COINCIDENT_CONTROL_POINTS"
+  },
+  "verdict": "AGREE"
+}

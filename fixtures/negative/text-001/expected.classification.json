@@ -1,0 +1,24 @@
+{
+  "schema_version": "pvec-gold/expected.classification/1",
+  "fixture_id": "text-001",
+  "evidence_class": "QUARANTINED",
+  "quarantine_reason": "UNSUPPORTED_ENTITY",
+  "entities": [
+    {
+      "dwg_type": "TEXT",
+      "count": 1,
+      "outcome": "IGNORED",
+      "reason": "Single-line text is not geometry v1 carries, and no glyph outline is promised. It is dropped by policy."
+    }
+  ],
+  "converter_emits_nothing": false,
+  "outcome": "IGNORED",
+  "reason": "Single-line text is not geometry v1 carries, and no glyph outline is promised. It is dropped by policy.",
+  "accepted_geometry": [],
+  "provenance": {
+    "derivation": "AUTHORING_PARAMETERS",
+    "authoring_script": "tools/authoring/author_corpus.py",
+    "parameter_file": "tools/authoring/corpus-params/negative/text-001.json",
+    "parameter_file_sha256": "769a09809b83f721045d290830d042cdc09cb816b52067de45781924e577b693"
+  }
+}

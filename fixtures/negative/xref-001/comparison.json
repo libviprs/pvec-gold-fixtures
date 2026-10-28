@@ -1,0 +1,29 @@
+{
+  "expected": {
+    "converter_emits_nothing": false,
+    "entities": [
+      {
+        "count": 1,
+        "dwg_type": "XREF",
+        "outcome": "UNSUPPORTED",
+        "reason": "An external reference points at geometry in another file that the pipeline does not resolve. It is recognised and refused."
+      }
+    ]
+  },
+  "fixture_id": "xref-001",
+  "problems": [],
+  "produced": {
+    "accepted_geometry": [],
+    "converter_emits_nothing": false,
+    "entities": [
+      {
+        "count": 1,
+        "dwg_type": "XREF",
+        "outcome": "UNSUPPORTED"
+      }
+    ],
+    "unclassified": []
+  },
+  "reader": "ACadSharp@3.7.1+d7dc111",
+  "verdict": "MATCH"
+}

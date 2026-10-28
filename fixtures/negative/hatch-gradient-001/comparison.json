@@ -1,0 +1,30 @@
+{
+  "expected": {
+    "converter_emits_nothing": false,
+    "entities": [
+      {
+        "count": 1,
+        "dwg_type": "HATCH",
+        "gradient": true,
+        "outcome": "IGNORED",
+        "reason": "A gradient fill is presentation with a colour ramp on top of a hatch. v1 drops it by policy and never renders a ramp."
+      }
+    ]
+  },
+  "fixture_id": "hatch-gradient-001",
+  "problems": [],
+  "produced": {
+    "accepted_geometry": [],
+    "converter_emits_nothing": false,
+    "entities": [
+      {
+        "count": 1,
+        "dwg_type": "HATCH",
+        "outcome": "IGNORED"
+      }
+    ],
+    "unclassified": []
+  },
+  "reader": "ACadSharp@3.7.1+d7dc111",
+  "verdict": "MATCH"
+}

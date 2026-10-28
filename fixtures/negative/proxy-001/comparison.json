@@ -1,0 +1,29 @@
+{
+  "expected": {
+    "converter_emits_nothing": true,
+    "entities": [
+      {
+        "count": 1,
+        "dwg_type": "ACAD_PROXY_ENTITY",
+        "outcome": "MISSING",
+        "reason": "A proxy or custom entity is opaque application data with no decodable geometry, and a reader that cannot instantiate it returns nothing for it. The converter is expected to emit nothing, which is different from recognising and refusing it."
+      }
+    ]
+  },
+  "fixture_id": "proxy-001",
+  "problems": [],
+  "produced": {
+    "accepted_geometry": [],
+    "converter_emits_nothing": true,
+    "entities": [
+      {
+        "count": 0,
+        "dwg_type": "ACAD_PROXY_ENTITY",
+        "outcome": "MISSING"
+      }
+    ],
+    "unclassified": []
+  },
+  "reader": "ACadSharp@3.7.1+d7dc111",
+  "verdict": "MATCH"
+}

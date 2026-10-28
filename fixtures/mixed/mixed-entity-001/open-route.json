@@ -1,0 +1,62 @@
+{
+  "classes": [
+    {
+      "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+      "direction": "SAME",
+      "entity": "mixed-entity-001.line",
+      "max_deviation": 4.965068306494546e-16
+    },
+    {
+      "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+      "direction": "SAME",
+      "entity": "mixed-entity-001.circle",
+      "max_deviation": 2.5121479338940403e-15
+    },
+    {
+      "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+      "direction": "SAME",
+      "entity": "mixed-entity-001.arc",
+      "max_deviation": 2.220446049250313e-15
+    },
+    {
+      "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+      "direction": "SAME",
+      "entity": "mixed-entity-001.ellipse",
+      "max_deviation": 3.552713678800501e-15
+    },
+    {
+      "class": "BOUNDED_APPROXIMATION",
+      "entity": "mixed-entity-001.polyline",
+      "max_deviation": 3.0
+    },
+    {
+      "class": "STRUCTURAL_EXACT",
+      "entity": "mixed-entity-001.nurbs"
+    },
+    {
+      "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+      "direction": "SAME",
+      "entity": "mixed-entity-001.nested-line",
+      "max_deviation": 2.6645352591003757e-15
+    },
+    {
+      "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+      "direction": "SAME",
+      "entity": "mixed-entity-001.scaled-circle",
+      "max_deviation": 3.972054645195637e-15
+    }
+  ],
+  "converter": "acadsharp-dwg2step",
+  "curves_evaluated": 10,
+  "exit_code": 0,
+  "numeric_policy_version": "PVec numeric policy v1",
+  "oracle_scope": "OPEN_CONVERTERS",
+  "product": {
+    "name": "ACadSharp",
+    "version": "3.7.1+d7dc111"
+  },
+  "single_oracle": true,
+  "status": "OK",
+  "step_emitted": true,
+  "worst_class": "BOUNDED_APPROXIMATION"
+}
