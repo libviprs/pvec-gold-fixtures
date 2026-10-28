@@ -98,6 +98,8 @@ class Coverage(unittest.TestCase):
             self.assertEqual(hashlib.sha256(param.read_bytes()).hexdigest(), d["provenance"]["parameter_file_sha256"])
             readme = (f.parent / "README.md").read_text()
             self.assertIn("No expected value comes from `primary.step` or `secondary.step`", readme)
+            self.assertIn("open writer named in the corpus manifest", readme)
+            self.assertNotIn("licensed", readme)
 
     def test_no_probe_mixes_two_rows(self):
         for f in sorted(KT.rglob("expected.math.json")):

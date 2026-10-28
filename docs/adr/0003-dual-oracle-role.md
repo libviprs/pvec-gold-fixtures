@@ -1,11 +1,11 @@
 # ADR 0003: the role of the dual oracle
 
 Status: frozen at the phase 1 exit gate (open route, 2026-10-28). The open route has one converter so far, so nothing is
-`DUAL_ORACLE_EQUIVALENT` yet; the second oracle is tracked in `docs/vendor-deferred.md`. Panel finding answered: 1, with 3 and 4.
+`DUAL_ORACLE_EQUIVALENT` yet; the second oracle is described in ADR 0010. Panel finding answered: 1, with 3 and 4.
 
 ## Context
 
-CAD Exchanger and the ODA SDKs are two independent paths from DWG to STEP AP242. Two independent
+Two converters of distinct open lineages are two independent paths from DWG to STEP AP242. Two independent
 paths are useful, but both can normalise or approximate the same construct in the same way, so their
 agreement is evidence of something weaker than the original intent.
 
@@ -30,7 +30,6 @@ capability. Only the known-truth probes can.
 
 ## Amendment (ADR 0009)
 
-The two converters are whichever the corpus revision names in its manifest, not always CAD Exchanger
-and ODA. The decision above already reads generically, so nothing in it changes. What a pair of
+The two converters are whichever the corpus revision names in its manifest, and ADR 0010 limits them to open ones. The decision above already reads generically, so nothing in it changes. What a pair of
 converters can claim is recorded in `oracle_scope` (ADR 0009), and two converters of one lineage don't
 count as a dual oracle.

@@ -363,8 +363,8 @@ def readme_for(s, rel, extra):
     return ("# %s\n\n%s\n\n"
             "I authored this probe from `%s`, and `expected.math.json` is derived from those parameters alone by "
             "`%s`. No expected value comes from `primary.step` or `secondary.step`, and none ever should.\n\n"
-            "`source.dwg` isn't here yet. It gets written from the same parameters by the ODA Drawings SDK writer in "
-            "`oda-converter` (O1.2), which needs a licensed SDK I don't have, so this directory has the record without the drawing.\n%s"
+            "`source.dwg` isn't here yet. It gets written from the same parameters by the open writer named in the corpus manifest, "
+            "so this directory has the record without the drawing.\n%s"
             % (s["id"], s["description"], rel, SCRIPT, extra))
 
 
