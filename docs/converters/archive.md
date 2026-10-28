@@ -117,5 +117,6 @@ content-regex AKIA[0-9A-Z]{16}
 ```
 
 The root `LICENSE` file is the repository's own MIT licence and does not match any pattern (its name has no
-extension). The guard skips the content scan on this page, on the patterns file and on its own test, because
-those spell the patterns out.
+extension). The guard skips the content scan on this page, on the patterns file and on three tests (`tests/test_vendor_guard.py`,
+`tests/test_convert_wrapper.py`, `tests/test_corpus.py`), because those spell the patterns out or plant a canary
+string on purpose.

@@ -7,9 +7,9 @@ a public release.
 
 - `SYNTHETIC_AUTHORED`: I authored the parameters (`tools/authoring/params/`) and a writer produced the DWG from
   them. Nothing is derived from anyone else's drawing.
-- Real-world drawings: not in the corpus yet. Issue #11 (O2.1/O2.2) is still open, and there is no
-  `corpus/provenance.json`. When real drawings arrive, each needs a licence identifier and a redistribution
-  verdict before it can be in a release; one without them is left out and the audit records it.
+- `REAL_WORLD_PUBLIC`: a public drawing with an established licence. `r1-open` has three, ACadSharp samples under
+  MIT, each recorded in `corpus/provenance.json` with its licence identifier, source and verdict. A drawing whose
+  licence cannot be established does not enter the corpus. The classes it does not cover are listed in that file.
 
 ## Licence verdicts
 
@@ -18,7 +18,7 @@ or provenance problem is `QUARANTINED` with reason `LICENCE_OR_PROVENANCE` (ADR 
 
 ## What r0-open holds
 
-All 30 accepted fixtures are `SYNTHETIC_AUTHORED` and `PUBLIC_REDISTRIBUTABLE`. The DWGs were written by acadrust
+All 30 `r0-open` fixtures are `SYNTHETIC_AUTHORED` and `PUBLIC_REDISTRIBUTABLE`. The DWGs were written by acadrust
 (`libviprs/acadrust` at a pinned commit, a fork of an MIT project) and read by ACadSharp (MIT) and acadrust itself.
 The repository is under the MIT licence (`LICENSE`). No file is attributed to CAD Exchanger or ODA, and nothing in a
 release carries vendor bytes ([converters/archive.md](converters/archive.md) and `tools/vendor_guard.sh` keep it

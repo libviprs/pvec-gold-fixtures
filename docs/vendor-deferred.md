@@ -171,3 +171,6 @@ What waits on a licence, for a licensee to run:
   capability table. The table says which capabilities rest on what today, and the vendor rows stay empty.
 - The vendor-written release (`corpus/release/<version>/` with vendor converter pins), a different manifest from
   the open one, signed off after the vendor audit.
+- `r1-open` in the clean-host run and the freeze. Its extra fixtures come from `tools/corpus/writer`, one is not
+  byte-reproducible, and its public release is built by `runner.corpus_release`. The clean-host procedure covers
+  `r0-open` only, and the `r1-open` rewrite and a single combined release are not done.

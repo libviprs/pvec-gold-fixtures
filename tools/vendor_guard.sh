@@ -27,7 +27,7 @@ case $mode in
 esac
 
 # files whose job is to spell the patterns out (or to plant a canary) are not scanned for content
-skip_content='^(tools/vendor-guard\.patterns|docs/converters/archive\.md|tests/test_vendor_guard\.py|tests/test_convert_wrapper\.py)$'
+skip_content='^(tools/vendor-guard\.patterns|docs/converters/archive\.md|tests/test_vendor_guard\.py|tests/test_convert_wrapper\.py|tests/test_corpus\.py)$'
 bad=0
 while IFS= read -r -d '' f; do
   [ -n "$f" ] || continue
