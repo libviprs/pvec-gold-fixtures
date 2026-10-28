@@ -22,7 +22,7 @@ import sys
 from pathlib import Path
 
 from . import canon, curves, expected_math as em, numeric, structural, verification
-from .r0_open import lineage_problems
+from .r0_open import ORACLE_SCOPES, VENDOR_NAME, lineage_problems
 
 STRUCTURAL_EXACT = "STRUCTURAL_EXACT"
 GEOMETRIC = "GEOMETRIC_EXACT_REPARAMETERIZED"
@@ -289,46 +289,72 @@ def is_converter_probe(doc):
     return not any("layer" in e for e in doc["entities"])
 
 
-def build_report(pol, probes, outputs_for, resolved=()):
+def build_report(pol, probes, outputs_for, resolved=(), no_source=None):
+    """no_source: {probe id: why it has no source.dwg}; such a probe was never converted and says so."""
     results = {}
     for pid, doc in probes.items():
         if not is_converter_probe(doc):
             continue
         results[pid] = qualify_probe(pol, doc, outputs_for(pid))
+        for cells in results[pid].values():
+            for c in cells:
+                if pid in (no_source or {}) and c["evidence"].get("reason", "").startswith("no converter output"):
+                    c["evidence"]["reason"] = "no source.dwg in the corpus, so the converter was not run: " + no_source[pid]
     ids = list(next(iter(results.values()))) if results else []
+    caps = capability_verdicts(pol, results, resolved)
+    if len(ids) == 1:
+        for r in caps:
+            r["reasons"].append("single oracle: no second converter, so no cross-converter discrepancy could be checked")
     return {"schema_version": "pvec-gold/probe-qualification/1", "numeric_policy_version": pol.version,
-            "converters": dict(zip(("primary", "secondary"), ids)), "probes": results, "capabilities": capability_verdicts(pol, results, resolved)}
+            "converters": dict(zip(("primary", "secondary"), ids)), "oracle_count": len(ids), "probes": results, "capabilities": caps}
 
 
 def main(argv):
     ap = argparse.ArgumentParser()
     ap.add_argument("--probes", default="fixtures/known-truth")
     ap.add_argument("--primary", nargs=2, metavar=("ID", "DIR"), required=True)
-    ap.add_argument("--secondary", nargs=2, metavar=("ID", "DIR"), required=True)
+    ap.add_argument("--secondary", nargs=2, metavar=("ID", "DIR"), help="omit for a single-oracle run (the open route today)")
+    ap.add_argument("--oracle-scope", default="OPEN_CONVERTERS", choices=[x for x in ORACLE_SCOPES if x != "NONE"])
+    ap.add_argument("--excluded", metavar="QUARANTINE_JSON", help="a corpus quarantine.json: its excluded probes have no source.dwg")
+    ap.add_argument("--platform", default="linux/amd64", help="platform the converters ran on, recorded in the report")
     ap.add_argument("--lineage", action="append", default=[], metavar="ID=NAME")
     ap.add_argument("--out", default="reports/phase1/probe-qualification.json")
     ap.add_argument("--resolved")
     a = ap.parse_args(argv)
-    (pid_, pdir), (sid_, sdir) = a.primary, a.secondary
+    (pid_, pdir), (sid_, sdir) = a.primary, a.secondary or (None, None)
     if pid_ == sid_:
         raise SystemExit("--primary and --secondary name the same converter %r: that is one oracle, not two" % pid_)
+    ids = [i for i in (pid_, sid_) if i]
     lin = dict(x.split("=", 1) for x in a.lineage)
-    bad = lineage_problems([{"id": i, "lineage": lin.get(i, "")} for i in (pid_, sid_)])
+    bad = lineage_problems([{"id": i, "lineage": lin.get(i, "")} for i in ids])
     if bad:
         raise SystemExit(bad[0])
+    if a.oracle_scope == "OPEN_CONVERTERS":
+        named = [i for i in ids + [lin[i] for i in ids] if VENDOR_NAME.search(i)]
+        if named:
+            raise SystemExit("oracle scope OPEN_CONVERTERS never names a vendor, but %r does (ADR 0009)" % named[0])
     pol = numeric.load_policy()
     probes = {}
     for f in sorted(Path(a.probes).rglob("expected.math.json")):
         d = em.load(f)
         probes[d["fixture_id"]] = d
     resolved = json.loads(Path(a.resolved).read_text()) if a.resolved else []
-    outputs_for = lambda pid: {pid_: load_outputs(pdir, pid, "primary"), sid_: load_outputs(sdir, pid, "secondary")}  # noqa: E731
-    rep = build_report(pol, probes, outputs_for, resolved)
-    rep["lineages"] = {pid_: lin[pid_], sid_: lin[sid_]}
+    def outputs_for(pid):
+        out = {pid_: load_outputs(pdir, pid, "primary")}
+        if sid_:
+            out[sid_] = load_outputs(sdir, pid, "secondary")
+        return out
+    no_source = {}
+    if a.excluded:
+        no_source = {e["id"]: "%s: %s" % (e["reason"], e["evidence"]) for e in json.loads(Path(a.excluded).read_text())["excluded"]}
+    rep = build_report(pol, probes, outputs_for, resolved, no_source)
+    rep["lineages"] = {i: lin[i] for i in ids}
+    rep["oracle_scope"] = a.oracle_scope
+    rep["platform"] = a.platform
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     Path(a.out).write_text(json.dumps(rep, indent=2) + "\n")
     for r in rep["capabilities"]:
-        print("%-18s %-10s %s=%-32s %s=%-32s %s" % (r["capability"], r["status"], pid_, r["by_converter"][pid_], sid_, r["by_converter"][sid_], "; ".join(r["reasons"])))
+        print("%-18s %-10s %s  %s" % (r["capability"], r["status"], "  ".join("%s=%s" % kv for kv in r["by_converter"].items()), "; ".join(r["reasons"])))
     return 0
 
 

@@ -51,6 +51,23 @@ class SingleOracle(unittest.TestCase):
         for pid in NO_DWG:
             for c in rep["probes"][pid][OPEN]:
                 self.assertIn("no source.dwg", c["evidence"]["reason"], pid)
+                self.assertTrue(c["not_run"], pid)
+                self.assertFalse(c["expectation_met"], pid)
+
+    def test_a_probe_that_was_never_run_blocks_its_capability(self):
+        _, rep = self.run_main("--excluded", str(ROOT / "corpus" / "r0-open" / "quarantine.json"))
+        row = next(r for r in rep["capabilities"] if r["capability"] == "affine_transform")
+        self.assertEqual(row["status"], "BLOCKED")
+        self.assertIn("not run", " ".join(row["reasons"]))
+        for n in NO_DWG:
+            self.assertIn(n, " ".join(row["reasons"]))
+
+    def test_one_converter_that_is_bounded_is_not_described_as_two_agreeing(self):
+        res = {p: {OPEN: [{"entity": "x", "class": q.BOUNDED, "evidence": {}}]} for p in q.CAPABILITIES["line"]}
+        r = q.capability_verdicts(POL, res)[0]
+        self.assertEqual(r["status"], "BLOCKED")
+        self.assertNotIn("both converters", " ".join(r["reasons"]))
+        self.assertIn("not certified", " ".join(r["reasons"]))
 
 
 class CommittedReport(unittest.TestCase):
@@ -84,8 +101,14 @@ class CommittedReport(unittest.TestCase):
 
     def test_the_rejection_probes_are_judged_by_expectation(self):
         r = self.rep()
-        for pid in ("near-singular-001",) + NO_DWG:
-            self.assertTrue(all(c.get("expectation_met") for c in r["probes"][pid][OPEN]), pid)
+        self.assertTrue(all(c["expectation_met"] for c in r["probes"]["near-singular-001"][OPEN]))
+        for pid in NO_DWG:
+            self.assertTrue(all(c["not_run"] and not c["expectation_met"] for c in r["probes"][pid][OPEN]), pid)
+
+    def test_no_probe_the_converter_ran_on_is_a_bounded_approximation(self):
+        r = self.rep()
+        bad = [(p, c["entity"]) for p, per in r["probes"].items() for c in per[OPEN] if c["class"] == q.BOUNDED]
+        self.assertEqual(bad, [])
 
     def test_every_capability_has_a_verdict(self):
         r = self.rep()

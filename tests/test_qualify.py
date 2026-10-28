@@ -122,6 +122,20 @@ class Classes(unittest.TestCase):
         self.assertTrue(POL.near(c["evidence"]["bound"], sagitta, r) or c["evidence"]["bound"] <= sagitta * 1.0001, (c["evidence"]["bound"], sagitta))
         self.assertGreater(c["evidence"]["bound"], sagitta * 0.9)
 
+    def test_closed_polyline_written_as_separate_lines_is_exact_at_the_seam(self):
+        """The nearest-point search must not lose the true nearest point when the seam of a closed curve ties two samples."""
+        e = probe("lwpolyline-closed-001")["entities"][0]
+        vs = e["geometry"]["vertices"]
+        lines = []
+        for i in range(len(vs)):
+            a, b = vs[i], vs[(i + 1) % len(vs)]
+            d = math.dist([canon.check_scalar(x) for x in a], [canon.check_scalar(x) for x in b])
+            lines.append({"class": "line", "geometry": {"start": a, "end": b}, "parameter_domain": {"start": S(0), "end": S(d)},
+                          "closure": {"closed_by_endpoint": False, "closed_by_knots": False, "periodic": False}})
+        c = cells(e, ver(*lines))
+        self.assertEqual(c["class"], q.GEOMETRIC, c["evidence"])
+        self.assertLess(c["evidence"]["max_deviation"], 1e-9)
+
     def test_missing_and_unsupported(self):
         e = probe("line-001")["entities"][0]
         self.assertEqual(cells(e, ver())["class"], q.MISSING)
