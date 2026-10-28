@@ -1,0 +1,4 @@
+GREEN probe-classification
+GREEN evaluator-selftest
+GREEN expected-math-roundtrip
+phase 1 exit gate: GREEN
