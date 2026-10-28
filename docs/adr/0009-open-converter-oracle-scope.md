@@ -2,14 +2,13 @@
 
 Status: proposed. It is not frozen by the phase 1 exit gate, because it adds a way to fill the oracle
 slots and doesn't change what the gate asks. Panel findings answered: 1 (agreement between two tools is
-weaker than known truth, so I make the reach of the agreement a field) and 9 (the licensed converter
-images can't be published, so I name the images that can).
+weaker than known truth, so I make the reach of the agreement a field) and 9 (I name the images that can be published).
 
 ## Context
 
 ADR 0001 defines the evidence classes, and ADR 0003 says two converters are the oracles whose agreement
-earns `DUAL_ORACLE_EQUIVALENT`. Both ADRs were written with CAD Exchanger and the ODA SDKs in mind, and
-those need a licensee to regenerate anything. `libviprs/pvec#118` and `libviprs/pvec#100` can't wait on
+earns `DUAL_ORACLE_EQUIVALENT`. Both ADRs were first written around licensed converters, which
+need a licence to rebuild anything. `libviprs/pvec#118` and `libviprs/pvec#100` can't wait on
 that, so the plan is two open DWG to STEP converters: one on the ACadSharp reader (MIT) and one on the
 LibreDWG reader (GPL, built in its own repository, `libviprs/pvec-oracle-libredwg`).
 
@@ -21,29 +20,26 @@ four class names are fine as they are. What is missing is a way to say who the o
 **A revision may use two open converters as its oracles**, provided they decode DWG through different
 lineages (different reader code, not two builds of one). The revision's manifest names each converter:
 `id`, `version`, `source_commit`, `lineage`, `links_occt` and the image digest it ran from. The ids are free
-strings (`acadsharp-dwg2step`, `libredwg-dwg2step`, and `cadex` or `oda` for the licensed pair), and the
+strings (`acadsharp-dwg2step`, `libredwg-dwg2step`), and the
 status record's `converter` field takes the same id.
 
 **`oracle_scope`** says how far the oracles reach, on the manifest and on every fixture:
 
 - `NONE`: no STEP oracle ran. `r0-open` is this, and keeps it (its manifest says `oracles: none`, which
   stands for `NONE` because that manifest is pinned and I don't touch it).
-- `OPEN_CONVERTERS`: the oracles are open converters. No converter id, version, lineage or manifest
-  field names a vendor, and neither converter links Open CASCADE (ADR 0004).
-- `VENDOR_CONVERTERS`: the oracles are the licensed SDKs, which is what ADR 0003 was first written for.
+- `OPEN_CONVERTERS`: the oracles are open converters, and neither converter links Open CASCADE (ADR 0004).
 
 **`evidence_scope`** gains `STEP_ORACLE` next to `READER_MAPPING_ONLY`. A fixture with `STEP_ORACLE` needs
 an `oracle_scope` other than `NONE`, and the manifest has to list at least two named converters with
 distinct lineages. `DUAL_ORACLE_EQUIVALENT` likewise needs `STEP_ORACLE` evidence and an `oracle_scope` other than `NONE`.
 
-The four class names and their ADR 0001 definitions don't change. A consumer that needs vendor agreement
-filters on `oracle_scope` instead of reading a class as more than it says.
+The four class names and their ADR 0001 definitions don't change. A consumer filters on `oracle_scope` instead of reading a class as more than it says.
 
 `runner/r0_open.py` holds the vocabulary (`ORACLE_SCOPES`, `EVIDENCE_SCOPES`) and `scope_problems`, which
 checks a manifest against these rules. `runner/qualify_probes.py` takes `--primary ID DIR --secondary ID DIR`,
 needs `--lineage ID=NAME` for both, refuses two equal ids or two equal lineages, writes the lineages into the
 report (the gate checks them again), and keeps every verdict rule: the rules never look at the ids.
-`DUAL_ORACLE_EQUIVALENT` needs `STEP_ORACLE` evidence, and `VENDOR_CONVERTERS` needs converters that name a vendor.
+`DUAL_ORACLE_EQUIVALENT` needs `STEP_ORACLE` evidence.
 
 **Common mode.** The common-mode statement: what the two converters share, said plainly. Both implement the same DWG specification,
 so a shared misreading of it would pass (the cross-read in ADR 0008 has the same limit). Both read the
@@ -56,6 +52,8 @@ ADR 0003, not a way round it.
 ## Consequences
 
 An `OPEN_CONVERTERS` fixture proves that two independent open decoders and an independent evaluator agree
-with the authored mathematics. It does not say that CAD Exchanger or ODA agree, and the field says so.
-The vendor criteria in the phase 1 qualification stay open for the licensed path. A later revision that
-adds vendor oracles sets `VENDOR_CONVERTERS` on the fixtures they cover and changes nothing else.
+with the authored mathematics. It says nothing about any commercial converter, and the field says so.
+
+## Amendment (ADR 0010)
+
+Only open converters are allowed, so `oracle_scope` has the two values `NONE` and `OPEN_CONVERTERS`. The licensed scope and the licensed converter ids are withdrawn. The common-mode statement above stands as written.
