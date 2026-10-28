@@ -8,7 +8,7 @@ Issue 20 (O3.1). The converter measured is the open one, `dwg2step-acadsharp` (A
 - **native arm64**, for comparison only: host `mercury`, platform `linux/arm64`, image `gold-dwg2step-acadsharp:test-arm64` (`sha256:26b1ecdc991e8168ad9b227fe2c5756fe5b49c08c24671eca8d1d4d0664a9587`).
 - No number here came from local Rosetta or any other emulation. Nothing ran on the Mac.
 - Every row is 7 repeats of one throw-away container, one at a time (concurrency 1). Median and the interquartile range are reported; min and max are in the JSON.
-- Licence: the converter is MIT and takes no licence. The concurrency limit applied is 8, the cap in `docker/converter-limits.json` (not a vendor licence). Concurrency 1 is below it, so the limit did not bound these numbers; it bounds the parallel runs in `orchestration-tuning.md`. The CAD Exchanger and ODA converters were not measured (no licence), see `docs/vendor-deferred.md`.
+- Licence: the converter is MIT and takes no licence. The concurrency limit applied is 8, the cap in `docker/converter-limits.json` (a cap I set). Concurrency 1 is below it, so the limit did not bound these numbers; it bounds the parallel runs in `orchestration-tuning.md`. Only the ACadSharp converter is measured here; the LibreDWG converter has no throughput numbers yet, see `docs/open-route-status.md`.
 - Host load average when the run started, x86_64: 5.75 3.08 1.51; arm64: 0.08 0.14 0.15. `mars` is shared, so its absolute times carry some noise.
 
 ## What is separated from what
@@ -74,5 +74,5 @@ That one is the designed refusal (NP-19, `near-singular-001`), not a defect: the
 
 ## Not measured
 
-- The named real-world subset: there is none here (no real-world drawing is held, issue 11). Recorded in `docs/vendor-deferred.md`.
-- CAD Exchanger and ODA throughput: no licence. Their licence concurrency limits are unknown and the scheduler treats an unknown limit as 1.
+- The named real-world subset: there is none here (no real-world drawing is held, issue 11). Recorded in `docs/open-route-status.md`.
+- LibreDWG converter throughput: not measured yet. The scheduler treats a converter with no listed limit as 1.

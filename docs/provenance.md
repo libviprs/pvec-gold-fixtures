@@ -20,6 +20,5 @@ or provenance problem is `QUARANTINED` with reason `LICENCE_OR_PROVENANCE` (ADR 
 
 All 30 `r0-open` fixtures are `SYNTHETIC_AUTHORED` and `PUBLIC_REDISTRIBUTABLE`. The DWGs were written by acadrust
 (`libviprs/acadrust` at a pinned commit, a fork of an MIT project) and read by ACadSharp (MIT) and acadrust itself.
-The repository is under the MIT licence (`LICENSE`). No file is attributed to CAD Exchanger or ODA, and nothing in a
-release carries vendor bytes ([converters/archive.md](converters/archive.md) and `tools/vendor_guard.sh` keep it
-that way).
+The repository is under the MIT licence (`LICENSE`). Nothing in a release carries third-party binaries, licence files or keys
+(`tools/vendor_guard.sh`, see [converters/images-and-setup.md](converters/images-and-setup.md), keeps it that way).

@@ -58,7 +58,7 @@ def main(runs):
              "divergences": div}
     (out / "converter-throughput.json").write_text(json.dumps({
         "schema": "pvec-gold/bench-converter/1", "fixture_set": "the 30 r0-open DWG probes (the full probe corpus of the open route)",
-        "real_world_subset": None, "real_world_subset_reason": "no real-world drawing is held here, see docs/vendor-deferred.md",
+        "real_world_subset": None, "real_world_subset_reason": "no real-world drawing is held here, see docs/open-route-status.md",
         "runs": [conv["x64"], conv["arm64"]]}, indent=2, sort_keys=True) + "\n")
     sp = dict(val["x64"]["signature_path"], arch="x64", arm64=val["arm64"]["signature_path"])
     (out / "validation.json").write_text(json.dumps({
@@ -86,9 +86,9 @@ def render_conv(conv, ids):
          "- **%s**, for comparison only: host `mercury`, platform `%s`, image `%s` (`%s`)." % (LABEL["arm64"], a["platform"], a["image"], a["image_id"]),
          "- No number here came from local Rosetta or any other emulation. Nothing ran on the Mac.",
          "- Every row is %d repeats of one throw-away container, one at a time (concurrency %d). Median and the interquartile range are reported; min and max are in the JSON." % (x["repeats"], x["concurrency"]),
-         "- Licence: the converter is MIT and takes no licence. The concurrency limit applied is %d, the cap in `docker/converter-limits.json` (not a vendor licence). "
+         "- Licence: the converter is MIT and takes no licence. The concurrency limit applied is %d, the cap in `docker/converter-limits.json` (a cap I set). "
          "Concurrency 1 is below it, so the limit did not bound these numbers; it bounds the parallel runs in `orchestration-tuning.md`. "
-         "The CAD Exchanger and ODA converters were not measured (no licence), see `docs/vendor-deferred.md`." % x["licence_limit"],
+         "Only the ACadSharp converter is measured here; the LibreDWG converter has no throughput numbers yet, see `docs/open-route-status.md`." % x["licence_limit"],
          "- Host load average when the run started, x86_64: %s; arm64: %s. `mars` is shared, so its absolute times carry some noise." % (" ".join(x["load_avg_before"]), " ".join(a["load_avg_before"])), "",
          "## What is separated from what", "",
          "`total` is `docker run` as seen from outside. `conversion` is the converter process inside the container, timed there, dotnet runtime start included. "
@@ -121,8 +121,8 @@ def render_conv(conv, ids):
     L += ["", "That one is the designed refusal (NP-19, `near-singular-001`), not a defect: the scheduler records it as refused and the run does not fail on it. "
           "There is no other failure on either architecture.", "",
           "## Not measured", "",
-          "- The named real-world subset: there is none here (no real-world drawing is held, issue 11). Recorded in `docs/vendor-deferred.md`.",
-          "- CAD Exchanger and ODA throughput: no licence. Their licence concurrency limits are unknown and the scheduler treats an unknown limit as 1.", ""]
+          "- The named real-world subset: there is none here (no real-world drawing is held, issue 11). Recorded in `docs/open-route-status.md`.",
+          "- LibreDWG converter throughput: not measured yet. The scheduler treats a converter with no listed limit as 1.", ""]
     return "\n".join(L)
 
 
@@ -140,7 +140,7 @@ def render_val(val, xarch, by_fx, sp):
          "| normalise | `runner.normalize` plus the schema and scalar checks on the signature |",
          "| structural | `runner.structural.structural_diff` of the derived signature against the frozen one, entity by entity |",
          "| report | building and serialising the comparison report |",
-         "| adaptive_geometric | **not measured**: no adaptive geometric comparison stage exists in this repository (O2.5 and O2.6 are not built), so there is no converged sample count to report. Listed in `docs/vendor-deferred.md` as waiting on that work, not on a licence |", "",
+         "| adaptive_geometric | **not measured**: no adaptive geometric comparison stage exists in this repository (O2.5 and O2.6 are not built), so there is no converged sample count to report. Listed in `docs/open-route-status.md` as waiting on that work |", "",
          "## Per fixture (median ms)", "",
          "| fixture | x64 load | x64 normalise | x64 structural | x64 report | arm64 load | arm64 normalise | arm64 structural | arm64 report |", "|---|---|---|---|---|---|---|---|---|"]
     def f3(v):
@@ -189,9 +189,9 @@ def render_orch(orch, conv):
     best = min(o["table"], key=lambda r: r["wall_s"]["median"])
     ch = next(r for r in o["table"] if r["parallel"] == o["chosen"]["parallel"])
     L += ["", "**Chosen: parallelism %d** (%.2f s for the corpus, %.1f fixtures per second), the smallest value within 10%% of the best (%d at %.2f s). "
-          "The cap for this converter is %d (docker/converter-limits.json: a cap I set, not a vendor licence), and the table stops there. "
+          "The cap for this converter is %d (docker/converter-limits.json: a cap I set), and the table stops there. "
           "Wall time still halves with every doubling, so on this host **the cap is what bounds throughput**, not the host: I did not measure above it, so I do not know where it flattens. "
-          "The scheduler refuses a request above the cap and limits its pool to it; a vendor converter with an unknown limit runs at 1." % (
+          "The scheduler refuses a request above the cap and limits its pool to it; a converter with no listed limit runs at 1." % (
               ch["parallel"], ch["wall_s"]["median"], ch["fixtures_per_s"], best["parallel"], best["wall_s"]["median"], conv["x64"]["licence_limit"]), "",
          "## Per-container limits", "",
          "Observed on the largest fixture (`%s`): peak %.1f MiB in the cgroup, %.1f MiB resident. The memory limit is **%d MiB**, about %.0fx the cgroup peak, and no converter was OOM-killed in the accepted configuration (%d). "

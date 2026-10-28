@@ -19,7 +19,8 @@ What goes in, and what is dropped on purpose:
     count of significant digits in its mantissa, is unambiguous. Stored values (control points,
     knots, weights, centres, radii, matrices, domains) keep their f64 bits and are written as the
     shortest text that round-trips. Evaluated values (sample parameters, points, tangents,
-    curvatures) are rounded to DERIVED_DIGITS significant digits and f64_hex is the bits of that
+    curvatures, and the DERIVED_GEOMETRY fields OCCT computes) are compared under the numeric policy by
+    runner.verify_signatures, never bit for bit. Sample values are rounded to DERIVED_DIGITS significant digits and f64_hex is the bits of that
     rounded decimal, so the last-digit differences OCCT shows between architectures do not reach
     the signature;
   * the evaluator, OCCT, schema and numeric policy versions are carried.
@@ -43,6 +44,12 @@ SCHEMA_VERSION = "pvec-gold/signature/1"
 # architectures by up to about 9 ulp (docs/validator/step-evaluator.md), roughly 2e-15 relative,
 # so 12 digits leaves room for that and still discards nothing a comparison needs.
 DERIVED_DIGITS = 12
+
+# Geometry fields that are not file content: OCCT computes them (a line's ends from LINE(point, VECTOR(dir,
+# magnitude)) and the trim, an ellipse's major axis by re-normalising the placement frame). They differ in
+# the last digits between x86_64 and arm64, so they are derived values like the samples, however they are
+# written. Everything else in geometry, and every parameter domain, is stored.
+DERIVED_GEOMETRY = {"line": ("start", "end"), "ellipse": ("major_axis",), "elliptical_arc": ("major_axis",)}
 
 LENGTH_POINTS = ("start", "end", "center")
 LENGTH_SCALARS = ("radius", "semi_major", "semi_minor")

@@ -118,9 +118,10 @@ class Orchestration(unittest.TestCase):
             self.assertIn(s, block)
         self.assertTrue((ROOT / "docker" / "converter-limits.json").is_file())
 
-    def test_the_vendor_deferred_file_has_a_section_for_this_issue(self):
-        t = (ROOT / "docs" / "vendor-deferred.md").read_text()
-        self.assertIn("#20", t)
+    def test_the_open_route_status_covers_the_benchmarks(self):
+        t = (ROOT / "docs" / "open-route-status.md").read_text()
+        self.assertIn("#77", t)
+        self.assertIn("libredwg", t.lower())
 
 
 if __name__ == "__main__":

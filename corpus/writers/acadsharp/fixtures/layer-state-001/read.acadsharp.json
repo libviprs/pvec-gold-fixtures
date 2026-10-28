@@ -1,0 +1,77 @@
+{
+  "blocks": [
+    {
+      "entities": [
+        {
+          "end": [
+            "0x4010000000000000",
+            "0x3ff0000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "SHOWN_L",
+          "start": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x0000000000000000"
+          ],
+          "type": "LINE"
+        },
+        {
+          "end": [
+            "0x4008000000000000",
+            "0x400c000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "OFF_L",
+          "start": [
+            "0x0000000000000000",
+            "0x4000000000000000",
+            "0x0000000000000000"
+          ],
+          "type": "LINE"
+        },
+        {
+          "end": [
+            "0x4016000000000000",
+            "0x4010000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "FROZEN_L",
+          "start": [
+            "0x0000000000000000",
+            "0x4014000000000000",
+            "0x0000000000000000"
+          ],
+          "type": "LINE"
+        }
+      ],
+      "name": "*Model_Space"
+    }
+  ],
+  "dwg_sha256": "54b416231533b5a10f77e538802b5bc073cc4c3e0193235e8c888471ca62deac",
+  "dwg_version": "AC1032",
+  "layers": [
+    {
+      "frozen": false,
+      "name": "0",
+      "on": true
+    },
+    {
+      "frozen": true,
+      "name": "FROZEN_L",
+      "on": true
+    },
+    {
+      "frozen": false,
+      "name": "OFF_L",
+      "on": false
+    },
+    {
+      "frozen": false,
+      "name": "SHOWN_L",
+      "on": true
+    }
+  ],
+  "reader": "ACadSharp@3.7.1+d7dc111",
+  "schema": "pvec-gold/r0-open-dwg-read/2"
+}

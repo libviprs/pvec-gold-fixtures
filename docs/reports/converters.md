@@ -5,7 +5,7 @@ writes the converter section of `comparison.json` (`schema/converter-section.sch
 
 ## Who the two oracles are
 
-ADR 0009 changed what "dual" means here, because CAD Exchanger and ODA have no licence on this side.
+ADR 0009 changed what "dual" means here, and ADR 0010 settled it: the two oracles are open converters.
 
 - Primary: the open ACadSharp-lineage converter, `dwg2step-acadsharp` (`tools/converters/acadsharp`,
   `docs/converters/acadsharp-dwg2step.md`).
@@ -13,9 +13,8 @@ ADR 0009 changed what "dual" means here, because CAD Exchanger and ODA have no l
   (GPL-3.0, kept in its own repository). Its image is in a draft PR as I write this, so it has not produced
   a signature yet. Until it has, a fixture has a primary signature only and no converter section: I don't
   fake a secondary.
-- The licensed pair (`cadex` and `oda`) is the vendor route, `oracle_scope: VENDOR_CONVERTERS`. The code
-  doesn't look at ids, only at lineages (which must differ) and at the oracle scope (which must not be
-  `NONE`), so the same module classifies that pair once the images exist. See `docs/vendor-deferred.md`.
+- The code doesn't look at ids, only at lineages (which must differ) and at the oracle scope (which must not be
+  `NONE`). See `docs/open-route-status.md` for where the second converter stands.
 
 The converter section names both converters with version, lineage and image digest, the numeric policy
 version, and the SHA-256 of each signature it was computed from.

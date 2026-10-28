@@ -8,7 +8,7 @@
   "additionalProperties": false,
   "properties": {
     "schema_version": { "const": "pvec-gold/converter-status/1" },
-    "converter": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "maxLength": 64, "description": "The converter's name: a short lowercase id such as cadex, oda, acadsharp-dwg2step or libredwg-dwg2step. Each corpus revision lists the ids it uses (ADR 0009)." },
+    "converter": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "maxLength": 64, "description": "The converter's name: a short lowercase id such as acadsharp-dwg2step or libredwg-dwg2step. Each corpus revision lists the ids it uses (ADR 0009)." },
     "status": { "enum": ["OK", "ERROR"] },
     "exit_code": { "enum": [0, 10, 11, 12, 13, 14, 15, 16, 17, 20] },
     "input": {

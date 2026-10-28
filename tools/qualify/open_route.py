@@ -1,9 +1,9 @@
-"""Convert every r0-open DWG with the open converter, evaluate the STEP with step_eval, and qualify.
+"""Convert every r0-open DWG with both open converters (ACadSharp, LibreDWG), evaluate the STEP with step_eval, and qualify.
 
 Runs inside the test driver container (python, docker CLI, the host's socket) with the tree in a docker
 volume; tools/qualify/open_route.sh sets that up. Nothing here runs on the machine that started it.
 
-    GOLD_VOLUME=<volume> python3 tools/qualify/open_route.py
+    GOLD_VOLUME=<volume> LIBREDWG_IMAGE=<digest ref or local id> python3 tools/qualify/open_route.py
 """
 import os
 import platform
@@ -20,6 +20,10 @@ PLAT = "linux/" + ARCH
 CONV = os.environ.get("DWG2STEP_IMAGE", "gold-dwg2step-acadsharp:qualify-" + ARCH)
 EVAL = os.environ.get("STEP_VALIDATOR_IMAGE", "gold-stepval:" + ARCH)
 ID = "acadsharp-dwg2step"
+SECOND = "libredwg-dwg2step"
+# the LibreDWG image is built from libviprs/pvec-oracle-libredwg (GPL), never from this tree: a digest or a local id
+LIBREDWG = os.environ["LIBREDWG_IMAGE"]
+RESOLVED = ROOT / "reports/phase1/resolved.json"
 OUT = ROOT / ".out-qualify"
 
 
@@ -44,11 +48,15 @@ def main():
         d.mkdir(parents=True, exist_ok=True)
         r = docker("run", "--rm", "--platform", PLAT, "-v", VOL + ":/v", CONV, "--in", vpath(dwg), "--out", vpath(d / "primary.step"),
                    "--status", vpath(d / "primary.status.json"), check=False)
-        print("%-34s exit %d" % (dwg.parent.name, r.returncode), flush=True)
-        if (d / "primary.step").exists():
-            docker("run", "--rm", "--platform", PLAT, "-v", VOL + ":/v", EVAL, "step_eval", "--in", vpath(d / "primary.step"),
-                   "--out", vpath(d / "primary.verification.json"), "--policy-version", pol)
-    r = subprocess.run([sys.executable, "-m", "runner.qualify_probes", "--primary", ID, str(OUT), "--lineage", ID + "=ACadSharp",
+        r2 = docker("run", "--rm", "--platform", PLAT, "--network", "none", "-v", VOL + ":/v", LIBREDWG, "dwg2step", "--in", vpath(dwg),
+                    "--out", vpath(d / "secondary.step"), "--status", vpath(d / "secondary.status.json"), check=False)
+        print("%-34s %s exit %d, %s exit %d" % (dwg.parent.name, ID, r.returncode, SECOND, r2.returncode), flush=True)
+        for prefix in ("primary", "secondary"):
+            if (d / (prefix + ".step")).exists():
+                docker("run", "--rm", "--platform", PLAT, "-v", VOL + ":/v", EVAL, "step_eval", "--in", vpath(d / (prefix + ".step")),
+                       "--out", vpath(d / (prefix + ".verification.json")), "--policy-version", pol)
+    r = subprocess.run([sys.executable, "-m", "runner.qualify_probes", "--primary", ID, str(OUT), "--secondary", SECOND, str(OUT),
+                        "--lineage", ID + "=ACadSharp", "--lineage", SECOND + "=LibreDWG", *(["--resolved", str(RESOLVED)] if RESOLVED.exists() else []),
                         "--excluded", str(ROOT / "corpus/r0-open/quarantine.json"), "--platform", PLAT,
                         "--out", str(ROOT / "reports/phase1/probe-qualification.json")], cwd=ROOT)
     if r.returncode:

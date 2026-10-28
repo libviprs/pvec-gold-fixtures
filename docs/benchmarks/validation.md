@@ -13,7 +13,7 @@ Issue 20 (O3.2). Measured by `bench/validation/run.py` inside the step-validator
 | normalise | `runner.normalize` plus the schema and scalar checks on the signature |
 | structural | `runner.structural.structural_diff` of the derived signature against the frozen one, entity by entity |
 | report | building and serialising the comparison report |
-| adaptive_geometric | **not measured**: no adaptive geometric comparison stage exists in this repository (O2.5 and O2.6 are not built), so there is no converged sample count to report. Listed in `docs/vendor-deferred.md` as waiting on that work, not on a licence |
+| adaptive_geometric | **not measured**: no adaptive geometric comparison stage exists in this repository (O2.5 and O2.6 are not built), so there is no converged sample count to report. Listed in `docs/open-route-status.md` as waiting on that work |
 
 ## Per fixture (median ms)
 
@@ -90,7 +90,7 @@ The STEP path also needs OCCT and an image; the signature path needs python and 
 ## Across architectures
 
 The STEP files are byte identical on both (the converter runs with `SOURCE_DATE_EPOCH` fixed). The signatures are not: 19 of 29 are identical, and the rest diverge only in the fields listed. All of them are last-digit differences in values OCCT evaluates (line ends through a transform, an ellipse's major axis, sample points on rational curves, anything near 1e7 m); stored control points, knots and weights agree everywhere. The structural verdict of the arm64 re-derivation against the frozen x86_64 signature is `STRUCTURAL_DIFFERS` for exactly these fixtures and `STRUCTURAL_EXACT` for the rest.
-I did not change the normaliser to hide them (that is O2.4 and out of scope here); the consequence is that the frozen signatures are the native x86_64 ones and `verify_signatures` is run there.
+Those are the measurements as taken at the time. Issue 74 then split the contract: `verify_signatures` compares stored values bitwise and derived values under the numeric policy, and it now passes 29 of 29 on native arm64 against the x86_64 set (see `docs/reproducibility.md`).
 
 | fixture | differing fields | first fields (entity.field) |
 |---|---|---|

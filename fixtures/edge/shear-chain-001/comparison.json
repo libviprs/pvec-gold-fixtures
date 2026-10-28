@@ -1,0 +1,1610 @@
+{
+  "checks": {
+    "cross": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "INSERT",
+        "field": "level1.type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "INSERT"
+      },
+      {
+        "expected": true,
+        "field": "level1.block_found",
+        "mode": "EXACT",
+        "ok": true,
+        "read": true
+      },
+      {
+        "expected": "INSERT",
+        "field": "level2.type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "INSERT"
+      },
+      {
+        "expected": true,
+        "field": "level2.block_found",
+        "mode": "EXACT",
+        "ok": true,
+        "read": true
+      },
+      {
+        "expected": "INSERT",
+        "field": "level3.type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "INSERT"
+      },
+      {
+        "expected": true,
+        "field": "level3.block_found",
+        "mode": "EXACT",
+        "ok": true,
+        "read": true
+      },
+      {
+        "expected": "LINE",
+        "field": "base.type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "LINE"
+      },
+      {
+        "expected": "0x3fe0000000000000",
+        "field": "base.start[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe0000000000000"
+      },
+      {
+        "expected": "0x3fd0000000000000",
+        "field": "base.start[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fd0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "base.start[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x400e000000000000",
+        "field": "base.end[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x400e000000000000"
+      },
+      {
+        "expected": "0x4004000000000000",
+        "field": "base.end[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4004000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "base.end[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.insert_point[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.insert_point[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.insert_point[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level1.scale[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level1.scale[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level1.scale[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.normal[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.normal[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level1.normal[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3fe5368c951e9cfc",
+        "field": "level1.rotation",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3fe5368c951e9cfc"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.insert_point[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.insert_point[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.insert_point[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff47e0f66afed07",
+        "field": "level2.scale[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff47e0f66afed07"
+      },
+      {
+        "expected": "0x3fe8fc1ecd5fda0e",
+        "field": "level2.scale[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe8fc1ecd5fda0e"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level2.scale[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.normal[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.normal[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level2.normal[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.rotation",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.insert_point[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.insert_point[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.insert_point[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level3.scale[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level3.scale[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level3.scale[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.normal[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.normal[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level3.normal[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0xbfed0d6a1369bd35",
+        "field": "level3.rotation",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0xbfed0d6a1369bd35"
+      },
+      {
+        "expected": "0x3fe938fa9c59df98",
+        "field": "level1.matrix[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe938fa9c59df98"
+      },
+      {
+        "expected": "0xbfe3b174f21e3087",
+        "field": "level1.matrix[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0xbfe3b174f21e3087"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.matrix[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.matrix[3]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3fe3b174f21e3087",
+        "field": "level1.matrix[4]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe3b174f21e3087"
+      },
+      {
+        "expected": "0x3fe938fa9c59df98",
+        "field": "level1.matrix[5]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe938fa9c59df98"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.matrix[6]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.matrix[7]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.matrix[8]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.matrix[9]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level1.matrix[10]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.matrix[11]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.matrix[12]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.matrix[13]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.matrix[14]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level1.matrix[15]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff47e0f66afed07",
+        "field": "level2.matrix[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff47e0f66afed07"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[3]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[4]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3fe8fc1ecd5fda0e",
+        "field": "level2.matrix[5]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe8fc1ecd5fda0e"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[6]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[7]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[8]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[9]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level2.matrix[10]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[11]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[12]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[13]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[14]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level2.matrix[15]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3fe3b174f21e3087",
+        "field": "level3.matrix[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe3b174f21e3087"
+      },
+      {
+        "expected": "0x3fe938fa9c59df98",
+        "field": "level3.matrix[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe938fa9c59df98"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.matrix[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.matrix[3]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0xbfe938fa9c59df98",
+        "field": "level3.matrix[4]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0xbfe938fa9c59df98"
+      },
+      {
+        "expected": "0x3fe3b174f21e3087",
+        "field": "level3.matrix[5]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe3b174f21e3087"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.matrix[6]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.matrix[7]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.matrix[8]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.matrix[9]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level3.matrix[10]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.matrix[11]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.matrix[12]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.matrix[13]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.matrix[14]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level3.matrix[15]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "composed.matrix[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3fe0000000000001",
+        "field": "composed.matrix[1]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3fe0000000000002"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "composed.matrix[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "composed.matrix[3]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0xbca50cd64b87a079",
+        "field": "composed.matrix[4]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0xbca8000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "composed.matrix[5]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "composed.matrix[6]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "composed.matrix[7]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "composed.matrix[8]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "composed.matrix[9]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "composed.matrix[10]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "composed.matrix[11]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "composed.matrix[12]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "composed.matrix[13]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "composed.matrix[14]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "composed.matrix[15]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3fe4000000000000",
+        "field": "world.start[0]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3fe4000000000000"
+      },
+      {
+        "expected": "0x3fd0000000000000",
+        "field": "world.start[1]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3fcffffffffffffd"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "world.start[2]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x4014000000000000",
+        "field": "world.end[0]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4014000000000000"
+      },
+      {
+        "expected": "0x4004000000000000",
+        "field": "world.end[1]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4003ffffffffffff"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "world.end[2]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x0000000000000000"
+      }
+    ],
+    "own": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "INSERT",
+        "field": "level1.type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "INSERT"
+      },
+      {
+        "expected": true,
+        "field": "level1.block_found",
+        "mode": "EXACT",
+        "ok": true,
+        "read": true
+      },
+      {
+        "expected": "INSERT",
+        "field": "level2.type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "INSERT"
+      },
+      {
+        "expected": true,
+        "field": "level2.block_found",
+        "mode": "EXACT",
+        "ok": true,
+        "read": true
+      },
+      {
+        "expected": "INSERT",
+        "field": "level3.type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "INSERT"
+      },
+      {
+        "expected": true,
+        "field": "level3.block_found",
+        "mode": "EXACT",
+        "ok": true,
+        "read": true
+      },
+      {
+        "expected": "LINE",
+        "field": "base.type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "LINE"
+      },
+      {
+        "expected": "0x3fe0000000000000",
+        "field": "base.start[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe0000000000000"
+      },
+      {
+        "expected": "0x3fd0000000000000",
+        "field": "base.start[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fd0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "base.start[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x400e000000000000",
+        "field": "base.end[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x400e000000000000"
+      },
+      {
+        "expected": "0x4004000000000000",
+        "field": "base.end[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4004000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "base.end[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.insert_point[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.insert_point[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.insert_point[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level1.scale[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level1.scale[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level1.scale[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.normal[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.normal[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level1.normal[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3fe5368c951e9cfc",
+        "field": "level1.rotation",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3fe5368c951e9cfc"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.insert_point[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.insert_point[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.insert_point[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff47e0f66afed07",
+        "field": "level2.scale[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff47e0f66afed07"
+      },
+      {
+        "expected": "0x3fe8fc1ecd5fda0e",
+        "field": "level2.scale[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe8fc1ecd5fda0e"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level2.scale[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.normal[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.normal[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level2.normal[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.rotation",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.insert_point[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.insert_point[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.insert_point[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level3.scale[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level3.scale[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level3.scale[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.normal[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.normal[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level3.normal[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0xbfed0d6a1369bd35",
+        "field": "level3.rotation",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0xbfed0d6a1369bd35"
+      },
+      {
+        "expected": "0x3fe938fa9c59df98",
+        "field": "level1.matrix[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe938fa9c59df98"
+      },
+      {
+        "expected": "0xbfe3b174f21e3087",
+        "field": "level1.matrix[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0xbfe3b174f21e3087"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.matrix[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.matrix[3]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3fe3b174f21e3087",
+        "field": "level1.matrix[4]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe3b174f21e3087"
+      },
+      {
+        "expected": "0x3fe938fa9c59df98",
+        "field": "level1.matrix[5]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe938fa9c59df98"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.matrix[6]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.matrix[7]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.matrix[8]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.matrix[9]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level1.matrix[10]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.matrix[11]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.matrix[12]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.matrix[13]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level1.matrix[14]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level1.matrix[15]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff47e0f66afed07",
+        "field": "level2.matrix[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff47e0f66afed07"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[3]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[4]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3fe8fc1ecd5fda0e",
+        "field": "level2.matrix[5]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe8fc1ecd5fda0e"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[6]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[7]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[8]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[9]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level2.matrix[10]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[11]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[12]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[13]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level2.matrix[14]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level2.matrix[15]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3fe3b174f21e3087",
+        "field": "level3.matrix[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe3b174f21e3087"
+      },
+      {
+        "expected": "0x3fe938fa9c59df98",
+        "field": "level3.matrix[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe938fa9c59df98"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.matrix[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.matrix[3]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0xbfe938fa9c59df98",
+        "field": "level3.matrix[4]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0xbfe938fa9c59df98"
+      },
+      {
+        "expected": "0x3fe3b174f21e3087",
+        "field": "level3.matrix[5]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe3b174f21e3087"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.matrix[6]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.matrix[7]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.matrix[8]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.matrix[9]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level3.matrix[10]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.matrix[11]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.matrix[12]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.matrix[13]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "level3.matrix[14]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "level3.matrix[15]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "composed.matrix[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3fe0000000000001",
+        "field": "composed.matrix[1]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3fe0000000000002"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "composed.matrix[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "composed.matrix[3]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0xbca50cd64b87a079",
+        "field": "composed.matrix[4]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0xbca8000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "composed.matrix[5]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "composed.matrix[6]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "composed.matrix[7]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "composed.matrix[8]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "composed.matrix[9]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "composed.matrix[10]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "composed.matrix[11]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "composed.matrix[12]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "composed.matrix[13]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "composed.matrix[14]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "composed.matrix[15]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3fe4000000000000",
+        "field": "world.start[0]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3fe4000000000000"
+      },
+      {
+        "expected": "0x3fd0000000000000",
+        "field": "world.start[1]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3fcffffffffffffd"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "world.start[2]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x4014000000000000",
+        "field": "world.end[0]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4014000000000000"
+      },
+      {
+        "expected": "0x4004000000000000",
+        "field": "world.end[1]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4003ffffffffffff"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "world.end[2]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x0000000000000000"
+      }
+    ]
+  },
+  "evidence": null,
+  "fixture_id": "shear-chain-001",
+  "numeric_policy_version": "PVec numeric policy v1",
+  "reader_vs_reader_differences": [],
+  "reason": null,
+  "verdict": "AGREE"
+}

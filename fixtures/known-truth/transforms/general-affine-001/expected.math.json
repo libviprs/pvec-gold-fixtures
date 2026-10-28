@@ -14,7 +14,7 @@
     "derivation": "AUTHORING_PARAMETERS",
     "authoring_script": "tools/authoring/author_probes.py",
     "parameter_file": "tools/authoring/params/transforms/general-affine-001.json",
-    "parameter_file_sha256": "d8790c447aa2398ef14365d0611acef7411169514d7ea84034359a927412243f",
+    "parameter_file_sha256": "fd1da81d4d0ea8c241e0a56a10c17492be1146ea787b868690be0579839f8693",
     "parameters": {
       "id": "general-affine-001",
       "group": "transforms",
@@ -61,6 +61,10 @@
       "rejection": {
         "classification": "UNREPRESENTABLE_TRANSFORM",
         "disposition": "QUARANTINE"
+      },
+      "profile_only": {
+        "chain_probe": "general-affine-chain-001",
+        "reason": "A single INSERT carries a translation, one rotation, three scales and no shear, so no writer can store this matrix in one INSERT and there is no DWG for this record on purpose. It is a profile-only probe: it states what pvec must do with a single stored matrix of this kind (pvec ADR 0012 and 0017). The DWG path is covered by general-affine-chain-001, a three-INSERT chain that reaches the same world-space line."
       }
     }
   },

@@ -1,7 +1,6 @@
 """Loader and manifest checks for corpus revision r0-open (the open-writer known-truth corpus).
 
-These read the corpus the way a downstream consumer would: json, pathlib and hashlib, no vendor
-software and no DWG library. They are red until corpus/r0-open exists, and they stay in the suite as
+These read the corpus the way a downstream consumer would: json, pathlib and hashlib, no DWG library. They are red until corpus/r0-open exists, and they stay in the suite as
 the honesty gate afterwards: the rules in docs/adr/0008-open-writer-known-truth-corpus.md are each
 checked here by name.
 """
@@ -18,7 +17,6 @@ ADR = ROOT / "docs" / "adr" / "0008-open-writer-known-truth-corpus.md"
 OPEN_FAMILIES = {"acadrust", "ACadSharp"}
 ADR_0006_REASONS = {"UNRESOLVED_DISAGREEMENT", "UNSUPPORTED_ENTITY", "APPROXIMATION", "MALFORMED_FIXTURE",
                     "LICENCE_OR_PROVENANCE"}
-FORBIDDEN_PRODUCERS = re.compile(r"cad\s*exchanger|cadex|\boda\b|open design", re.I)
 
 
 def sha(path):
@@ -71,14 +69,6 @@ class ManifestHeader(unittest.TestCase):
 
 
 class HonestyRules(unittest.TestCase):
-    def test_no_vendor_attribution_anywhere_structured(self):
-        m = manifest()
-        producers = [m["writer"]] + [r["reader"] for r in m.get("cross_readers", [])]
-        for f in m["fixtures"]:
-            producers += [f["dwg"]["writer"], f["cross_read"]["reader"]]
-        for p in producers:
-            self.assertIsNone(FORBIDDEN_PRODUCERS.search(p), p)
-
     def test_no_step_files_and_no_dual_oracle_class(self):
         self.assertEqual(list(CORPUS.rglob("*.step")) + list(CORPUS.rglob("*.stp")), [])
         m = manifest()
@@ -309,21 +299,6 @@ class HardenedCheck(unittest.TestCase):
         (self.c / "innocent.dat").write_text("ISO-10303-21;\nHEADER;\n")
         self.assertTrue(any("innocent.dat" in x for x in self.problems()))
 
-    def test_vendor_attribution_in_a_readme_is_caught(self):
-        p = self.c / "fixtures" / "line-001" / "README.md"
-        p.write_text(p.read_text() + "\nThis drawing was converted by CAD Exchanger.\n")
-        self.assertTrue(any("line-001/README.md" in x for x in self.problems()))
-
-    def test_vendor_attribution_in_the_changelog_is_caught(self):
-        p = self.tmp / "corpus" / "CHANGELOG.md"
-        p.write_text(p.read_text() + "\nThe ODA writer produced these.\n")
-        self.assertTrue(any("CHANGELOG" in x for x in self.problems()))
-
-    def test_a_vendor_mentioned_in_a_negation_is_allowed(self):
-        p = self.c / "fixtures" / "line-001" / "README.md"
-        p.write_text(p.read_text() + "\nNothing here was converted by CAD Exchanger or ODA.\n")
-        self.assertEqual(self.problems(), [])
-
 
 class PinnedBundle(unittest.TestCase):
     def test_every_fixture_names_p1_1_capabilities_or_says_none(self):
@@ -460,7 +435,7 @@ class OracleScope(unittest.TestCase):
         return self.r0.scope_problems(m)
 
     def test_the_vocabulary_is_the_one_adr_0009_names(self):
-        self.assertEqual(self.r0.ORACLE_SCOPES, ("NONE", "OPEN_CONVERTERS", "VENDOR_CONVERTERS"))
+        self.assertEqual(self.r0.ORACLE_SCOPES, ("NONE", "OPEN_CONVERTERS"))
         self.assertEqual(self.r0.EVIDENCE_SCOPES, ("READER_MAPPING_ONLY", "STEP_ORACLE"))
 
     def test_a_well_formed_open_manifest_has_no_problems(self):
@@ -474,14 +449,6 @@ class OracleScope(unittest.TestCase):
             self.assertTrue(probs, repr(conv))
             self.assertTrue(any("converter" in p for p in probs), probs)
 
-    def test_open_converters_scope_never_names_a_vendor(self):
-        for field, val in (("id", "cadex-dwg2step"), ("id", "oda-step"), ("lineage", "CAD Exchanger"), ("lineage", "Open Design Alliance")):
-            conv = open_converters()
-            conv[1] = dict(conv[1], **{field: val})
-            probs = self.problems(r1_manifest(converters=conv))
-            self.assertTrue(any("vendor" in p for p in probs), (field, val, probs))
-        self.assertTrue(any("vendor" in p for p in self.problems(r1_manifest(oracles="vendor"))))
-
     def test_two_converters_of_one_lineage_are_refused_for_dual_oracle(self):
         conv = open_converters()
         conv[1] = dict(conv[1], lineage=conv[0]["lineage"])
@@ -494,25 +461,6 @@ class OracleScope(unittest.TestCase):
         probs = self.problems(r1_manifest(converters=conv))
         self.assertTrue(any("lineage" in p for p in probs), probs)
         self.assertTrue(any("lineage" in p for p in self.r0.lineage_problems(conv)))
-
-    def test_vendor_converters_scope_needs_vendor_converters(self):
-        self.assertTrue(any("vendor" in p for p in self.problems(r1_manifest(oracle_scope="VENDOR_CONVERTERS", oracles="open"))))
-        m = r1_manifest(oracle_scope="VENDOR_CONVERTERS", oracles="vendor", step_oracle="vendor")
-        m["fixtures"][0]["oracle_scope"] = "VENDOR_CONVERTERS"
-        self.assertTrue(any("vendor" in p for p in self.problems(m)), "the open pair must not carry VENDOR_CONVERTERS")
-        conv = [dict(open_converters()[0], id="cadex", lineage="CAD Exchanger"), dict(open_converters()[1], id="oda", lineage="ODA")]
-        m = r1_manifest(oracle_scope="VENDOR_CONVERTERS", oracles="vendor", step_oracle="vendor", converters=conv)
-        m["fixtures"][0]["oracle_scope"] = "VENDOR_CONVERTERS"
-        self.assertEqual(self.problems(m), [])
-
-    def test_a_vendor_name_is_caught_at_the_start_of_a_token(self):
-        for val in ("odafoo", "oda", "cadexpro", "oda-step"):
-            conv = open_converters()
-            conv[1] = dict(conv[1], id=val)
-            self.assertTrue(any("vendor" in p for p in self.problems(r1_manifest(converters=conv))), val)
-        conv = open_converters()
-        conv[1] = dict(conv[1], lineage="geodata-reader")
-        self.assertEqual(self.problems(r1_manifest(converters=conv)), [])
 
     def test_dual_oracle_class_needs_step_oracle_evidence(self):
         m = r1_manifest()
@@ -530,7 +478,7 @@ class OracleScope(unittest.TestCase):
         self.assertTrue(self.problems(r1_manifest(oracle_scope="EVERYTHING")))
         self.assertTrue(self.problems(r1_manifest(evidence_scope="PROVEN")))
         m = r1_manifest()
-        m["fixtures"][0]["oracle_scope"] = "VENDOR_CONVERTERS"
+        m["fixtures"][0]["oracle_scope"] = "LICENSED_CONVERTERS"
         self.assertTrue(any("fixture" in p for p in self.problems(m)))
         m = r1_manifest()
         m["fixtures"][0]["evidence_scope"] = "NOT_A_SCOPE"

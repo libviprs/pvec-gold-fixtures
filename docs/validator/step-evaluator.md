@@ -38,12 +38,10 @@ numeric policy, in the harness and later in the comparison stages.
 ## Why it's independent (input to ADR 0004)
 
 OCCT is a separately developed, open source geometry kernel. The claim is that its STEP reader
-shares no code with either converter path: CAD Exchanger's reader and writer are the vendor's, and
-ODA's STEP SDK is ODA's. What I haven't done is verify that against each vendor's own component
-list, and the claim shouldn't be frozen in ADR 0004 until someone has (CAD Exchanger's history
-includes Open CASCADE people, and I haven't checked whether any current build links OCCT). If either
-converter does link OCCT, the evaluator stops being independent of it for that path, and the
-alternative is a second, non-OCCT reader for that path only.
+shares no code with either converter path. The ACadSharp converter is C# code and the LibreDWG one is
+Python over `dwgread` JSON, and each converter entry in a manifest states `links_occt`, which has to be
+`false` (ADR 0004). If a converter did link OCCT, the evaluator would stop being independent of it for
+that path, and the alternative would be a second, non-OCCT reader for that path only.
 
 ## Self-test
 
