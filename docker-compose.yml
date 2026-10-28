@@ -76,3 +76,24 @@ services:
       - /tmp
     volumes:
       - ${FIXTURE_DIR:-./fixtures}:/fixtures
+
+  # O2.3: the one-command path. `docker compose run --rm fixture-runner generate [fixture-id ...]`
+  # drives the services above with the host's docker socket (client-side calls only: run, down,
+  # image inspect). The repository is mounted at its own host path so the bind mounts the converter
+  # services declare resolve on the host, which is the only place the daemon looks. The corpus is
+  # mounted read-only at /corpus, the layout corpus/container.pin.json records.
+  fixture-runner:
+    build:
+      context: .
+      dockerfile: docker/fixture-runner/Dockerfile
+    image: pvec-gold/fixture-runner:local
+    platform: ${VALIDATOR_PLATFORM:-linux/amd64}
+    network_mode: none
+    working_dir: ${PWD}
+    environment:
+      FIXTURE_DIR: ${FIXTURE_DIR:-${PWD}/fixtures}
+    volumes:
+      - ${PWD}:${PWD}
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${CORPUS_DIR:-./corpus/r0-open}:/corpus:ro
+    entrypoint: ["python3", "-m", "runner.generate"]
