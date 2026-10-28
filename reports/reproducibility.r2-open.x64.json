@@ -1,0 +1,34 @@
+{
+  "converters": [
+    {
+      "id": "acadsharp-dwg2step",
+      "image_digest": "sha256:ae4defd059e3aa29cf8f4159f1d857b9c48efd1a4b300074594ff42bb7b542bb",
+      "lineage": "acadsharp",
+      "platform": "linux/amd64",
+      "version": "3.7.1+d7dc111"
+    },
+    {
+      "id": "libredwg-dwg2step",
+      "image_digest": "sha256:3c32156802d83574cda1c62e8b44779a02723ead5e8fb2f4c9ad3ae6d1564985",
+      "lineage": "libredwg",
+      "platform": "linux/amd64",
+      "version": "1 (LibreDWG 0.14+patch0001)"
+    }
+  ],
+  "fixtures": 59,
+  "generate_exit": {
+    "a": 1,
+    "b": 1
+  },
+  "label": "native-x64",
+  "release_problems": [],
+  "result": "PASS",
+  "revision": "r2-open",
+  "schema_version": "pvec-gold/reproducibility/2",
+  "unlisted_divergences": [],
+  "validator": {
+    "image": "pvec-gold/step-validator:local",
+    "image_digest": "sha256:6d4ea205090901c630b77a6383b060d3706696be5541e63a324d9ea9862179b9",
+    "service": "step-validator"
+  }
+}

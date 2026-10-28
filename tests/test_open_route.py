@@ -12,7 +12,7 @@ REPORT = ROOT / "reports" / "phase1" / "probe-qualification.json"
 KT = ROOT / "fixtures" / "known-truth"
 POL = numeric.load_policy()
 OPEN = "acadsharp-dwg2step"
-NO_DWG = ("singular-001",)   # shear-001 and general-affine-001 are profile-only (#69): no DWG on purpose, not converter probes
+NO_DWG = ()   # shear-001 and general-affine-001 are profile-only (#69); singular-001 has a DWG since #70 and is judged like near-singular-001
 
 
 class SingleOracle(unittest.TestCase):
@@ -103,7 +103,8 @@ class CommittedReport(unittest.TestCase):
 
     def test_the_rejection_probes_are_judged_by_expectation(self):
         r = self.rep()
-        self.assertTrue(all(c["expectation_met"] for c in r["probes"]["near-singular-001"][OPEN]))
+        for pid in ("near-singular-001", "singular-001"):
+            self.assertTrue(all(c["expectation_met"] for c in r["probes"][pid][OPEN]), pid)
         for pid in NO_DWG:
             self.assertTrue(all(c["not_run"] and not c["expectation_met"] for c in r["probes"][pid][OPEN]), pid)
 

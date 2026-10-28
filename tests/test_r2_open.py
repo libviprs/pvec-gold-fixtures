@@ -402,5 +402,73 @@ class CleanHostScript(unittest.TestCase):
         self.assertIn("runner.r2_open", self.text)
 
 
+class Committed(unittest.TestCase):
+    """The revision, the release and the audit as committed."""
+
+    def setUp(self):
+        self.d = ROOT / "corpus" / "r2-open"
+        self.m = json.loads((self.d / "manifest.json").read_text())
+        self.qual = json.loads((ROOT / "reports" / "r2-open" / "probe-qualification.json").read_text())
+
+    def test_the_sums_cover_every_file(self):
+        self.assertEqual(r2_open.verify_sums(self.d), [])
+
+    def test_two_converters_by_local_digest_and_distinct_lineage(self):
+        cs = self.m["converters"]
+        self.assertEqual(len(cs), 2)
+        self.assertEqual(len({c["lineage"] for c in cs}), 2)
+        self.assertTrue(all(c["image_digest"].startswith("sha256:") for c in cs))
+        self.assertEqual(self.m["oracle_scope"], "OPEN_CONVERTERS")
+
+    def test_every_fixture_of_r1_open_is_in_it(self):
+        r1 = {f["id"] for f in json.loads((ROOT / "corpus" / "r1-open" / "manifest.json").read_text())["fixtures"]}
+        self.assertEqual({f["id"] for f in self.m["fixtures"]}, r1)
+
+    def test_nothing_claims_step_oracle_that_the_run_did_not_back(self):
+        for e in self.m["fixtures"]:
+            if e["evidence_scope"] != "STEP_ORACLE":
+                continue
+            so = e["step_oracle"]
+            if e["evidence_class"] == "QUARANTINED" or e.get("expects_rejection"):
+                self.assertTrue(all(so["refused"].values()), e["id"])
+            else:
+                self.assertFalse(any(so["refused"].values()), e["id"])
+                self.assertIn(so["verdict"], (e["evidence_class"], "DUAL_ORACLE_EQUIVALENT", "KNOWN_TRUTH_EXACT"), e["id"])
+
+    def test_the_changelog_table_is_the_manifest_moves(self):
+        text = (ROOT / "corpus" / "CHANGELOG.md").read_text()
+        self.assertEqual(r2_open.changelog_block(text), r2_open.render_moves(self.m))
+
+    def test_the_audit_numbers_are_the_derived_ones(self):
+        self.assertTrue(r2_open.sync_audit(ROOT / "reports" / "final-audit-r2-open.md", r2_open.audit_blocks(self.m, self.qual)),
+                        "reports/final-audit-r2-open.md has drifted from the manifest")
+
+    def test_no_capability_is_blocked_and_affine_transform_is_certified(self):
+        states = {c["capability"]: c["status"] for c in self.qual["capabilities"]}
+        self.assertEqual(states["affine_transform"], "CERTIFIED")
+        self.assertEqual({s for s in states.values()}, {"CERTIFIED"})
+        self.assertEqual(self.qual["oracle_count"], 2)
+        phase1 = json.loads((ROOT / "reports" / "phase1" / "probe-qualification.json").read_text())
+        self.assertEqual(phase1["capabilities"], self.qual["capabilities"])
+
+    def test_the_release_verifies_and_pins_the_manifest_it_came_from(self):
+        rel = ROOT / "corpus" / "release" / "r2-open-1"
+        self.assertEqual(r2_open.verify_release(rel), [])
+        pins = json.loads((rel / "manifest.json").read_text())["pins"]
+        self.assertEqual(pins["corpus"]["manifest_sha256"], sha((self.d / "manifest.json").read_bytes()))
+
+    def test_both_reproducibility_reports_pass_with_no_unlisted_divergence(self):
+        for arch in ("x64", "arm64"):
+            r = json.loads((ROOT / "reports" / ("reproducibility.r2-open.%s.json" % arch)).read_text())
+            self.assertEqual((r["result"], r["unlisted_divergences"], r["release_problems"]), ("PASS", [], []), arch)
+            self.assertEqual(r["fixtures"], len(self.m["fixtures"]))
+
+    def test_the_audit_makes_a_recommendation_about_occt_and_does_not_switch_it(self):
+        text = (ROOT / "reports" / "final-audit-r2-open.md").read_text()
+        self.assertRegex(text, r"(?i)recommend")
+        self.assertIn("occt-from-source.md", text)
+        self.assertNotIn("Dockerfile.occt-src", (ROOT / "docker-compose.yml").read_text())
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -31,7 +31,7 @@ Both converters are measured on native x86_64 (`docs/benchmarks/converter-throug
 
 ## Images and the next revision
 
-The digests in `corpus/container.pin.json` stay `null` until the open images (`dwg2step-acadsharp`, `step-validator`, and the LibreDWG one from its repository) are published, which needs a registry session. `r2-open`, the first `STEP_ORACLE` revision with a clean-host run, a new audit and a combined release, is #78.
+The digests in `corpus/container.pin.json` stay `null` until the open images (`dwg2step-acadsharp`, `step-validator`, and the LibreDWG one from its repository) are published, which needs a registry session. `r2-open` (#78) is built: the first `STEP_ORACLE` revision, its clean-host run on x86_64 and arm64, the audit `reports/final-audit-r2-open.md` and the combined release candidate `corpus/release/r2-open-1` (not tagged). Every capability is `CERTIFIED` from two oracles, `affine_transform` included.
 
 ## Dropped
 
