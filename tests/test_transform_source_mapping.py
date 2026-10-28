@@ -63,7 +63,7 @@ class Validator(unittest.TestCase):
         d = self.doc()
         claims(d, "WORLD_SPACE_RESULT")[0]["kind"] = "SOURCE_MAPPING"
         errs = em.validate_doc(d)
-        self.assertTrue(any("SOURCE_MAPPING" in e for e in errs), errs)
+        self.assertTrue(any("SOURCE_MAPPING is only for TRANSFORM_PRESERVED" in e for e in errs), errs)
 
     def test_an_instance_without_a_world_space_assertion_is_refused(self):
         d = self.doc()
