@@ -1,3 +1,2 @@
 # Reproducibility (stub)
-
-`status.wall_time_seconds`, `step.FILE_NAME.time_stamp`
+`step.FILE_NAME.time_stamp` `status.wall_time_seconds` `status.output.path` `status.output.sha256`

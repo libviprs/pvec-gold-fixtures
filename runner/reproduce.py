@@ -28,8 +28,10 @@ ROOT = Path(__file__).resolve().parent.parent
 DIVERGENCE_NAMES = (
     "step.FILE_NAME.time_stamp",
     "status.wall_time_seconds",
+    "status.output.path",
+    "status.output.sha256",
 )
-JSON_ALLOWED = {"status": {"status.wall_time_seconds"}}
+JSON_ALLOWED = {"status": {"status.wall_time_seconds", "status.output.path", "status.output.sha256"}}
 
 
 class FreezeBlocked(Exception):
@@ -303,7 +305,8 @@ def run(platform, label, out_dir, against=None, write_release=None, skip_regen=F
         "images_built": built,
         "pinned_inputs": {"base_images": pinned_inputs()[1], "regenerated_with": regen},
         "regenerated_corpus": None if regen_bundle is None else {"bundle_sha256": regen_bundle, "pinned_bundle_sha256": pin["bundle_sha256"],
-                                                                 "matches_pin": regen_bundle == pin["bundle_sha256"]},
+                                                                 "matches_pin": regen_bundle == pin["bundle_sha256"],
+                                                                 "files_differing_from_committed": differing_files(ROOT / "corpus" / "r0-open", corpus_dir)},
         "fixtures": [{k: v for k, v in f.items() if k not in ("step_normalised", "signature_bytes")} for f in fixtures],
         "unlisted_divergences": diverged_total,
         "divergence_list": list(DIVERGENCE_NAMES),
@@ -338,8 +341,20 @@ def run(platform, label, out_dir, against=None, write_release=None, skip_regen=F
     return 0 if report["result"] == "PASS" else 1
 
 
+def differing_files(committed, regenerated):
+    out = []
+    names = {str(p.relative_to(d)) for d in (committed, regenerated) for p in d.rglob("*") if p.is_file()}
+    for n in sorted(names):
+        a, b = committed / n, regenerated / n
+        if not (a.is_file() and b.is_file()) or a.read_bytes() != b.read_bytes():
+            out.append(n)
+    return out
+
+
 def _base_of(dockerfile):
-    return ", ".join(re.findall(r"^FROM\s+(\S+@sha256:[0-9a-f]{64})", (ROOT / dockerfile).read_text(), re.M))
+    text = (ROOT / dockerfile).read_text()
+    refs = re.findall(r"^FROM\s+(\S+@sha256:[0-9a-f]{64})", text, re.M) + re.findall(r"^ARG BASE=(\S+@sha256:[0-9a-f]{64})", text, re.M)
+    return ", ".join(dict.fromkeys(refs))
 
 
 def verify(rel):

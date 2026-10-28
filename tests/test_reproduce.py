@@ -18,12 +18,12 @@ class Divergence(unittest.TestCase):
         self.assertEqual(reproduce.step_divergence(STEP % "2026-10-28T01:00:00", bad), ["step: differs beyond FILE_NAME time stamp"])
 
     def test_json_difference_on_the_list_passes_and_off_the_list_fails(self):
-        a = {"status": "ok", "wall_time_seconds": 1.5, "output": {"sha256": "aa"}}
-        b = {"status": "ok", "wall_time_seconds": 2.5, "output": {"sha256": "aa"}}
+        a = {"status": "ok", "wall_time_seconds": 1.5, "output": {"sha256": "aa", "path": "/x/a"}, "product": {"version": "1"}}
+        b = {"status": "ok", "wall_time_seconds": 2.5, "output": {"sha256": "bb", "path": "/x/b"}, "product": {"version": "1"}}
         self.assertEqual(reproduce.json_divergence("status", a, b), [])
         c = copy.deepcopy(b)
-        c["output"]["sha256"] = "bb"
-        self.assertEqual(reproduce.json_divergence("status", a, c), ["status.output.sha256"])
+        c["product"]["version"] = "2"
+        self.assertEqual(reproduce.json_divergence("status", a, c), ["status.product.version"])
         d = dict(b, extra=1)
         self.assertEqual(reproduce.json_divergence("status", a, d), ["status.extra"])
 
