@@ -1,7 +1,7 @@
 {
   "fixture_set": "the 30 r0-open DWG probes (the full probe corpus of the open route)",
   "real_world_subset": null,
-  "real_world_subset_reason": "no real-world drawing is held here, see docs/vendor-deferred.md",
+  "real_world_subset_reason": "no real-world drawing is held here, see docs/open-route-status.md",
   "runs": [
     {
       "arch": "x64",

@@ -68,7 +68,7 @@ references, converter versions, evaluator version and numeric policy version. It
 `signatures/manifest.json` ones; its STEP hashes are of the text with the `FILE_NAME` time stamp replaced by
 `<TIMESTAMP>`, which is how `step/*.step` is shipped.
 
-No proprietary converter, evaluator, docker or vendor network access is needed to read a release. The evidence is
+No converter, evaluator, docker or network access is needed to read a release. The evidence is
 `KNOWN_TRUTH_EXACT` for reader mapping only with `oracle_scope: NONE` on the corpus, and one open converter behind
 the STEP files ([evidence-classes.md](evidence-classes.md)); converter agreement is never source truth. Whether PVec
 becomes the default blueprint path is `P8.7` and `N8.7`'s decision, not an assumption here.

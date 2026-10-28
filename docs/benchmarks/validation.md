@@ -13,7 +13,7 @@ Issue 20 (O3.2). Measured by `bench/validation/run.py` inside the step-validator
 | normalise | `runner.normalize` plus the schema and scalar checks on the signature |
 | structural | `runner.structural.structural_diff` of the derived signature against the frozen one, entity by entity |
 | report | building and serialising the comparison report |
-| adaptive_geometric | **not measured**: no adaptive geometric comparison stage exists in this repository (O2.5 and O2.6 are not built), so there is no converged sample count to report. Listed in `docs/vendor-deferred.md` as waiting on that work, not on a licence |
+| adaptive_geometric | **not measured**: no adaptive geometric comparison stage exists in this repository (O2.5 and O2.6 are not built), so there is no converged sample count to report. Listed in `docs/open-route-status.md` as waiting on that work |
 
 ## Per fixture (median ms)
 

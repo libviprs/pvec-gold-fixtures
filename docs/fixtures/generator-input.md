@@ -26,7 +26,7 @@ The bytes depend on content only (the normaliser's serialisation), so a second r
 ## What is refused
 
 A fixture is not handed over when the oracle scope is `NONE`, when the manifest fails the ADR 0009 scope
-rules (two converters of one lineage, a vendor named under `OPEN_CONVERTERS`, and so on), when its converter
+rules (two converters of one lineage, a converter without an image digest, and so on), when its converter
 section is a `MATERIAL_DIFFERENCE` or QUARANTINED, when the section was not computed from these signatures,
 or when a signature carries another numeric policy version.
 

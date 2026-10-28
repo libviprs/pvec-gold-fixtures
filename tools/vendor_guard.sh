@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Refuse vendor artifacts, licence files and key-shaped strings (ADR 0007, docs/converters/archive.md).
+# Refuse vendor artifacts, licence files and key-shaped strings (ADR 0007, docs/converters/images-and-setup.md).
 #
 #   tools/vendor_guard.sh --staged       the files staged for commit (the pre-commit hook)
 #   tools/vendor_guard.sh --tree [DIR]   every file under DIR, default the repository (the CI check)
@@ -27,7 +27,7 @@ case $mode in
 esac
 
 # files whose job is to spell the patterns out (or to plant a canary) are not scanned for content
-skip_content='^(tools/vendor-guard\.patterns|docs/converters/archive\.md|tests/test_vendor_guard\.py|tests/test_corpus\.py)$'
+skip_content='^(tools/vendor-guard\.patterns|tests/test_vendor_guard\.py|tests/test_corpus\.py)$'
 bad=0
 while IFS= read -r -d '' f; do
   [ -n "$f" ] || continue
