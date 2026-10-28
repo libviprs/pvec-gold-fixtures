@@ -112,7 +112,7 @@ def decide(entry, obs):
             f["evidence_scope"] = "STEP_ORACLE"
         else:
             why = "%s converter drew geometry for a fixture that should be refused" % " and ".join(failures)
-    elif entry.get("downstream_disposition"):
+    elif entry.get("downstream_disposition") or entry.get("expects_rejection"):
         if both_refused:
             f["evidence_scope"] = "STEP_ORACLE"
         else:
@@ -162,6 +162,15 @@ def common_setup(infos):
     return first
 
 
+def expects_rejection(root, entry):
+    """True when the authored record says the pipeline must reject the entity (near-singular-001, singular-001)."""
+    t = entry["artifacts"].get("expected.math.json")
+    if not t:
+        return False
+    doc = load(Path(root) / t["path"])
+    return any("rejection" in ent for ent in doc.get("entities", []))
+
+
 def build(root, runs, out, setup_extra=None):
     root, runs, out = Path(root), Path(runs), Path(out)
     entries = fixture_entries(root)
@@ -175,6 +184,7 @@ def build(root, runs, out, setup_extra=None):
     for fid, e in entries.items():
         gen = runs / fid
         o = observe(gen)
+        e = dict(e, expects_rejection=expects_rejection(root, e))
         fields, move = decide(e, o)
         e2 = {k: v for k, v in e.items()}
         e2["previous"] = {"evidence_class": e["evidence_class"], "evidence_scope": e["evidence_scope"], "oracle_scope": e.get("oracle_scope")}

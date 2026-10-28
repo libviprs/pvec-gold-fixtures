@@ -120,6 +120,11 @@ class Decide(unittest.TestCase):
         self.assertEqual(f["evidence_scope"], "STEP_ORACLE")
         self.assertEqual(f["evidence_class"], "KNOWN_TRUTH_EXACT")
 
+    def test_the_authored_record_alone_marks_a_rejection_probe(self):
+        e = entry("singular-001", group="edge", expects_rejection=True)
+        f, _ = r2_open.decide(e, obs("QUARANTINED", "UNSUPPORTED_ENTITY", refused=("primary", "secondary")))
+        self.assertEqual(f["evidence_scope"], "STEP_ORACLE")
+
     def test_a_rejection_probe_one_converter_emitted_does_not_move(self):
         e = entry("near-singular-001", group="transforms", downstream_disposition={"expected": "REJECT"})
         f, move = r2_open.decide(e, obs("QUARANTINED", "UNSUPPORTED_ENTITY", refused=("primary",)))
@@ -262,6 +267,18 @@ class Build(unittest.TestCase):
             _, _, out1, _ = build_in(t, ES, SPECS)
             _, _, out2, _ = build_in(u, ES, SPECS)
             self.assertEqual((out1 / "SHA256SUMS").read_text(), (out2 / "SHA256SUMS").read_text())
+
+
+class RejectionFromTruth(unittest.TestCase):
+    def test_build_reads_the_rejection_from_the_expected_record(self):
+        es = [entry("near-singular-001", group="transforms")]
+        with tempfile.TemporaryDirectory() as t:
+            root = tree(Path(t) / "root", es)
+            (root / es[0]["artifacts"]["expected.math.json"]["path"]).write_text(json.dumps({"entities": [{"rejection": {"disposition": "QUARANTINE"}}]}))
+            gen(Path(t) / "runs", "near-singular-001", "QUARANTINED", "UNSUPPORTED_ENTITY", refused=("primary", "secondary"))
+            m = r2_open.build(root, Path(t) / "runs", Path(t) / "out")
+            self.assertEqual(m["fixtures"][0]["evidence_scope"], "STEP_ORACLE")
+            self.assertTrue(m["fixtures"][0]["expects_rejection"])
 
 
 class Release(unittest.TestCase):

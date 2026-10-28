@@ -31,7 +31,7 @@ git -C "$here" archive --format=tar HEAD | r "$dk exec -i $d sh -c 'mkdir -p /tr
 r "$dk save $lr | $dk exec -i $d docker load" >/dev/null
 lrid=$(dd docker images -q | head -1)
 dd "docker tag $lrid pvec-oracle-libredwg:local"
-dd "docker build -q --platform $plat -f /tree/docker/step-validator/Dockerfile --target final -t pvec-gold/step-validator:local /tree" >/dev/null
+dd "docker build -q --platform $plat -f /tree/${VALIDATOR_DOCKERFILE:-docker/step-validator/Dockerfile} --target ${VALIDATOR_TARGET:-final} -t pvec-gold/step-validator:local /tree" >/dev/null
 dd "docker build -q --platform $plat -f /tree/tools/converters/acadsharp/Dockerfile -t pvec-gold/dwg2step-acadsharp:local /tree" >/dev/null
 dd "docker build -q --platform $plat -f /tree/docker/fixture-runner/Dockerfile -t gold-fixture-runner /tree" >/dev/null
 set +e
