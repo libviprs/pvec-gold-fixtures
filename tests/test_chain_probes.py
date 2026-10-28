@@ -126,7 +126,7 @@ class ChainRecords(unittest.TestCase):
             self.assertTrue((d / "read.acadrust.json").is_file(), fid)
             self.assertTrue((d / "read.acadsharp.json").is_file(), fid)
             cmp_ = load(d / "comparison.json")
-            self.assertEqual(cmp_["evidence_class"], "KNOWN_TRUTH_EXACT", fid)
+            self.assertEqual(cmp_["verdict"], "AGREE", fid)
 
     def test_the_converter_result_is_recorded_and_is_not_a_rejection(self):
         for fid in CHAINS:

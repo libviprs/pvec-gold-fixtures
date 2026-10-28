@@ -206,6 +206,11 @@ class EndToEnd(unittest.TestCase):
         for f in sorted(KT.rglob("expected.math.json")):
             d = em.load(f)
             probes[d["fixture_id"]] = d
+        listed = {p for ps in q.CAPABILITIES.values() for p in ps}
+        for f in sorted((ROOT / "fixtures" / "edge").rglob("expected.math.json")):
+            d = em.load(f)
+            if d["fixture_id"] in listed:   # the chain probes live in the edge group (#69)
+                probes[d["fixture_id"]] = d
 
         def outputs(pid):
             d = probes[pid]

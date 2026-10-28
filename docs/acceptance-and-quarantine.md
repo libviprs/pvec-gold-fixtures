@@ -22,7 +22,7 @@ fixture is not admitted at all.
 ## Excluded, not quarantined
 
 A probe the writer cannot store exactly gets no DWG and is listed under `excluded` in `manifest.json`, with its
-reason and evidence (`r0-open` lists `shear-001`, `general-affine-001` and `singular-001`). It is a gap that is
+reason and evidence (`r0-open` lists `shear-001`, `general-affine-001` and `singular-001`; the first two are now profile-only records, with `shear-chain-001` and `general-affine-chain-001` in `r1-open` carrying their maps through a DWG). It is a gap that is
 written down, not a fixture that hides.
 
 ## Who clears a quarantine

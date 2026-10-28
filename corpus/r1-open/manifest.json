@@ -1253,6 +1253,63 @@
     {
       "artifacts": {
         "README.md": {
+          "path": "fixtures/edge/general-affine-chain-001/README.md",
+          "sha256": "2282c1a8a68688684a2bef5540ea5cf82e0471e10926af2a75de9c57f4491238"
+        },
+        "acadsharp-dwg2step.status.json": {
+          "path": "fixtures/edge/general-affine-chain-001/acadsharp-dwg2step.status.json",
+          "sha256": "e5c441ff6e0dd62b4d982d68a088c209e20504863cefaa02a937dd6bdf25d132"
+        },
+        "acadsharp-dwg2step.step": {
+          "path": "fixtures/edge/general-affine-chain-001/acadsharp-dwg2step.step",
+          "sha256": "258cf6b560c5fd6ba55ce825564e3bcbc1a80998e5c9a2a022f20d6163c31822"
+        },
+        "acadsharp-dwg2step.verification.json": {
+          "path": "fixtures/edge/general-affine-chain-001/acadsharp-dwg2step.verification.json",
+          "sha256": "0fdf748d6fd65a66b9b24d1f7aae9e760d2d2d53585bb5a32eeea02d4ce4930b"
+        },
+        "comparison.json": {
+          "path": "fixtures/edge/general-affine-chain-001/comparison.json",
+          "sha256": "4fbcefcc16e662edee4991f8bfece3fa5b948352dc9eec1843c3a32a047d2a2b"
+        },
+        "expected.math.json": {
+          "path": "fixtures/edge/general-affine-chain-001/expected.math.json",
+          "sha256": "d308c0127720f3003b39554ff8223f77d000c3efc1b286ba85b1a038d958d146"
+        },
+        "open-route.json": {
+          "path": "fixtures/edge/general-affine-chain-001/open-route.json",
+          "sha256": "a9be3f9e2b01961a93921aa97ff1e594c6669d2e86cb0d64f7880ba81ac44342"
+        },
+        "params.json": {
+          "path": "fixtures/edge/general-affine-chain-001/params.json",
+          "sha256": "68829f39843333fb3a94e72ccaed62a82777720d5fc635f1021189d69e40aa55"
+        },
+        "read.acadrust.json": {
+          "path": "fixtures/edge/general-affine-chain-001/read.acadrust.json",
+          "sha256": "fe060681f35489a62754062ce5643374e2acfb010c090a4da276a56a03e536ea"
+        },
+        "read.acadsharp.json": {
+          "path": "fixtures/edge/general-affine-chain-001/read.acadsharp.json",
+          "sha256": "196698a2f9c4d911a73c3460c6f40447e783473b26e17b0d298f9c68a18944a8"
+        },
+        "source.dwg": {
+          "path": "fixtures/edge/general-affine-chain-001/source.dwg",
+          "sha256": "f08d1c84596c9ce6765ad1a3922081c11bcec418127892ebf7b1eb31fddb1289"
+        }
+      },
+      "dwg_version": "AC1032",
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "group": "edge",
+      "id": "general-affine-chain-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracle_scope": "NONE",
+      "provenance": "SYNTHETIC_AUTHORED",
+      "status": "ACCEPTED"
+    },
+    {
+      "artifacts": {
+        "README.md": {
           "path": "fixtures/edge/huge-extent-001/README.md",
           "sha256": "a87e8c1eab8a5164cb41134a5bd8532d0ce7542b9083222ad5ec060057683911"
         },
@@ -1302,6 +1359,63 @@
       "evidence_scope": "READER_MAPPING_ONLY",
       "group": "edge",
       "id": "huge-extent-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracle_scope": "NONE",
+      "provenance": "SYNTHETIC_AUTHORED",
+      "status": "ACCEPTED"
+    },
+    {
+      "artifacts": {
+        "README.md": {
+          "path": "fixtures/edge/shear-chain-001/README.md",
+          "sha256": "76956cbb3a268aaada9492cebb02b2928a9bb3f12ea0e8fc09b0c195377af86c"
+        },
+        "acadsharp-dwg2step.status.json": {
+          "path": "fixtures/edge/shear-chain-001/acadsharp-dwg2step.status.json",
+          "sha256": "cd7db780b5ebcb8902e0b8b9621e3f216ad73185338b6041d238b7d8263d5389"
+        },
+        "acadsharp-dwg2step.step": {
+          "path": "fixtures/edge/shear-chain-001/acadsharp-dwg2step.step",
+          "sha256": "7980ba86e5a4776453055e2a6661ab49085cba4c87b432117d1d82608cda7874"
+        },
+        "acadsharp-dwg2step.verification.json": {
+          "path": "fixtures/edge/shear-chain-001/acadsharp-dwg2step.verification.json",
+          "sha256": "b6eb268a43f6eb32dad58b8c864385b4b74a8dcc73cb52b080c8a06a59c19076"
+        },
+        "comparison.json": {
+          "path": "fixtures/edge/shear-chain-001/comparison.json",
+          "sha256": "3558c5daa6692935a8f5b212c2f16870856a8e820252d58e6ad1489428619682"
+        },
+        "expected.math.json": {
+          "path": "fixtures/edge/shear-chain-001/expected.math.json",
+          "sha256": "ed4c6a3277680fccadba208424556be9af0a467919263f5285d68af9234d5b1c"
+        },
+        "open-route.json": {
+          "path": "fixtures/edge/shear-chain-001/open-route.json",
+          "sha256": "eea9b72d03ddb604caed6b41cc2e2dacc458fa87fd60098ad4f373fca8f428e5"
+        },
+        "params.json": {
+          "path": "fixtures/edge/shear-chain-001/params.json",
+          "sha256": "b4ccbce124914a64ea9d60acb3dbb2784b368eaf1779a6e3788bb41b41b5c68c"
+        },
+        "read.acadrust.json": {
+          "path": "fixtures/edge/shear-chain-001/read.acadrust.json",
+          "sha256": "e0f73348343a7fe79c428fa323a4bb83bffa073bb84241a530537424d5f65e25"
+        },
+        "read.acadsharp.json": {
+          "path": "fixtures/edge/shear-chain-001/read.acadsharp.json",
+          "sha256": "2c05466c1c268f14e90365c052efdf4631e01ad9b67eb9e70f409db962dcc29b"
+        },
+        "source.dwg": {
+          "path": "fixtures/edge/shear-chain-001/source.dwg",
+          "sha256": "a67001359899ce960a491a8b78a19ca5184ed1ea153e7ce47414d9d1b7b78301"
+        }
+      },
+      "dwg_version": "AC1032",
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "group": "edge",
+      "id": "shear-chain-001",
       "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
       "oracle_scope": "NONE",
       "provenance": "SYNTHETIC_AUTHORED",

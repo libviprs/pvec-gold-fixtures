@@ -360,6 +360,15 @@ def build_fixture(path):
 
 
 def readme_for(s, rel, extra):
+    if "profile_only" in s:
+        po = s["profile_only"]
+        return ("# %s\n\n%s\n\n"
+                "I authored this record from `%s`, and `expected.math.json` is derived from those parameters alone by `%s`. "
+                "No expected value comes from `primary.step` or `secondary.step`, and none ever should.\n\n"
+                "This is a profile only probe and it has no `source.dwg`. %s\n\n"
+                "The drawing for the same map is `%s` under `fixtures/edge`. It keeps this record's matrix as its chain matrix, "
+                "so the two stay comparable, and it is the probe that exercises `affine_transform` through a DWG.\n%s"
+                % (s["id"], s["description"], rel, SCRIPT, po["reason"], po["chain_probe"], extra))
     return ("# %s\n\n%s\n\n"
             "I authored this probe from `%s`, and `expected.math.json` is derived from those parameters alone by "
             "`%s`. No expected value comes from `primary.step` or `secondary.step`, and none ever should.\n\n"
