@@ -90,7 +90,7 @@ The STEP path also needs OCCT and an image; the signature path needs python and 
 ## Across architectures
 
 The STEP files are byte identical on both (the converter runs with `SOURCE_DATE_EPOCH` fixed). The signatures are not: 19 of 29 are identical, and the rest diverge only in the fields listed. All of them are last-digit differences in values OCCT evaluates (line ends through a transform, an ellipse's major axis, sample points on rational curves, anything near 1e7 m); stored control points, knots and weights agree everywhere. The structural verdict of the arm64 re-derivation against the frozen x86_64 signature is `STRUCTURAL_DIFFERS` for exactly these fixtures and `STRUCTURAL_EXACT` for the rest.
-I did not change the normaliser to hide them (that is O2.4 and out of scope here); the consequence is that the frozen signatures are the native x86_64 ones and `verify_signatures` is run there.
+Those are the measurements as taken at the time. Issue 74 then split the contract: `verify_signatures` compares stored values bitwise and derived values under the numeric policy, and it now passes 29 of 29 on native arm64 against the x86_64 set (see `docs/reproducibility.md`).
 
 | fixture | differing fields | first fields (entity.field) |
 |---|---|---|

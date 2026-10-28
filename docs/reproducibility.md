@@ -58,7 +58,7 @@ digests above. Native x64 is host `mars` (linux/amd64), arm64 is host `mercury` 
 |---|---|---|---|
 | first | native x64 | PASS | wrote the release candidate `corpus/release/r0-open-1`; regenerated bundle equals the pin (`b0e3377b...`), 0 files differ from the committed corpus, 0 unlisted divergences |
 | second | native x64 | PASS | all 29 converted fixtures match the frozen source, STEP and signature hashes, `near-singular-001` refused as before; bundle equals the pin; base image digests equal |
-| third | native arm64 | differs | corpus bundle and every STEP hash match; 10 of 29 signatures differ (below) |
+| third | native arm64 | PASS (re-checked) | corpus bundle and every STEP hash match; before the stored/derived split 10 of 29 signatures differed in last digits, and now `runner.verify_signatures` re-derives 29 of 29 against the same frozen set (below) |
 
 Build, regenerate and convert-evaluate-normalise took 59 s, 84 s and 62 s on the second x64 run (two conversions per
 fixture, one at a time), and 81 s, 83 s and 37 s on arm64. Built image ids differed on every run:
@@ -72,14 +72,14 @@ fixture, one at a time), and 81 s, 83 s and 37 s on arm64. Built image ids diffe
 The full records are `reports/reproducibility.json` (second x64), `reports/reproducibility.run1-x64.json` and
 `reports/reproducibility.arm64.json`.
 
-## The architecture caveat
+## Stored bits and derived values
 
-The frozen signatures are the native x86_64 set, as `docs/downstream-contract.md` says. On arm64 the STEP files are
-byte-identical, but OCCT's evaluation differs in the last digits and 12-digit rounding does not hide it for 10 of 29
-fixtures: `bspline-d3-001`, `ellipse-001`, `elliptical-arc-001`, `large-coords-001`, `lwpolyline-closed-001`,
-`nonunit-weight-001`, `polyline-001`, `polyline2d-001`, `rotation-irrational-001` and `translation-001`
-(`docs/benchmarks/validation.md` has the fields). Reproducibility hashes are therefore x64-only; an arm64 run is
-labelled as such and is not expected to match the signature hashes.
+A signature separates what the converter wrote from what OCCT computes. Stored values (control points, knots,
+weights, radii, parameter domains) are hashed and compared bit for bit. Derived values (sample points, tangents,
+curvatures, a line's ends, an ellipse's major axis) are compared under the numeric policy, because OCCT's last
+digits differ between x86_64 and arm64 (`docs/downstream-contract.md`). So the frozen set is the same on both,
+the STEP bytes are identical, and `python3 -m runner.verify_signatures signatures` prints
+`29 of 29 signatures re-derived identically` on native x86_64 (mars) and on native arm64 (mercury).
 
 ## STEP hashes
 
