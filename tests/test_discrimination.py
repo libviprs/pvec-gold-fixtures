@@ -23,6 +23,14 @@ KNOT_COLLAPSE = {"bspline-d3-001", "bspline-d5-001", "closed-by-endpoint-001", "
 REPARAMETERISE = {"bspline-d3-001", "bspline-d5-001", "closed-by-endpoint-001", "closed-periodic-001", "nonunit-weight-001",
                   "nurbs-d2-offconic-001", "nurbs-d3-001", "repeated-knot-c0-001"}
 EXPECTED = {"weights-to-1": WEIGHTS_TO_ONE, "knot-collapse": KNOT_COLLAPSE, "reparameterise": REPARAMETERISE}
+# LibreDWG's converter does not write closed-periodic-001 the way the authored record has it (its unmutated
+# output is already BOUNDED_APPROXIMATION), so there is no exact class for a mutation to move it out of.
+# That is a finding about the converter, not a gap in the harness, and the probe is named here so it stays visible.
+NOT_EXACT_TO_BEGIN_WITH = {"libredwg-dwg2step": {"closed-periodic-001"}}
+
+
+def named(conv, mut):
+    return EXPECTED[mut] - NOT_EXACT_TO_BEGIN_WITH.get(conv, set())
 
 
 def step_text(conv, probe):
@@ -99,14 +107,15 @@ class RealOutputThroughTheEvaluator(unittest.TestCase):
     def test_the_unmutated_real_output_is_structurally_exact_for_the_named_probes(self):
         for conv in CONVERTERS:
             for p in set().union(*EXPECTED.values()):
-                self.assertEqual(self.report[conv][p]["baseline"], "STRUCTURAL_EXACT", (conv, p))
+                want = "BOUNDED_APPROXIMATION" if p in NOT_EXACT_TO_BEGIN_WITH.get(conv, ()) else "STRUCTURAL_EXACT"
+                self.assertEqual(self.report[conv][p]["baseline"], want, (conv, p))
 
     def test_each_mutation_changes_the_class_of_the_named_probes_in_both_converters(self):
         for conv in CONVERTERS:
-            for mut, named in EXPECTED.items():
+            for mut in EXPECTED:
                 changed = {p for p, r in self.report[conv].items() if r["mutations"][mut]["changed"]}
                 self.assertGreaterEqual(len(changed), 3, (conv, mut))
-                self.assertEqual(changed, named, (conv, mut))
+                self.assertEqual(changed, named(conv, mut), (conv, mut))
 
     def test_the_new_class_is_the_one_each_mutation_should_cause(self):
         for conv in CONVERTERS:
