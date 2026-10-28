@@ -180,6 +180,60 @@ class Gen(unittest.TestCase):
         self.assertIn("leaked", out)
 
 
+class Teardown(Gen):
+    """Issue 66: inside the fixture-runner container, `compose down` also removes the runner's own container
+    (a one-off of the same project), SIGTERMs the runner halfway through its teardown and turns a clean run
+    into exit 130 with no leak check. The teardown there removes the project's other containers and volumes by
+    label and leaves itself alone."""
+
+    def inside(self, others="conv000000001\nconv000000002\n"):
+        cont = self.d / "containers"
+        cont.write_text("selfself1234\n" + others)
+        return dict(self.env, HOSTNAME="selfself1234", FAKE_CONTAINERS=str(cont))
+
+    def test_inside_the_runner_no_compose_down_is_run(self):
+        rc, out = self.run_gen("alpha-001", env=self.inside())
+        self.assertEqual(rc, 0, out)
+        self.assertFalse(any(DOWN in c for c in self.calls()), self.calls())
+
+    def test_inside_the_runner_the_other_containers_are_removed_with_their_volumes(self):
+        self.run_gen("alpha-001", env=self.inside())
+        rms = [c for c in self.calls() if c.startswith("rm ")]
+        self.assertEqual(len(rms), 1, rms)
+        self.assertIn("conv000000001", rms[0])
+        self.assertIn("conv000000002", rms[0])
+        self.assertIn("-v", rms[0].split())
+
+    def test_inside_the_runner_it_never_removes_itself(self):
+        self.run_gen("alpha-001", env=self.inside())
+        self.assertFalse(any("selfself1234" in c for c in self.calls() if c.startswith("rm ")))
+
+    def test_the_lookup_is_by_the_compose_project_label(self):
+        self.run_gen("alpha-001", env=self.inside())
+        ls = [c for c in self.calls() if c.startswith("container ls")]
+        self.assertTrue(ls and "label=com.docker.compose.project=" in ls[-1], ls)
+
+    def test_inside_the_runner_a_clean_run_reaches_the_leak_check_and_exits_zero(self):
+        rc, out = self.run_gen("alpha-001", "--check-leaks", env=self.inside())
+        self.assertEqual(rc, 0, out)
+        self.assertIn("leak check:", out)
+
+    def test_inside_the_runner_a_sigint_mid_conversion_still_tears_down_and_exits_130(self):
+        p = self.start("alpha-001", env=dict(self.inside(), FAKE_HANG="libredwg-converter"))
+        for _ in range(100):
+            if any(" run " in c and "libredwg-converter" in c for c in self.calls()):
+                break
+            time.sleep(0.1)
+        else:
+            p.kill()
+            self.fail("the run never reached the second converter")
+        p.send_signal(signal.SIGINT)
+        out, _ = p.communicate(timeout=60)
+        self.assertEqual(p.returncode, 130, out)
+        self.assertTrue(any(c.startswith("rm ") for c in self.calls()))
+        self.assertFalse(any(DOWN in c for c in self.calls()))
+
+
 class Evidence(unittest.TestCase):
     def test_exact_cells_from_both_converters_with_truth_are_known_truth(self):
         from runner import generate as g

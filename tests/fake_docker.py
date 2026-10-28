@@ -8,6 +8,7 @@ answers the few calls runner/generate.py makes. Knobs, all environment variables
   FAKE_FAIL       a service name whose run exits 15 and writes an ERROR status
   FAKE_HANG       a service name whose run sleeps until killed
   FAKE_NO_IMAGE   an image name `image inspect` cannot find
+  FAKE_CONTAINERS  what `container ls -aq --filter label=...` prints: the project's containers, the runner's own first
   FAKE_PS / FAKE_VOLS  what `ps -a` and `volume ls` print (files), so a leak can be staged
 """
 import hashlib
@@ -46,6 +47,9 @@ elif args[:2] == ["image", "inspect"]:
     print("sha256:" + hashlib.sha256(img.encode()).hexdigest())
 elif args[:1] == ["ps"]:
     p = os.environ.get("FAKE_PS")
+    sys.stdout.write(Path(p).read_text() if p else "")
+elif args[:2] == ["container", "ls"]:
+    p = os.environ.get("FAKE_CONTAINERS")
     sys.stdout.write(Path(p).read_text() if p else "")
 elif args[:2] == ["volume", "ls"]:
     p = os.environ.get("FAKE_VOLS")
