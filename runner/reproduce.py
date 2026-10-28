@@ -30,6 +30,7 @@ DIVERGENCE_NAMES = (
     "status.wall_time_seconds",
     "status.output.path",
     "status.output.sha256",
+    "image.built_image_id",
 )
 JSON_ALLOWED = {"status": {"status.wall_time_seconds", "status.output.path", "status.output.sha256"}}
 
@@ -327,7 +328,12 @@ def run(platform, label, out_dir, against=None, write_release=None, skip_regen=F
         evaluator={k: versions.get(k, "") for k in ("evaluator", "occt")},
         numeric_policy=versions.get("policy", ""), version="r0-open-1")
     if against:
-        report["against"] = {"manifest": str(against), "per_fixture": against_manifest(json.loads(Path(against).read_text()), pieces["fixtures"])}
+        frozen = json.loads(Path(against).read_text())
+        report["against"] = {"manifest": str(against), "per_fixture": against_manifest(frozen, pieces["fixtures"]),
+                             "base_images_pinned_equal": {n: frozen["pins"]["images"].get(n, {}).get("base") == i["base"] for n, i in pieces["images"].items()},
+                             "built_image_id_same_as_frozen": {n: frozen["pins"]["images"].get(n, {}).get("built_image_id") == i["built_image_id"] for n, i in pieces["images"].items()}}
+        if not all(report["against"]["base_images_pinned_equal"].values()):
+            report["result"] = "FAIL"
         if any(v != "MATCH" for v in report["against"]["per_fixture"].values()):
             report["result"] = "FAIL"
     (out_dir / "reproducibility.json").write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
