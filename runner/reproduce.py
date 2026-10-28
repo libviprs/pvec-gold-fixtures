@@ -243,6 +243,11 @@ def run(platform, label, out_dir, against=None, write_release=None, skip_regen=F
         regen = regenerate_dwgs(platform, ROOT)
         regen_corpus = out_dir / "corpus-regenerated"
         run_py("runner.r0_open", "assemble", ".out-r0open/AC1032/run1", str(regen_corpus), "--writer-info", "tools/r0-open/writer-info.json")
+        # the revision's README.md is hand-written prose, not derived from any DWG, so it is copied in and the
+        # checksums are rewritten the way the committed ones were (docs/reproducibility.md)
+        (regen_corpus / "README.md").write_bytes((ROOT / "corpus" / "r0-open" / "README.md").read_bytes())
+        from . import r0_open
+        r0_open.write_sums(regen_corpus)
         run_py("runner.r0_open", "check", str(regen_corpus))
         regen_bundle = run_py("runner.r0_open", "bundle", str(regen_corpus), str(out_dir / "regen.tar")).strip()
         corpus_dir = regen_corpus
