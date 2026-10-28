@@ -19,7 +19,7 @@ The open-route version mutates the expected and evaluator records (`tests/test_p
 - `shear-001` and `general-affine-001` have no DWG, because a single INSERT cannot carry shear. Chain probes and profile-only tags are #69. `singular-001` needs a writer that stores a zero scale, which is #70. Until then `affine_transform` stays `BLOCKED`.
 - The converters refuse all three real-world drawings in `r1-open` (inches and feet, fit-point-only splines), so none can be `DUAL_ORACLE_EQUIVALENT`. Lifting that is #68.
 - The real-world set is three public drawings. More from openly licensed sources is #76. AutoCAD-written bytes enter only through that set, with provenance.
-- Only one writer family is in the corpus. ACadSharp's writer is #71, LibreDWG's R2000 and R2004 writer is #72, and the one `r1-open` file that is not byte-reproducible (`mesh-001`) is #73.
+- `r0-open` is written by acadrust only. A second family, ACadSharp's `DwgWriter`, is in `corpus/writers/acadsharp`, and LibreDWG's R2000 and R2004 writer is #72. Every `r1-open` DWG regenerates byte for byte.
 
 ## Signatures across architectures
 

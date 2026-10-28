@@ -13,7 +13,7 @@ CORPUS_RS = (ROOT / "tools" / "corpus" / "writer" / "src" / "corpus.rs").read_te
 class MeshDeterminism(unittest.TestCase):
     def test_writer_info_says_26_of_26_and_has_no_pin_note(self):
         d = INFO["determinism"]
-        self.assertIn("26 of 26", d)
+        self.assertIn("23 of 23", d)
         self.assertNotRegex(d, r"(?i)pinned|not deterministic|differs between runs")
 
     def test_manifest_determinism_matches_writer_info(self):

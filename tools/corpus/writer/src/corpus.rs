@@ -111,10 +111,13 @@ fn build_negative(variant: &str, version: DxfVersion) -> Result<CadDocument, Ski
             EntityType::MText(m)
         }
         "solid3d" => EntityType::Solid3D(Solid3D::from_sat(SAT)),
-        "mesh" => EntityType::Mesh(Mesh::from_triangles(
-            vec![o, Vector3::new(1.0, 0.0, 0.0), Vector3::new(0.0, 1.0, 0.0)],
-            &[(0, 1, 2)],
-        )),
+        "mesh" => {
+            let mut m = Mesh::from_triangles(vec![o, Vector3::new(1.0, 0.0, 0.0), Vector3::new(0.0, 1.0, 0.0)], &[(0, 1, 2)]);
+            // Mesh::compute_edges collects the edges in a HashSet, so their order, and the DWG, changes from one
+            // build to the next. Ascending order is the one the file gets every time.
+            m.edges.sort_by_key(|e| (e.start, e.end));
+            EntityType::Mesh(m)
+        }
         "region" => EntityType::Region(Region::from_sat(SAT)),
         "proxy" => EntityType::Unknown(UnknownEntity::new("ACAD_PROXY_ENTITY")),
         "ole" => {

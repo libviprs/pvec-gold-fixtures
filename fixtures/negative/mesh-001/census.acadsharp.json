@@ -1,7 +1,7 @@
 {
   "schema": "pvec-gold/dwg-census/1",
   "reader": "ACadSharp@3.7.1\u002Bd7dc111",
-  "dwg_sha256": "fec5347306c1d2e330088e2805badec86472740f95a61daa8dc22bdc37a0f52b",
+  "dwg_sha256": "6fb6a5a476227b75100dc81fd22274c2973e77dec15ddc86a3222e166a99f82c",
   "dwg_version": "AC1032",
   "summary": {
     "entity_count": 1,
