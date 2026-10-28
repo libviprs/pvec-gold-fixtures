@@ -1,7 +1,7 @@
 """Regenerate the signatures from the DWG corpus through the open converter, under the scheduler.
 
     python3 -m runner.regenerate --out DIR --parallel N [--pack signatures] [--mem 1g] [--cpus 1]
-        [--converter-image IMG] [--eval-image IMG] [--converter acadsharp-dwg2step]
+        [--converter-image IMG]  (libredwg-dwg2step: the image id or digest of the LibreDWG converter) [--eval-image IMG] [--converter acadsharp-dwg2step]
 
 Per fixture (a container each, concurrency capped by runner/scheduler.py and docker/converter-limits.json):
 DWG -> primary.step + primary.status.json -> primary.verification.json (step_eval) -> signature.json
@@ -23,6 +23,10 @@ ROOT = Path(__file__).resolve().parent.parent
 CORPUS = ROOT / "corpus" / "r0-open" / "fixtures"
 # Fixed so the STEP time stamp, the one field a run varies, is the same on every host and every run.
 SOURCE_DATE_EPOCH = "1761523200"
+# The LibreDWG image has no entrypoint (its service in docker-compose.yml sets one), so the binary is named here.
+ENTRYPOINT = {"libredwg-dwg2step": "dwg2step"}
+# Per-converter memory limit, as in docker-compose.yml, unless --mem says otherwise.
+MEM = {"acadsharp-dwg2step": "256m", "libredwg-dwg2step": "512m"}
 
 
 def fixtures():
@@ -37,6 +41,7 @@ def make_job(a, run_id):
         c = containers.run(a.converter_image, ["--in", containers.cpath(src / "source.dwg"), "--out", containers.cpath(work / "primary.step"),
                                                "--status", containers.cpath(work / "primary.status.json")],
                            [src, work], name="gold-%s-%s-c" % (run_id, fx), label=label, mem=a.mem, cpus=a.cpus,
+                           entrypoint=ENTRYPOINT.get(a.converter),
                            extra=["-e", "SOURCE_DATE_EPOCH=" + SOURCE_DATE_EPOCH])
         log.write("converter exit %d" % c.returncode)
         log.write(c.stderr[-2000:])
@@ -75,10 +80,11 @@ def main(argv):
     p.add_argument("--converter", default="acadsharp-dwg2step")
     p.add_argument("--converter-image", default="gold-dwg2step-acadsharp:test-" + containers.PLATFORM.split("/")[1])
     p.add_argument("--eval-image", default="gold-stepval:" + containers.PLATFORM.split("/")[1])
-    p.add_argument("--mem", default="256m")
+    p.add_argument("--mem", help="default per converter: " + ", ".join("%s %s" % kv for kv in MEM.items()))
     p.add_argument("--cpus", default="2")
     p.add_argument("--pack")
     a = p.parse_args(argv)
+    a.mem = a.mem or MEM.get(a.converter, "256m")
     out = Path(a.out)
     run_id = "%d" % os.getpid()
     t0 = time.monotonic()

@@ -3941,9 +3941,7 @@
       }
     }
   },
-  "not_measured": {
-    "adaptive_geometric": "no adaptive geometric comparison stage exists in this repository (O2.5 and O2.6 are not built), so there is no converged sample count to report"
-  },
+  "not_measured": {},
   "runs": [
     {
       "arch": "x64",

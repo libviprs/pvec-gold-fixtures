@@ -1,6 +1,7 @@
 """Measure and prove the orchestration settings: wall time per parallelism, resume, teardown, resource limits.
 
     python3 bench/orchestration/run.py --host mars --conv-report .conv.json --out orchestration.json
+    [--converter libredwg-dwg2step --mem 512m --cap-basis TEXT]   the image is the one the conv report measured
 
 Runs where the docker CLI and socket are (bench/drive.sh). Everything goes through runner.regenerate, the
 same entry point a real regeneration uses, so the numbers are the scheduler's own.
@@ -21,12 +22,14 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent
-MEM, CPUS = "256m", "2"
+sys.path.insert(0, str(ROOT))
+from runner import scheduler  # noqa: E402
+CPUS = "2"
 SUBSET = "line-001,nurbs-d3-001,nested-blocks-001,polyline-001"
 
 
-def regen(out, parallel, extra=()):
-    return subprocess.Popen([sys.executable, "-m", "runner.regenerate", "--out", str(out), "--parallel", str(parallel), "--mem", MEM, "--cpus", CPUS, *extra],
+def regen(out, parallel, base, extra=()):
+    return subprocess.Popen([sys.executable, "-m", "runner.regenerate", "--out", str(out), "--parallel", str(parallel), "--cpus", CPUS, *base, *extra],
                             cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
 
 
@@ -58,17 +61,23 @@ def main(argv):
     p.add_argument("--conv-report", required=True)
     p.add_argument("--reps", type=int, default=3)
     p.add_argument("--work", default=str(ROOT / ".out-orch"))
+    p.add_argument("--converter", default="acadsharp-dwg2step")
+    p.add_argument("--eval-image", help="step_eval image, passed to runner.regenerate (default: its own)")
+    p.add_argument("--mem", default="256m")
+    p.add_argument("--cap-basis", default="a cap I set", help="why the cap in docker/converter-limits.json is what it is")
     p.add_argument("--out", required=True)
     a = p.parse_args(argv)
+    mem = a.mem
     work = Path(a.work)
     conv = json.loads(Path(a.conv_report).read_text())
+    base = ["--converter", a.converter, "--mem", mem, "--converter-image", conv["image"]] + (["--eval-image", a.eval_image] if a.eval_image else [])
     arch = conv["arch"]
 
     table, oom, other_failures = [], 0, []
     for par in (1, 2, 4, 8):
         walls = []
         for i in range(a.reps):
-            proc = regen(work / ("t%d-%d" % (par, i)), par)
+            proc = regen(work / ("t%d-%d" % (par, i)), par, base)
             s = summary(proc.communicate()[0])
             walls.append(s["wall_s"])
             oom += sum("out of memory" in v for v in s["failed"].values())
@@ -80,42 +89,48 @@ def main(argv):
     best = min(r["wall_s"]["median"] for r in table)
     chosen = next(r["parallel"] for r in table if r["wall_s"]["median"] <= best * 1.10)
 
+    # The dotnet runtime switches only mean something for the dotnet converter.
+    runs = [("unlimited", []), ("cpus_1", ["--cpus", "1", "--mem", mem]), ("cpus_2", ["--cpus", "2", "--mem", mem]), ("cpus_4", ["--cpus", "4", "--mem", mem])]
+    if a.converter == "acadsharp-dwg2step":
+        runs += [("TieredPGO_0", ["--env", "DOTNET_TieredPGO=0"]), ("TieredCompilation_0", ["--env", "DOTNET_TieredCompilation=0"])]
     experiments = {}
-    for name, args in (("unlimited", []), ("cpus_1", ["--cpus", "1", "--mem", MEM]), ("cpus_2", ["--cpus", "2", "--mem", MEM]),
-                       ("cpus_4", ["--cpus", "4", "--mem", MEM]), ("TieredPGO_0", ["--env", "DOTNET_TieredPGO=0"]), ("TieredCompilation_0", ["--env", "DOTNET_TieredCompilation=0"])):
+    for name, args in runs:
         o = work / ("exp-%s.json" % name)
         subprocess.run([sys.executable, "bench/converters/run.py", "--image", conv["image"], "--host", a.host, "--repeats", "9", "--fixtures", SUBSET,
-                        "--out", str(o), "--work", str(work / "exp"), *args], cwd=ROOT, check=True, capture_output=True)
+                        "--converter", a.converter, "--out", str(o), "--work", str(work / "exp"), *args], cwd=ROOT, check=True, capture_output=True)
         r = json.loads(o.read_text())
         experiments[name] = {"conversion_s_median": statistics.median(m["conversion_s"]["median"] for m in r["fixtures"].values()),
                              "total_s_median": statistics.median(m["total_s"]["median"] for m in r["fixtures"].values())}
 
     # resume: interrupt at parallelism 4 once a few fixtures are done, then rerun
     out = work / "resume"
-    proc = regen(out, 4)
+    proc = regen(out, 4, base)
     wait_for(out / "state", 6)
     proc.send_signal(signal.SIGINT)
     proc.communicate()
     before = {p_.name: tree(p_) for p_ in (out / "fixtures").iterdir() if not p_.name.startswith(".")}
-    proc = regen(out, 4)
+    proc = regen(out, 4, base)
     s = summary(proc.communicate()[0])
     after = {fx: tree(out / "fixtures" / fx) for fx in before}
     resume = {"done_before_interrupt": len(before), "skipped_on_rerun": len(s["skipped"]), "regenerated_on_rerun": len(s["done"]) + len(s["refused"]),
               "untouched_hashes_identical": before == after, "skipped_exactly_the_finished": sorted(s["skipped"]) == sorted(before) or set(before) <= set(s["skipped"])}
 
     # teardown: abort a parallel run, then look for survivors
-    vols0, ctr0 = docker_ls("volume", "ls", "-q"), docker_ls("ps", "-aq")
-    proc = regen(work / "abort", 8)
+    # The docker host is shared, so a raw before/after diff would count other people's containers. The runner names its
+    # containers gold-<run id>-... and labels them gold.run=<run id>; those are the ones a leak could be.
+    ctr0 = docker_ls("ps", "-aq", "--filter", "name=gold-")
+    proc = regen(work / "abort", 8, base)
     time.sleep(0.6)
     proc.send_signal(signal.SIGINT)
     proc.communicate()
     leftover_c = docker_ls("ps", "-aq", "--filter", "label=gold.run") 
-    teardown = {"signal": "SIGINT at parallelism 8", "leftover_labelled_containers": len(leftover_c), "new_containers": len(docker_ls("ps", "-aq") - ctr0),
-                "new_volumes": len(docker_ls("volume", "ls", "-q") - vols0)}
+    teardown = {"signal": "SIGINT at parallelism 8", "leftover_labelled_containers": len(leftover_c), "new_containers": len(docker_ls("ps", "-aq", "--filter", "name=gold-") - ctr0),
+                "new_volumes": len(docker_ls("volume", "ls", "-q", "--filter", "label=gold.run"))}
 
     rep = {
         "schema": "pvec-gold/bench-orchestration-run/1", "arch": arch, "host": a.host, "native": True, "emulated": False,
-        "image": conv["image"], "image_id": conv["image_id"], "table": table, "chosen": {"parallel": chosen, "cpus": float(CPUS), "memory_limit_mib": 256,
+        "converter": a.converter, "cap": scheduler.limit_for(a.converter), "cap_basis": a.cap_basis,
+        "image": conv["image"], "image_id": conv["image_id"], "table": table, "chosen": {"parallel": chosen, "cpus": float(CPUS), "memory_limit_mib": int(mem.rstrip("m")),
                                                                                     "rule": "smallest parallelism within 10% of the best median wall"},
         "experiments_conversion_subset": SUBSET, "experiments": experiments,
         "observed_peak_rss_mib": max(m["peak_rss_mib"]["max"] for m in conv["fixtures"].values()),

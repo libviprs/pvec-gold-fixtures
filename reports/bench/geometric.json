@@ -1,0 +1,1213 @@
+{
+  "runs": [
+    {
+      "arch": "x64",
+      "emulated": false,
+      "fixtures": {
+        "arc-seam-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.0037822394515387714,
+            "max": 0.15678816102445126,
+            "median": 0.14735900692176074,
+            "min": 0.1463183070300147,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "bezier-d3-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.0025206069694831967,
+            "max": 0.33098203409463167,
+            "median": 0.3291455520084128,
+            "min": 0.3257262270199135,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "bspline-d3-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.0016585640260018408,
+            "max": 0.37674102804157883,
+            "median": 0.36658677307423204,
+            "min": 0.36535979993641376,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 39,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "bspline-d5-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.0033740925136953592,
+            "max": 0.6310007770080119,
+            "median": 0.6261093490757048,
+            "min": 0.6224542210111395,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 41,
+            "not_admitted": 18,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "bulge-arc-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.003799456520937383,
+            "max": 0.5062079479685053,
+            "median": 0.4939618289936334,
+            "min": 0.4894426839891821,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 36,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "bulge-arc-neg-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.004348255053628236,
+            "max": 0.5065468230750412,
+            "median": 0.4910816870396957,
+            "min": 0.48864161397796124,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 36,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "circle-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.001235787000041455,
+            "max": 0.15235661494079977,
+            "median": 0.1505723650334403,
+            "min": 0.1485656970180571,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "closed-by-endpoint-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.004790970997419208,
+            "max": 0.37168705207295716,
+            "median": 0.3676058549899608,
+            "min": 0.3644339239690453,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "closed-periodic-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.0021455694804899395,
+            "max": 0.37186199298594147,
+            "median": 0.3693855159217492,
+            "min": 0.367398108006455,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 43,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "ellipse-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.0005018230876885355,
+            "max": 0.15235291502904147,
+            "median": 0.14985258993692696,
+            "min": 0.14910728705581278,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "elliptical-arc-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.001231281436048448,
+            "max": 0.15196918998844922,
+            "median": 0.1504231799626723,
+            "min": 0.14986053900793195,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "large-coords-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.0032234734972007573,
+            "max": 0.5187703090487048,
+            "median": 0.5129141230136156,
+            "min": 0.5097445740830153,
+            "n": 7
+          },
+          "entities": 3,
+          "quantities": {
+            "count": 20,
+            "not_admitted": 18,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "layer-state-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.03670591296395287,
+            "max": 0.48119546892121434,
+            "median": 0.41719398903660476,
+            "min": 0.4117280440405011,
+            "n": 7
+          },
+          "entities": 3,
+          "quantities": {
+            "count": 103,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "line-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.0017729676328599453,
+            "max": 0.13970024301670492,
+            "median": 0.1379421770107001,
+            "min": 0.1367063099751249,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "lwpolyline-closed-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.0059806505450978875,
+            "max": 0.9573958349647,
+            "median": 0.949339265935123,
+            "min": 0.9417540070135146,
+            "n": 7
+          },
+          "entities": 4,
+          "quantities": {
+            "count": 36,
+            "not_admitted": 5,
+            "refinement": {
+              "deepest_level": 6,
+              "sample_count": 258
+            }
+          },
+          "repeats": 7
+        },
+        "nested-blocks-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.003581618017051369,
+            "max": 0.14194691006559879,
+            "median": 0.13746118894778192,
+            "min": 0.1360538270091638,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 11,
+            "not_admitted": 3,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "nonuniform-scale-circle-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.0028903514612466097,
+            "max": 0.17726659798063338,
+            "median": 0.1504473660606891,
+            "min": 0.1474501449847594,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 30,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "nonuniform-scale-rotated-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.030704647419042885,
+            "max": 0.21415554801933467,
+            "median": 0.1640889080008492,
+            "min": 0.15020376001484692,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 39,
+            "not_admitted": 34,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "nonunit-weight-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.002744629979133606,
+            "max": 0.27421935100574046,
+            "median": 0.2702364670112729,
+            "min": 0.2654486990068108,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 11,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "nurbs-d2-offconic-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.002193997032009065,
+            "max": 0.27417403599247336,
+            "median": 0.2713142929133028,
+            "min": 0.2704403840471059,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 3,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "nurbs-d3-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.001949680969119072,
+            "max": 0.3689714160282165,
+            "median": 0.36681242391932756,
+            "min": 0.3647648600162938,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 39,
+            "not_admitted": 16,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "polyline-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.004695667012128979,
+            "max": 0.7938429120695218,
+            "median": 0.644200867973268,
+            "min": 0.6417042430257425,
+            "n": 7
+          },
+          "entities": 4,
+          "quantities": {
+            "count": 36,
+            "not_admitted": 4,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "polyline2d-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.0060853418544866145,
+            "max": 0.6675365610281006,
+            "median": 0.6474191750166938,
+            "min": 0.6433674759464338,
+            "n": 7
+          },
+          "entities": 4,
+          "quantities": {
+            "count": 36,
+            "not_admitted": 20,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "reflection-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.002527275471948087,
+            "max": 0.1517431689426303,
+            "median": 0.14917331899050623,
+            "min": 0.1472021359950304,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 5,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "repeated-knot-c0-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.005401450500357896,
+            "max": 0.39277775993105024,
+            "median": 0.36813730001449585,
+            "min": 0.36547722294926643,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 33,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "rotation-irrational-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.0009893825044855475,
+            "max": 0.1411691460525617,
+            "median": 0.13963106204755604,
+            "min": 0.13908948795869946,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 15,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "tiny-radius-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.0008466344443149865,
+            "max": 0.14943304099142551,
+            "median": 0.14864793291781098,
+            "min": 0.1467719590291381,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 11,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "translation-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.0059685599990189075,
+            "max": 0.14853728201705962,
+            "median": 0.13864105194807053,
+            "min": 0.13643858500290662,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 21,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "uniform-scale-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.0014083569985814393,
+            "max": 0.15073320106603205,
+            "median": 0.14814766007475555,
+            "min": 0.14640532596968114,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 39,
+            "not_admitted": 34,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        }
+      },
+      "host": "mars",
+      "load_avg": [
+        "4.04",
+        "4.76",
+        "4.79"
+      ],
+      "most_expensive": [
+        "lwpolyline-closed-001",
+        "polyline2d-001",
+        "polyline-001",
+        "bspline-d5-001",
+        "large-coords-001"
+      ],
+      "native": true,
+      "policy_version": "PVec numeric policy v1",
+      "repeats": 7,
+      "schema": "pvec-gold/bench-geometric-run/1",
+      "total_median_s": 9.403832273790613
+    },
+    {
+      "arch": "arm64",
+      "emulated": false,
+      "fixtures": {
+        "arc-seam-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.0018603266216814518,
+            "max": 0.15848984592594206,
+            "median": 0.15519797906745225,
+            "min": 0.15469527803361416,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "bezier-d3-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.001469268521759659,
+            "max": 0.34862804505974054,
+            "median": 0.34714635903947055,
+            "min": 0.34517222293652594,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "bspline-d3-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.00266439700499177,
+            "max": 0.3903704530093819,
+            "median": 0.38520936598069966,
+            "min": 0.38309964805375785,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 39,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "bspline-d5-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.007843672472517937,
+            "max": 0.6939688069978729,
+            "median": 0.6843384939711541,
+            "min": 0.675902372924611,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 41,
+            "not_admitted": 18,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "bulge-arc-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.0013012300478294492,
+            "max": 0.509968723054044,
+            "median": 0.5060559069970623,
+            "min": 0.5027528320206329,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 36,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "bulge-arc-neg-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.0011792531586252153,
+            "max": 0.5085863280110061,
+            "median": 0.5074167620623484,
+            "min": 0.5054222500184551,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 36,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "circle-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.0008451955509372056,
+            "max": 0.15817839198280126,
+            "median": 0.15597455098759383,
+            "min": 0.1554449750110507,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "closed-by-endpoint-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.0034619480138644576,
+            "max": 0.3898233789950609,
+            "median": 0.3863607649691403,
+            "min": 0.38278044399339706,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "closed-periodic-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.0026790009578689933,
+            "max": 0.3969058550428599,
+            "median": 0.38875497796107084,
+            "min": 0.38677159196231514,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 43,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "ellipse-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.0018422020366415381,
+            "max": 0.16499991400633007,
+            "median": 0.16160075704101473,
+            "min": 0.16073310398496687,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "elliptical-arc-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.00047113944310694933,
+            "max": 0.16347597900312394,
+            "median": 0.16047369106672704,
+            "min": 0.15964299498591572,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "large-coords-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.0019119500066153705,
+            "max": 0.5433930499712005,
+            "median": 0.5411165839759633,
+            "min": 0.5375965960556641,
+            "n": 7
+          },
+          "entities": 3,
+          "quantities": {
+            "count": 20,
+            "not_admitted": 18,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "layer-state-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.0009391945204697549,
+            "max": 0.4387944280169904,
+            "median": 0.4365847109584138,
+            "min": 0.4354601450031623,
+            "n": 7
+          },
+          "entities": 3,
+          "quantities": {
+            "count": 103,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "line-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.0012857510009780526,
+            "max": 0.14923494507092983,
+            "median": 0.14676914899609983,
+            "min": 0.1463397389743477,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "lwpolyline-closed-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.0028669569874182343,
+            "max": 0.996907213004306,
+            "median": 0.9940437979530543,
+            "min": 0.9900386090157554,
+            "n": 7
+          },
+          "entities": 4,
+          "quantities": {
+            "count": 36,
+            "not_admitted": 5,
+            "refinement": {
+              "deepest_level": 6,
+              "sample_count": 258
+            }
+          },
+          "repeats": 7
+        },
+        "nested-blocks-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.001642266463022679,
+            "max": 0.14981035294476897,
+            "median": 0.1467784410342574,
+            "min": 0.14493342698551714,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 11,
+            "not_admitted": 3,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "nonuniform-scale-circle-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.002113697584718466,
+            "max": 0.16362418490462005,
+            "median": 0.16145438398234546,
+            "min": 0.15789343893993646,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 30,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "nonuniform-scale-rotated-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.001979844586458057,
+            "max": 0.16311677603516728,
+            "median": 0.16164063196629286,
+            "min": 0.15837309800554067,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 39,
+            "not_admitted": 34,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "nonunit-weight-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.0015274769975803792,
+            "max": 0.28706781298387796,
+            "median": 0.2824292160803452,
+            "min": 0.28024708293378353,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 11,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "nurbs-d2-offconic-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.0036813824553973973,
+            "max": 0.2932196781039238,
+            "median": 0.2888094949303195,
+            "min": 0.28658090298995376,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 3,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "nurbs-d3-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.005633331020362675,
+            "max": 0.4013083720346913,
+            "median": 0.39506750798318535,
+            "min": 0.38959179900120944,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 39,
+            "not_admitted": 16,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "polyline-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.0035714040277525783,
+            "max": 0.6895857489435002,
+            "median": 0.6802209749585018,
+            "min": 0.6788399959914386,
+            "n": 7
+          },
+          "entities": 4,
+          "quantities": {
+            "count": 36,
+            "not_admitted": 4,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "polyline2d-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.004646867513656616,
+            "max": 0.6915330949705094,
+            "median": 0.681897075031884,
+            "min": 0.6693230990786105,
+            "n": 7
+          },
+          "entities": 4,
+          "quantities": {
+            "count": 36,
+            "not_admitted": 20,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "reflection-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.0008980704587884247,
+            "max": 0.1598121179267764,
+            "median": 0.15514077304396778,
+            "min": 0.15430282696615905,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 5,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "repeated-knot-c0-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.0012711885501630604,
+            "max": 0.39366540510673076,
+            "median": 0.3856796919135377,
+            "min": 0.3832319799112156,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 33,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "rotation-irrational-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.0014437490608543158,
+            "max": 0.1479234229773283,
+            "median": 0.14657286007422954,
+            "min": 0.1453898788895458,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 15,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "tiny-radius-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.0015363094862550497,
+            "max": 0.16104018199257553,
+            "median": 0.15601684199646115,
+            "min": 0.15514306398108602,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 35,
+            "not_admitted": 11,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "translation-001": {
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "compare_geometric_s": {
+            "iqr": 0.001172773540019989,
+            "max": 0.15107783407438546,
+            "median": 0.14852603909093887,
+            "min": 0.14794121403247118,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 21,
+            "not_admitted": 0,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        },
+        "uniform-scale-001": {
+          "class": "BOUNDED_APPROXIMATION",
+          "compare_geometric_s": {
+            "iqr": 0.0017040575039573014,
+            "max": 0.16083039389923215,
+            "median": 0.15905779600143433,
+            "min": 0.158298057038337,
+            "n": 7
+          },
+          "entities": 1,
+          "quantities": {
+            "count": 39,
+            "not_admitted": 34,
+            "refinement": {
+              "deepest_level": 2,
+              "sample_count": 18
+            }
+          },
+          "repeats": 7
+        }
+      },
+      "host": "mercury",
+      "load_avg": [
+        "0.86",
+        "0.40",
+        "0.47"
+      ],
+      "most_expensive": [
+        "lwpolyline-closed-001",
+        "bspline-d5-001",
+        "polyline2d-001",
+        "polyline-001",
+        "large-coords-001"
+      ],
+      "native": true,
+      "policy_version": "PVec numeric policy v1",
+      "repeats": 7,
+      "schema": "pvec-gold/bench-geometric-run/1",
+      "total_median_s": 9.906335579114966
+    }
+  ],
+  "schema": "pvec-gold/bench-geometric/1"
+}

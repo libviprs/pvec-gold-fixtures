@@ -27,7 +27,7 @@ STEP bytes match on native x86_64 and native arm64, but 10 of 29 signatures diff
 
 ## Benchmarks
 
-Only the ACadSharp converter is measured (`docker/converter-limits.json` has a limit for it alone). Throughput, memory and the orchestration table for the LibreDWG converter, and timing the geometric comparison stage, are #77.
+Both converters are measured on native x86_64 (`docs/benchmarks/converter-throughput.md`, `orchestration-tuning.md`), and `docker/converter-limits.json` has a cap for each. The LibreDWG converter has no arm64 numbers because no arm64 image of it is held here. The geometric comparison stage is timed on both architectures in `docs/benchmarks/validation.md`. All of it is on the 30 small probes, so none of it says how a real drawing behaves.
 
 ## Images and the next revision
 
