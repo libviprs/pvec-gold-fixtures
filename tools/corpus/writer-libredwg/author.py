@@ -21,6 +21,7 @@ import sys
 from pathlib import Path
 
 TAU = 2 * math.pi
+SPLINE_TOL = 1 / 10_000_000  # the knot and control point tolerance fields every DWG spline carries
 
 
 class Skip(Exception):
@@ -233,7 +234,7 @@ def make_curve(d, e, dwg_entity, block=None, layer=None):
         nurbs = cls == "nurbs"
         pts = [{"x": c[0], "y": c[1], "z": c[2], **({"w": fx(w)} if nurbs else {})} for c, w in zip(cps, g["weights"] if nurbs else cps)]
         return [d.entity("SPLINE", 36, {"_subclass": "AcDbSpline", "scenario": 1, "degree": degree, "rational": int(nurbs), "closed_b": int(cl["closed_by_knots"]),
-                                        "periodic": int(cl["periodic"]), "knot_tol": 1e-07, "ctrl_tol": 1e-07, "weighted": int(nurbs), "knots": knots, "ctrl_pts": pts},
+                                        "periodic": int(cl["periodic"]), "knot_tol": SPLINE_TOL, "ctrl_tol": SPLINE_TOL, "weighted": int(nurbs), "knots": knots, "ctrl_pts": pts},
                          **kw, **extra)]
     raise Skip("UNSUPPORTED_ENTITY", "no DWG form written for class " + cls)
 
