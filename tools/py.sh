@@ -10,7 +10,7 @@ nas=$here/../tools/nas.sh
 [ -x "$nas" ] || nas=${NAS_SH:-/Users/rom/workspace/libviprs/tools/nas.sh}
 host=${NAS:-devshell@192.168.0.100}
 name=gold-py-$(basename "$here")
-img=gold-py:$(shasum "$here/requirements.txt" | cut -c1-12)
+img=gold-py:$(cat "$here/requirements.txt" "$here/docker/py/Dockerfile" | shasum | cut -c1-12)
 ssh=(ssh -o BatchMode=yes -o LogLevel=ERROR "$host")
 if [ "${1:-}" = "--done" ]; then
   "$nas" clean "$name"

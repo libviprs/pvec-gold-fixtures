@@ -108,7 +108,8 @@ class Staged(unittest.TestCase):
     def test_commit_of_clean_file_goes_through(self):
         (self.d / "n.md").write_text("hello\n")
         self.git("add", "n.md")
-        self.assertEqual(self.git("commit", "-qm", "x").returncode, 0)
+        r = self.git("commit", "-qm", "x")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
 
     def test_commit_with_vendor_path_is_refused(self):
         p = self.d / "vendor" / "oda"
