@@ -175,7 +175,7 @@ def image_id(ref):
 def pinned_inputs():
     pin = json.loads((ROOT / "corpus" / "r0-open.pin.json").read_text())
     out = {}
-    for role, s in pin["container_images"].items():
+    for role, s in json.loads((ROOT / "corpus" / "r0-open" / "manifest.json").read_text())["container_images"].items():
         m = re.match(r"(\S+) (sha256:[0-9a-f]{64})", s)
         out[role] = (m.group(1), m.group(2))
     return pin, out
