@@ -8,7 +8,7 @@ documents says whether it is native x64 or arm64.
 
 ## The services and their images
 
-The topology, so you can rebuild it without reading `docker-compose.yml`. Images are tagged `:local` and none
+The topology, so you can rebuild it without reading `docker-compose.yml`. The compose file has four services (`cadex-converter`, `oda-converter`, `step-validator`, `fixture-runner`); the open converter is a fifth image that sits outside it. Images are tagged `:local` and none
 of them is pushed anywhere, except that the two open images may be published by digest (ADR 0007, amendment).
 
 | service / image | what it is | platform | network | licence | defined in |
@@ -18,9 +18,12 @@ of them is pushed anywhere, except that the two open images may be published by 
 | `step-validator` (`pvec-gold/step-validator:local`, or `gold-stepval:<arch>` when built by the scripts) | the independent STEP evaluator, Open CASCADE only | amd64 and arm64 | none | none | `docker/step-validator/` |
 | `dwg2step-acadsharp` (`gold-dwg2step-acadsharp:*`; publishable name `ghcr.io/libviprs/pvec-gold-dwg2step-acadsharp`) | the open converter on ACadSharp, MIT | amd64 and arm64 | none | none | `tools/converters/acadsharp/` |
 
-There is no fixture-runner image yet. The runner is the python package `runner/`, run in the `docker/py`
-image (python plus `requirements.txt`, no converter, nothing proprietary), and the one-command Compose
-service that issue #13 describes is not built. The vendor-only part is in [vendor-deferred.md](vendor-deferred.md).
+| `fixture-runner` (`pvec-gold/fixture-runner:local`) | `docker compose run --rm fixture-runner generate [id ...]`: drives two converter services and the validator with the host socket (`runner/generate.py`) | validator platform | none | none | `docker/fixture-runner/` |
+
+The python tests run in the `docker/py` image (python, git and `requirements.txt`, no converter, nothing
+proprietary). `generate` needs two converters with distinct lineages, so a real run of it with the licensed
+pair is in [vendor-deferred.md](vendor-deferred.md). The open route's one command is
+`python3 -m runner.reproduce run` (below), driven from `tools/clean_host.sh`.
 
 All converter services run with a read-only root, `tmpfs` on `/tmp`, all capabilities dropped and
 `no-new-privileges`. The two licensed ones mount their licence read-only at run time and nothing is in the
