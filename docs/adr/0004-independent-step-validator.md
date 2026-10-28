@@ -1,7 +1,7 @@
 # ADR 0004: one independent STEP validator, itself validated
 
-Status: proposed. It can be frozen for the open route (see the amendment); for a vendor path it is **still open**, because the independence claim below still
-needs checking against the two vendors' own component lists. Panel finding answered: 5.
+Status: frozen for the open route at the phase 1 exit gate (2026-10-28). For a vendor path the independence claim still has to be
+checked against the two vendors' own component lists, which is listed in `docs/vendor-deferred.md`. Panel finding answered: 5.
 
 ## Context
 

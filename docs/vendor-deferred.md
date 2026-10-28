@@ -31,7 +31,7 @@ What waits on a licence or on another repository:
 - `Container::start` in `crates/pvec-hermetic`, the digest pin in the pvec repository and making `precision`
   required for the vendor revision are pvec changes and are not made here.
 
-## Issues 15 and 54: converter classification and generator input: converter classification and generator input
+## Issues 15 and 54: converter classification and generator input
 
 **CAD Exchanger and ODA (oracle_scope VENDOR_CONVERTERS).** The structural and geometric reports and the
 converter classification (`runner/compare_structural.py`, `compare_geometric.py`, `compare_converters.py`)
@@ -61,3 +61,31 @@ self-test STEP files, from both architectures, and signatures built from the kno
 **Per-converter blocks.** The issue asked for a structural block inside `primary.verification.json`. I
 write `primary.structural.json` and `primary.geometric.json` beside it, because the verification record has
 its own schema. Say if you want them folded in.
+
+## Converter qualification, the pathological and transform probes, and the exit gate (issues 2 and 6)
+
+What runs for real: the open converter `acadsharp-dwg2step` converts the 30 `r0-open` DWGs, `step_eval` evaluates the STEP,
+`runner/qualify_probes.py` classifies every probe (`reports/phase1/probe-qualification.json`), and the exit gate is green for
+`OPEN_CONVERTERS` with one oracle (`reports/phase1/exit-gate.txt`, `tools/qualify/open_route.sh mars`). ADRs 0001 to 0007 are frozen.
+
+What waits on a licence or a second open converter:
+
+- CAD Exchanger Batch and the ODA Drawings and STEP SDKs: the images, their licence findings, concurrency limits, reproducible
+  digests, error-code tables and the `docs/converters/*-qualification.md` results stay as they are (issue 2, the first half). Nothing
+  was built or run for them.
+- The second oracle. ADR 0003 wants two converters with distinct lineages, and the open route has one. The LibreDWG converter
+  (`libviprs/pvec-oracle-libredwg`) will add the second column; running `runner.qualify_probes` with `--secondary` then adds
+  the discrepancy check, and only then can a cell earn `DUAL_ORACLE_EQUIVALENT`. The vendor pair would run the same command with
+  `--oracle-scope VENDOR_CONVERTERS`.
+- `source.dwg` written by the ODA Drawings SDK writer for every probe row, and byte-identical regeneration from the authoring
+  script under that writer (issue 6). The open writer's DWGs are the corpus today (ADR 0008), with the header differences named
+  in `corpus/r0-open`.
+- `shear-001`, `general-affine-001` and `singular-001` have no DWG: the open writer has no matrix-carrying INSERT and rewrites a
+  zero scale. A vendor writer that can carry them would unblock the `affine_transform` capability, which is `BLOCKED` for exactly
+  that reason.
+- The discrimination criterion run on vendor STEP output. The open-route version mutates the expected and evaluator records
+  (`tests/test_probes.py`) and passes; injecting a weight-to-1 renormalisation, a knot collapse and a reparameterisation into real
+  converter output needs a converter that can be made to do that, which is the vendor pair.
+- ADR 0004's independence claim against the CAD Exchanger and ODA component lists, and the ADR 0007 image checks (no licence in
+  layers, no key in logs).
+- Superseding `r0-open` with a vendor-qualified revision in `corpus/CHANGELOG.md` (issue 42's third criterion).
