@@ -89,3 +89,29 @@ What waits on a licence or a second open converter:
 - ADR 0004's independence claim against the CAD Exchanger and ODA component lists, and the ADR 0007 image checks (no licence in
   layers, no key in logs).
 - Superseding `r0-open` with a vendor-qualified revision in `corpus/CHANGELOG.md` (issue 42's third criterion).
+
+## Issue #20: benchmarks, orchestration tuning and signature artifacts
+
+What runs for real, on the open route (`dwg2step-acadsharp` plus `step_eval`): converter throughput and cost on native
+x86_64 (`mars`) and native arm64 (`mercury`), validation cost per stage on both, the scheduler with its licence cap,
+resume and teardown, the compose limits, and the signature packaging with the re-derivation job. The numbers are in
+`docs/benchmarks/` and `reports/bench/`.
+
+What waits on a licence or on other work:
+
+- CAD Exchanger and ODA throughput, startup, peak memory and failure rate. Neither image can be built here. A licensee
+  runs `bench/converters/run.py --image <vendor image> --converter cadex|oda` on the NAS host (native x86_64 only), and
+  puts the vendor's real concurrency limit in `docker/converter-limits.json`. Until then those entries are `null`, and
+  `runner/scheduler.py` runs an unlisted or null converter at 1, so an unknown limit is never read as unlimited.
+- The vendor orchestration table (parallelism 1, 2, 4, 8 up to the licence limit) and the vendor memory limit. Both depend on
+  the vendor limit and on the vendor peak RSS, which I cannot observe. The `acadsharp-converter` limits (256m, 2 cpus) say
+  nothing about them.
+- The named real-world subset. No real-world drawing is held in this repository (issue 11), so the throughput report has the
+  probe corpus only. Peak memory in particular is untested on a drawing larger than a few curves.
+- The adaptive geometric comparison stage of the validation benchmark and its converged sample count. This one waits on
+  work, not on a licence: the comparison stage (O2.5, O2.6) does not exist yet. `bench/validation/run.py` has four stages
+  and says so.
+- The signatures are frozen from the open converter's STEP, not from a vendor's. A vendor revision re-runs
+  `python3 -m runner.regenerate` with the vendor image and `python3 -m runner.verify_signatures` on the NAS host.
+- Cross-architecture signature identity is not achieved (10 of 29 differ in last digits, named in
+  `docs/benchmarks/validation.md`). Fixing it means changing normalisation, which is O2.4 and not done here.

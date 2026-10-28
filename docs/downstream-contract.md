@@ -1,0 +1,56 @@
+# What a downstream test may depend on
+
+`pvec`, `libviprs` and `maplibre-pvec` read the frozen artifacts of this repository and nothing else. This is
+the line between what they may rely on and what they may not. It is checked by `tests/test_signature_path_20.py`
+and by `runner/verify_signatures.py`.
+
+## Signature artifacts
+
+Under `signatures/`:
+
+```
+signatures/manifest.json                 versions, and the SHA-256 of every signature and retained STEP
+signatures/<fixture-id>/signature.json   pvec-gold/signature/1, written by runner.normalize
+signatures/<fixture-id>/primary.step     the STEP file the signature was derived from (audit source)
+```
+
+Every accepted fixture ships both files. A fixture the converter refuses by design (`near-singular-001`,
+`NEAR_SINGULAR_TRANSFORM`) ships neither, and the manifest does not list it.
+
+## A downstream test may depend on
+
+- The signature JSON: `schema/signature.schema.json`, version `pvec-gold/signature/1`. The field names, the
+  `{decimal, f64_hex, precision}` scalar, the metre as the one length unit, and the sort order of entities
+  (class, then a hash of the content).
+- The manifest: `manifest_version`, `versions.schema`, `versions.evaluator`, `versions.occt`,
+  `versions.policy`, and the hash of each signature. A consumer pins the schema and policy versions it was
+  written against and calls `runner.signatures.load(dir, id, expect_schema=..., expect_policy=...)`, which
+  refuses a manifest or a signature that is not what was pinned. That module is standard library only: no
+  OCCT, no STEP parser, no converter, no jsonschema.
+- Stored values (control points, knots, weights, centres, radii, axes, parameter domains) as exact f64 bits.
+  Evaluated values (sample points, tangents, curvatures) are rounded to 12 significant digits and are a
+  property of the evaluator, not of the drawing. Compare them with the numeric policy, never bit for bit,
+  and not across architectures (see below).
+- The hashes. If a hash in the manifest does not match the file, the artifact is damaged and the test should
+  fail, not skip.
+
+## A downstream test may not depend on
+
+- STEP text. The STEP file is retained for audit and for `runner/verify_signatures.py`; its entity numbers,
+  its time stamp, its line order and its spelling of reals are the converter's. Nothing downstream parses it.
+- Entity ids of any kind: STEP `#n` numbers, the evaluator's own labels.
+- A converter being present, or its name. The signature does not say which converter made the STEP, and a
+  test that needs to know has stopped being a downstream test.
+- The signature being the same on every architecture. It is the same STEP on both (the STEP bytes are
+  identical once `SOURCE_DATE_EPOCH` is fixed), but OCCT's evaluation differs in the last digits between
+  native x86_64 and native arm64, and 12-digit rounding does not hide every such difference
+  (`docs/benchmarks/validation.md` names the fixtures and fields). The frozen signatures are the native
+  x86_64 ones.
+
+## Drift
+
+`python3 -m runner.verify_signatures signatures` re-derives every signature from its retained STEP and compares
+the bytes. It needs `step_eval`, so it runs in the step-validator image, on native x86_64. Any difference fails
+the job and names the fields that differ; a byte difference with no differing field fails as such. It was
+exercised once with a mutated signature (one `f64_hex` changed with the manifest rewritten to match), and it
+named the field. See `docs/benchmarks/validation.md`.
