@@ -8,7 +8,7 @@ The open converter `acadsharp-dwg2step` converts the 30 `r0-open` DWGs, `step_ev
 
 ## The second oracle
 
-The LibreDWG converter lives in `libviprs/pvec-oracle-libredwg` (GPL-3.0-or-later, image consumed by digest or local id, never a build context here). Its column is in `reports/phase1/probe-qualification.json` (oracle_count 2, every cell classified for both converters), and a real two-converter `generate` run, with the interrupt check, is recorded in `docs/reports/generate-real-run.md`.
+The LibreDWG converter (#65, real run in #66) lives in `libviprs/pvec-oracle-libredwg` (GPL-3.0-or-later, image consumed by digest or local id, never a build context here). Its column is in `reports/phase1/probe-qualification.json` (oracle_count 2, every cell classified for both converters), and a real two-converter `generate` run, with the interrupt check, is recorded in `docs/reports/generate-real-run.md`.
 
 ## Discrimination on real converter output
 
