@@ -94,39 +94,39 @@ Deviations are in metres, measured against the authored curve both ways.
 | nested-blocks-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 6 structural field(s) differ (geometry.end[0], geometry.end[1]...); max deviation 1.83e-15 at unit parameter 0.6805, direction SAME |
 | bspline-d3-001 |  | STRUCTURAL_EXACT | 47 fields equal bit for bit |
 | bspline-d5-001 |  | STRUCTURAL_EXACT | 55 fields equal bit for bit |
-| bulge-arc-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 30 structural field(s) differ (class, geometry.bulges#len...); max deviation 2.59e-15 at unit parameter 0.6286, direction SAME |
+| bulge-arc-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 30 structural field(s) differ (class, geometry.bulges#len...); max deviation 2.22e-15 at unit parameter 0.6180, direction SAME |
 | bulge-arc-001 | bulge-arc-001-equivalent-arc | GEOMETRIC_EXACT_REPARAMETERIZED | 4 structural field(s) differ (geometry.center[0], geometry.center[1]...); max deviation 3.23e-15 at unit parameter 0.6180, direction SAME |
 | bulge-arc-neg-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 30 structural field(s) differ (class, geometry.bulges#len...); max deviation 4.37e-15 at unit parameter 0.0555, direction REVERSED |
 | bulge-arc-neg-001 | bulge-arc-neg-001-equivalent-arc | GEOMETRIC_EXACT_REPARAMETERIZED | 2 structural field(s) differ (geometry.radius, geometry.x_axis[2]); max deviation 3.82e-15 at unit parameter 0.7430, direction SAME |
-| circle-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 1 structural field(s) differ (geometry.x_axis[2]); max deviation 4.88e-15 at unit parameter 0.9941, direction SAME |
+| circle-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 1 structural field(s) differ (geometry.x_axis[2]); max deviation 2.66e-15 at unit parameter 0.9930, direction SAME |
 | closed-by-endpoint-001 |  | STRUCTURAL_EXACT | 47 fields equal bit for bit |
 | closed-periodic-001 |  | STRUCTURAL_EXACT | 47 fields equal bit for bit |
 | ellipse-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 1 structural field(s) differ (geometry.major_axis[2]); max deviation 3.20e-15 at unit parameter 0.8680, direction SAME |
 | elliptical-arc-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 1 structural field(s) differ (geometry.major_axis[2]); max deviation 1.60e-15 at unit parameter 0.8680, direction SAME |
-| large-coords-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 1 structural field(s) differ (different number of curves: 3); max deviation 3.73e-09 at unit parameter 0.9305, direction n/a |
+| large-coords-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 1 structural field(s) differ (different number of curves: 3); max deviation 1.86e-09 at unit parameter 0.6805, direction n/a |
 | line-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 1 structural field(s) differ (parameter_domain.end); max deviation 4.97e-16 at unit parameter 0.4930, direction SAME |
-| lwpolyline-closed-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 1 structural field(s) differ (different number of curves: 4); max deviation 9.93e-16 at unit parameter 0.9305, direction n/a |
+| lwpolyline-closed-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 1 structural field(s) differ (different number of curves: 4); max deviation 1.78e-15 at unit parameter 0.7429, direction n/a |
 | nonunit-weight-001 |  | STRUCTURAL_EXACT | 44 fields equal bit for bit |
 | nurbs-d2-offconic-001 |  | STRUCTURAL_EXACT | 44 fields equal bit for bit |
 | nurbs-d3-001 |  | STRUCTURAL_EXACT | 49 fields equal bit for bit |
-| polyline-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 1 structural field(s) differ (different number of curves: 4); max deviation 9.93e-16 at unit parameter 0.8680, direction n/a |
-| polyline2d-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 1 structural field(s) differ (different number of curves: 4); max deviation 1.40e-15 at unit parameter 0.9523, direction n/a |
+| polyline-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 1 structural field(s) differ (different number of curves: 4); max deviation 1.29e-15 at unit parameter 0.0182, direction n/a |
+| polyline2d-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 1 structural field(s) differ (different number of curves: 4); max deviation 2.32e-15 at unit parameter 0.9622, direction n/a |
 | repeated-knot-c0-001 |  | STRUCTURAL_EXACT | 43 fields equal bit for bit |
-| tiny-radius-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 1 structural field(s) differ (geometry.x_axis[2]); max deviation 2.22e-16 at unit parameter 0.1783, direction SAME |
+| tiny-radius-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 1 structural field(s) differ (geometry.x_axis[2]); max deviation 1.11e-16 at unit parameter 0.1180, direction SAME |
 | general-affine-001 |  | MISSING | not run: no source.dwg (UNSUPPORTED_ENTITY) |
 | near-singular-001 |  | UNSUPPORTED (expectation met) | refused, exit 15 NEAR_SINGULAR_TRANSFORM (NP-19); no geometry emitted, as expected |
 | nonuniform-scale-circle-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 14 structural field(s) differ (class, geometry.center[0]...); max deviation 5.33e-15 at unit parameter 0.7430, direction SAME |
-| nonuniform-scale-rotated-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 15 structural field(s) differ (class, geometry.center[0]...); max deviation 5.69e-15 at unit parameter 0.7588, direction SAME |
+| nonuniform-scale-rotated-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 15 structural field(s) differ (class, geometry.center[0]...); max deviation 5.52e-15 at unit parameter 0.7430, direction SAME |
 | reflection-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 4 structural field(s) differ (geometry.center[0], geometry.normal[2]...); max deviation 8.01e-16 at unit parameter 0.6805, direction SAME |
-| rotation-irrational-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 6 structural field(s) differ (geometry.end[0], geometry.end[1]...); max deviation 8.92e-16 at unit parameter 0.9305, direction SAME |
+| rotation-irrational-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 6 structural field(s) differ (geometry.end[0], geometry.end[1]...); max deviation 8.90e-16 at unit parameter 0.9305, direction SAME |
 | shear-001 |  | MISSING | not run: no source.dwg (UNSUPPORTED_ENTITY) |
 | singular-001 |  | MISSING | not run: no source.dwg (UNSUPPORTED_ENTITY) |
 | translation-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 8 structural field(s) differ (geometry.end[0], geometry.end[1]...); max deviation 1.11e-16 at unit parameter 0.0239, direction SAME |
 | uniform-scale-001 |  | GEOMETRIC_EXACT_REPARAMETERIZED | 5 structural field(s) differ (geometry.center[0], geometry.center[1]...); max deviation 3.97e-15 at unit parameter 0.7430, direction SAME |
 
 Reading it. Nothing is `BOUNDED_APPROXIMATION`. The splines and NURBS come back bit for bit. Everything else is
-`GEOMETRIC_EXACT_REPARAMETERIZED` with a worst deviation of 3.7e-9, which is one ulp-scale error at the 1e7 offset of
-`large-coords-001` (the feature size is 1e-4), and 5.7e-15 or less everywhere else. A segment polyline comes back as one line
+`GEOMETRIC_EXACT_REPARAMETERIZED` with a worst deviation of 1.9e-9, which is one ulp-scale error at the 1e7 offset of
+`large-coords-001` (the feature size is 1e-4), and 5.5e-15 or less everywhere else. A segment polyline comes back as one line
 per segment, a Bezier as a B-spline, a bulge as arcs, and a non-uniform scale of a circle as the ellipse with named axes (never a
 circle). `bulge-arc-neg-001` is the one probe with direction `REVERSED`: the converter writes a negative bulge counter-clockwise
 from the second vertex, which is the authored equivalent arc.
