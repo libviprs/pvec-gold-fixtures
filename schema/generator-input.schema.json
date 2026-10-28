@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/libviprs/pvec-gold-fixtures/schema/generator-input.schema.json",
+  "title": "*.generator-input.json",
+  "description": "A real-world fixture's STEP signature plus the provenance the pvec-testkit generator stamps into the canonical PVec it makes from it: fixture id, corpus revision and the oracle revision. The generator adds its own version. derivation is fixed to STEP_SIGNATURE, so an artifact made from a DWG reader's output does not fit this schema.",
+  "type": "object",
+  "required": ["schema_version", "provenance", "oracle", "numeric_policy_version", "signature_schema_version", "signature_sha256", "secondary_signature_sha256", "signature"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "pvec-gold/generator-input/1"},
+    "provenance": {"type": "object", "required": ["fixture_id", "corpus_revision", "oracle_revision", "derivation"], "additionalProperties": false,
+      "properties": {"fixture_id": {"type": "string", "minLength": 1}, "corpus_revision": {"type": "string", "minLength": 1},
+                     "oracle_revision": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "derivation": {"const": "STEP_SIGNATURE"}}},
+    "oracle": {"type": "object", "required": ["oracle_scope", "converters", "evidence_scope", "evidence_class", "is_source_truth", "classification"], "additionalProperties": false,
+      "properties": {"oracle_scope": {"enum": ["OPEN_CONVERTERS", "VENDOR_CONVERTERS"]},
+                     "converters": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "object", "required": ["id", "version", "lineage", "image_digest"], "additionalProperties": false,
+                       "properties": {"id": {"type": "string"}, "version": {"type": "string"}, "lineage": {"type": "string"}, "image_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}}}},
+                     "evidence_scope": {"const": "STEP_ORACLE"}, "evidence_class": {"const": "DUAL_ORACLE_EQUIVALENT"},
+                     "is_source_truth": {"const": false},
+                     "classification": {"enum": ["MATCH", "EXACT_REPARAMETERIZATION", "EQUIVALENT_GEOMETRY"]}}},
+    "numeric_policy_version": {"type": "string", "minLength": 1},
+    "signature_schema_version": {"const": "pvec-gold/signature/1"},
+    "signature_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "secondary_signature_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "signature": {"type": "object", "required": ["schema_version", "versions", "units", "entities"], "properties": {"schema_version": {"const": "pvec-gold/signature/1"}}}
+  }
+}

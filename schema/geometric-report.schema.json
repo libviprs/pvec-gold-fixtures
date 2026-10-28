@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/libviprs/pvec-gold-fixtures/schema/geometric-report.schema.json",
+  "title": "geometric report",
+  "description": "Whether a signature traces the same geometry as the known truth. Every quantity carries a number, its unit, the unit parameter where it occurred and the numeric-policy tolerance that admitted it (or did not). The class says nothing about structural exactness or display fidelity.",
+  "type": "object",
+  "required": ["schema_version", "fixture_id", "numeric_policy_version", "signature_schema_version", "stage", "class", "unmatched_produced", "entities", "fixture_quantities"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "pvec-gold/geometric-report/1"},
+    "fixture_id": {"type": "string", "minLength": 1},
+    "numeric_policy_version": {"type": "string", "minLength": 1},
+    "signature_schema_version": {"const": "pvec-gold/signature/1"},
+    "stage": {"type": "object", "required": ["name", "architecture"], "additionalProperties": false,
+              "properties": {"name": {"const": "compare_geometric"}, "architecture": {"type": "string", "minLength": 1}}},
+    "class": {"enum": ["GEOMETRIC_EXACT_REPARAMETERIZED", "BOUNDED_APPROXIMATION", "UNSUPPORTED", "MISSING"]},
+    "bound": {"type": "number", "minimum": 0},
+    "unmatched_produced": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+    "fixture_quantities": {"type": "array", "items": {"$ref": "#/$defs/quantity"}},
+    "entities": {"type": "array", "items": {
+      "type": "object",
+      "required": ["entity", "matched", "signature_index", "equivalent", "quantities", "derivative_exclusions", "samples_excluded", "curvature"],
+      "properties": {
+        "entity": {"type": "string"},
+        "matched": {"type": "boolean"},
+        "signature_index": {"type": ["integer", "null"]},
+        "equivalent": {"type": "boolean"},
+        "direction": {"enum": ["SAME", "REVERSED"]},
+        "error": {"type": "string"},
+        "quantities": {"type": "array", "items": {"$ref": "#/$defs/quantity"}},
+        "derivative_exclusions": {"type": "array", "items": {"$ref": "#/$defs/exclusion"}},
+        "samples_excluded": {"type": "array", "items": {"$ref": "#/$defs/exclusion"}},
+        "curvature": {"type": "object", "required": ["compared"], "properties": {"compared": {"type": "boolean"}, "excluded_parameters": {"type": "array"}}}
+      }}}
+  },
+  "$defs": {
+    "exclusion": {"type": "object", "required": ["parameter", "reason"], "properties": {"parameter": {"type": "object"}, "reason": {"type": "string", "minLength": 1}}},
+    "quantity": {
+      "type": "object",
+      "required": ["quantity", "deviation", "unit", "at_unit_parameter", "tolerance", "admitted"],
+      "properties": {
+        "quantity": {"type": "string", "minLength": 1},
+        "deviation": {"type": "number", "minimum": 0},
+        "unit": {"type": "string", "minLength": 1},
+        "at_unit_parameter": {"type": "number", "minimum": 0, "maximum": 1},
+        "tolerance": {"type": "number", "minimum": 0},
+        "admitted": {"type": "boolean"},
+        "converged": {"type": "boolean"},
+        "refinement_level": {"type": "integer", "minimum": 1},
+        "sample_count": {"type": "integer", "minimum": 1},
+        "measured_in": {"enum": ["EXPECTED_TO_PRODUCED", "PRODUCED_TO_EXPECTED"]},
+        "estimator_error": {"type": "number", "minimum": 0}
+      }
+    }
+  }
+}

@@ -52,3 +52,5 @@ intended `f64`, for example `{"decimal": "0.70710678118654757", "f64_hex": "0x3f
   containers, always with an explicit `--platform`, and every write-up says which results are
   native x64 and which arm64.
 - No credential is written to a file, echoed, or copied to a build host.
+
+The structural and geometric reports, the converter comparison and the generator input for real-world fixtures are described in [docs/reports](docs/reports/structural.md) and [docs/fixtures/generator-input.md](docs/fixtures/generator-input.md). What waits on a licence or another repository is in [docs/vendor-deferred.md](docs/vendor-deferred.md).
