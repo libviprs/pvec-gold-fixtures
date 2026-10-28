@@ -22,7 +22,7 @@ import sys
 from pathlib import Path
 
 from . import canon, curves, expected_math as em, numeric, structural, verification
-from .r0_open import lineage_problems
+from .r0_open import ORACLE_SCOPES, VENDOR_NAME, lineage_problems
 
 STRUCTURAL_EXACT = "STRUCTURAL_EXACT"
 GEOMETRIC = "GEOMETRIC_EXACT_REPARAMETERIZED"
@@ -78,7 +78,18 @@ class Placed:
 
     def nearest(self, q):
         pts = self.samples()
-        i = min(range(len(pts)), key=lambda k: curves.dist(pts[k], q))
+        ds = [curves.dist(p, q) for p in pts]
+        # On a closed curve the first and last samples are one point, so the nearest sample can be a near tie
+        # and the true nearest point sits next to either end. Refine around the four closest samples.
+        near = sorted(range(len(ds)), key=ds.__getitem__)[:4]
+        best = None
+        for i in near:
+            cand = self._refine(q, i)
+            if best is None or curves.dist(cand, q) < curves.dist(best, q):
+                best = cand
+        return best
+
+    def _refine(self, q, i):
         lo, hi = max(i - 1, 0) / SAMPLES, min(i + 1, SAMPLES) / SAMPLES
         f = lambda u: curves.dist(self.at(u), q)  # noqa: E731
         a, b = lo, hi
@@ -148,17 +159,18 @@ def refine_maximum(h, at, width):
 
 
 def deviation(pol, src, targets, scale):
-    """Max distance from points of src to the union of targets, refined until stable by the policy."""
+    """Max distance from points of src to the union of targets, refined until stable by the policy.
+    Returns (deviation, unit parameter, stable, refinement level)."""
     f = lambda u: src.at(u)  # noqa: E731
     g = lambda u: nearest_on_all(targets, src.at(u))  # noqa: E731
     h = lambda u: curves.dist(f(u), g(u))  # noqa: E731
     try:
         dev, at, lvl = pol.adaptive_max_deviation(f, g, 0.0, 1.0, curves.dist, scale, max_levels=7)
-        stable, width = True, 1.0 / (8 * 2 ** (lvl - 1))
+        stable = True
     except numeric.UnstableEstimate as e:
-        dev, at, stable, width = e.best, e.at, False, 1.0 / (8 * 2 ** (e.levels - 1))
-    dev2, at2 = refine_maximum(h, at, width)
-    return (dev2, at2, stable) if dev2 > dev else (dev, at, stable)
+        dev, at, lvl, stable = e.best, e.at, e.levels, False
+    dev2, at2 = refine_maximum(h, at, 1.0 / (8 * 2 ** (lvl - 1)))
+    return (dev2, at2, stable, lvl) if dev2 > dev else (dev, at, stable, lvl)
 
 
 def classify_entity(pol, ent, actual_doc, status):
@@ -197,10 +209,10 @@ def classify_entity(pol, ent, actual_doc, status):
             sdiff = sdiff + ["transform (expected a bare curve)"]
         if not sdiff:
             return cell(STRUCTURAL_EXACT, {"fields_compared": len(structural.fields(core(a)))}, None)
-    d1, at1, st1 = deviation(pol, exp, placed, scale)
+    d1, at1, st1, _ = deviation(pol, exp, placed, scale)
     worst, where, stable, which = d1, at1, st1, "EXPECTED_TO_ACTUAL"
     for a in placed:
-        d2, at2, st2 = deviation(pol, a, [exp], scale)
+        d2, at2, st2, _ = deviation(pol, a, [exp], scale)
         if d2 > worst:
             worst, where, stable, which = d2, at2, st2, "ACTUAL_TO_EXPECTED"
     ev = {"structural_diff": sdiff if sdiff is not None else ["different number of curves: %d" % len(placed)],
@@ -242,21 +254,26 @@ def capability_verdicts(pol, results, resolved=()):
     convs = list(next(iter(results.values()))) if results else list(CONVERTERS)
     rows = []
     for cap, probes in CAPABILITIES.items():
-        per_conv = {}
-        for conv in convs:
-            classes = [probe_class(results[p][conv]) for p in probes if p in results]
-            per_conv[conv] = max(classes, key=lambda k: RANK[k]) if classes else MISSING
         # rejection probes are judged by expectation, not by class
         rej = [p for p in probes if p in results and all("expectation_met" in c for conv in convs for c in results[p][conv])]
-        rej_fail = [p for p in rej if not all(c["expectation_met"] for conv in convs for c in results[p][conv])]
+        per_conv = {}
+        for conv in convs:
+            classes = [probe_class(results[p][conv]) for p in probes if p in results and p not in rej]
+            per_conv[conv] = max(classes, key=lambda k: RANK[k]) if classes else MISSING
+        not_run = [p for p in rej if any(c.get("not_run") for conv in convs for c in results[p][conv])]
+        rej_fail = [p for p in rej if p not in not_run and not all(c["expectation_met"] for conv in convs for c in results[p][conv])]
         best = min(per_conv.values(), key=lambda k: RANK[k])
         disc = [p for p in probes if p in results and p not in rej
                 and len({probe_class(results[p][conv]) in EXACT for conv in convs}) > 1 and p not in resolved]
-        cert_struct = best == STRUCTURAL_EXACT and not disc and not rej_fail
-        cert_geom = best in EXACT and not disc and not rej_fail
+        cert_struct = best == STRUCTURAL_EXACT and not disc and not rej_fail and not not_run
+        cert_geom = best in EXACT and not disc and not rej_fail and not not_run
         reasons = []
-        if per_conv and all(k == BOUNDED for k in per_conv.values()):
+        if len(per_conv) > 1 and all(k == BOUNDED for k in per_conv.values()):
             reasons.append("both converters land in BOUNDED_APPROXIMATION: not certified even though they agree")
+        elif len(per_conv) == 1 and best == BOUNDED:
+            reasons.append("the converter lands in BOUNDED_APPROXIMATION: not certified")
+        if not_run:
+            reasons.append("probes not run (no source.dwg): %s" % ", ".join(not_run))
         if best not in EXACT and not reasons:
             reasons.append("no converter produced an exact representation (best: %s)" % best)
         if disc:
@@ -290,46 +307,74 @@ def is_converter_probe(doc):
     return not any("layer" in e for e in doc["entities"])
 
 
-def build_report(pol, probes, outputs_for, resolved=()):
+def build_report(pol, probes, outputs_for, resolved=(), no_source=None):
+    """no_source: {probe id: why it has no source.dwg}; such a probe was never converted and says so."""
     results = {}
     for pid, doc in probes.items():
         if not is_converter_probe(doc):
             continue
         results[pid] = qualify_probe(pol, doc, outputs_for(pid))
+        for cells in results[pid].values():
+            for c in cells:
+                if pid in (no_source or {}) and c["evidence"].get("reason", "").startswith("no converter output"):
+                    c["evidence"]["reason"] = "no source.dwg in the corpus, so the converter was not run: " + no_source[pid]
+                    c["not_run"] = True
+                    c["expectation_met"] = False   # an expectation nobody exercised has not been met
     ids = list(next(iter(results.values()))) if results else []
+    caps = capability_verdicts(pol, results, resolved)
+    if len(ids) == 1:
+        for r in caps:
+            r["reasons"].append("single oracle: no second converter, so no cross-converter discrepancy could be checked")
     return {"schema_version": "pvec-gold/probe-qualification/1", "numeric_policy_version": pol.version,
-            "converters": dict(zip(("primary", "secondary"), ids)), "probes": results, "capabilities": capability_verdicts(pol, results, resolved)}
+            "converters": dict(zip(("primary", "secondary"), ids)), "oracle_count": len(ids), "probes": results, "capabilities": caps}
 
 
 def main(argv):
     ap = argparse.ArgumentParser()
     ap.add_argument("--probes", default="fixtures/known-truth")
     ap.add_argument("--primary", nargs=2, metavar=("ID", "DIR"), required=True)
-    ap.add_argument("--secondary", nargs=2, metavar=("ID", "DIR"), required=True)
+    ap.add_argument("--secondary", nargs=2, metavar=("ID", "DIR"), help="omit for a single-oracle run (the open route today)")
+    ap.add_argument("--oracle-scope", default="OPEN_CONVERTERS", choices=[x for x in ORACLE_SCOPES if x != "NONE"])
+    ap.add_argument("--excluded", metavar="QUARANTINE_JSON", help="a corpus quarantine.json: its excluded probes have no source.dwg")
+    ap.add_argument("--platform", default="linux/amd64", help="platform the converters ran on, recorded in the report")
     ap.add_argument("--lineage", action="append", default=[], metavar="ID=NAME")
     ap.add_argument("--out", default="reports/phase1/probe-qualification.json")
     ap.add_argument("--resolved")
     a = ap.parse_args(argv)
-    (pid_, pdir), (sid_, sdir) = a.primary, a.secondary
+    (pid_, pdir), (sid_, sdir) = a.primary, a.secondary or (None, None)
     if pid_ == sid_:
         raise SystemExit("--primary and --secondary name the same converter %r: that is one oracle, not two" % pid_)
+    ids = [i for i in (pid_, sid_) if i]
     lin = dict(x.split("=", 1) for x in a.lineage)
-    bad = lineage_problems([{"id": i, "lineage": lin.get(i, "")} for i in (pid_, sid_)])
+    bad = lineage_problems([{"id": i, "lineage": lin.get(i, "")} for i in ids])
     if bad:
         raise SystemExit(bad[0])
+    if a.oracle_scope == "OPEN_CONVERTERS":
+        named = [i for i in ids + [lin[i] for i in ids] if VENDOR_NAME.search(i)]
+        if named:
+            raise SystemExit("oracle scope OPEN_CONVERTERS never names a vendor, but %r does (ADR 0009)" % named[0])
     pol = numeric.load_policy()
     probes = {}
     for f in sorted(Path(a.probes).rglob("expected.math.json")):
         d = em.load(f)
         probes[d["fixture_id"]] = d
     resolved = json.loads(Path(a.resolved).read_text()) if a.resolved else []
-    outputs_for = lambda pid: {pid_: load_outputs(pdir, pid, "primary"), sid_: load_outputs(sdir, pid, "secondary")}  # noqa: E731
-    rep = build_report(pol, probes, outputs_for, resolved)
-    rep["lineages"] = {pid_: lin[pid_], sid_: lin[sid_]}
+    def outputs_for(pid):
+        out = {pid_: load_outputs(pdir, pid, "primary")}
+        if sid_:
+            out[sid_] = load_outputs(sdir, pid, "secondary")
+        return out
+    no_source = {}
+    if a.excluded:
+        no_source = {e["id"]: "%s: %s" % (e["reason"], e["evidence"]) for e in json.loads(Path(a.excluded).read_text())["excluded"]}
+    rep = build_report(pol, probes, outputs_for, resolved, no_source)
+    rep["lineages"] = {i: lin[i] for i in ids}
+    rep["oracle_scope"] = a.oracle_scope
+    rep["platform"] = a.platform
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     Path(a.out).write_text(json.dumps(rep, indent=2) + "\n")
     for r in rep["capabilities"]:
-        print("%-18s %-10s %s=%-32s %s=%-32s %s" % (r["capability"], r["status"], pid_, r["by_converter"][pid_], sid_, r["by_converter"][sid_], "; ".join(r["reasons"])))
+        print("%-18s %-10s %s  %s" % (r["capability"], r["status"], "  ".join("%s=%s" % kv for kv in r["by_converter"].items()), "; ".join(r["reasons"])))
     return 0
 
 

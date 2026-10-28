@@ -1,6 +1,6 @@
 # ADR 0005: numeric policy adoption
 
-Status: proposed, frozen by the phase 1 exit gate. Panel finding answered: 7.
+Status: frozen at the phase 1 exit gate (open route, 2026-10-28). Panel finding answered: 7.
 
 ## Context
 

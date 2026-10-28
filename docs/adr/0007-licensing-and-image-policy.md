@@ -1,6 +1,7 @@
 # ADR 0007: licensing and image policy
 
-Status: proposed, frozen by the phase 1 exit gate. Panel finding answered: 9.
+Status: frozen at the phase 1 exit gate (open route, 2026-10-28). The vendor image checks it asks for have not run, because there
+is no licence here; they are listed in `docs/vendor-deferred.md`. Panel finding answered: 9.
 
 ## Context
 

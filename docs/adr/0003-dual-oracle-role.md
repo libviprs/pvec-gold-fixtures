@@ -1,6 +1,7 @@
 # ADR 0003: the role of the dual oracle
 
-Status: proposed, frozen by the phase 1 exit gate. Panel finding answered: 1, with 3 and 4.
+Status: frozen at the phase 1 exit gate (open route, 2026-10-28). The open route has one converter so far, so nothing is
+`DUAL_ORACLE_EQUIVALENT` yet; the second oracle is tracked in `docs/vendor-deferred.md`. Panel finding answered: 1, with 3 and 4.
 
 ## Context
 
