@@ -53,3 +53,12 @@ class Record(unittest.TestCase):
     def test_it_pins_the_images_by_id_not_by_registry(self):
         self.assertRegex(self.text, r"sha256:[0-9a-f]{64}")
         self.assertNotIn("ghcr.io", self.text.replace("ghcr.io/libviprs/pvec-gold-dwg2step-acadsharp", ""))
+
+
+class RunnerEnvironment(unittest.TestCase):
+    def test_the_runner_sees_the_libredwg_image_choice(self):
+        # runner.generate calls `docker compose config` from inside the container, so a LIBREDWG_IMAGE set on
+        # the host only counts if compose hands it on
+        s = service("fixture-runner")
+        self.assertRegex(s, r"LIBREDWG_IMAGE: \$\{LIBREDWG_IMAGE:-[^}]+\}")
+        self.assertRegex(s, r"LIBREDWG_PLATFORM: \$\{LIBREDWG_PLATFORM:-[^}]+\}")
