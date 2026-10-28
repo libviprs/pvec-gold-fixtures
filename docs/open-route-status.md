@@ -17,7 +17,7 @@ The open-route version mutates the expected and evaluator records (`tests/test_p
 ## Corpus gaps
 
 - `shear-001` and `general-affine-001` have no DWG, because a single INSERT cannot carry shear. Chain probes and profile-only tags are #69. `singular-001` needs a writer that stores a zero scale, which is #70. Until then `affine_transform` stays `BLOCKED`.
-- The converters refuse all three real-world drawings in `r1-open` (inches and feet, fit-point-only splines), so none can be `DUAL_ORACLE_EQUIVALENT`. Lifting that is #68.
+- Both converters now convert `blocks-dynamic-linear-001` (inches, scaled to metre) and `general-sample-ac1032-001` (inches, one fit-point-only spline skipped per entity). `arch-aecobjects-001` still exits 15 in both: its only model-space entity is an AEC wall object, and the lines and polylines sit in blocks nothing inserts, so there is no curve to write. The `r1-open` records under `fixtures/real-world/` are the frozen run with the old converter and are re-recorded by the next revision, not here.
 - The real-world set is three public drawings. More from openly licensed sources is #76. AutoCAD-written bytes enter only through that set, with provenance.
 - `r0-open` is written by acadrust only. A second family, ACadSharp's `DwgWriter`, is in `corpus/writers/acadsharp`, and LibreDWG's R2000 and R2004 writer is #72. Every `r1-open` DWG regenerates byte for byte.
 
