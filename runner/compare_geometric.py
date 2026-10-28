@@ -34,6 +34,10 @@ SCHEMA_VERSION = "pvec-gold/geometric-report/1"
 UNSUPPORTED, MISSING = "UNSUPPORTED", "MISSING"
 H = 1.0 / 1024            # unit-parameter step of the finite-difference stencils; their own error is measured and recorded
 ARC_N = 2048
+# A signature writes derived values (ends, samples) to 12 significant digits, so each coordinate carries up to
+# half a unit of the last kept digit (normalize.DERIVED_DIGITS). Positional quantities are admitted within the policy tolerance plus that, recorded as
+# signature_rounding, so a drawing at 1e8 metres is not called an approximation for digits it was never given.
+SIGNATURE_ROUNDING = 3.0 ** 0.5 * 0.5 * 10.0 ** (1 - normalize.DERIVED_DIGITS)
 CLOSED_FORM_CURVATURE = ("line", "circle", "circular_arc")
 
 
@@ -85,7 +89,7 @@ def bounds_quantity(want, got, tol_for):
             if d >= worst:
                 worst, at = d, want[a][side][1]
     mag = max(abs(w[s][0]) for w in want for s in (0, 1))
-    return q("bounds", worst, "metre", at, tol_for(mag))
+    return q("bounds", worst, "metre", at, tol_for(mag) + SIGNATURE_ROUNDING * mag, signature_rounding=SIGNATURE_ROUNDING * mag)
 
 
 # ---- derivatives -----------------------------------------------------------------------------------------
@@ -150,6 +154,10 @@ def nearest_unit(p, point):
     return (a + b) / 2
 
 
+def is_identity(m16):
+    return not m16 or all(abs(x - (1.0 if i % 5 == 0 else 0.0)) == 0.0 for i, x in enumerate(m16))
+
+
 def derivative_quantities(pol, v, local, produced, flip):
     """Tangent and curvature at the signature's samples. Returns (quantities, excluded samples)."""
     qs, excluded = [], []
@@ -174,11 +182,11 @@ def derivative_quantities(pol, v, local, produced, flip):
                     t = [-x for x in t]
                 dev = curves.dist(t, got)
                 err = curves.dist(t, [-x for x in t2] if flip else t2)
-                qs.append(q("tangent", dev, "dimensionless (unit vector)", u, pol.tol(1.0, 1.0), estimator_error=err))
+                qs.append(q("tangent", dev, "dimensionless (unit vector)", u, pol.tol(1.0, 1.0) + err, estimator_error=err))
             else:
                 if v["class"] == "line":
                     k0, err = 0.0, 0.0
-                elif v["class"] in ("circle", "circular_arc"):
+                elif v["class"] in ("circle", "circular_arc") and is_identity(local.m):
                     k0, err = 1.0 / canon.check_scalar(v["geometry"]["radius"]), 0.0
                 else:
                     k0 = curvature(local, u, H)
@@ -207,16 +215,19 @@ def compare_pair(pol, ent_id, v, produced, j):
     rev = max(curves.dist(s0, a1), curves.dist(s1, a0))
     reversed_ = rev < fwd
     b0, b1 = (a1, a0) if reversed_ else (a0, a1)
-    qs = [q("endpoint_start", curves.dist(s0, b0), "metre", 0.0, tol), q("endpoint_end", curves.dist(s1, b1), "metre", 1.0, tol)]
+    rnd = SIGNATURE_ROUNDING * mag
+    qs = [q("endpoint_start", curves.dist(s0, b0), "metre", 0.0, tol + rnd, signature_rounding=rnd),
+          q("endpoint_end", curves.dist(s1, b1), "metre", 1.0, tol + rnd, signature_rounding=rnd)]
     d1, at1, st1, l1 = deviation(pol, pe, [ps], scale)
     d2, at2, st2, l2 = deviation(pol, ps, [pe], scale)
     (dev, at, stable, lvl), side = ((d1, at1, st1, l1), "EXPECTED_TO_PRODUCED") if d1 >= d2 else ((d2, at2, st2, l2), "PRODUCED_TO_EXPECTED")
-    qs.append(q("curve_deviation", dev, "metre", at, tol, converged=stable, refinement_level=lvl,
+    qs.append(q("curve_deviation", dev, "metre", at, tol + rnd, signature_rounding=rnd, converged=stable, refinement_level=lvl,
                 sample_count=2 + 8 * 2 ** (lvl - 1), measured_in=side))
     le, ee = arc_length(pe)
     lp, ep = arc_length(ps)
-    qs.append(q("arc_length", abs(le - lp), "metre", 1.0, pol.tol(max(le, lp), max(le, lp)) + ee + ep, estimator_error=ee + ep))
-    dq, excluded = derivative_quantities(pol, v, placed(v, True), produced, reversed_)
+    qs.append(q("arc_length", abs(le - lp), "metre", 1.0, pol.tol(max(le, lp), max(le, lp)) + ee + ep + 2 * rnd,
+                signature_rounding=2 * rnd, estimator_error=ee + ep))
+    dq, excluded = derivative_quantities(pol, v, pe, produced, reversed_)
     qs += dq
     base.update(equivalent=all(x["admitted"] for x in qs), direction="REVERSED" if reversed_ else "SAME", quantities=qs,
                 samples_excluded=excluded,
@@ -254,26 +265,33 @@ def compare_views(pol, fixture_id, ids, views, sig):
         scale = max(numeric.feature_scale(core(v)) for v in views)
         mag = max(abs(c) for p in pes + pss for pt in p.samples() for c in pt)
         tol = pol.tol(scale, mag)
-        fixture_q.append(bounds_quantity(union_extent(pes), union_extent(pss), lambda m: pol.tol(scale, m)))
+        every = [placed(e) for e in produced] if left else pss   # a split polyline: all of its pieces, not the one that got paired
+        fixture_q.append(bounds_quantity(union_extent(pes), union_extent(every), lambda m: pol.tol(scale, m)))
         if left or any(not r["matched"] for r in rows):   # counts differ: the sets are compared as sets
             pl = [placed(produced[j]) for j in range(len(produced))]
             pe_all = [placed(v) for v in views]
             ex = [deviation(pol, p, pl, scale) for p in pe_all] + [deviation(pol, p, pe_all, scale) for p in pl]
             dev, at, stable, lvl = max(ex, key=lambda x: x[0])
-            fixture_q.append(q("union_curve_deviation", dev, "metre", at, tol, converged=stable, refinement_level=lvl,
+            fixture_q.append(q("union_curve_deviation", dev, "metre", at, tol + SIGNATURE_ROUNDING * mag,
+                               signature_rounding=SIGNATURE_ROUNDING * mag, converged=stable, refinement_level=lvl,
                                sample_count=2 + 8 * 2 ** (lvl - 1)))
-    allq = [x for r in rows for x in r["quantities"]] + fixture_q
+    as_sets = bool(left or any(not r["matched"] for r in rows)) and any(x["quantity"] == "union_curve_deviation" for x in fixture_q)
+    # A polyline the converter wrote as several lines has no single produced entity to hold it against: the first
+    # line's ends are not the polyline's. The sets are compared (both directions, bounds), and the per-entity
+    # quantities that cannot mean anything across a split are reported but do not decide the class.
+    decisive = fixture_q if as_sets else [x for r in rows for x in r["quantities"]] + fixture_q
+    allq = decisive
     if not produced:
         klass = MISSING
     elif any(r.get("error") for r in rows):
         klass = UNSUPPORTED
-    elif allq and all(x["admitted"] for x in allq) and (all(r["matched"] for r in rows) or any(x["quantity"] == "union_curve_deviation" for x in fixture_q)) and not (left and not fixture_q):
+    elif allq and all(x["admitted"] for x in allq) and (all(r["matched"] for r in rows) or as_sets) and not (left and not fixture_q):
         klass = GEOMETRIC
     else:
         klass = BOUNDED
     rep = {"schema_version": SCHEMA_VERSION, "fixture_id": fixture_id, "numeric_policy_version": pol.version,
            "signature_schema_version": sig["schema_version"], "stage": {"name": "compare_geometric", "architecture": platform.machine()},
-           "class": klass, "unmatched_produced": left, "entities": rows, "fixture_quantities": fixture_q}
+           "class": klass, "compared_as_sets": as_sets, "unmatched_produced": left, "entities": rows, "fixture_quantities": fixture_q}
     if klass == BOUNDED:
         rep["bound"] = max([x["deviation"] for x in allq] or [0.0])
     return rep
