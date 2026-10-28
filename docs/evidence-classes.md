@@ -3,12 +3,15 @@
 The four classes are defined once, in [ADR 0001](adr/0001-evidence-classes.md), and this page does not redefine
 them. It says how to read them, and what two extra fields (ADR 0008 and ADR 0009) add.
 
-| class | read it as |
-|---|---|
-| `KNOWN_TRUTH_EXACT` | the expected mathematics was authored before any DWG or converter existed, and the thing under test agrees with it. The only class that supports an "exact" claim. |
-| `DUAL_ORACLE_EQUIVALENT` | two converters, read by the one independent evaluator, agree. This is interoperability and regression value. **Converter agreement is never source truth**, and no document here calls a fixture exact because two tools agreed. |
-| `REAL_WORLD_DIFFERENTIAL` | a real drawing kept to spot differences between providers. It carries a licence verdict. |
-| `QUARANTINED` | not to be relied on, with a named reason that is never "unknown" ([acceptance-and-quarantine.md](acceptance-and-quarantine.md)). |
+- **`KNOWN_TRUTH_EXACT`** reads as: the expected mathematics was authored before any DWG or converter existed,
+  and the thing under test agrees with it. It is the only class that supports an "exact" claim.
+- **`DUAL_ORACLE_EQUIVALENT`** reads as: two converters, read by the one independent evaluator, agree. That is
+  interoperability and regression value. Converter agreement is never source truth, and no document here
+  calls a fixture exact because two tools agreed.
+- **`REAL_WORLD_DIFFERENTIAL`** reads as: a real drawing kept to spot differences between providers. It
+  carries a licence verdict.
+- **`QUARANTINED`** reads as: not to be relied on, with a named reason that is never "unknown"
+  ([acceptance-and-quarantine.md](acceptance-and-quarantine.md)).
 
 ## Two fields that bound a class
 
@@ -29,6 +32,7 @@ and none is `VENDOR_CONVERTERS`.
 - Exactness has two parts, structure and geometry, and the conformance classes for them (structural
   exactness, geometric exactness, display fidelity) belong to EPIC P in `libviprs/pvec#1`. I cite them and
   never redefine them.
-- A display-fidelity result is never called mathematically exact, anywhere in this repository.
+- A display-fidelity result is never called
+  exact, in any sense, anywhere in this repository.
 - Where the evaluator compares evaluated values, the thresholds come from the adopted numeric policy
   ([numeric-policy.md](numeric-policy.md)), not from this repository.
