@@ -1,0 +1,1 @@
+{"id":"arc-seam-001","kind":"circular_arc","description":"A counter-clockwise arc from 5.5 rad with a sweep of 1.5 rad, so it ends at 7.0 rad and crosses the 0/2pi seam (2pi is about 6.2832).","center":["0","0","0"],"radius":"3","start_angle":"5.5","sweep_angle":"1.5"}

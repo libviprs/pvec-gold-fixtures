@@ -1,0 +1,33 @@
+{
+  "family": "acadsharp",
+  "own_reader": "ACadSharp",
+  "writer_source": "https://github.com/DomCR/ACadSharp at d7dc111023477d8a9fffc2153139459c95b4f345 (upstream 3.7.1, built from source, JIT), DwgWriter, via tools/corpus/writer-acadsharp. The writer takes every number from the f64_hex fields of the authored expected.math.json records and the decimal strings of the parameter files, as tools/r0-open/rust does for acadrust.",
+  "readers": [
+    {
+      "name": "ACadSharp",
+      "reader": "ACadSharp@3.7.1+d7dc111",
+      "role": "own reader of the writer family",
+      "file": "acadsharp.read.json",
+      "source": "ACadSharp at d7dc111, DwgReader.Read, via tools/r0-open/acadsharp-dump"
+    },
+    {
+      "name": "acadrust",
+      "reader": "acadrust@0.5.5+d35691f",
+      "role": "cross reader (a different writer family's reader)",
+      "file": "acadrust.read.json",
+      "source": "https://github.com/libviprs/acadrust at d35691f483534e4affc3a4065486e168c898ac7d, DwgReader, via tools/r0-open/rust (command read)"
+    },
+    {
+      "name": "LibreDWG",
+      "reader": "LibreDWG",
+      "role": "cross reader (a third, independent lineage)",
+      "file": "libredwg.read.json",
+      "source": "dwgdump from the pvec-oracle-libredwg image (LibreDWG 0.14, dwgread with doubles printed to 17 digits), run as a separate process; the image is used by id and is not built from this repository"
+    }
+  ],
+  "images": {
+    "writer_and_acadsharp_reader": "mcr.microsoft.com/dotnet/sdk:10.0.401-noble sha256:e70cdb7f80b0348f5cb85f19a8f670fca061f033d57eed12fa003d58b0e06317 (linux/amd64, native x86_64 on MARS)",
+    "acadrust_reader": "rust:1.99.1-bookworm sha256:e12566d5abc17a0da741628782cdb504b68b8961f5bfcf677936bf3e8b32de29 (linux/amd64, native x86_64 on MARS)",
+    "libredwg_reader": "pvec-oracle-libredwg local image id sha256:78296435f60a50dccedce277123ce1b3fc4aa1dc1e467d69440401ef0c025221 (linux/amd64, built locally from libviprs/pvec-oracle-libredwg at fc7af29, not published)"
+  }
+}

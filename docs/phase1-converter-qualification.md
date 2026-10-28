@@ -48,6 +48,24 @@ probes that cover it, the report gives the worst class per converter, and a verd
 Blocked capabilities are the explicit phase 2 blockers, and they are reported to EPIC P because they
 bound what v1 can claim. The open-route list is below.
 
+## Discrimination on real converter output
+
+The self-test mutations only prove the evaluator catches a bad hand-written file. `runner/discrimination.py` does the
+same to what the converters actually wrote: it takes the STEP text of the B-spline probes from both open converters
+(`signatures/<probe>/primary.step` for ACadSharp, `fixtures/discrimination/libredwg-dwg2step/` for LibreDWG, with a
+provenance record), changes one curve entity, and runs the result through `step_eval` and the probe classifier.
+
+| mutation | what it does | probes whose class moves, in both converters |
+|---|---|---|
+| `weights-to-1` | every rational weight becomes 1 | `nonunit-weight-001`, `nurbs-d2-offconic-001`, `nurbs-d3-001` (to `BOUNDED_APPROXIMATION`) |
+| `knot-collapse` | the first interior knot is merged into the next one | `bspline-d3-001`, `bspline-d5-001`, `closed-by-endpoint-001`, `nonunit-weight-001`, `nurbs-d2-offconic-001`, `nurbs-d3-001` (to `BOUNDED_APPROXIMATION`) |
+| `reparameterise` | every knot is scaled by 2 | the same eight probes as the structural-exact ones for ACadSharp, seven for LibreDWG (to `GEOMETRIC_EXACT_REPARAMETERIZED`) |
+
+LibreDWG's converter does not write `closed-periodic-001` the way the authored record has it (its plain output is already
+`BOUNDED_APPROXIMATION`), so that probe is the one `reparameterise` cannot move there. `tests/test_discrimination.py` names every
+probe, so a probe that stops being caught, or a new one, fails it. The class checks need the evaluator (`STEP_EVAL`); the
+last run is in `reports/phase1/discrimination.json`.
+
 ## The exit gate
 
 `python3 -m runner.phase1_gate` checks three named things and is green only if all three are:

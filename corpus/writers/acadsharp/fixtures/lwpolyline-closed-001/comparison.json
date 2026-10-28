@@ -1,0 +1,436 @@
+{
+  "checks": {
+    "ACadSharp": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "LWPOLYLINE",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "LWPOLYLINE"
+      },
+      {
+        "expected": 4,
+        "field": "vertex_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 4
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[0].x",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[0].y",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[0].z(elevation)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[0].bulge",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x4014000000000000",
+        "field": "vertex[1].x",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4014000000000000"
+      },
+      {
+        "expected": "0x3fe0000000000000",
+        "field": "vertex[1].y",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[1].z(elevation)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[1].bulge",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x4011000000000000",
+        "field": "vertex[2].x",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4011000000000000"
+      },
+      {
+        "expected": "0x400e000000000000",
+        "field": "vertex[2].y",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x400e000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[2].z(elevation)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[2].bulge",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0xbff0000000000000",
+        "field": "vertex[3].x",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0xbff0000000000000"
+      },
+      {
+        "expected": "0x4004000000000000",
+        "field": "vertex[3].y",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4004000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[3].z(elevation)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[3].bulge",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": true,
+        "field": "closed",
+        "mode": "EXACT",
+        "ok": true,
+        "read": true
+      }
+    ],
+    "LibreDWG": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "LWPOLYLINE",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "LWPOLYLINE"
+      },
+      {
+        "expected": 4,
+        "field": "vertex_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 4
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[0].x",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[0].y",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[0].z(elevation)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[0].bulge",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x4014000000000000",
+        "field": "vertex[1].x",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4014000000000000"
+      },
+      {
+        "expected": "0x3fe0000000000000",
+        "field": "vertex[1].y",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[1].z(elevation)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[1].bulge",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x4011000000000000",
+        "field": "vertex[2].x",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4011000000000000"
+      },
+      {
+        "expected": "0x400e000000000000",
+        "field": "vertex[2].y",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x400e000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[2].z(elevation)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[2].bulge",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0xbff0000000000000",
+        "field": "vertex[3].x",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0xbff0000000000000"
+      },
+      {
+        "expected": "0x4004000000000000",
+        "field": "vertex[3].y",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4004000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[3].z(elevation)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[3].bulge",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": true,
+        "field": "closed",
+        "mode": "EXACT",
+        "ok": true,
+        "read": true
+      }
+    ],
+    "acadrust": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "LWPOLYLINE",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "LWPOLYLINE"
+      },
+      {
+        "expected": 4,
+        "field": "vertex_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 4
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[0].x",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[0].y",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[0].z(elevation)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[0].bulge",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x4014000000000000",
+        "field": "vertex[1].x",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4014000000000000"
+      },
+      {
+        "expected": "0x3fe0000000000000",
+        "field": "vertex[1].y",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[1].z(elevation)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[1].bulge",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x4011000000000000",
+        "field": "vertex[2].x",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4011000000000000"
+      },
+      {
+        "expected": "0x400e000000000000",
+        "field": "vertex[2].y",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x400e000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[2].z(elevation)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[2].bulge",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0xbff0000000000000",
+        "field": "vertex[3].x",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0xbff0000000000000"
+      },
+      {
+        "expected": "0x4004000000000000",
+        "field": "vertex[3].y",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4004000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[3].z(elevation)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[3].bulge",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": true,
+        "field": "closed",
+        "mode": "EXACT",
+        "ok": true,
+        "read": true
+      }
+    ]
+  },
+  "evidence": null,
+  "fixture_id": "lwpolyline-closed-001",
+  "numeric_policy_version": "PVec numeric policy v1",
+  "reader_vs_reader_differences": {},
+  "reason": null,
+  "verdict": "AGREE"
+}
