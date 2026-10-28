@@ -1424,6 +1424,68 @@
     {
       "artifacts": {
         "README.md": {
+          "path": "fixtures/edge/singular-001/README.md",
+          "sha256": "1e5e48771630d6d6df53535de5cb4c0a4a987414500ece5d51e705769a87b14b"
+        },
+        "acadsharp-dwg2step.status.json": {
+          "path": "fixtures/edge/singular-001/acadsharp-dwg2step.status.json",
+          "sha256": "ef483648092c7530ec268bf42e20d29700db49d69ae099fa2987392c54ea2e66"
+        },
+        "comparison.json": {
+          "path": "fixtures/edge/singular-001/comparison.json",
+          "sha256": "63af86007db22356121ef1d15275dee5780bcb1f784410855998110c8c7bff52"
+        },
+        "expected.math.json": {
+          "path": "fixtures/edge/singular-001/expected.math.json",
+          "sha256": "7d260757661b6b396be434d42d04cb4ae3768b1307b86474456512b453b0c32d"
+        },
+        "libredwg-dwg2step.status.json": {
+          "path": "fixtures/edge/singular-001/libredwg-dwg2step.status.json",
+          "sha256": "b7c410adbe16d28ff11c32ea4cf064b9a6c3b83f2413b4429883dfb299560560"
+        },
+        "open-route.json": {
+          "path": "fixtures/edge/singular-001/open-route.json",
+          "sha256": "470a8c2329998db1831d10a882acff1d709d693646801a54f0335059a0ec72d7"
+        },
+        "params.json": {
+          "path": "fixtures/edge/singular-001/params.json",
+          "sha256": "8d221233cb1dac0daa6b69488db3b81dab47d530a927b89aa345fefd6133b5d1"
+        },
+        "read.acadrust.json": {
+          "path": "fixtures/edge/singular-001/read.acadrust.json",
+          "sha256": "cb73a88b26502cb524e947002f4667ad89d12128ee52e6ce500fe699c61c7aea"
+        },
+        "read.acadsharp.json": {
+          "path": "fixtures/edge/singular-001/read.acadsharp.json",
+          "sha256": "01921495315d19d1bf2ee69337a22c5bfd5a8c395607de9fdb0c6bc66f638a7a"
+        },
+        "read.libredwg.json": {
+          "path": "fixtures/edge/singular-001/read.libredwg.json",
+          "sha256": "9a0de5cf866e9e06bf200718b72263c965b9bab3c2d218a190bead47c9bba553"
+        },
+        "source.dwg": {
+          "path": "fixtures/edge/singular-001/source.dwg",
+          "sha256": "1394adbee5a986320b5aa8c035c802c2740782b10db676e3fb9b6e00bbb2d8c8"
+        },
+        "writer.json": {
+          "path": "fixtures/edge/singular-001/writer.json",
+          "sha256": "cbbbfe8ce1f92584f21766bf30d59ee090765a2af4a1ee45e46fbad8bde8a3c7"
+        }
+      },
+      "dwg_version": "AC1032",
+      "dwg_writer": "acadrust@0.5.5+eacbc9f",
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "group": "edge",
+      "id": "singular-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracle_scope": "NONE",
+      "provenance": "SYNTHETIC_AUTHORED",
+      "status": "ACCEPTED"
+    },
+    {
+      "artifacts": {
+        "README.md": {
           "path": "fixtures/edge/tiny-extent-001/README.md",
           "sha256": "4188d9fc604f2518ce423462027771d67aab28f13bc6cf0b0fe466c62058a170"
         },

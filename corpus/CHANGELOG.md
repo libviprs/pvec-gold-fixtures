@@ -13,6 +13,12 @@ Adds fixtures on top of `r0-open` (included by hash) without touching it (issues
   `shear-001` and `general-affine-001` stay as profile-only records with no DWG and the chains are what exercise
   `affine_transform`. The angles and scales are derived values, read back under policy and not exact. Both chains agree
   across the two readers and `acadsharp-dwg2step` lands them in `GEOMETRIC_EXACT_REPARAMETERIZED`. `r0-open` is untouched.
+- `edge` also holds `singular-001` (#70), the first drawing with an INSERT scale of exactly 0.0 (r0-open still lists it as
+  excluded). acadrust's checked setters rewrite the zero to 1e-12, so it is written with `Insert::set_scale_unchecked` from
+  libviprs/acadrust#52 (`tools/corpus/singular`). Three readers return the zero bit for bit and agree: acadrust at that commit,
+  ACadSharp with the converter's zero-scale patch, and LibreDWG's `dwgdump`. `acadsharp-dwg2step` refuses it as
+  `SINGULAR_TRANSFORM` and `libredwg-dwg2step` refuses it too, both with exit 15 and no STEP. `quarantine.json` no longer lists
+  it as excluded, and lists `shear-001` and `general-affine-001` as `PROFILE_ONLY` (see the chain probes above).
 - `degenerate`: a zero-length line, a zero-radius circle and a spline with coincident control points. They are
   `QUARANTINED` by design with an expected refusal. ACadSharp clamps a zero radius up to 1e-12, so the refusal rule
   uses NP-06 and not exact zero.

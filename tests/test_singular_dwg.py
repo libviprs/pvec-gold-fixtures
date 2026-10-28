@@ -1,9 +1,9 @@
 """#70: a DWG for singular-001, the probe no acadrust or ACadSharp writer would store.
 
-A DWG holds an INSERT scale as a plain double, so a file can say 0.0. The writers refuse it (acadrust rewrites it to
-1e-12, ACadSharp throws), so the file comes from LibreDWG's JSON round trip (tools/corpus/singular/make.py), and the
-readers had to be told to report what the file says: acadrust from libviprs/acadrust#52, ACadSharp from
-tools/converters/acadsharp/patches/0001-insert-keep-zero-scale.patch.
+A DWG holds an INSERT scale as a plain double, so a file can say 0.0. The writers refuse it (acadrust's setters rewrite
+it to 1e-12, ACadSharp throws), so the file is written by acadrust at the commit that has Insert::set_scale_unchecked
+(libviprs/acadrust#52, tools/corpus/singular), and the readers had to be told to report what the file says: acadrust
+from the same commit, ACadSharp from tools/converters/acadsharp/patches/0001-insert-keep-zero-scale.patch.
 
 What these tests hold the fixture to: three readers return the 0.0 scale bit for bit, they decode the same record, and
 both converters refuse the drawing with exit 15 and write no STEP.
@@ -42,7 +42,7 @@ class Drawing(unittest.TestCase):
             self.assertTrue((FX / n).is_file(), n)
 
     def test_it_is_a_dwg_with_an_instance_chain_and_the_authored_record(self):
-        self.assertEqual((FX / "source.dwg").read_bytes()[:6], b"AC1018")
+        self.assertEqual((FX / "source.dwg").read_bytes()[:6], b"AC1032")
         self.assertEqual(em.validate_file(FX / "expected.math.json"), [])
         ent = em.load(FX / "expected.math.json")["entities"][0]
         self.assertEqual(ent["rejection"], {"classification": "SINGULAR_TRANSFORM", "disposition": "REJECT"})
@@ -87,25 +87,29 @@ class Drawing(unittest.TestCase):
 
 
 class Provenance(unittest.TestCase):
-    def test_the_dwg_is_near_singular_001_with_one_scale_changed_and_says_so(self):
+    def test_the_writer_record_names_the_tool_the_script_and_the_dwg(self):
         w = load(FX / "writer.json")
-        self.assertEqual(w["derived_from"]["id"], "near-singular-001")
-        self.assertEqual(w["derived_from"]["sha256"], sha(R0 / "source.dwg"))
         self.assertEqual(w["dwg"]["sha256"], sha(FX / "source.dwg"))
-        self.assertEqual(w["dwg"]["version"], "AC1018")
-        self.assertEqual(w["script"], "tools/corpus/singular/make.py")
+        self.assertEqual(w["dwg"]["version"], "AC1032")
+        self.assertEqual(w["script"], "tools/corpus/singular/run.sh")
         self.assertTrue((ROOT / w["script"]).is_file())
-        self.assertIn("dwgwrite", w["tool"])
-        self.assertRegex(w["tool_image"], r"^(sha256:[0-9a-f]{64}|[0-9a-f]{12})$")
+        self.assertIn("set_scale_unchecked", w["tool"])
+        self.assertIn("byte-identical", w["deterministic"])
+        self.assertIn("LibreDWG", w["readers"]["libredwg"]["reader"])
 
     def test_the_acadrust_pin_is_a_full_commit_that_is_not_the_one_that_clamps(self):
         w = load(FX / "writer.json")
-        pin = w["readers"]["acadrust"]
-        self.assertRegex(pin["commit"], r"^[0-9a-f]{40}$")
-        self.assertNotEqual(pin["commit"], "d35691f483534e4affc3a4065486e168c898ac7d")
-        self.assertIn(pin["commit"][:7], load(FX / "read.acadrust.json")["reader"])
-        toml = (ROOT / "tools/corpus/singular/reader/Cargo.toml").read_text()
-        self.assertIn(pin["commit"], toml)
+        self.assertRegex(w["commit"], r"^[0-9a-f]{40}$")
+        self.assertNotEqual(w["commit"], "d35691f483534e4affc3a4065486e168c898ac7d")
+        self.assertIn(w["commit"][:7], load(FX / "read.acadrust.json")["reader"])
+        self.assertEqual(w["writer"], load(FX / "read.acadrust.json")["reader"])
+        self.assertIn(w["commit"], (ROOT / "tools/corpus/singular/tool/Cargo.toml").read_text())
+
+    def test_the_tool_changes_nothing_in_r0_open_main_but_the_ids_and_the_scale_setter(self):
+        b = (ROOT / "tools/corpus/singular/tool/build.rs").read_text()
+        self.assertIn("set_scale_unchecked", b)
+        self.assertIn("insert_for's scale setters moved", b)
+        self.assertEqual((ROOT / "tools/r0-open/rust/Cargo.toml").read_text().count("d35691f483534e4affc3a4065486e168c898ac7d"), 1)
 
     def test_the_acadsharp_patch_removes_only_the_three_zero_guards(self):
         text = PATCH.read_text()
@@ -157,7 +161,8 @@ class Corpus(unittest.TestCase):
         f = [x for x in m["fixtures"] if x["id"] == "singular-001"]
         self.assertEqual(len(f), 1)
         self.assertEqual((f[0]["group"], f[0]["status"], f[0]["evidence_class"]), ("edge", "ACCEPTED", "KNOWN_TRUTH_EXACT"))
-        self.assertEqual(f[0]["dwg_version"], "AC1018")
+        self.assertEqual(f[0]["dwg_version"], "AC1032")
+        self.assertEqual(f[0]["dwg_writer"], load(FX / "writer.json")["writer"])
         q = load(ROOT / "corpus/r1-open/quarantine.json")
         self.assertNotIn("singular-001", [e["id"] for e in q["excluded"]])
 
@@ -173,6 +178,10 @@ class Corpus(unittest.TestCase):
         q = load(ROOT / "corpus/r0-open/quarantine.json")
         self.assertIn("singular-001", [e["id"] for e in q["excluded"]])
         self.assertFalse((R0.parent / "singular-001").exists())
+
+    def test_the_corpus_check_runs_the_three_reader_recomputation(self):
+        from runner import singular_probe
+        self.assertEqual(singular_probe.check(ROOT), [])
 
     def test_the_capability_matrix_lists_it_under_affine_transform(self):
         mat = load(ROOT / "corpus/capability-matrix.json")

@@ -19,6 +19,10 @@ decision and needs a registry session this repository never handles).
   multi-arch index (see the `FROM` lines in `tools/converters/acadsharp/Dockerfile`).
 - ACadSharp: upstream `DomCR/ACadSharp` at `d7dc111023477d8a9fffc2153139459c95b4f345` (3.7.1), the same
   commit the r0-open cross-reader used. The build checks the clone against `ACADSHARP_COMMIT`.
+  One patch goes on top, `tools/converters/acadsharp/patches/0001-insert-keep-zero-scale.patch`: `Insert.cs` throws on a zero
+  scale, a DWG can store one, and upstream master dropped the same guard. Without the patch a drawing that holds a zero scale
+  is refused as `INPUT_MALFORMED` (12) before the flattener sees it. The patch only removes the three guards, so nothing else
+  reads differently. The status record still says `3.7.1+d7dc111`.
 - Policy: `policy/pvec-numeric-policy.v1.json` is copied into the image. The converter reads one number
   from it, `REL`, for the near-singular refusal below, and carries no threshold of its own.
 
@@ -71,8 +75,9 @@ INSERT's normal). Nothing is left as an instance, so STEP's uniform-scale-only
 - A bulge becomes a circular arc through the two vertices. A negative bulge is written counter-clockwise
   from the second vertex to the first, which is the authored "equivalent arc".
 - Polylines arrive as one `LINE` or arc edge per segment, closed ones with the implicit closing segment.
-- Refused with exit 15: an INSERT chain whose composed 2D map has `|ad - bc| <= REL * big^2` (NP-19), named
-  `NEAR_SINGULAR_TRANSFORM` in the message; MINSERT arrays; nesting deeper than 64 or a block that contains
+- Refused with exit 15: an INSERT chain whose composed 2D map has a determinant of exactly zero, named
+  `SINGULAR_TRANSFORM` in the message (singular-001), or one with `|ad - bc| <= REL * big^2` (NP-19), named
+  `NEAR_SINGULAR_TRANSFORM`; MINSERT arrays; nesting deeper than 64 or a block that contains
   itself; a spline with fit points only.
 - Other entity types (text, hatches, dimensions) are skipped, and the count per type goes into `warnings`.
   The r0-open probes contain none.
