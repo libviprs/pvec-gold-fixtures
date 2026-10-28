@@ -48,3 +48,40 @@ The cpu limit is the one setting the numbers justify (a single cpu starves the r
 - Parallelism 8 is a recommendation for the host measured; it is a flag, not a constant, because the best value depends on the cores of the host.
 
 `runner/generate.py` (issue 13) still converts one fixture at a time through compose; moving it onto the scheduler is the next step and is not done here.
+
+<!-- second-converter -->
+## Both converters
+
+Issue 77. The same harness (`bench/orchestration/run.py`, through `runner.regenerate`), host `mars`, **native x86_64**, 3 repeats, per-container limits 2 cpus; ACadSharp at 256m, `libredwg-dwg2step` at 512m (the compose limits). Wall time to convert, evaluate and normalise the 30 `r0-open` DWGs:
+
+| parallelism | acadsharp-dwg2step median wall (s) | fixtures per second | libredwg-dwg2step median wall (s) | fixtures per second |
+|---|---|---|---|---|
+| 1 | 17.80 | 1.7 | 17.25 | 1.7 |
+| 2 | 9.41 | 3.2 | 6.30 | 4.8 |
+| 4 | 4.91 | 6.1 | 3.22 | 9.3 |
+| 8 | 2.62 | 11.4 | 2.00 | 15.0 |
+
+## libredwg-dwg2step
+
+Image `g77-libredwg:local` (`sha256:df38155d4d343f75e465e8c190f8734a7b83de1f261849f0377a31a544f970c5`). Raw record: `reports/bench/libredwg-orchestration.json`. Step_eval ran from the step-validator test image (local tag g77-stepval:amd64, id sha256:b2d9634dbed9).
+
+**Chosen: parallelism 8** (2.00 s for the corpus, 15.0 fixtures per second), the smallest value within 10% of the best. **Cap: 8** in `docker/converter-limits.json`. I set the cap to 8, the top of the range I measured. Wall time still falls at 8 (see the table), so the cap and not the host bounds throughput, and I did not measure above it. No licence is involved.
+
+**Memory**: largest fixture `large-coords-001`, peak 11.4 MiB in the cgroup and 18.7 MiB resident. The limit is **512 MiB** (`mem_limit` of the `libredwg-converter` service), about 45x the cgroup peak; 0 containers were OOM-killed. That is generous for these probes, and a real drawing needs its own measurement, so I did not lower it.
+
+Cpu limit, four-fixture subset (`line-001,nurbs-d3-001,nested-blocks-001,polyline-001`, 9 repeats), median over the fixtures, ms:
+
+| setting | conversion | total (`docker run`) |
+|---|---|---|
+| unlimited | 30 | 202 |
+| cpus_1 | 30 | 182 |
+| cpus_2 | 30 | 189 |
+| cpus_4 | 32 | 206 |
+
+The converter is single threaded, so a cpu limit changes nothing measurable (differences are inside the spread). I kept 2, as for the other converter, because a second cpu is what `dwgread` and the python start would use if they overlapped, and it costs nothing here. There are no runtime switches to try.
+
+- **Resume**: a parallelism-4 run interrupted with SIGINT after 8 fixtures were done; the rerun skipped 8 and regenerated 22. Untouched fixtures hashed identically before and after: **True**.
+- **Teardown under parallelism**: a parallelism-8 run aborted with SIGINT left 0 labelled containers, 0 new `gold-` containers and 0 volumes labelled by the run. `mars` is shared, so I count only what the runner names or labels; a raw before and after diff of the host would count other people's containers.
+- **Refusal**: `near-singular-001` is refused by both converters with `NEAR_SINGULAR_TRANSFORM` (exit 15) and recorded as refused, not failed. Unexpected failures: 0.
+- `runner.regenerate --converter libredwg-dwg2step --converter-image IMAGE` runs the binary `dwg2step` of the image (it has no entrypoint) and defaults to 512m.
+<!-- /second-converter -->

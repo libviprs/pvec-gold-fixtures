@@ -13,7 +13,7 @@ Issue 20 (O3.2). Measured by `bench/validation/run.py` inside the step-validator
 | normalise | `runner.normalize` plus the schema and scalar checks on the signature |
 | structural | `runner.structural.structural_diff` of the derived signature against the frozen one, entity by entity |
 | report | building and serialising the comparison report |
-| adaptive_geometric | **not measured**: no adaptive geometric comparison stage exists in this repository (O2.5 and O2.6 are not built), so there is no converged sample count to report. Listed in `docs/open-route-status.md` as waiting on that work |
+| compare_geometric | `runner.compare_geometric.compare` of the frozen signature against the fixture's known truth (`expected.math.json`): endpoints, adaptive curve deviation, bounding box, arc length, tangent and curvature. Timed on its own by `bench/validation/geometric.py`, see the section below |
 
 ## Per fixture (median ms)
 
@@ -108,3 +108,47 @@ Those are the measurements as taken at the time. Issue 74 then split the contrac
 ## Drift check, exercised
 
 `python3 -m runner.verify_signatures signatures` on native x86_64: 29 of 29 signatures re-derived identically. With one `f64_hex` of `line-001` changed (manifest rewritten to match, so only the re-derivation can notice) it exits 1 and prints `DRIFT line-001: entities[0].geometry.start[0]`. On native arm64 against the x86_64 set it reports the divergences above (19 of 29 identical).
+
+<!-- compare-geometric -->
+## compare_geometric
+
+Issue 77. `runner.compare_geometric.compare` against each fixture's known truth, timed on its own by `bench/validation/geometric.py` (7 repeats per fixture, the comparison alone with the inputs already parsed, no OCCT). Raw record: `reports/bench/geometric.json`. **native x86_64** on `mars` and **native arm64** on `mercury`, no emulation, over the 29 accepted fixtures.
+
+This stage is adaptive (the curve deviation is refined until the estimate is stable by the numeric policy), so its cost follows the curve and not just the entity count. Over all fixtures the medians sum to **9.40 s** native x86_64 and 9.91 s native arm64, against 0.75 s for the load, normalise, structural and report stages together on x86_64, so it is the dominant stage of a full comparison. The deepest refinement any quantity needed was level 6. The verdict is the same on both architectures for every fixture: yes.
+
+Classes over the 29 fixtures: 14 BOUNDED_APPROXIMATION, 15 GEOMETRIC_EXACT_REPARAMETERIZED. A `BOUNDED_APPROXIMATION` here means the stage measured a bound; this page times the stage and does not argue about those verdicts.
+
+| fixture | x64 median ms | x64 iqr | arm64 median ms | arm64 iqr | entities | quantities | deepest refinement (samples) | class |
+|---|---|---|---|---|---|---|---|---|
+| arc-seam-001 | 147 | 4 | 155 | 2 | 1 | 35 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| bezier-d3-001 | 329 | 3 | 347 | 1 | 1 | 35 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| bspline-d3-001 | 367 | 2 | 385 | 3 | 1 | 39 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| bspline-d5-001 | 626 | 3 | 684 | 8 | 1 | 41 | level 2 (18) | BOUNDED_APPROXIMATION |
+| bulge-arc-001 | 494 | 4 | 506 | 1 | 1 | 36 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| bulge-arc-neg-001 | 491 | 4 | 507 | 1 | 1 | 36 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| circle-001 | 151 | 1 | 156 | 1 | 1 | 35 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| closed-by-endpoint-001 | 368 | 5 | 386 | 3 | 1 | 35 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| closed-periodic-001 | 369 | 2 | 389 | 3 | 1 | 43 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| ellipse-001 | 150 | 1 | 162 | 2 | 1 | 35 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| elliptical-arc-001 | 150 | 1 | 160 | 0 | 1 | 35 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| large-coords-001 | 513 | 3 | 541 | 2 | 3 | 20 | level 2 (18) | BOUNDED_APPROXIMATION |
+| layer-state-001 | 417 | 37 | 437 | 1 | 3 | 103 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| line-001 | 138 | 2 | 147 | 1 | 1 | 35 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| lwpolyline-closed-001 | 949 | 6 | 994 | 3 | 4 | 36 | level 6 (258) | BOUNDED_APPROXIMATION |
+| nested-blocks-001 | 137 | 4 | 147 | 2 | 1 | 11 | level 2 (18) | BOUNDED_APPROXIMATION |
+| nonuniform-scale-circle-001 | 150 | 3 | 161 | 2 | 1 | 35 | level 2 (18) | BOUNDED_APPROXIMATION |
+| nonuniform-scale-rotated-001 | 164 | 31 | 162 | 2 | 1 | 39 | level 2 (18) | BOUNDED_APPROXIMATION |
+| nonunit-weight-001 | 270 | 3 | 282 | 2 | 1 | 35 | level 2 (18) | BOUNDED_APPROXIMATION |
+| nurbs-d2-offconic-001 | 271 | 2 | 289 | 4 | 1 | 35 | level 2 (18) | BOUNDED_APPROXIMATION |
+| nurbs-d3-001 | 367 | 2 | 395 | 6 | 1 | 39 | level 2 (18) | BOUNDED_APPROXIMATION |
+| polyline-001 | 644 | 5 | 680 | 4 | 4 | 36 | level 2 (18) | BOUNDED_APPROXIMATION |
+| polyline2d-001 | 647 | 6 | 682 | 5 | 4 | 36 | level 2 (18) | BOUNDED_APPROXIMATION |
+| reflection-001 | 149 | 3 | 155 | 1 | 1 | 5 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| repeated-knot-c0-001 | 368 | 5 | 386 | 1 | 1 | 33 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| rotation-irrational-001 | 140 | 1 | 147 | 1 | 1 | 35 | level 2 (18) | BOUNDED_APPROXIMATION |
+| tiny-radius-001 | 149 | 1 | 156 | 2 | 1 | 35 | level 2 (18) | BOUNDED_APPROXIMATION |
+| translation-001 | 139 | 6 | 149 | 1 | 1 | 21 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| uniform-scale-001 | 148 | 1 | 159 | 2 | 1 | 39 | level 2 (18) | BOUNDED_APPROXIMATION |
+
+Five most expensive on x86_64: lwpolyline-closed-001 (949 ms), polyline2d-001 (647 ms), polyline-001 (644 ms), bspline-d5-001 (626 ms), large-coords-001 (513 ms).
+<!-- /compare-geometric -->

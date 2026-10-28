@@ -21,7 +21,7 @@ case $host in
   *) echo "host?" >&2; exit 2 ;;
 esac
 plat=linux/$arch
-vol=gold-bench-20-$arch
+vol=${GOLD_BENCH_VOL:-gold-bench-20-$arch}   # GOLD_BENCH_VOL keeps parallel jobs off each other's tree
 drv=gold-acs-driver:$arch
 r() { "${ssh[@]}" "$cfg $*"; }
 case $cmd in

@@ -79,10 +79,10 @@ class Validation(unittest.TestCase):
             for e in r["most_expensive"]:
                 self.assertTrue(e["reason"])
 
-    def test_the_adaptive_geometric_stage_is_reported_as_absent_with_its_reason(self):
+    def test_the_geometric_stage_is_listed_as_a_timed_stage_not_as_absent(self):
         rep = load("validation.json")
-        self.assertIn("adaptive_geometric", rep["not_measured"])
-        self.assertIn("adaptive_geometric", read("validation.md"))
+        self.assertNotIn("adaptive_geometric", rep["not_measured"])
+        self.assertIn("compare_geometric", read("validation.md"))
 
     def test_signatures_and_verdicts_are_compared_across_architectures(self):
         x = load("validation.json")["cross_architecture"]
@@ -120,7 +120,7 @@ class Orchestration(unittest.TestCase):
 
     def test_the_open_route_status_covers_the_benchmarks(self):
         t = (ROOT / "docs" / "open-route-status.md").read_text()
-        self.assertIn("#77", t)
+        self.assertIn("docs/benchmarks", t)
         self.assertIn("libredwg", t.lower())
 
 
