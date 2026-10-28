@@ -1,5 +1,7 @@
 # Final corpus audit: r0-open
 
+> This is the dated record of `r0-open`. The vendor rows were retired by ADR 0010, and the audit for the two-oracle revision is `reports/final-audit-r2-open.md`.
+
 I walked the four registers once by hand before the freeze. The scope is the open route (`oracle_scope: NONE` on the
 corpus, one open converter behind the STEP files), because nothing else exists here; what is still open is in
 [docs/open-route-status.md](../docs/open-route-status.md).

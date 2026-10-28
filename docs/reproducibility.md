@@ -91,3 +91,25 @@ shipped `step/*.step` carry that literal. The signature hashes are the same as i
 The same procedure with the LibreDWG converter added as the secondary is tracked in
 [open-route-status.md](open-route-status.md). Its image is consumed by digest
 ([converters/images-and-setup.md](converters/images-and-setup.md)).
+
+
+## r2-open: the two-converter clean-host run (#78)
+
+`tools/clean_host_r2.sh mars|mercury` does for `r2-open` what `tools/clean_host.sh` does for `r0-open`, with `runner.r2_open run` as the
+one command. The daemon is a throw-away docker-in-docker with no images. It builds the validator and the ACadSharp converter from
+pinned inputs and builds a fixture-runner driver. The LibreDWG image is GPL and is built in `libviprs/pvec-oracle-libredwg`, so it
+reaches the clean daemon by `docker save | docker load` from a local image (`LIBREDWG_LOCAL=...`) and is used by id. Nothing is
+pushed and no credential is involved.
+
+The command stages the DWGs of `r0-open` and `r1-open`, runs `runner.generate` (both converters, the evaluator, normalise, compare, with
+the leak check) twice, compares the two runs artifact by artifact (only the STEP time stamp and the converters' clocks may differ),
+builds `corpus/r2-open`, builds the release `corpus/release/r2-open-1`, verifies it, and writes the capability table
+(`reports/r2-open/probe-qualification.json`) from the two converters' outputs.
+
+| run | host | result | fixtures | notes |
+|---|---|---|---|---|
+| x64 | mars, native x86_64 | PASS | 59 | no unlisted divergence between the two runs; the release verifies |
+| arm64 | mercury, native arm64 | PASS | 59 | same; all 41 fixtures with STEP have the same STEP hashes as x64, and 14 of 39 signatures differ in the last digits |
+
+The records are `reports/reproducibility.r2-open.x64.json` and `reports/reproducibility.r2-open.arm64.json`. The release is the
+x86_64 set, as `r0-open-1` was.

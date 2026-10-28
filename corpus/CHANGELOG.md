@@ -1,5 +1,80 @@
 # corpus changelog
 
+## r2-open (candidate)
+
+The first `STEP_ORACLE` revision (#78). It holds the 59 fixtures of `r1-open` (which lists `r0-open`'s) with the result of running both open converters, `acadsharp-dwg2step` and `libredwg-dwg2step`, over each, in a clean docker daemon (`tools/clean_host_r2.sh`). `oracle_scope` is `OPEN_CONVERTERS`. Nothing earlier is edited: `r0-open` and `r1-open` stay as they were, and `r2-open` points at their DWGs.
+
+A fixture moves only when the run backs it. A probe with a known truth moves to `STEP_ORACLE` when both converters' output is exact or the same geometry. A fixture that is refused by design keeps `QUARANTINED` and moves its scope to `STEP_ORACLE` when both converters refused it. A real-world drawing becomes `DUAL_ORACLE_EQUIVALENT` when both converted it and the signatures agree. Everything else keeps its class and scope and the table says why. The real-world fixtures were recorded again with the inch and foot scaling in both converters (#67, #68).
+
+<!-- r2-open-moves -->
+Run counts: 59 fixtures, 51 changed class or scope, 8 kept with a reason, 0 unchanged.
+
+| fixture | from | to |
+|---|---|---|
+| `arc-seam-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `arc-tiny-sweep-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `bezier-d3-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `blocks-dynamic-linear-001` | REAL_WORLD_DIFFERENTIAL / READER_CENSUS_ONLY | DUAL_ORACLE_EQUIVALENT / STEP_ORACLE |
+| `bspline-d3-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `bspline-d5-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `bspline-nonunit-domain-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `bulge-arc-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `bulge-arc-neg-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `circle-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `closed-by-endpoint-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `closed-periodic-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `dimension-001` | QUARANTINED / CLASSIFICATION_EXPECTED | QUARANTINED / STEP_ORACLE |
+| `ellipse-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `elliptical-arc-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `empty-001` | QUARANTINED / CLASSIFICATION_EXPECTED | QUARANTINED / STEP_ORACLE |
+| `general-affine-chain-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `hatch-001` | QUARANTINED / CLASSIFICATION_EXPECTED | QUARANTINED / STEP_ORACLE |
+| `hatch-gradient-001` | QUARANTINED / CLASSIFICATION_EXPECTED | QUARANTINED / STEP_ORACLE |
+| `huge-extent-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `image-001` | QUARANTINED / CLASSIFICATION_EXPECTED | QUARANTINED / STEP_ORACLE |
+| `large-coords-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `line-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `lwpolyline-closed-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `mesh-001` | QUARANTINED / CLASSIFICATION_EXPECTED | QUARANTINED / STEP_ORACLE |
+| `mtext-001` | QUARANTINED / CLASSIFICATION_EXPECTED | QUARANTINED / STEP_ORACLE |
+| `near-singular-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `nested-blocks-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `nonuniform-scale-circle-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `nonuniform-scale-rotated-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `nonunit-weight-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `nurbs-d2-offconic-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `nurbs-d3-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `ole-001` | QUARANTINED / CLASSIFICATION_EXPECTED | QUARANTINED / STEP_ORACLE |
+| `polyline-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `polyline2d-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `proxy-001` | QUARANTINED / CLASSIFICATION_EXPECTED | QUARANTINED / STEP_ORACLE |
+| `reflection-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `region-001` | QUARANTINED / CLASSIFICATION_EXPECTED | QUARANTINED / STEP_ORACLE |
+| `repeated-knot-c0-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `rotation-irrational-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `shear-chain-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `singular-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `solid3d-001` | QUARANTINED / CLASSIFICATION_EXPECTED | QUARANTINED / STEP_ORACLE |
+| `table-001` | QUARANTINED / CLASSIFICATION_EXPECTED | QUARANTINED / STEP_ORACLE |
+| `text-001` | QUARANTINED / CLASSIFICATION_EXPECTED | QUARANTINED / STEP_ORACLE |
+| `tiny-radius-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `translation-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `uniform-scale-001` | KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY | KNOWN_TRUTH_EXACT / STEP_ORACLE |
+| `wipeout-001` | QUARANTINED / CLASSIFICATION_EXPECTED | QUARANTINED / STEP_ORACLE |
+| `xref-001` | QUARANTINED / CLASSIFICATION_EXPECTED | QUARANTINED / STEP_ORACLE |
+
+Kept as they were, with the reason the run gave:
+
+- `arch-aecobjects-001` (REAL_WORLD_DIFFERENTIAL / READER_CENSUS_ONLY): UNSUPPORTED_ENTITY (primary: CONVERSION_FAILED; secondary: CONVERSION_FAILED)
+- `coincident-control-points-001` (QUARANTINED / REJECTION_EXPECTED): primary converter drew geometry for a fixture that should be refused
+- `general-sample-ac1032-001` (REAL_WORLD_DIFFERENTIAL / READER_CENSUS_ONLY): UNRESOLVED_DISAGREEMENT
+- `layer-state-001` (KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY): APPROXIMATION
+- `mixed-entity-001` (KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY): APPROXIMATION
+- `tiny-extent-001` (KNOWN_TRUTH_EXACT / READER_MAPPING_ONLY): UNSUPPORTED_ENTITY
+- `zero-length-segment-001` (QUARANTINED / REJECTION_EXPECTED): primary converter drew geometry for a fixture that should be refused
+- `zero-radius-001` (QUARANTINED / REJECTION_EXPECTED): primary and secondary converter drew geometry for a fixture that should be refused
+<!-- /r2-open-moves -->
+
 ## r1-open (candidate)
 
 Adds fixtures on top of `r0-open` (included by hash) without touching it (issues #11 and #18).

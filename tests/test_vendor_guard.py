@@ -1,5 +1,6 @@
 """tools/vendor_guard.sh against planted dummies (#27). Nothing here is vendor software or a real key."""
 import re
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -78,6 +79,7 @@ class Tree(unittest.TestCase):
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
 
 
+@unittest.skipUnless(shutil.which("git"), "no git binary in this container; the hook is exercised in a throw-away repository")
 class Staged(unittest.TestCase):
     """The pre-commit hook refuses a commit that stages a planted dummy."""
 

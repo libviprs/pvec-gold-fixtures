@@ -907,30 +907,6 @@
         }
       ]
     },
-    "general-affine-001": {
-      "acadsharp-dwg2step": [
-        {
-          "entity": "general-affine-001",
-          "class": "MISSING",
-          "evidence": {
-            "reason": "no source.dwg in the corpus, so the converter was not run: UNSUPPORTED_ENTITY: op 'matrix' (a general matrix) has no single INSERT form: one INSERT carries translation, one rotation about the normal and three scales, and no shear. A three-level nested INSERT chain (rotate, scale, rotate) could carry its 2x2 part through a singular value decomposition, but those factors would be derived values compared under policy and not EXACT, and the probe's own truth is a rejection outcome that no reader-mapping check can exercise, so that was not attempted"
-          },
-          "expectation_met": false,
-          "not_run": true
-        }
-      ],
-      "libredwg-dwg2step": [
-        {
-          "entity": "general-affine-001",
-          "class": "MISSING",
-          "evidence": {
-            "reason": "no source.dwg in the corpus, so the converter was not run: UNSUPPORTED_ENTITY: op 'matrix' (a general matrix) has no single INSERT form: one INSERT carries translation, one rotation about the normal and three scales, and no shear. A three-level nested INSERT chain (rotate, scale, rotate) could carry its 2x2 part through a singular value decomposition, but those factors would be derived values compared under policy and not EXACT, and the probe's own truth is a rejection outcome that no reader-mapping check can exercise, so that was not attempted"
-          },
-          "expectation_met": false,
-          "not_run": true
-        }
-      ]
-    },
     "near-singular-001": {
       "acadsharp-dwg2step": [
         {
@@ -1175,51 +1151,25 @@
         }
       ]
     },
-    "shear-001": {
-      "acadsharp-dwg2step": [
-        {
-          "entity": "shear-001",
-          "class": "MISSING",
-          "evidence": {
-            "reason": "no source.dwg in the corpus, so the converter was not run: UNSUPPORTED_ENTITY: op 'matrix' (a general matrix) has no single INSERT form: one INSERT carries translation, one rotation about the normal and three scales, and no shear. A three-level nested INSERT chain (rotate, scale, rotate) could carry its 2x2 part through a singular value decomposition, but those factors would be derived values compared under policy and not EXACT, and the probe's own truth is a rejection outcome that no reader-mapping check can exercise, so that was not attempted"
-          },
-          "expectation_met": false,
-          "not_run": true
-        }
-      ],
-      "libredwg-dwg2step": [
-        {
-          "entity": "shear-001",
-          "class": "MISSING",
-          "evidence": {
-            "reason": "no source.dwg in the corpus, so the converter was not run: UNSUPPORTED_ENTITY: op 'matrix' (a general matrix) has no single INSERT form: one INSERT carries translation, one rotation about the normal and three scales, and no shear. A three-level nested INSERT chain (rotate, scale, rotate) could carry its 2x2 part through a singular value decomposition, but those factors would be derived values compared under policy and not EXACT, and the probe's own truth is a rejection outcome that no reader-mapping check can exercise, so that was not attempted"
-          },
-          "expectation_met": false,
-          "not_run": true
-        }
-      ]
-    },
     "singular-001": {
       "acadsharp-dwg2step": [
         {
           "entity": "singular-001",
-          "class": "MISSING",
+          "class": "UNSUPPORTED",
           "evidence": {
-            "reason": "no source.dwg in the corpus, so the converter was not run: UNSUPPORTED_ENTITY: acadrust's Insert scale setters rewrite a scale below 1e-12 in magnitude (asked for [1.0, 0.0, 1.0], stored [1.0, 1e-12, 1.0]), so the file would carry a different transform from the one authored"
+            "reason": "converter reported CONVERSION_FAILED: SINGULAR_TRANSFORM: the composed map of block PROBE_SINGULAR_001_L1 has |ad - bc| = 0 exactly, so it maps the plane onto a line or a point (PVec numeric policy NP-19)"
           },
-          "expectation_met": false,
-          "not_run": true
+          "expectation_met": true
         }
       ],
       "libredwg-dwg2step": [
         {
           "entity": "singular-001",
-          "class": "MISSING",
+          "class": "UNSUPPORTED",
           "evidence": {
-            "reason": "no source.dwg in the corpus, so the converter was not run: UNSUPPORTED_ENTITY: acadrust's Insert scale setters rewrite a scale below 1e-12 in magnitude (asked for [1.0, 0.0, 1.0], stored [1.0, 1e-12, 1.0]), so the file would carry a different transform from the one authored"
+            "reason": "converter reported CONVERSION_FAILED: INSERT of PROBE_SINGULAR_001_L1 has a singular matrix; no geometry is written for it"
           },
-          "expectation_met": false,
-          "not_run": true
+          "expectation_met": true
         }
       ]
     },
@@ -1316,6 +1266,101 @@
             "estimate_stable": true,
             "scale": 3.75,
             "magnitude": 8.75,
+            "direction": "SAME"
+          }
+        }
+      ]
+    },
+    "general-affine-chain-001": {
+      "acadsharp-dwg2step": [
+        {
+          "entity": "general-affine-chain-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "geometry.end[0]",
+              "geometry.end[1]",
+              "geometry.start[0]",
+              "geometry.start[1]",
+              "parameter_domain.end",
+              "transform"
+            ],
+            "max_deviation": 1.9860273225978185e-15,
+            "at_unit_parameter": 0.6180339887498949,
+            "measured_in": "EXPECTED_TO_ACTUAL",
+            "estimate_stable": true,
+            "scale": 4.880637765702348,
+            "magnitude": 6.25,
+            "direction": "SAME"
+          }
+        }
+      ],
+      "libredwg-dwg2step": [
+        {
+          "entity": "general-affine-chain-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "geometry.end[0]",
+              "geometry.end[1]",
+              "geometry.start[0]",
+              "geometry.start[1]",
+              "parameter_domain.end",
+              "transform"
+            ],
+            "max_deviation": 1.9860273225978185e-15,
+            "at_unit_parameter": 0.6180339887498949,
+            "measured_in": "EXPECTED_TO_ACTUAL",
+            "estimate_stable": true,
+            "scale": 4.880637765702348,
+            "magnitude": 6.25,
+            "direction": "SAME"
+          }
+        }
+      ]
+    },
+    "shear-chain-001": {
+      "acadsharp-dwg2step": [
+        {
+          "entity": "shear-chain-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "geometry.end[0]",
+              "geometry.start[0]",
+              "geometry.start[1]",
+              "parameter_domain.end",
+              "transform"
+            ],
+            "max_deviation": 1.2560739669470201e-15,
+            "at_unit_parameter": 0.9577880217510295,
+            "measured_in": "ACTUAL_TO_EXPECTED",
+            "estimate_stable": true,
+            "scale": 4.919667163538607,
+            "magnitude": 5.000000000000001,
+            "direction": "SAME"
+          }
+        }
+      ],
+      "libredwg-dwg2step": [
+        {
+          "entity": "shear-chain-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "geometry.end[0]",
+              "geometry.end[1]",
+              "geometry.start[0]",
+              "geometry.start[1]",
+              "parameter_domain.end",
+              "transform"
+            ],
+            "max_deviation": 8.881784197001252e-16,
+            "at_unit_parameter": 0.8055339887498949,
+            "measured_in": "EXPECTED_TO_ACTUAL",
+            "estimate_stable": true,
+            "scale": 4.919667163538607,
+            "magnitude": 5.0,
             "direction": "SAME"
           }
         }
@@ -1506,8 +1551,8 @@
         "nonuniform-scale-circle-001",
         "nonuniform-scale-rotated-001",
         "reflection-001",
-        "shear-001",
-        "general-affine-001",
+        "shear-chain-001",
+        "general-affine-chain-001",
         "nested-blocks-001",
         "near-singular-001",
         "singular-001"
@@ -1521,11 +1566,9 @@
         "libredwg-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED"
       },
       "certified_structural": false,
-      "certified_geometric": false,
-      "status": "BLOCKED",
-      "reasons": [
-        "probes not run (no source.dwg): shear-001, general-affine-001, singular-001"
-      ]
+      "certified_geometric": true,
+      "status": "CERTIFIED",
+      "reasons": []
     }
   ],
   "resolved": [],

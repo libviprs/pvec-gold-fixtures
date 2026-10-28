@@ -116,14 +116,14 @@ Issue 77. `runner.compare_geometric.compare` against each fixture's known truth,
 
 This stage is adaptive (the curve deviation is refined until the estimate is stable by the numeric policy), so its cost follows the curve and not just the entity count. Over all fixtures the medians sum to **9.40 s** native x86_64 and 9.91 s native arm64, against 0.75 s for the load, normalise, structural and report stages together on x86_64, so it is the dominant stage of a full comparison. The deepest refinement any quantity needed was level 6. The verdict is the same on both architectures for every fixture: yes.
 
-Classes over the 29 fixtures: 14 BOUNDED_APPROXIMATION, 15 GEOMETRIC_EXACT_REPARAMETERIZED. A `BOUNDED_APPROXIMATION` here means the stage measured a bound; this page times the stage and does not argue about those verdicts.
+Classes over the 29 fixtures: 2 BOUNDED_APPROXIMATION, 27 GEOMETRIC_EXACT_REPARAMETERIZED (re-classified in #78 after the comparator fixes described in reports/final-audit-r2-open.md; the timings below are from the earlier run). A `BOUNDED_APPROXIMATION` here means the stage measured a bound; this page times the stage and does not argue about those verdicts.
 
 | fixture | x64 median ms | x64 iqr | arm64 median ms | arm64 iqr | entities | quantities | deepest refinement (samples) | class |
 |---|---|---|---|---|---|---|---|---|
 | arc-seam-001 | 147 | 4 | 155 | 2 | 1 | 35 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
 | bezier-d3-001 | 329 | 3 | 347 | 1 | 1 | 35 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
 | bspline-d3-001 | 367 | 2 | 385 | 3 | 1 | 39 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
-| bspline-d5-001 | 626 | 3 | 684 | 8 | 1 | 41 | level 2 (18) | BOUNDED_APPROXIMATION |
+| bspline-d5-001 | 626 | 3 | 684 | 8 | 1 | 41 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
 | bulge-arc-001 | 494 | 4 | 506 | 1 | 1 | 36 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
 | bulge-arc-neg-001 | 491 | 4 | 507 | 1 | 1 | 36 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
 | circle-001 | 151 | 1 | 156 | 1 | 1 | 35 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
@@ -131,24 +131,24 @@ Classes over the 29 fixtures: 14 BOUNDED_APPROXIMATION, 15 GEOMETRIC_EXACT_REPAR
 | closed-periodic-001 | 369 | 2 | 389 | 3 | 1 | 43 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
 | ellipse-001 | 150 | 1 | 162 | 2 | 1 | 35 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
 | elliptical-arc-001 | 150 | 1 | 160 | 0 | 1 | 35 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
-| large-coords-001 | 513 | 3 | 541 | 2 | 3 | 20 | level 2 (18) | BOUNDED_APPROXIMATION |
+| large-coords-001 | 513 | 3 | 541 | 2 | 3 | 20 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
 | layer-state-001 | 417 | 37 | 437 | 1 | 3 | 103 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
 | line-001 | 138 | 2 | 147 | 1 | 1 | 35 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
-| lwpolyline-closed-001 | 949 | 6 | 994 | 3 | 4 | 36 | level 6 (258) | BOUNDED_APPROXIMATION |
-| nested-blocks-001 | 137 | 4 | 147 | 2 | 1 | 11 | level 2 (18) | BOUNDED_APPROXIMATION |
-| nonuniform-scale-circle-001 | 150 | 3 | 161 | 2 | 1 | 35 | level 2 (18) | BOUNDED_APPROXIMATION |
-| nonuniform-scale-rotated-001 | 164 | 31 | 162 | 2 | 1 | 39 | level 2 (18) | BOUNDED_APPROXIMATION |
-| nonunit-weight-001 | 270 | 3 | 282 | 2 | 1 | 35 | level 2 (18) | BOUNDED_APPROXIMATION |
-| nurbs-d2-offconic-001 | 271 | 2 | 289 | 4 | 1 | 35 | level 2 (18) | BOUNDED_APPROXIMATION |
+| lwpolyline-closed-001 | 949 | 6 | 994 | 3 | 4 | 36 | level 6 (258) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| nested-blocks-001 | 137 | 4 | 147 | 2 | 1 | 11 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| nonuniform-scale-circle-001 | 150 | 3 | 161 | 2 | 1 | 35 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| nonuniform-scale-rotated-001 | 164 | 31 | 162 | 2 | 1 | 39 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| nonunit-weight-001 | 270 | 3 | 282 | 2 | 1 | 35 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| nurbs-d2-offconic-001 | 271 | 2 | 289 | 4 | 1 | 35 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
 | nurbs-d3-001 | 367 | 2 | 395 | 6 | 1 | 39 | level 2 (18) | BOUNDED_APPROXIMATION |
-| polyline-001 | 644 | 5 | 680 | 4 | 4 | 36 | level 2 (18) | BOUNDED_APPROXIMATION |
-| polyline2d-001 | 647 | 6 | 682 | 5 | 4 | 36 | level 2 (18) | BOUNDED_APPROXIMATION |
+| polyline-001 | 644 | 5 | 680 | 4 | 4 | 36 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
+| polyline2d-001 | 647 | 6 | 682 | 5 | 4 | 36 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
 | reflection-001 | 149 | 3 | 155 | 1 | 1 | 5 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
 | repeated-knot-c0-001 | 368 | 5 | 386 | 1 | 1 | 33 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
-| rotation-irrational-001 | 140 | 1 | 147 | 1 | 1 | 35 | level 2 (18) | BOUNDED_APPROXIMATION |
+| rotation-irrational-001 | 140 | 1 | 147 | 1 | 1 | 35 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
 | tiny-radius-001 | 149 | 1 | 156 | 2 | 1 | 35 | level 2 (18) | BOUNDED_APPROXIMATION |
 | translation-001 | 139 | 6 | 149 | 1 | 1 | 21 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
-| uniform-scale-001 | 148 | 1 | 159 | 2 | 1 | 39 | level 2 (18) | BOUNDED_APPROXIMATION |
+| uniform-scale-001 | 148 | 1 | 159 | 2 | 1 | 39 | level 2 (18) | GEOMETRIC_EXACT_REPARAMETERIZED |
 
 Five most expensive on x86_64: lwpolyline-closed-001 (949 ms), polyline2d-001 (647 ms), polyline-001 (644 ms), bspline-d5-001 (626 ms), large-coords-001 (513 ms).
 <!-- /compare-geometric -->

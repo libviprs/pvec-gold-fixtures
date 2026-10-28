@@ -15,6 +15,7 @@
               "properties": {"name": {"const": "compare_geometric"}, "architecture": {"type": "string", "minLength": 1}}},
     "class": {"enum": ["GEOMETRIC_EXACT_REPARAMETERIZED", "BOUNDED_APPROXIMATION", "UNSUPPORTED", "MISSING"]},
     "bound": {"type": "number", "minimum": 0},
+    "compared_as_sets": {"type": "boolean"},
     "unmatched_produced": {"type": "array", "items": {"type": "integer", "minimum": 0}},
     "fixture_quantities": {"type": "array", "items": {"$ref": "#/$defs/quantity"}},
     "entities": {"type": "array", "items": {
@@ -49,7 +50,8 @@
         "refinement_level": {"type": "integer", "minimum": 1},
         "sample_count": {"type": "integer", "minimum": 1},
         "measured_in": {"enum": ["EXPECTED_TO_PRODUCED", "PRODUCED_TO_EXPECTED"]},
-        "estimator_error": {"type": "number", "minimum": 0}
+        "estimator_error": {"type": "number", "minimum": 0},
+        "signature_rounding": {"type": "number", "minimum": 0}
       }
     }
   }
