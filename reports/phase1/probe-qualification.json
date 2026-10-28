@@ -2,12 +2,31 @@
   "schema_version": "pvec-gold/probe-qualification/1",
   "numeric_policy_version": "PVec numeric policy v1",
   "converters": {
-    "primary": "acadsharp-dwg2step"
+    "primary": "acadsharp-dwg2step",
+    "secondary": "libredwg-dwg2step"
   },
-  "oracle_count": 1,
+  "oracle_count": 2,
   "probes": {
     "arc-seam-001": {
       "acadsharp-dwg2step": [
+        {
+          "entity": "arc-seam-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "geometry.x_axis[2]"
+            ],
+            "max_deviation": 3.0201331455116262e-15,
+            "at_unit_parameter": 0.0555339887498949,
+            "measured_in": "EXPECTED_TO_ACTUAL",
+            "estimate_stable": true,
+            "scale": 3.0,
+            "magnitude": 2.9999941730784845,
+            "direction": "SAME"
+          }
+        }
+      ],
+      "libredwg-dwg2step": [
         {
           "entity": "arc-seam-001",
           "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
@@ -28,6 +47,29 @@
     },
     "bezier-d3-001": {
       "acadsharp-dwg2step": [
+        {
+          "entity": "bezier-d3-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "class",
+              "geometry.knots#len",
+              "geometry.knots[0].multiplicity",
+              "geometry.knots[0].value",
+              "geometry.knots[1].multiplicity",
+              "geometry.knots[1].value"
+            ],
+            "max_deviation": 9.155133597044475e-16,
+            "at_unit_parameter": 0.4305339887498949,
+            "measured_in": "EXPECTED_TO_ACTUAL",
+            "estimate_stable": true,
+            "scale": 4.716990566028302,
+            "magnitude": 4.0,
+            "direction": "SAME"
+          }
+        }
+      ],
+      "libredwg-dwg2step": [
         {
           "entity": "bezier-d3-001",
           "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
@@ -74,6 +116,29 @@
             "direction": "SAME"
           }
         }
+      ],
+      "libredwg-dwg2step": [
+        {
+          "entity": "nested-blocks-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "geometry.end[0]",
+              "geometry.end[1]",
+              "geometry.start[0]",
+              "geometry.start[1]",
+              "parameter_domain.end",
+              "transform"
+            ],
+            "max_deviation": 1.831026719408895e-15,
+            "at_unit_parameter": 0.6805339887498949,
+            "measured_in": "EXPECTED_TO_ACTUAL",
+            "estimate_stable": true,
+            "scale": 6.878408246098802,
+            "magnitude": 8.5,
+            "direction": "SAME"
+          }
+        }
       ]
     },
     "bspline-d3-001": {
@@ -85,10 +150,28 @@
             "fields_compared": 47
           }
         }
+      ],
+      "libredwg-dwg2step": [
+        {
+          "entity": "bspline-d3-001",
+          "class": "STRUCTURAL_EXACT",
+          "evidence": {
+            "fields_compared": 47
+          }
+        }
       ]
     },
     "bspline-d5-001": {
       "acadsharp-dwg2step": [
+        {
+          "entity": "bspline-d5-001",
+          "class": "STRUCTURAL_EXACT",
+          "evidence": {
+            "fields_compared": 55
+          }
+        }
+      ],
+      "libredwg-dwg2step": [
         {
           "entity": "bspline-d5-001",
           "class": "STRUCTURAL_EXACT",
@@ -164,6 +247,74 @@
             "direction": "SAME"
           }
         }
+      ],
+      "libredwg-dwg2step": [
+        {
+          "entity": "bulge-arc-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "class",
+              "geometry.bulges#len",
+              "geometry.bulges[0]",
+              "geometry.bulges[1]",
+              "geometry.center#len",
+              "geometry.center[0]",
+              "geometry.center[1]",
+              "geometry.center[2]",
+              "geometry.normal#len",
+              "geometry.normal[0]",
+              "geometry.normal[1]",
+              "geometry.normal[2]",
+              "geometry.radius",
+              "geometry.start_angle",
+              "geometry.sweep_angle",
+              "geometry.vertices#len",
+              "geometry.vertices[0]#len",
+              "geometry.vertices[0][0]",
+              "geometry.vertices[0][1]",
+              "geometry.vertices[0][2]",
+              "geometry.vertices[1]#len",
+              "geometry.vertices[1][0]",
+              "geometry.vertices[1][1]",
+              "geometry.vertices[1][2]",
+              "geometry.x_axis#len",
+              "geometry.x_axis[0]",
+              "geometry.x_axis[1]",
+              "geometry.x_axis[2]",
+              "parameter_domain.end"
+            ],
+            "max_deviation": 1.7763568394002505e-15,
+            "at_unit_parameter": 0.5555339887498949,
+            "measured_in": "ACTUAL_TO_EXPECTED",
+            "estimate_stable": true,
+            "scale": 3.913118960624632,
+            "magnitude": 4.5,
+            "direction": "SAME"
+          }
+        },
+        {
+          "entity": "bulge-arc-001-equivalent-arc",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "geometry.center[0]",
+              "geometry.center[1]",
+              "geometry.start_angle",
+              "geometry.x_axis[0]",
+              "geometry.x_axis[1]",
+              "parameter_domain.end",
+              "parameter_domain.start"
+            ],
+            "max_deviation": 2.3914935841127266e-15,
+            "at_unit_parameter": 0.6180339887498949,
+            "measured_in": "ACTUAL_TO_EXPECTED",
+            "estimate_stable": true,
+            "scale": 2.837011246452858,
+            "magnitude": 4.5,
+            "direction": "SAME"
+          }
+        }
       ]
     },
     "bulge-arc-neg-001": {
@@ -230,10 +381,98 @@
             "direction": "SAME"
           }
         }
+      ],
+      "libredwg-dwg2step": [
+        {
+          "entity": "bulge-arc-neg-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "class",
+              "geometry.bulges#len",
+              "geometry.bulges[0]",
+              "geometry.bulges[1]",
+              "geometry.center#len",
+              "geometry.center[0]",
+              "geometry.center[1]",
+              "geometry.center[2]",
+              "geometry.normal#len",
+              "geometry.normal[0]",
+              "geometry.normal[1]",
+              "geometry.normal[2]",
+              "geometry.radius",
+              "geometry.start_angle",
+              "geometry.sweep_angle",
+              "geometry.vertices#len",
+              "geometry.vertices[0]#len",
+              "geometry.vertices[0][0]",
+              "geometry.vertices[0][1]",
+              "geometry.vertices[0][2]",
+              "geometry.vertices[1]#len",
+              "geometry.vertices[1][0]",
+              "geometry.vertices[1][1]",
+              "geometry.vertices[1][2]",
+              "geometry.x_axis#len",
+              "geometry.x_axis[0]",
+              "geometry.x_axis[1]",
+              "geometry.x_axis[2]",
+              "parameter_domain.end"
+            ],
+            "max_deviation": 2.8435583831733384e-15,
+            "at_unit_parameter": 0.3680339887498949,
+            "measured_in": "ACTUAL_TO_EXPECTED",
+            "estimate_stable": true,
+            "scale": 4.301162633521313,
+            "magnitude": 3.0,
+            "direction": "SAME"
+          }
+        },
+        {
+          "entity": "bulge-arc-neg-001-equivalent-arc",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "geometry.normal[0]",
+              "geometry.normal[1]",
+              "geometry.normal[2]",
+              "geometry.radius",
+              "geometry.start_angle",
+              "geometry.x_axis[0]",
+              "geometry.x_axis[1]",
+              "parameter_domain.end",
+              "parameter_domain.start"
+            ],
+            "max_deviation": 2.5989654674417885e-15,
+            "at_unit_parameter": 0.8680339887498949,
+            "measured_in": "ACTUAL_TO_EXPECTED",
+            "estimate_stable": true,
+            "scale": 3.906889392115193,
+            "magnitude": 3.0,
+            "direction": "REVERSED"
+          }
+        }
       ]
     },
     "circle-001": {
       "acadsharp-dwg2step": [
+        {
+          "entity": "circle-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "geometry.x_axis[2]"
+            ],
+            "max_deviation": 2.6645352591003757e-15,
+            "at_unit_parameter": 0.9930339887498949,
+            "measured_in": "EXPECTED_TO_ACTUAL",
+            "estimate_stable": true,
+            "scale": 2.75,
+            "magnitude": 5.0,
+            "direction": "SAME"
+          }
+        }
+      ],
+      "libredwg-dwg2step": [
         {
           "entity": "circle-001",
           "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
@@ -261,6 +500,15 @@
             "fields_compared": 47
           }
         }
+      ],
+      "libredwg-dwg2step": [
+        {
+          "entity": "closed-by-endpoint-001",
+          "class": "STRUCTURAL_EXACT",
+          "evidence": {
+            "fields_compared": 47
+          }
+        }
       ]
     },
     "closed-periodic-001": {
@@ -272,10 +520,37 @@
             "fields_compared": 47
           }
         }
+      ],
+      "libredwg-dwg2step": [
+        {
+          "entity": "closed-periodic-001",
+          "class": "STRUCTURAL_EXACT",
+          "evidence": {
+            "fields_compared": 47
+          }
+        }
       ]
     },
     "ellipse-001": {
       "acadsharp-dwg2step": [
+        {
+          "entity": "ellipse-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "geometry.major_axis[2]"
+            ],
+            "max_deviation": 3.2023728339893768e-15,
+            "at_unit_parameter": 0.8680339887498949,
+            "measured_in": "EXPECTED_TO_ACTUAL",
+            "estimate_stable": true,
+            "scale": 3.0,
+            "magnitude": 4.995233011444203,
+            "direction": "SAME"
+          }
+        }
+      ],
+      "libredwg-dwg2step": [
         {
           "entity": "ellipse-001",
           "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
@@ -312,10 +587,45 @@
             "direction": "SAME"
           }
         }
+      ],
+      "libredwg-dwg2step": [
+        {
+          "entity": "elliptical-arc-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "geometry.major_axis[2]"
+            ],
+            "max_deviation": 1.6011864169946884e-15,
+            "at_unit_parameter": 0.8680339887498949,
+            "measured_in": "EXPECTED_TO_ACTUAL",
+            "estimate_stable": true,
+            "scale": 3.0,
+            "magnitude": 4.50809685455813,
+            "direction": "SAME"
+          }
+        }
       ]
     },
     "large-coords-001": {
       "acadsharp-dwg2step": [
+        {
+          "entity": "large-coords-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "different number of curves: 3"
+            ],
+            "max_deviation": 1.862645149230957e-09,
+            "at_unit_parameter": 0.6805339887498949,
+            "measured_in": "EXPECTED_TO_ACTUAL",
+            "estimate_stable": true,
+            "scale": 0.00022360641790187212,
+            "magnitude": 10000000.0003
+          }
+        }
+      ],
+      "libredwg-dwg2step": [
         {
           "entity": "large-coords-001",
           "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
@@ -351,10 +661,45 @@
             "direction": "SAME"
           }
         }
+      ],
+      "libredwg-dwg2step": [
+        {
+          "entity": "line-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "parameter_domain.end"
+            ],
+            "max_deviation": 4.965068306494546e-16,
+            "at_unit_parameter": 0.4930339887498949,
+            "measured_in": "EXPECTED_TO_ACTUAL",
+            "estimate_stable": true,
+            "scale": 3.952847075210474,
+            "magnitude": 3.75,
+            "direction": "SAME"
+          }
+        }
       ]
     },
     "lwpolyline-closed-001": {
       "acadsharp-dwg2step": [
+        {
+          "entity": "lwpolyline-closed-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "different number of curves: 4"
+            ],
+            "max_deviation": 1.7763568394002505e-15,
+            "at_unit_parameter": 0.7428965258182785,
+            "measured_in": "EXPECTED_TO_ACTUAL",
+            "estimate_stable": true,
+            "scale": 5.3967582862307255,
+            "magnitude": 5.0
+          }
+        }
+      ],
+      "libredwg-dwg2step": [
         {
           "entity": "lwpolyline-closed-001",
           "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
@@ -381,10 +726,28 @@
             "fields_compared": 44
           }
         }
+      ],
+      "libredwg-dwg2step": [
+        {
+          "entity": "nonunit-weight-001",
+          "class": "STRUCTURAL_EXACT",
+          "evidence": {
+            "fields_compared": 44
+          }
+        }
       ]
     },
     "nurbs-d2-offconic-001": {
       "acadsharp-dwg2step": [
+        {
+          "entity": "nurbs-d2-offconic-001",
+          "class": "STRUCTURAL_EXACT",
+          "evidence": {
+            "fields_compared": 44
+          }
+        }
+      ],
+      "libredwg-dwg2step": [
         {
           "entity": "nurbs-d2-offconic-001",
           "class": "STRUCTURAL_EXACT",
@@ -403,10 +766,36 @@
             "fields_compared": 49
           }
         }
+      ],
+      "libredwg-dwg2step": [
+        {
+          "entity": "nurbs-d3-001",
+          "class": "STRUCTURAL_EXACT",
+          "evidence": {
+            "fields_compared": 49
+          }
+        }
       ]
     },
     "polyline-001": {
       "acadsharp-dwg2step": [
+        {
+          "entity": "polyline-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "different number of curves: 4"
+            ],
+            "max_deviation": 1.2947314098277875e-15,
+            "at_unit_parameter": 0.018237274986317886,
+            "measured_in": "ACTUAL_TO_EXPECTED",
+            "estimate_stable": true,
+            "scale": 4.190763653560053,
+            "magnitude": 4.0
+          }
+        }
+      ],
+      "libredwg-dwg2step": [
         {
           "entity": "polyline-001",
           "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
@@ -441,6 +830,23 @@
             "magnitude": 3.5
           }
         }
+      ],
+      "libredwg-dwg2step": [
+        {
+          "entity": "polyline2d-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "different number of curves: 4"
+            ],
+            "max_deviation": 2.318213734067276e-15,
+            "at_unit_parameter": 0.9622002148987963,
+            "measured_in": "ACTUAL_TO_EXPECTED",
+            "estimate_stable": true,
+            "scale": 4.422951503238533,
+            "magnitude": 3.5
+          }
+        }
       ]
     },
     "repeated-knot-c0-001": {
@@ -452,10 +858,37 @@
             "fields_compared": 43
           }
         }
+      ],
+      "libredwg-dwg2step": [
+        {
+          "entity": "repeated-knot-c0-001",
+          "class": "STRUCTURAL_EXACT",
+          "evidence": {
+            "fields_compared": 43
+          }
+        }
       ]
     },
     "tiny-radius-001": {
       "acadsharp-dwg2step": [
+        {
+          "entity": "tiny-radius-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "geometry.x_axis[2]"
+            ],
+            "max_deviation": 1.1102230246251565e-16,
+            "at_unit_parameter": 0.1180339887498949,
+            "measured_in": "EXPECTED_TO_ACTUAL",
+            "estimate_stable": true,
+            "scale": 1e-05,
+            "magnitude": 0.50001,
+            "direction": "SAME"
+          }
+        }
+      ],
+      "libredwg-dwg2step": [
         {
           "entity": "tiny-radius-001",
           "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
@@ -485,6 +918,17 @@
           "expectation_met": false,
           "not_run": true
         }
+      ],
+      "libredwg-dwg2step": [
+        {
+          "entity": "general-affine-001",
+          "class": "MISSING",
+          "evidence": {
+            "reason": "no source.dwg in the corpus, so the converter was not run: UNSUPPORTED_ENTITY: op 'matrix' (a general matrix) has no single INSERT form: one INSERT carries translation, one rotation about the normal and three scales, and no shear. A three-level nested INSERT chain (rotate, scale, rotate) could carry its 2x2 part through a singular value decomposition, but those factors would be derived values compared under policy and not EXACT, and the probe's own truth is a rejection outcome that no reader-mapping check can exercise, so that was not attempted"
+          },
+          "expectation_met": false,
+          "not_run": true
+        }
       ]
     },
     "near-singular-001": {
@@ -497,10 +941,51 @@
           },
           "expectation_met": true
         }
+      ],
+      "libredwg-dwg2step": [
+        {
+          "entity": "near-singular-001",
+          "class": "UNSUPPORTED",
+          "evidence": {
+            "reason": "converter reported CONVERSION_FAILED: NEAR_SINGULAR_TRANSFORM: INSERT of PROBE_NEAR_SINGULAR_001_L1 maps the plane with |ad - bc| <= REL * big^2 (NP-19); no curve is written"
+          },
+          "expectation_met": true
+        }
       ]
     },
     "nonuniform-scale-circle-001": {
       "acadsharp-dwg2step": [
+        {
+          "entity": "nonuniform-scale-circle-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "class",
+              "geometry.center[0]",
+              "geometry.major_axis#len",
+              "geometry.major_axis[0]",
+              "geometry.major_axis[1]",
+              "geometry.major_axis[2]",
+              "geometry.radius",
+              "geometry.semi_major",
+              "geometry.semi_minor",
+              "geometry.x_axis#len",
+              "geometry.x_axis[0]",
+              "geometry.x_axis[1]",
+              "geometry.x_axis[2]",
+              "transform"
+            ],
+            "max_deviation": 5.333694441429199e-15,
+            "at_unit_parameter": 0.7430339887498949,
+            "measured_in": "EXPECTED_TO_ACTUAL",
+            "estimate_stable": true,
+            "scale": 6.0,
+            "magnitude": 9.0,
+            "direction": "SAME"
+          }
+        }
+      ],
+      "libredwg-dwg2step": [
         {
           "entity": "nonuniform-scale-circle-001",
           "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
@@ -564,10 +1049,63 @@
             "direction": "SAME"
           }
         }
+      ],
+      "libredwg-dwg2step": [
+        {
+          "entity": "nonuniform-scale-rotated-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "class",
+              "geometry.center[0]",
+              "geometry.center[1]",
+              "geometry.major_axis#len",
+              "geometry.major_axis[0]",
+              "geometry.major_axis[1]",
+              "geometry.major_axis[2]",
+              "geometry.radius",
+              "geometry.semi_major",
+              "geometry.semi_minor",
+              "geometry.x_axis#len",
+              "geometry.x_axis[0]",
+              "geometry.x_axis[1]",
+              "geometry.x_axis[2]",
+              "transform"
+            ],
+            "max_deviation": 5.347542221830668e-15,
+            "at_unit_parameter": 0.7430339887498949,
+            "measured_in": "EXPECTED_TO_ACTUAL",
+            "estimate_stable": true,
+            "scale": 6.0,
+            "magnitude": 7.947726231217728,
+            "direction": "SAME"
+          }
+        }
       ]
     },
     "reflection-001": {
       "acadsharp-dwg2step": [
+        {
+          "entity": "reflection-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "geometry.center[0]",
+              "geometry.normal[2]",
+              "geometry.x_axis[0]",
+              "transform"
+            ],
+            "max_deviation": 8.005932084973442e-16,
+            "at_unit_parameter": 0.6805339887498949,
+            "measured_in": "EXPECTED_TO_ACTUAL",
+            "estimate_stable": true,
+            "scale": 1.5,
+            "magnitude": 3.3815914910043277,
+            "direction": "SAME"
+          }
+        }
+      ],
+      "libredwg-dwg2step": [
         {
           "entity": "reflection-001",
           "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
@@ -612,10 +1150,44 @@
             "direction": "SAME"
           }
         }
+      ],
+      "libredwg-dwg2step": [
+        {
+          "entity": "rotation-irrational-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "geometry.end[0]",
+              "geometry.end[1]",
+              "geometry.start[0]",
+              "geometry.start[1]",
+              "parameter_domain.end",
+              "transform"
+            ],
+            "max_deviation": 8.989550626504553e-16,
+            "at_unit_parameter": 0.9305339887498949,
+            "measured_in": "EXPECTED_TO_ACTUAL",
+            "estimate_stable": true,
+            "scale": 3.9528470752104745,
+            "magnitude": 4.506271957699961,
+            "direction": "SAME"
+          }
+        }
       ]
     },
     "shear-001": {
       "acadsharp-dwg2step": [
+        {
+          "entity": "shear-001",
+          "class": "MISSING",
+          "evidence": {
+            "reason": "no source.dwg in the corpus, so the converter was not run: UNSUPPORTED_ENTITY: op 'matrix' (a general matrix) has no single INSERT form: one INSERT carries translation, one rotation about the normal and three scales, and no shear. A three-level nested INSERT chain (rotate, scale, rotate) could carry its 2x2 part through a singular value decomposition, but those factors would be derived values compared under policy and not EXACT, and the probe's own truth is a rejection outcome that no reader-mapping check can exercise, so that was not attempted"
+          },
+          "expectation_met": false,
+          "not_run": true
+        }
+      ],
+      "libredwg-dwg2step": [
         {
           "entity": "shear-001",
           "class": "MISSING",
@@ -638,10 +1210,46 @@
           "expectation_met": false,
           "not_run": true
         }
+      ],
+      "libredwg-dwg2step": [
+        {
+          "entity": "singular-001",
+          "class": "MISSING",
+          "evidence": {
+            "reason": "no source.dwg in the corpus, so the converter was not run: UNSUPPORTED_ENTITY: acadrust's Insert scale setters rewrite a scale below 1e-12 in magnitude (asked for [1.0, 0.0, 1.0], stored [1.0, 1e-12, 1.0]), so the file would carry a different transform from the one authored"
+          },
+          "expectation_met": false,
+          "not_run": true
+        }
       ]
     },
     "translation-001": {
       "acadsharp-dwg2step": [
+        {
+          "entity": "translation-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "geometry.end[0]",
+              "geometry.end[1]",
+              "geometry.end[2]",
+              "geometry.start[0]",
+              "geometry.start[1]",
+              "geometry.start[2]",
+              "parameter_domain.end",
+              "transform"
+            ],
+            "max_deviation": 1.1102230246251565e-16,
+            "at_unit_parameter": 0.02387324825699263,
+            "measured_in": "EXPECTED_TO_ACTUAL",
+            "estimate_stable": true,
+            "scale": 3.952847075210474,
+            "magnitude": 7.25,
+            "direction": "SAME"
+          }
+        }
+      ],
+      "libredwg-dwg2step": [
         {
           "entity": "translation-001",
           "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
@@ -689,6 +1297,28 @@
             "direction": "SAME"
           }
         }
+      ],
+      "libredwg-dwg2step": [
+        {
+          "entity": "uniform-scale-001",
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+          "evidence": {
+            "structural_diff": [
+              "geometry.center[0]",
+              "geometry.center[1]",
+              "geometry.radius",
+              "geometry.x_axis[2]",
+              "transform"
+            ],
+            "max_deviation": 3.972054645195637e-15,
+            "at_unit_parameter": 0.7430339887498949,
+            "measured_in": "EXPECTED_TO_ACTUAL",
+            "estimate_stable": true,
+            "scale": 3.75,
+            "magnitude": 8.75,
+            "direction": "SAME"
+          }
+        }
       ]
     }
   },
@@ -699,17 +1329,17 @@
         "line-001"
       ],
       "converters": [
-        "acadsharp-dwg2step"
+        "acadsharp-dwg2step",
+        "libredwg-dwg2step"
       ],
       "by_converter": {
-        "acadsharp-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        "acadsharp-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED",
+        "libredwg-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED"
       },
       "certified_structural": false,
       "certified_geometric": true,
       "status": "CERTIFIED",
-      "reasons": [
-        "single oracle: no second converter, so no cross-converter discrepancy could be checked"
-      ]
+      "reasons": []
     },
     {
       "capability": "polyline",
@@ -720,17 +1350,17 @@
         "polyline2d-001"
       ],
       "converters": [
-        "acadsharp-dwg2step"
+        "acadsharp-dwg2step",
+        "libredwg-dwg2step"
       ],
       "by_converter": {
-        "acadsharp-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        "acadsharp-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED",
+        "libredwg-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED"
       },
       "certified_structural": false,
       "certified_geometric": true,
       "status": "CERTIFIED",
-      "reasons": [
-        "single oracle: no second converter, so no cross-converter discrepancy could be checked"
-      ]
+      "reasons": []
     },
     {
       "capability": "circle",
@@ -739,17 +1369,17 @@
         "tiny-radius-001"
       ],
       "converters": [
-        "acadsharp-dwg2step"
+        "acadsharp-dwg2step",
+        "libredwg-dwg2step"
       ],
       "by_converter": {
-        "acadsharp-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        "acadsharp-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED",
+        "libredwg-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED"
       },
       "certified_structural": false,
       "certified_geometric": true,
       "status": "CERTIFIED",
-      "reasons": [
-        "single oracle: no second converter, so no cross-converter discrepancy could be checked"
-      ]
+      "reasons": []
     },
     {
       "capability": "ellipse",
@@ -757,17 +1387,17 @@
         "ellipse-001"
       ],
       "converters": [
-        "acadsharp-dwg2step"
+        "acadsharp-dwg2step",
+        "libredwg-dwg2step"
       ],
       "by_converter": {
-        "acadsharp-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        "acadsharp-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED",
+        "libredwg-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED"
       },
       "certified_structural": false,
       "certified_geometric": true,
       "status": "CERTIFIED",
-      "reasons": [
-        "single oracle: no second converter, so no cross-converter discrepancy could be checked"
-      ]
+      "reasons": []
     },
     {
       "capability": "trimmed_curve",
@@ -776,17 +1406,17 @@
         "elliptical-arc-001"
       ],
       "converters": [
-        "acadsharp-dwg2step"
+        "acadsharp-dwg2step",
+        "libredwg-dwg2step"
       ],
       "by_converter": {
-        "acadsharp-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        "acadsharp-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED",
+        "libredwg-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED"
       },
       "certified_structural": false,
       "certified_geometric": true,
       "status": "CERTIFIED",
-      "reasons": [
-        "single oracle: no second converter, so no cross-converter discrepancy could be checked"
-      ]
+      "reasons": []
     },
     {
       "capability": "composite_curve",
@@ -795,17 +1425,17 @@
         "bulge-arc-neg-001"
       ],
       "converters": [
-        "acadsharp-dwg2step"
+        "acadsharp-dwg2step",
+        "libredwg-dwg2step"
       ],
       "by_converter": {
-        "acadsharp-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        "acadsharp-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED",
+        "libredwg-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED"
       },
       "certified_structural": false,
       "certified_geometric": true,
       "status": "CERTIFIED",
-      "reasons": [
-        "single oracle: no second converter, so no cross-converter discrepancy could be checked"
-      ]
+      "reasons": []
     },
     {
       "capability": "bezier",
@@ -813,17 +1443,17 @@
         "bezier-d3-001"
       ],
       "converters": [
-        "acadsharp-dwg2step"
+        "acadsharp-dwg2step",
+        "libredwg-dwg2step"
       ],
       "by_converter": {
-        "acadsharp-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        "acadsharp-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED",
+        "libredwg-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED"
       },
       "certified_structural": false,
       "certified_geometric": true,
       "status": "CERTIFIED",
-      "reasons": [
-        "single oracle: no second converter, so no cross-converter discrepancy could be checked"
-      ]
+      "reasons": []
     },
     {
       "capability": "bspline",
@@ -835,17 +1465,17 @@
         "closed-periodic-001"
       ],
       "converters": [
-        "acadsharp-dwg2step"
+        "acadsharp-dwg2step",
+        "libredwg-dwg2step"
       ],
       "by_converter": {
-        "acadsharp-dwg2step": "STRUCTURAL_EXACT"
+        "acadsharp-dwg2step": "STRUCTURAL_EXACT",
+        "libredwg-dwg2step": "STRUCTURAL_EXACT"
       },
       "certified_structural": true,
       "certified_geometric": true,
       "status": "CERTIFIED",
-      "reasons": [
-        "single oracle: no second converter, so no cross-converter discrepancy could be checked"
-      ]
+      "reasons": []
     },
     {
       "capability": "nurbs",
@@ -855,17 +1485,17 @@
         "nonunit-weight-001"
       ],
       "converters": [
-        "acadsharp-dwg2step"
+        "acadsharp-dwg2step",
+        "libredwg-dwg2step"
       ],
       "by_converter": {
-        "acadsharp-dwg2step": "STRUCTURAL_EXACT"
+        "acadsharp-dwg2step": "STRUCTURAL_EXACT",
+        "libredwg-dwg2step": "STRUCTURAL_EXACT"
       },
       "certified_structural": true,
       "certified_geometric": true,
       "status": "CERTIFIED",
-      "reasons": [
-        "single oracle: no second converter, so no cross-converter discrepancy could be checked"
-      ]
+      "reasons": []
     },
     {
       "capability": "affine_transform",
@@ -883,22 +1513,25 @@
         "singular-001"
       ],
       "converters": [
-        "acadsharp-dwg2step"
+        "acadsharp-dwg2step",
+        "libredwg-dwg2step"
       ],
       "by_converter": {
-        "acadsharp-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        "acadsharp-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED",
+        "libredwg-dwg2step": "GEOMETRIC_EXACT_REPARAMETERIZED"
       },
       "certified_structural": false,
       "certified_geometric": false,
       "status": "BLOCKED",
       "reasons": [
-        "probes not run (no source.dwg): shear-001, general-affine-001, singular-001",
-        "single oracle: no second converter, so no cross-converter discrepancy could be checked"
+        "probes not run (no source.dwg): shear-001, general-affine-001, singular-001"
       ]
     }
   ],
+  "resolved": [],
   "lineages": {
-    "acadsharp-dwg2step": "ACadSharp"
+    "acadsharp-dwg2step": "ACadSharp",
+    "libredwg-dwg2step": "LibreDWG"
   },
   "oracle_scope": "OPEN_CONVERTERS",
   "platform": "linux/amd64"

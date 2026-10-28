@@ -402,7 +402,7 @@ EXTRA = {
     "composite_curve": ["mixed-entity-001"],
     "bspline": ["bspline-nonunit-domain-001"],
     "nurbs": ["mixed-entity-001"],
-    "affine_transform": ["mixed-entity-001"],
+    "affine_transform": ["mixed-entity-001", "shear-chain-001", "general-affine-chain-001"],
 }
 REFUSED = {"line": ["zero-length-segment-001"], "circle": ["zero-radius-001"], "bspline": ["coincident-control-points-001"]}
 

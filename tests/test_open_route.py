@@ -12,7 +12,7 @@ REPORT = ROOT / "reports" / "phase1" / "probe-qualification.json"
 KT = ROOT / "fixtures" / "known-truth"
 POL = numeric.load_policy()
 OPEN = "acadsharp-dwg2step"
-NO_DWG = ("shear-001", "general-affine-001", "singular-001")
+NO_DWG = ("singular-001",)   # shear-001 and general-affine-001 are profile-only (#69): no DWG on purpose, not converter probes
 
 
 class SingleOracle(unittest.TestCase):
@@ -82,9 +82,9 @@ class CommittedReport(unittest.TestCase):
     def test_report_is_the_open_converter_on_the_adopted_policy(self):
         r = self.rep()
         self.assertEqual(r["numeric_policy_version"], POL.version)
-        self.assertEqual(r["converters"], {"primary": OPEN})
+        self.assertEqual(r["converters"], {"primary": OPEN, "secondary": "libredwg-dwg2step"})
         self.assertEqual(r["oracle_scope"], "OPEN_CONVERTERS")
-        self.assertEqual(r["oracle_count"], 1)
+        self.assertEqual(r["oracle_count"], 2)
         self.assertEqual(r["platform"], "linux/amd64")
 
     def test_gate_check_one_is_green(self):
