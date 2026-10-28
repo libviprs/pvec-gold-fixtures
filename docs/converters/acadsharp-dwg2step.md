@@ -30,8 +30,7 @@ The Part 21 subset is the one the evaluator self-test files use: `LINE`, `CIRCLE
 Every real is written with `E16`, 17 significant digits, which round-trips an f64 exactly.
 
 The status record is `schema/converter-status.schema.json`, written on every run. The `converter` value is
-`acadsharp-dwg2step`, a stub: the enum in the schema still says `cadex` or `oda` until ADR 0009 (issue 47)
-makes it a string. The exit codes are the shared ones:
+`acadsharp-dwg2step`, the named id ADR 0009 allows. The exit codes are the shared ones:
 
 | code | class | when |
 |---|---|---|
@@ -99,6 +98,18 @@ needs them.
 
 The evaluator note about closed periodic splines (`docs/validator/step-evaluator.md`, open points) is
 answered by the run records, not by this file.
+
+## Local build digests
+
+Built locally on 2026-10-28, nothing pushed. These are the image ids (config digests) of the single-platform
+builds, not a registry index digest, which only exists once someone publishes:
+
+| platform | host | image id |
+|---|---|---|
+| linux/amd64 | mars | `sha256:2d97c4423580f595d37a4b1d9b9fad56fe0575901d4bce9069c0cab4796331a6` |
+| linux/arm64 | mercury | `sha256:b4ac1756db767942fa5f21b005977c6942431a4978b66a27e0d92fcf12f2167b` |
+
+The two builds share the base digests in the Dockerfile and produce byte-identical STEP files.
 
 ## Running the tests
 
