@@ -421,5 +421,74 @@ class Release(unittest.TestCase):
         self.assertEqual(shown["private_hashes"], {"source.dwg": "0" * 64})
 
 
+# ---- the open-converter run (dwg2step-acadsharp, oracle_scope OPEN_CONVERTERS) ----------------------------------------
+
+class OpenRoute(unittest.TestCase):
+    GROUPS = {"edge": FX / "edge", "mixed": FX / "mixed", "degenerate": FX / "degenerate", "negative": NEG, "real-world": RW}
+    ID = "acadsharp-dwg2step"
+
+    def records(self, group):
+        return {d.name: load(d / "open-route.json") for d in dirs(self.GROUPS[group])}
+
+    def test_every_fixture_records_the_converter_status_and_a_derived_open_route_record(self):
+        for group, base in self.GROUPS.items():
+            self.assertTrue(dirs(base), group)
+            for d in dirs(base):
+                self.assertTrue((d / (self.ID + ".status.json")).is_file(), "%s/%s" % (group, d.name))
+                r = load(d / "open-route.json")
+                self.assertEqual(r["converter"], self.ID)
+                self.assertEqual(r["oracle_scope"], "OPEN_CONVERTERS")
+                self.assertEqual(r["single_oracle"], True, "one open converter has run; ADR 0009 needs two for STEP_ORACLE")
+
+    def test_the_converter_emits_no_step_for_any_negative_fixture(self):
+        for fid, r in self.records("negative").items():
+            self.assertEqual(r["verdict"], "NO_STEP_EMITTED", fid)
+            self.assertFalse(r["step_emitted"], fid)
+            self.assertEqual(r["exit_code"], 15, fid)
+
+    def test_the_verdict_rules_for_negative_and_degenerate_fixtures(self):
+        c = corpus()
+        self.assertEqual(c.open_route_verdict("negative", step_emitted=False, curves=0), "NO_STEP_EMITTED")
+        self.assertEqual(c.open_route_verdict("negative", step_emitted=True, curves=2), "STEP_EMITTED")
+        self.assertEqual(c.open_route_verdict("degenerate", step_emitted=False, curves=0), "REFUSED")
+        self.assertEqual(c.open_route_verdict("degenerate", step_emitted=True, curves=1), "CONVERTER_EMITTED_GEOMETRY")
+        self.assertTrue(c.open_route_problems("negative", {"verdict": "STEP_EMITTED"}))
+        self.assertEqual(c.open_route_problems("negative", {"verdict": "NO_STEP_EMITTED"}), [])
+
+    def test_a_converter_that_emits_geometry_for_a_degenerate_fixture_is_listed_not_hidden(self):
+        got = {fid: r["verdict"] for fid, r in self.records("degenerate").items()}
+        self.assertEqual(set(got), set(Degenerate.EXPECT))
+        self.assertTrue(set(got.values()) <= {"REFUSED", "CONVERTER_EMITTED_GEOMETRY"})
+        failing = {f for f, v in got.items() if v != "REFUSED"}
+        self.assertEqual(set(corpus().open_route_failures(ROOT)), failing)
+        q = {x["id"]: x["evidence"] for x in load(REV / "quarantine.json")["quarantined"]}
+        for fid in failing:
+            self.assertIn(self.ID, q[fid])
+
+    def test_edge_entities_are_classified_and_mixed_entities_are_matched_one_to_one(self):
+        from runner import qualify_probes as q
+        for fid, r in self.records("edge").items():
+            self.assertTrue(r["classes"], fid)
+            for cl in r["classes"]:
+                self.assertIn(cl["class"], q.RANK, fid)
+        mixed = load(FX / "mixed/mixed-entity-001/expected.math.json")
+        r = self.records("mixed")["mixed-entity-001"]
+        self.assertEqual([c["entity"] for c in r["classes"]], [e["id"] for e in mixed["entities"]])
+        self.assertTrue(any(c["class"] in q.EXACT for c in r["classes"]), "matching is by best distinct curve, not by position")
+
+    def test_real_world_refusals_are_recorded_with_the_converters_own_reason(self):
+        for fid, r in self.records("real-world").items():
+            self.assertIn("exit_code", r, fid)
+            if r["exit_code"] != 0:
+                self.assertTrue(r["error"]["message"].strip(), fid)
+            self.assertEqual(r["differential"], "SINGLE_OPEN_CONVERTER_ONLY", fid)
+
+    def test_the_matrix_carries_step_evidence_where_the_open_converter_ran(self):
+        rows = {r["capability"]: r for r in load(CORPUS / "capability-matrix.json")["rows"]}
+        edge = {f["id"]: f for f in rows["bspline"]["fixtures"]}
+        self.assertEqual(edge["bspline-nonunit-domain-001"]["step_evidence"]["converter"], self.ID)
+        self.assertIn(edge["bspline-nonunit-domain-001"]["step_evidence"]["class"], ("STRUCTURAL_EXACT", "GEOMETRIC_EXACT_REPARAMETERIZED"))
+
+
 if __name__ == "__main__":
     unittest.main()
