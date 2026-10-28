@@ -54,3 +54,20 @@ intended `f64`, for example `{"decimal": "0.70710678118654757", "f64_hex": "0x3f
 - No credential is written to a file, echoed, or copied to a build host.
 
 The structural and geometric reports, the converter comparison and the generator input for real-world fixtures are described in [docs/reports](docs/reports/structural.md) and [docs/fixtures/generator-input.md](docs/fixtures/generator-input.md). What waits on a licence or another repository is in [docs/vendor-deferred.md](docs/vendor-deferred.md).
+
+## Documentation
+
+- [Docker workflow](docs/docker-workflow.md)
+- [Converter licensing and setup](docs/converters/licensing-and-setup.md), and the [archive of the proprietary workflow](docs/converters/archive.md)
+- [Known-truth fixture authoring](docs/fixtures/authoring.md)
+- [Evidence classes](docs/evidence-classes.md) ([ADR 0001](docs/adr/0001-evidence-classes.md))
+- [STEP evaluator design](docs/validator/step-evaluator.md)
+- [Numeric comparison policy](docs/numeric-policy.md)
+- [Corpus provenance and licensing](docs/provenance.md)
+- [Acceptance and quarantine](docs/acceptance-and-quarantine.md)
+- [Reproducibility guide](docs/reproducibility.md)
+- [Downstream test contract](docs/downstream-contract.md)
+- [Benchmark report](docs/benchmark-report.md)
+- [Final corpus audit](reports/final-audit.md), [vendor-deferred work](docs/vendor-deferred.md), and the release candidate [`corpus/release/r0-open-1`](corpus/release/r0-open-1/RELEASE-NOTES.md)
+
+Enable the commit guard with `git config core.hooksPath .githooks` (see the archive document).
