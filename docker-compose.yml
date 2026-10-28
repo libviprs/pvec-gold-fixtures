@@ -63,6 +63,36 @@ services:
           create_host_path: false
       - ${FIXTURE_DIR:-./fixtures}:/fixtures
 
+  # The open converter (ACadSharp, MIT): no licence, runs on either architecture. The limits come from
+  # docs/benchmarks/orchestration-tuning.md: a conversion peaks at about 21 MiB in the cgroup (58 MiB
+  # resident) on the largest r0-open fixture, so 256m leaves a wide margin, and one cpu doubles the
+  # conversion time (the dotnet runtime wants a second thread) while two cost nothing against none.
+  # The concurrency cap is not set here: runner/scheduler.py enforces docker/converter-limits.json.
+  acadsharp-converter:
+    image: pvec-gold/dwg2step-acadsharp:local
+    platform: ${ACADSHARP_PLATFORM:-linux/amd64}
+    build:
+      context: .
+      dockerfile: tools/converters/acadsharp/Dockerfile
+    network_mode: none
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 256m
+    memswap_limit: 256m
+    cpus: 2
+    logging:
+      driver: json-file
+      options:
+        max-size: 1m
+        max-file: "3"
+    volumes:
+      - ${FIXTURE_DIR:-./fixtures}:/fixtures
+
   step-validator:
     image: pvec-gold/step-validator:local
     platform: ${VALIDATOR_PLATFORM:-linux/amd64}

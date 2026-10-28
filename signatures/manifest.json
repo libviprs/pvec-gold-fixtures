@@ -1,0 +1,127 @@
+{
+  "fixtures": {
+    "arc-seam-001": {
+      "signature_sha256": "fe7557297fdad79ef97d6970ebb9f57b1faf29f9e9d34925190cfeadfb580f5f",
+      "step_sha256": "963ca7404817bac8cef953ba27ed719d54a3afa6da9f1651e3c18e053b388372"
+    },
+    "bezier-d3-001": {
+      "signature_sha256": "465fbb53bd9935fd86d97e8be47e786664adc2556c81140d9eb091e494747ff8",
+      "step_sha256": "a45bc9265a57f6b8c8333548b9bd32ba7724240178b81f0cd5d9547587cc566d"
+    },
+    "bspline-d3-001": {
+      "signature_sha256": "0a77cfacac1359d35a38af1f6cf40a889f53d474ef89ac1284b3641c18b4fe75",
+      "step_sha256": "65f0d8c0cbac9388c2124ba7e8238a89d7d1633747f19ea859a287584724f281"
+    },
+    "bspline-d5-001": {
+      "signature_sha256": "a46ccaa859a11f861ac9b4bcdf19700e47fbe555bf77b28b5ce9682990086578",
+      "step_sha256": "8dad52730f3032f36f2d919676ba83505d8cb20f65d8684dd295ca6178495d27"
+    },
+    "bulge-arc-001": {
+      "signature_sha256": "6e977b824987d7be1cdda7acccd7943f41486154b62e8c7bc78df196182504a7",
+      "step_sha256": "633a76644f17522f16a0ddbb293982d790a6e16acf0029bd5f57432e95408b58"
+    },
+    "bulge-arc-neg-001": {
+      "signature_sha256": "817fc8068538917d7324b26d339ac89a85e83a5e02c43a982318b532cb7390fe",
+      "step_sha256": "4eb187cfcb8e376b30c374250cbee0e7395fba517f1063fff2033fdd9825bf48"
+    },
+    "circle-001": {
+      "signature_sha256": "6ad1f47fe57a810c9214e4cf37d589a670737d885e7c5158e993ee7d04136210",
+      "step_sha256": "ee5e555655c384eff4169aa1f6b8d9fd13454c1fab2e9f4ed67c21368750387f"
+    },
+    "closed-by-endpoint-001": {
+      "signature_sha256": "78953625695be6375a9deff82f65db953b73ee7213453f9bdff7c3c4f3232649",
+      "step_sha256": "ef37fde8d6eb0c07fc058e131463b4fbe0762b3776b9df4fc93f6fe227a36e6b"
+    },
+    "closed-periodic-001": {
+      "signature_sha256": "2f20c917a296855ce2ef4b0288fa3fb7441eba68b82cbff6778d8f8f5a2897ff",
+      "step_sha256": "157c711e5d407df118809ef942ec4c808b2029cf0eb4357b63fb461d8c658b4f"
+    },
+    "ellipse-001": {
+      "signature_sha256": "9a1c2ca968a5ae3100d89e6029ade2f64bd5b1bcf1ae3f6ed93ae8988064fe78",
+      "step_sha256": "4d01e3abd58fc9cb298188a51e445129150d88dede473b7de5ecd2d1dafefdac"
+    },
+    "elliptical-arc-001": {
+      "signature_sha256": "c6e6a607b26ffa272e46be36030c58f2c238f926580131de500dcdb47e838778",
+      "step_sha256": "955b6578dd3068e9fae58b4664f3662b38582ff32df3a0da33efbaf04163072e"
+    },
+    "large-coords-001": {
+      "signature_sha256": "048f5a50c4eda79055e663184c6681c1845b485687a3daa9125da85ece5e13e2",
+      "step_sha256": "8ea474a15059c69a0ebb25c975cfe4f8048363457169d21d4e8c888d0e4ae14a"
+    },
+    "layer-state-001": {
+      "signature_sha256": "445cfd63a91754768ad956f2a52d74763f83f558a33a6df5c69db0ed6a30e789",
+      "step_sha256": "8644858ec783c57fc112be26139b5b138cd56cea9a27fbd5da6ce5af3fe21ff2"
+    },
+    "line-001": {
+      "signature_sha256": "71b477906816edd2a47269064dfe9701219cda0a7a5f5b6a68c5aa817fb81380",
+      "step_sha256": "377d290f6628a8570cbddb5cfcdb312167bda550dcabcdae3dce3143e895de01"
+    },
+    "lwpolyline-closed-001": {
+      "signature_sha256": "19e34ae44b0c2b3cd38e4dd8fc36ef3f9f438583a08c44e055e33b57b27535c5",
+      "step_sha256": "7b450097dc1cf6221c225573e320cefdf18e6f7b979a9c2b72e05e54330515ae"
+    },
+    "nested-blocks-001": {
+      "signature_sha256": "c672bc5bb5c8efd7b8c18ab51169dd67c62fc17f056adb2f0311c1068a63d5f4",
+      "step_sha256": "4221e88429ae36948082a591c0a23d46ca0b7630194054d0bd1225f0f0d8b496"
+    },
+    "nonuniform-scale-circle-001": {
+      "signature_sha256": "782bf9a565f76b14f6a29baf1f76bd4571da30f6e10bbb0c16897ff18b5fd455",
+      "step_sha256": "f948fada9a7ab79983ba27b81c5d9162ebc183b4598325f045daf787c72d39ca"
+    },
+    "nonuniform-scale-rotated-001": {
+      "signature_sha256": "899b7c83bbef9a17698171ba98ca503acac4e11a253d7c3e77f4403462f11bf3",
+      "step_sha256": "2b5c64b1e5657ebe1a7825dd964513993826cb4fed427017400577bad85c4ac6"
+    },
+    "nonunit-weight-001": {
+      "signature_sha256": "82c1f9185c44be3272944fa446486458dc1d365f41b4f5ce33df5095b2c58ed8",
+      "step_sha256": "c8f79238855b766a5e41339e7483b60342aa87a5a3713ff4d2663afb410f2ebf"
+    },
+    "nurbs-d2-offconic-001": {
+      "signature_sha256": "8204f71d2101879bd8b9821cc7adec01409eeb1df2977f95ebeed04e40f6f8ef",
+      "step_sha256": "4750df40baf7daea5122b34323614033fa5eb4145c38ae4aa81d9100c32f8668"
+    },
+    "nurbs-d3-001": {
+      "signature_sha256": "bf189406db9fb435e36e2cec9d10ad08d2d3c9807f6e3abdd7b3944cbf019e77",
+      "step_sha256": "873ae34e8192b2f323a7a5e8b8a9108e22a900ff9254c0f15573046b90fb2083"
+    },
+    "polyline-001": {
+      "signature_sha256": "021207c25dcf4f600070c1a89b597eac73e8412258aaf0baf703c1216571d873",
+      "step_sha256": "d19f511e4c5f5ca90cb34805ed8dc46e497477c6753edc30a6b3170aa0f88238"
+    },
+    "polyline2d-001": {
+      "signature_sha256": "94ea45e1e421001f48cd13f5259d89f48b25989ba0fa5013be99a8573775607d",
+      "step_sha256": "81a14c758e04b05a191408fb0dfd0255d79119de53386709dbb8cff93697bc3d"
+    },
+    "reflection-001": {
+      "signature_sha256": "63864ffb4fb08437af860711495ac9a1e293cd50578dd9ab3b347d77a633a28c",
+      "step_sha256": "12b07f3493b667a714a5a0bd035963779e4594020d8c82d13d202b1328e03144"
+    },
+    "repeated-knot-c0-001": {
+      "signature_sha256": "a27e47f2e134cdd01343b6676a30c33922ff4fcb7f42f766388578d5c0fc33a6",
+      "step_sha256": "1c27e93725e5d6fe3853cdb7d4aa38e9c7ab9a84c59a8d86dc6dcd97a6730c98"
+    },
+    "rotation-irrational-001": {
+      "signature_sha256": "2582cd7cda4ce61226b44efcc70eb71f30e849be4c7c240101a532fbc8a5dddc",
+      "step_sha256": "e1b141916dad352b01ae9fe638e950c13d263d7bd593c1bf504d9492e6f83f30"
+    },
+    "tiny-radius-001": {
+      "signature_sha256": "bab335564648c4594ea0bcff46160f05552250a1a2f76e51f47ac73f67d5e860",
+      "step_sha256": "5d8efad20e648c5943d1d7ffa5ddcc1fd9c7afe1f5c8e0c2fa1f21ec30599db6"
+    },
+    "translation-001": {
+      "signature_sha256": "bf1b9825aeff07e3779810e737773820b6a7f9f70602f52dfa1d30099e00e9fd",
+      "step_sha256": "fd99eee4a21aafc26e78d6db3c1c8ccbaecf644e9904277b2aae8439520b9034"
+    },
+    "uniform-scale-001": {
+      "signature_sha256": "5d5c4ff7d0ba01a8a06a41bcbf1f4e6ae7543c68f0c6b6114788c09686835fff",
+      "step_sha256": "927b3d2ad3653e11fdd02b7bb96fa52557f7d464e734281ec7621df23068db30"
+    }
+  },
+  "manifest_version": "pvec-gold/signatures-manifest/1",
+  "versions": {
+    "evaluator": "1",
+    "occt": "7.6.3",
+    "policy": "PVec numeric policy v1",
+    "schema": "pvec-gold/signature/1"
+  }
+}
