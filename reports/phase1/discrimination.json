@@ -1,0 +1,366 @@
+{
+  "acadsharp-dwg2step": {
+    "bezier-d3-001": {
+      "baseline": "GEOMETRIC_EXACT_REPARAMETERIZED",
+      "mutations": {
+        "knot-collapse": {
+          "applies": false,
+          "changed": false,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        },
+        "reparameterise": {
+          "applies": true,
+          "changed": false,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        },
+        "weights-to-1": {
+          "applies": false,
+          "changed": false,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        }
+      }
+    },
+    "bspline-d3-001": {
+      "baseline": "STRUCTURAL_EXACT",
+      "mutations": {
+        "knot-collapse": {
+          "applies": true,
+          "changed": true,
+          "class": "BOUNDED_APPROXIMATION"
+        },
+        "reparameterise": {
+          "applies": true,
+          "changed": true,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        },
+        "weights-to-1": {
+          "applies": false,
+          "changed": false,
+          "class": "STRUCTURAL_EXACT"
+        }
+      }
+    },
+    "bspline-d5-001": {
+      "baseline": "STRUCTURAL_EXACT",
+      "mutations": {
+        "knot-collapse": {
+          "applies": true,
+          "changed": true,
+          "class": "BOUNDED_APPROXIMATION"
+        },
+        "reparameterise": {
+          "applies": true,
+          "changed": true,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        },
+        "weights-to-1": {
+          "applies": false,
+          "changed": false,
+          "class": "STRUCTURAL_EXACT"
+        }
+      }
+    },
+    "closed-by-endpoint-001": {
+      "baseline": "STRUCTURAL_EXACT",
+      "mutations": {
+        "knot-collapse": {
+          "applies": true,
+          "changed": true,
+          "class": "BOUNDED_APPROXIMATION"
+        },
+        "reparameterise": {
+          "applies": true,
+          "changed": true,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        },
+        "weights-to-1": {
+          "applies": false,
+          "changed": false,
+          "class": "STRUCTURAL_EXACT"
+        }
+      }
+    },
+    "closed-periodic-001": {
+      "baseline": "STRUCTURAL_EXACT",
+      "mutations": {
+        "knot-collapse": {
+          "applies": false,
+          "changed": false,
+          "class": "STRUCTURAL_EXACT"
+        },
+        "reparameterise": {
+          "applies": true,
+          "changed": true,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        },
+        "weights-to-1": {
+          "applies": false,
+          "changed": false,
+          "class": "STRUCTURAL_EXACT"
+        }
+      }
+    },
+    "nonunit-weight-001": {
+      "baseline": "STRUCTURAL_EXACT",
+      "mutations": {
+        "knot-collapse": {
+          "applies": true,
+          "changed": true,
+          "class": "BOUNDED_APPROXIMATION"
+        },
+        "reparameterise": {
+          "applies": true,
+          "changed": true,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        },
+        "weights-to-1": {
+          "applies": true,
+          "changed": true,
+          "class": "BOUNDED_APPROXIMATION"
+        }
+      }
+    },
+    "nurbs-d2-offconic-001": {
+      "baseline": "STRUCTURAL_EXACT",
+      "mutations": {
+        "knot-collapse": {
+          "applies": true,
+          "changed": true,
+          "class": "BOUNDED_APPROXIMATION"
+        },
+        "reparameterise": {
+          "applies": true,
+          "changed": true,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        },
+        "weights-to-1": {
+          "applies": true,
+          "changed": true,
+          "class": "BOUNDED_APPROXIMATION"
+        }
+      }
+    },
+    "nurbs-d3-001": {
+      "baseline": "STRUCTURAL_EXACT",
+      "mutations": {
+        "knot-collapse": {
+          "applies": true,
+          "changed": true,
+          "class": "BOUNDED_APPROXIMATION"
+        },
+        "reparameterise": {
+          "applies": true,
+          "changed": true,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        },
+        "weights-to-1": {
+          "applies": true,
+          "changed": true,
+          "class": "BOUNDED_APPROXIMATION"
+        }
+      }
+    },
+    "repeated-knot-c0-001": {
+      "baseline": "STRUCTURAL_EXACT",
+      "mutations": {
+        "knot-collapse": {
+          "applies": false,
+          "changed": false,
+          "class": "STRUCTURAL_EXACT"
+        },
+        "reparameterise": {
+          "applies": true,
+          "changed": true,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        },
+        "weights-to-1": {
+          "applies": false,
+          "changed": false,
+          "class": "STRUCTURAL_EXACT"
+        }
+      }
+    }
+  },
+  "libredwg-dwg2step": {
+    "bezier-d3-001": {
+      "baseline": "GEOMETRIC_EXACT_REPARAMETERIZED",
+      "mutations": {
+        "knot-collapse": {
+          "applies": false,
+          "changed": false,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        },
+        "reparameterise": {
+          "applies": true,
+          "changed": false,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        },
+        "weights-to-1": {
+          "applies": false,
+          "changed": false,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        }
+      }
+    },
+    "bspline-d3-001": {
+      "baseline": "STRUCTURAL_EXACT",
+      "mutations": {
+        "knot-collapse": {
+          "applies": true,
+          "changed": true,
+          "class": "BOUNDED_APPROXIMATION"
+        },
+        "reparameterise": {
+          "applies": true,
+          "changed": true,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        },
+        "weights-to-1": {
+          "applies": false,
+          "changed": false,
+          "class": "STRUCTURAL_EXACT"
+        }
+      }
+    },
+    "bspline-d5-001": {
+      "baseline": "STRUCTURAL_EXACT",
+      "mutations": {
+        "knot-collapse": {
+          "applies": true,
+          "changed": true,
+          "class": "BOUNDED_APPROXIMATION"
+        },
+        "reparameterise": {
+          "applies": true,
+          "changed": true,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        },
+        "weights-to-1": {
+          "applies": false,
+          "changed": false,
+          "class": "STRUCTURAL_EXACT"
+        }
+      }
+    },
+    "closed-by-endpoint-001": {
+      "baseline": "STRUCTURAL_EXACT",
+      "mutations": {
+        "knot-collapse": {
+          "applies": true,
+          "changed": true,
+          "class": "BOUNDED_APPROXIMATION"
+        },
+        "reparameterise": {
+          "applies": true,
+          "changed": true,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        },
+        "weights-to-1": {
+          "applies": false,
+          "changed": false,
+          "class": "STRUCTURAL_EXACT"
+        }
+      }
+    },
+    "closed-periodic-001": {
+      "baseline": "BOUNDED_APPROXIMATION",
+      "mutations": {
+        "knot-collapse": {
+          "applies": false,
+          "changed": false,
+          "class": "BOUNDED_APPROXIMATION"
+        },
+        "reparameterise": {
+          "applies": true,
+          "changed": false,
+          "class": "BOUNDED_APPROXIMATION"
+        },
+        "weights-to-1": {
+          "applies": false,
+          "changed": false,
+          "class": "BOUNDED_APPROXIMATION"
+        }
+      }
+    },
+    "nonunit-weight-001": {
+      "baseline": "STRUCTURAL_EXACT",
+      "mutations": {
+        "knot-collapse": {
+          "applies": true,
+          "changed": true,
+          "class": "BOUNDED_APPROXIMATION"
+        },
+        "reparameterise": {
+          "applies": true,
+          "changed": true,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        },
+        "weights-to-1": {
+          "applies": true,
+          "changed": true,
+          "class": "BOUNDED_APPROXIMATION"
+        }
+      }
+    },
+    "nurbs-d2-offconic-001": {
+      "baseline": "STRUCTURAL_EXACT",
+      "mutations": {
+        "knot-collapse": {
+          "applies": true,
+          "changed": true,
+          "class": "BOUNDED_APPROXIMATION"
+        },
+        "reparameterise": {
+          "applies": true,
+          "changed": true,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        },
+        "weights-to-1": {
+          "applies": true,
+          "changed": true,
+          "class": "BOUNDED_APPROXIMATION"
+        }
+      }
+    },
+    "nurbs-d3-001": {
+      "baseline": "STRUCTURAL_EXACT",
+      "mutations": {
+        "knot-collapse": {
+          "applies": true,
+          "changed": true,
+          "class": "BOUNDED_APPROXIMATION"
+        },
+        "reparameterise": {
+          "applies": true,
+          "changed": true,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        },
+        "weights-to-1": {
+          "applies": true,
+          "changed": true,
+          "class": "BOUNDED_APPROXIMATION"
+        }
+      }
+    },
+    "repeated-knot-c0-001": {
+      "baseline": "STRUCTURAL_EXACT",
+      "mutations": {
+        "knot-collapse": {
+          "applies": false,
+          "changed": false,
+          "class": "STRUCTURAL_EXACT"
+        },
+        "reparameterise": {
+          "applies": true,
+          "changed": true,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+        },
+        "weights-to-1": {
+          "applies": false,
+          "changed": false,
+          "class": "STRUCTURAL_EXACT"
+        }
+      }
+    }
+  }
+}
