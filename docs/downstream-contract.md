@@ -27,10 +27,12 @@ Every accepted fixture ships both files. A fixture the converter refuses by desi
   written against and calls `runner.signatures.load(dir, id, expect_schema=..., expect_policy=...)`, which
   refuses a manifest or a signature that is not what was pinned. That module is standard library only: no
   OCCT, no STEP parser, no converter, no jsonschema.
-- Stored values (control points, knots, weights, centres, radii, axes, parameter domains) as exact f64 bits.
-  Evaluated values (sample points, tangents, curvatures) are rounded to 12 significant digits and are a
-  property of the evaluator, not of the drawing. Compare them with the numeric policy, never bit for bit,
-  and not across architectures (see below).
+- Stored values (control points, knots, weights, centres, radii, parameter domains) as exact f64 bits. They are
+  the same on every architecture, and `runner/verify_signatures.py` compares them bit for bit.
+  Values OCCT derives are not file content: sample points, tangents and curvatures (rounded to 12 significant
+  digits), a line's ends and an ellipse's major axis (`runner.normalize.DERIVED_GEOMETRY`). Compare those
+  with the numeric policy, never bit for bit. They move in the last digits between native x86_64 and native
+  arm64, and that is not a difference.
 - The hashes. If a hash in the manifest does not match the file, the artifact is damaged and the test should
   fail, not skip.
 
@@ -41,16 +43,12 @@ Every accepted fixture ships both files. A fixture the converter refuses by desi
 - Entity ids of any kind: STEP `#n` numbers, the evaluator's own labels.
 - A converter being present, or its name. The signature does not say which converter made the STEP, and a
   test that needs to know has stopped being a downstream test.
-- The signature being the same on every architecture. It is the same STEP on both (the STEP bytes are
-  identical once `SOURCE_DATE_EPOCH` is fixed), but OCCT's evaluation differs in the last digits between
-  native x86_64 and native arm64, and 12-digit rounding does not hide every such difference
-  (`docs/benchmarks/validation.md` names the fixtures and fields). The frozen signatures are the native
-  x86_64 ones.
 
 ## Drift
 
 `python3 -m runner.verify_signatures signatures` re-derives every signature from its retained STEP and compares
-the bytes. It needs `step_eval`, so it runs in the step-validator image, on native x86_64. Any difference fails
+them: stored values bit for bit, derived values under the numeric policy. It needs `step_eval`, so it runs in the
+step-validator image, and it passes on native x86_64 and on native arm64 against the same frozen set. Any difference fails
 the job and names the fields that differ; a byte difference with no differing field fails as such. It was
 exercised once with a mutated signature (one `f64_hex` changed with the manifest rewritten to match), and it
 named the field. See `docs/benchmarks/validation.md`.
