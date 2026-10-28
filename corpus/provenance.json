@@ -7,9 +7,9 @@
       "block-heavy",
       "general annotation-heavy (mixed discipline)"
     ],
-    "not_covered": "structural, mechanical, electrical, civil, industrial/facility, spline-heavy and large-coordinate (above 1e6) drawings: I found no drawing in these classes with a licence I could establish, and a drawing whose licence cannot be established does not enter the corpus. The synthetic large-coords-001 and huge-extent-001 cover the large-coordinate arithmetic but are not real-world."
+    "not_covered": "structural, mechanical, electrical, civil, industrial/facility, spline-heavy and large-coordinate (above 1e6) drawings. I looked at the WBDG NAVFAC CAD downloads (fuel pier, magazine details) and the VA Technical Information Library: the WBDG page states no licence and claims copyright for the National Institute of Building Sciences, and I found no licence statement on the VA pages, so those sets are PRIVATE (id and hash only) and nothing from them counts as covered. No public drawing above 1e6 extent is in the corpus yet. The synthetic large-coords-001 and huge-extent-001 cover the large-coordinate arithmetic but are not real-world."
   },
-  "private_pack": "none yet: every fixture here is PUBLIC_REDISTRIBUTABLE. A PRIVATE source would appear in fixtures/real-world as its id and hashes only, with the bytes in a pack outside this repository, and runner.corpus.private_path_problems fails the run if a PRIVATE DWG is present.",
+  "private_pack": "Two NAVFAC sets from legacy.wbdg.org are PRIVATE: their ids, the page statement and per-file SHA-256 are in \"private\" below, and the bytes stay in a pack outside this repository. runner.corpus.private_path_problems fails the run if a PRIVATE DWG is present under its id or under any other name (it matches the hashes).",
   "fixtures": {
     "arch-aecobjects-001": {
       "origin": "https://github.com/DomCR/ACadSharp/blob/d7dc111023477d8a9fffc2153139459c95b4f345/samples/aec_objects/AecObjects.dwg",
@@ -43,6 +43,67 @@
       "redistribution_verdict": "PUBLIC_REDISTRIBUTABLE",
       "discipline": "general annotation-heavy (mixed discipline)",
       "note": "A general sample sheet with text, multileaders, hatches, polylines and two splines."
+    }
+  },
+  "private": {
+    "navfac-fuelpier-private-001": {
+      "origin": "https://legacy.wbdg.org/NAVFAC/NAVCAD/FuelPier_NAVFAC10009724-10009734.zip",
+      "source_page": "https://legacy.wbdg.org/navy/cad",
+      "page_statement": "The WBDG NAVFAC CAD page lists the download with no licence or public-domain statement. Its footer reads \"(c) 2026 National Institute of Building Sciences. All rights reserved.\" The page is run by the National Institute of Building Sciences, not by the Navy.",
+      "rights_holder": "not established (the title blocks name the Naval Facilities Engineering Command, the host asserts copyright for itself)",
+      "licence": "UNKNOWN",
+      "licence_basis": "US government work only where the publishing agency says so or the drawing's author is the agency. The publishing site is not the agency and states no licence; a title block that names the command does not say who drew the sheets, and contractor-authored sheets are not public domain. I could not establish either, so the verdict is PRIVATE.",
+      "acquisition_date": "2026-10-28",
+      "redistribution_verdict": "PRIVATE",
+      "archive_sha256": "f803e684bb6ade0ef5d958c0dd402224dca81c3ae09da5aae6bac908638c690a",
+      "discipline": "structural, civil, electrical, mechanical (fuel pier)",
+      "note": "Eleven AC1015 sheets for a fuel pier. The DWG bytes are in a pack outside this repository.",
+      "files": {
+        "NFP_E101.dwg": "f5e4f0b3e3a707885a09857402af0623fa7202f5bbed6189bf5e8d07f9c03897",
+        "NFP_E501.dwg": "09192c7a214333038ab74860a83c0a5238ee4e5896f69017a1f86da5cfda7702",
+        "NFP_G001.dwg": "453bd18bdcd02da93b028d31595ac1aa97f0b38a6b038abc52e92860f18a7174",
+        "NFP_G002.dwg": "fb0f2bb9e144a426a21f086724ac7f301a90769b81a25c6a9be6486ed80d339d",
+        "NFP_M101.dwg": "0bf2e691a23e793f0f5224cac3f8cdca9532ad9371b0be0d2aee4d8dbe9c12ac",
+        "NFP_M102.dwg": "c2a27e3405ec75f542c66f8beeee767f9b2b31826b5d5798a0d7acdb30a6d6b0",
+        "NFP_M103.dwg": "319f6725cd3586416ea5d451ba1f293af96c20d6f2e801921dc846d41143d7c1",
+        "NFP_M301.dwg": "697a027360052ed9601c033b3e0777a2d7b3f219b721eae024aba8736d6080a3",
+        "NFP_M501.dwg": "cd6c64112dac342dca89b09f7d46a9c5bf083228b43cb7106d07aecd964f3e26",
+        "NFP_M502.dwg": "748a72a51081f51f9a89645a26afb190b18e5686f350bd63dd5379406871ef63",
+        "NFP_S101.dwg": "b45cffea5d46aa7a282b011694ddf30eb450223439e5fdd21c8b5414ff19bd29"
+      }
+    },
+    "navfac-magazines-private-001": {
+      "origin": "https://legacy.wbdg.org/NAVFAC/NAVCAD/navy_magazines_dwg.zip",
+      "source_page": "https://legacy.wbdg.org/navy/cad",
+      "page_statement": "The WBDG NAVFAC CAD page lists the download with no licence or public-domain statement. Its footer reads \"(c) 2026 National Institute of Building Sciences. All rights reserved.\" The page is run by the National Institute of Building Sciences, not by the Navy.",
+      "rights_holder": "not established (the title blocks name the Naval Facilities Engineering Command, the host asserts copyright for itself)",
+      "licence": "UNKNOWN",
+      "licence_basis": "US government work only where the publishing agency says so or the drawing's author is the agency. The publishing site is not the agency and states no licence; a title block that names the command does not say who drew the sheets, and contractor-authored sheets are not public domain. I could not establish either, so the verdict is PRIVATE.",
+      "acquisition_date": "2026-10-28",
+      "redistribution_verdict": "PRIVATE",
+      "archive_sha256": "dfa0df0f527a7b1b14ca8efb77d8ff936d8d5fb86b511206e1a22d9d54163b50",
+      "discipline": "electrical (magazine details)",
+      "note": "Twenty AC1024 detail sheets. The DWG bytes are in a pack outside this repository.",
+      "files": {
+        "E-1.dwg": "24ed7ddc09f6e43b27b037c49a1b474d9cd6e03910f29005fc2ca86125c29eff",
+        "E-10.dwg": "07720851aa1d252910bba12995fa0c92333378a955710cedf73228f01dd636f1",
+        "E-11.dwg": "0b81c4c805680b709d855cd55e73949bc54fdf6e345e689de97ecf63f1d110ef",
+        "E-12.dwg": "395e8bbd6d51ec3b4d648b0ddb0373ab4016a335ea238047a5c31224f014fdb8",
+        "E-13.dwg": "b7155fc14e4b51ced397de14bff2aa2e62030c827bcbda9d5c8ee293f82f28c6",
+        "E-14.dwg": "bdc34970c7078da82e553abc671d3c464dc3ac41ccde1cc409b7d946bf33b92a",
+        "E-15.dwg": "7a3761c037eff16d37d9e12301548231dcd90bab570fb1216f3e60e0ee01de69",
+        "E-16.dwg": "ad8cf7776123347d523ee2b5294fb210e828669b41ac97587d12e44684901452",
+        "E-17.dwg": "7f46db96b1e9311b920414bc3a1a687a45ea4e44409d27218dd17769788e6d13",
+        "E-2.dwg": "16d4e958250f7e0ed15ad5127b771ee76b08b5411d803be431f7567274c27f79",
+        "E-3.dwg": "ac1e319e030b49ffbf8a355c38bea346e926a93b71fc6e71721adfb301cc079c",
+        "E-4.dwg": "73b82c1ef779648c2a4e2ec36908257350a7954513902b70cf052ac47db6ba84",
+        "E-5.dwg": "de67b50e5ff786f25dc548d977fede5ab7f30eda7653a74a2a8e74424e521aba",
+        "E-6.dwg": "0391971dc8d3fa56e46b7321b4bf595cd02c07c15e98f47b675d5eeef04bbcd7",
+        "E-7.dwg": "28134ac4478bc9be2dce92a9864b3df201e42d055b459ea36d12d09edc4f368c",
+        "E-8.dwg": "6d13c51ade5ff71129d24a293cd847966f2d53188716d987d1aa56e81d21709c",
+        "E-9.dwg": "b8bd6eefed0a332d3b2af5edb0de3e6e72ae19334b6cf793fdd4b6272ce91d6d",
+        "S-1.dwg": "67317dd58a7ec02ee64289aa36e9c301f2b74c97fb48ade602cdb6233b9f2fb5"
+      }
     }
   }
 }
