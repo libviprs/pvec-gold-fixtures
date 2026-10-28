@@ -93,6 +93,33 @@ services:
     volumes:
       - ${FIXTURE_DIR:-./fixtures}:/fixtures
 
+  # The second open converter (LibreDWG, GPL-3.0-or-later), a different decoder lineage from ACadSharp.
+  # It is an image reference and never a build: the Dockerfile lives in libviprs/pvec-oracle-libredwg, so
+  # no GPL source is a build context here and the only thing that crosses is the process boundary and the
+  # files it writes. Set LIBREDWG_IMAGE to the digest reference (name@sha256:...) or to a local image id.
+  # Commands: `dwg2step --in --out --status` and `dwgdump --in --out`; the image has no entrypoint.
+  libredwg-converter:
+    image: ${LIBREDWG_IMAGE:-pvec-oracle-libredwg:local}
+    platform: ${LIBREDWG_PLATFORM:-linux/amd64}
+    network_mode: none
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 512m
+    memswap_limit: 512m
+    cpus: 2
+    logging:
+      driver: json-file
+      options:
+        max-size: 1m
+        max-file: "3"
+    volumes:
+      - ${FIXTURE_DIR:-./fixtures}:/fixtures
+
   step-validator:
     image: pvec-gold/step-validator:local
     platform: ${VALIDATOR_PLATFORM:-linux/amd64}

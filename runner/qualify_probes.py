@@ -8,6 +8,8 @@ DIR holds <probe-id>/primary.verification.json (+ primary.status.json) for the p
 <probe-id>/secondary.verification.json (+ secondary.status.json) for the secondary one. With --lineage for
 both ids is required: two converters of one lineage, or two equal ids, are refused as a dual oracle (ADR 0009),
 and the report records the lineages so a verdict always shows whose decoders produced it.
+--resolved FILE is a JSON list of {"probe": ID, "explanation": TEXT}: a cross-converter discrepancy on that
+probe stops blocking its capability, and the explanation goes into the report. A bare id is refused.
 Comparison reads the normalised evaluator records, never STEP text, and every threshold comes from the
 vendored policy. The verdict rules do not look at the ids.
 
@@ -358,6 +360,11 @@ def main(argv):
         d = em.load(f)
         probes[d["fixture_id"]] = d
     resolved = json.loads(Path(a.resolved).read_text()) if a.resolved else []
+    for r in resolved:
+        if not isinstance(r, dict) or not str(r.get("explanation", "")).strip():
+            raise SystemExit("--resolved entries are {\"probe\": ID, \"explanation\": TEXT}; %r has no explanation" % (r,))
+        if r.get("probe") not in probes:
+            raise SystemExit("--resolved names %r, which is not a probe" % (r.get("probe"),))
     def outputs_for(pid):
         out = {pid_: load_outputs(pdir, pid, "primary")}
         if sid_:
@@ -366,7 +373,8 @@ def main(argv):
     no_source = {}
     if a.excluded:
         no_source = {e["id"]: "%s: %s" % (e["reason"], e["evidence"]) for e in json.loads(Path(a.excluded).read_text())["excluded"]}
-    rep = build_report(pol, probes, outputs_for, resolved, no_source)
+    rep = build_report(pol, probes, outputs_for, [r["probe"] for r in resolved], no_source)
+    rep["resolved"] = resolved
     rep["lineages"] = {i: lin[i] for i in ids}
     rep["oracle_scope"] = a.oracle_scope
     rep["platform"] = a.platform
