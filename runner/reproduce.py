@@ -16,6 +16,7 @@ import os
 import re
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 from . import step_normalise
@@ -224,10 +225,14 @@ def run(platform, label, out_dir, against=None, write_release=None, skip_regen=F
     pol = numeric.load_policy()
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
+    t0 = time.monotonic()
+    timings = {}
     stepval = "gold-stepval:" + arch
     conv = "gold-dwg2step-acadsharp:repro-" + arch
     docker("build", "-q", "--platform", platform, "-f", str(ROOT / "docker/step-validator/Dockerfile"), "-t", stepval, str(ROOT))
     docker("build", "-q", "--platform", platform, "-f", str(ROOT / "tools/converters/acadsharp/Dockerfile"), "-t", conv, str(ROOT))
+    timings["build_images_seconds"] = round(time.monotonic() - t0, 1)
+    t1 = time.monotonic()
     built = {"step-validator": image_id(stepval), "dwg2step-acadsharp": image_id(conv)}
     pin, _ = pinned_inputs()
     corpus_dir = ROOT / "corpus" / "r0-open"
@@ -241,6 +246,8 @@ def run(platform, label, out_dir, against=None, write_release=None, skip_regen=F
         corpus_dir = regen_corpus
     else:
         regen_bundle = None
+    timings["regenerate_dwgs_seconds"] = round(time.monotonic() - t1, 1)
+    t2 = time.monotonic()
     manifest_sha = hashlib.sha256((corpus_dir / "manifest.json").read_bytes()).hexdigest()
     mf = json.loads((corpus_dir / "manifest.json").read_text())
     fixtures, diverged_total = [], []
@@ -258,6 +265,7 @@ def run(platform, label, out_dir, against=None, write_release=None, skip_regen=F
             code = convert(platform, conv, dwg, d, "primary")
             st = json.loads((d / "primary.status.json").read_text())
             runs[name] = {"code": code, "status": st, "dir": d}
+        rec["converter_wall_seconds"] = runs["a"]["status"].get("wall_time_seconds")
         diffs += json_divergence("status", runs["a"]["status"], runs["b"]["status"])
         if runs["a"]["code"] != runs["b"]["code"]:
             diffs.append("exit_code")
@@ -285,6 +293,7 @@ def run(platform, label, out_dir, against=None, write_release=None, skip_regen=F
                        diverged=diffs)
         fixtures.append(rec)
         diverged_total += ["%s: %s" % (fid, d) for d in diffs]
+    timings["convert_evaluate_normalise_seconds"] = round(time.monotonic() - t2, 1)
     status_ok = not diverged_total
     product = product_seen
     tool_version = re.search(r'ToolVersion = "([^"]+)"', (ROOT / "tools/converters/acadsharp/Program.cs").read_text()).group(1)
@@ -298,6 +307,7 @@ def run(platform, label, out_dir, against=None, write_release=None, skip_regen=F
         "fixtures": [{k: v for k, v in f.items() if k not in ("step_normalised", "signature_bytes")} for f in fixtures],
         "unlisted_divergences": diverged_total,
         "divergence_list": list(DIVERGENCE_NAMES),
+        "timings": timings,
         "result": "PASS" if status_ok and (regen_bundle is None or regen_bundle == pin["bundle_sha256"]) else "FAIL",
     }
     pieces = dict(
