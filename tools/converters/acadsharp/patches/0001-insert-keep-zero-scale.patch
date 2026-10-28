@@ -1,0 +1,40 @@
+diff --git a/src/ACadSharp/Entities/Insert.cs b/src/ACadSharp/Entities/Insert.cs
+index 5e88c6b3..5953fe43 100644
+--- a/src/ACadSharp/Entities/Insert.cs
++++ b/src/ACadSharp/Entities/Insert.cs
+@@ -160,11 +160,6 @@ public class Insert : Entity, IOrientable
+ 		}
+ 		set
+ 		{
+-			if (value.Equals(0))
+-			{
+-				string name = nameof(this.XScale);
+-				throw new ArgumentOutOfRangeException(name, value, $"{name} value must be none zero.");
+-			}
+ 			this._xscale = value;
+ 		}
+ 	}
+@@ -181,11 +176,6 @@ public class Insert : Entity, IOrientable
+ 		}
+ 		set
+ 		{
+-			if (value.Equals(0))
+-			{
+-				string name = nameof(this.YScale);
+-				throw new ArgumentOutOfRangeException(name, value, $"{name} value must be none zero.");
+-			}
+ 			this._yscale = value;
+ 		}
+ 	}
+@@ -202,11 +192,6 @@ public class Insert : Entity, IOrientable
+ 		}
+ 		set
+ 		{
+-			if (value.Equals(0))
+-			{
+-				string name = nameof(this.ZScale);
+-				throw new ArgumentOutOfRangeException(name, value, $"{name} value must be none zero.");
+-			}
+ 			this._zscale = value;
+ 		}
+ 	}

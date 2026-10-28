@@ -1,0 +1,25 @@
+{
+  "converter": "libredwg-dwg2step",
+  "declared_schema": null,
+  "error": {
+    "class": "CONVERSION_FAILED",
+    "code": 15,
+    "message": "INSERT of PROBE_SINGULAR_001_L1 has a singular matrix; no geometry is written for it"
+  },
+  "exit_code": 15,
+  "input": {
+    "path": "source.dwg",
+    "sha256": "1394adbee5a986320b5aa8c035c802c2740782b10db676e3fb9b6e00bbb2d8c8"
+  },
+  "output": null,
+  "product": {
+    "name": "pvec-oracle-libredwg dwg2step",
+    "version": "1 (LibreDWG 0.14+patch0001)"
+  },
+  "schema_version": "pvec-gold/converter-status/1",
+  "status": "ERROR",
+  "wall_time_seconds": "0.005",
+  "warnings": [
+    "dwgread: Warning: TODO TABLESTYLE r2010+ missing fields"
+  ]
+}

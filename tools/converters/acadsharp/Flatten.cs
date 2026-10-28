@@ -189,12 +189,16 @@ public sealed class Flattener
         return a;
     }
 
-    // NP-19: refuse an affine map whose |ad - bc| <= REL * big^2 (the 2D part), or that is not finite.
+    // NP-19: refuse an affine map whose |ad - bc| <= REL * big^2 (the 2D part), or that is not finite. A determinant of
+    // exactly zero is SINGULAR_TRANSFORM (the authored outcome of singular-001), anything else under the bound is NEAR_SINGULAR_TRANSFORM.
     void RefuseSingular(Affine m, string block)
     {
         double a = m.L[0, 0], b = m.L[0, 1], c = m.L[1, 0], d = m.L[1, 1];
         double big = Math.Max(Math.Max(Math.Abs(a), Math.Abs(b)), Math.Max(Math.Abs(c), Math.Abs(d)));
         double det = Math.Abs(a * d - b * c);
+        if (det == 0.0)
+            throw new ConvertException(15, "CONVERSION_FAILED",
+                "SINGULAR_TRANSFORM: the composed map of block " + block + " has |ad - bc| = " + det.ToString("R", CultureInfo.InvariantCulture) + " exactly, so it maps the plane onto a line or a point (PVec numeric policy NP-19)");
         if (!double.IsFinite(det) || det <= _rel * big * big)
             throw new ConvertException(15, "CONVERSION_FAILED",
                 "NEAR_SINGULAR_TRANSFORM: the composed map of block " + block + " has |ad - bc| = " + det.ToString("R", CultureInfo.InvariantCulture) + " with big = " + big.ToString("R", CultureInfo.InvariantCulture) + " (PVec numeric policy NP-19)");
