@@ -2,13 +2,13 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/libviprs/pvec-gold-fixtures/schema/converter-status.schema.json",
   "title": "converter status record",
-  "description": "One record per converter run, written beside the output whether the run worked or not. The exit codes are shared by both converters: 0 ok, 10 bad arguments, 11 input missing or unreadable, 12 input malformed, 13 DWG version unsupported, 14 licence or activation unavailable, 15 conversion failed, 16 output not produced or not written, 17 declared STEP schema is not AP242, 20 internal error.",
+  "description": "One record per converter run, written beside the output whether the run worked or not. The exit codes are shared by every converter: 0 ok, 10 bad arguments, 11 input missing or unreadable, 12 input malformed, 13 DWG version unsupported, 14 licence or activation unavailable, 15 conversion failed, 16 output not produced or not written, 17 declared STEP schema is not AP242, 20 internal error.",
   "type": "object",
   "required": ["schema_version", "converter", "status", "exit_code", "input", "output", "product", "declared_schema", "wall_time_seconds", "warnings", "error"],
   "additionalProperties": false,
   "properties": {
     "schema_version": { "const": "pvec-gold/converter-status/1" },
-    "converter": { "enum": ["cadex", "oda"] },
+    "converter": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "maxLength": 64, "description": "The converter's name: a short lowercase id such as cadex, oda, acadsharp-dwg2step or libredwg-dwg2step. Each corpus revision lists the ids it uses (ADR 0009)." },
     "status": { "enum": ["OK", "ERROR"] },
     "exit_code": { "enum": [0, 10, 11, 12, 13, 14, 15, 16, 17, 20] },
     "input": {

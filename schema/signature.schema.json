@@ -1,0 +1,732 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/libviprs/pvec-gold-fixtures/schema/signature.schema.json",
+  "title": "*.signature.json",
+  "description": "An implementation-neutral signature of one STEP file, made by runner/normalize.py from a step_eval verification record. It names no STEP entity id, file offset or converter, lists entities in a content-derived order, uses the canonical unit, and gives every scalar its decimal, its f64_hex and the number of significant digits in the decimal (precision). Stored values keep their bits; evaluated samples are rounded to a fixed number of digits so two architectures agree. Arithmetic relations JSON Schema cannot express (decimal against f64_hex, precision against the digits of the decimal) are enforced by runner/normalize.py, and the two together are the gate.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "versions",
+    "units",
+    "entities"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "pvec-gold/signature/1"
+    },
+    "versions": {
+      "type": "object",
+      "required": [
+        "evaluator",
+        "occt",
+        "schema",
+        "policy"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "evaluator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "occt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema": {
+          "const": "pvec-gold/signature/1"
+        },
+        "policy": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "units": {
+      "type": "object",
+      "required": [
+        "canonical"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "canonical": {
+          "const": "metre"
+        }
+      }
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/entity"
+      }
+    }
+  },
+  "$defs": {
+    "scalar": {
+      "type": "object",
+      "required": [
+        "decimal",
+        "f64_hex",
+        "precision"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "decimal": {
+          "type": "string",
+          "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?[eE][+-]?[0-9]+$"
+        },
+        "f64_hex": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{16}$"
+        },
+        "precision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 17
+        }
+      }
+    },
+    "point3": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "$ref": "#/$defs/scalar"
+      }
+    },
+    "domain": {
+      "type": "object",
+      "required": [
+        "start",
+        "end"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "start": {
+          "$ref": "#/$defs/scalar"
+        },
+        "end": {
+          "$ref": "#/$defs/scalar"
+        }
+      }
+    },
+    "closure": {
+      "type": "object",
+      "required": [
+        "closed_by_endpoint",
+        "closed_by_knots",
+        "periodic"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "closed_by_endpoint": {
+          "type": "boolean"
+        },
+        "closed_by_knots": {
+          "type": "boolean"
+        },
+        "periodic": {
+          "type": "boolean"
+        }
+      }
+    },
+    "knot": {
+      "type": "object",
+      "required": [
+        "value",
+        "multiplicity"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/$defs/scalar"
+        },
+        "multiplicity": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "transform": {
+      "type": "object",
+      "required": [
+        "convention",
+        "matrix",
+        "determinant",
+        "classification"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "convention": {
+          "const": "ROW_MAJOR_COLUMN_VECTOR_PARENT_LEFT"
+        },
+        "matrix": {
+          "type": "array",
+          "minItems": 16,
+          "maxItems": 16,
+          "items": {
+            "$ref": "#/$defs/scalar"
+          }
+        },
+        "determinant": {
+          "$ref": "#/$defs/scalar"
+        },
+        "classification": {
+          "enum": [
+            "IDENTITY",
+            "TRANSLATION",
+            "ROTATION",
+            "UNIFORM_SCALE",
+            "NON_UNIFORM_SCALE",
+            "REFLECTION",
+            "SHEAR",
+            "GENERAL_AFFINE",
+            "NEAR_SINGULAR",
+            "SINGULAR"
+          ]
+        }
+      }
+    },
+    "line_geometry": {
+      "type": "object",
+      "required": [
+        "start",
+        "end"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "start": {
+          "$ref": "#/$defs/point3"
+        },
+        "end": {
+          "$ref": "#/$defs/point3"
+        }
+      }
+    },
+    "polyline_geometry": {
+      "type": "object",
+      "required": [
+        "vertices",
+        "bulges"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "vertices": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/point3"
+          }
+        },
+        "bulges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/scalar"
+          }
+        }
+      }
+    },
+    "circle_geometry": {
+      "type": "object",
+      "required": [
+        "center",
+        "normal",
+        "x_axis",
+        "radius"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "center": {
+          "$ref": "#/$defs/point3"
+        },
+        "normal": {
+          "$ref": "#/$defs/point3"
+        },
+        "x_axis": {
+          "$ref": "#/$defs/point3"
+        },
+        "radius": {
+          "$ref": "#/$defs/scalar"
+        }
+      }
+    },
+    "circular_arc_geometry": {
+      "type": "object",
+      "required": [
+        "center",
+        "normal",
+        "x_axis",
+        "radius",
+        "start_angle",
+        "sweep_angle"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "center": {
+          "$ref": "#/$defs/point3"
+        },
+        "normal": {
+          "$ref": "#/$defs/point3"
+        },
+        "x_axis": {
+          "$ref": "#/$defs/point3"
+        },
+        "radius": {
+          "$ref": "#/$defs/scalar"
+        },
+        "start_angle": {
+          "$ref": "#/$defs/scalar"
+        },
+        "sweep_angle": {
+          "$ref": "#/$defs/scalar"
+        }
+      }
+    },
+    "ellipse_geometry": {
+      "type": "object",
+      "required": [
+        "center",
+        "normal",
+        "major_axis",
+        "semi_major",
+        "semi_minor"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "center": {
+          "$ref": "#/$defs/point3"
+        },
+        "normal": {
+          "$ref": "#/$defs/point3"
+        },
+        "major_axis": {
+          "$ref": "#/$defs/point3"
+        },
+        "semi_major": {
+          "$ref": "#/$defs/scalar"
+        },
+        "semi_minor": {
+          "$ref": "#/$defs/scalar"
+        }
+      }
+    },
+    "elliptical_arc_geometry": {
+      "type": "object",
+      "required": [
+        "center",
+        "normal",
+        "major_axis",
+        "semi_major",
+        "semi_minor",
+        "start_angle",
+        "sweep_angle"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "center": {
+          "$ref": "#/$defs/point3"
+        },
+        "normal": {
+          "$ref": "#/$defs/point3"
+        },
+        "major_axis": {
+          "$ref": "#/$defs/point3"
+        },
+        "semi_major": {
+          "$ref": "#/$defs/scalar"
+        },
+        "semi_minor": {
+          "$ref": "#/$defs/scalar"
+        },
+        "start_angle": {
+          "$ref": "#/$defs/scalar"
+        },
+        "sweep_angle": {
+          "$ref": "#/$defs/scalar"
+        }
+      }
+    },
+    "bezier_geometry": {
+      "type": "object",
+      "required": [
+        "degree",
+        "control_points"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "degree": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "control_points": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/point3"
+          }
+        }
+      }
+    },
+    "bspline_geometry": {
+      "type": "object",
+      "required": [
+        "degree",
+        "control_points",
+        "knots"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "degree": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "control_points": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/point3"
+          }
+        },
+        "knots": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/knot"
+          }
+        }
+      }
+    },
+    "nurbs_geometry": {
+      "type": "object",
+      "required": [
+        "degree",
+        "control_points",
+        "knots",
+        "weights",
+        "weights_all_unit"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "degree": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "control_points": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/point3"
+          }
+        },
+        "knots": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/knot"
+          }
+        },
+        "weights": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/scalar"
+          }
+        },
+        "weights_all_unit": {
+          "type": "boolean"
+        }
+      }
+    },
+    "unsupported_geometry": {
+      "type": "object",
+      "required": [
+        "occt_type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "occt_type": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "sample": {
+      "type": "object",
+      "required": [
+        "parameter",
+        "point",
+        "tangent",
+        "curvature",
+        "derivative_exclusion"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "parameter": {
+          "$ref": "#/$defs/scalar"
+        },
+        "point": {
+          "$ref": "#/$defs/point3"
+        },
+        "tangent": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/point3"
+            }
+          ]
+        },
+        "curvature": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/scalar"
+            }
+          ]
+        },
+        "derivative_exclusion": {
+          "enum": [
+            null,
+            "C0_KNOT",
+            "C1_KNOT",
+            "ZERO_SPEED"
+          ]
+        }
+      }
+    },
+    "entity": {
+      "type": "object",
+      "required": [
+        "class",
+        "structure",
+        "geometry",
+        "parameter_domain",
+        "closure",
+        "transform",
+        "samples"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "class": {
+          "enum": [
+            "line",
+            "polyline",
+            "circle",
+            "circular_arc",
+            "ellipse",
+            "elliptical_arc",
+            "bezier",
+            "bspline",
+            "nurbs",
+            "unsupported"
+          ]
+        },
+        "structure": {
+          "const": "CURVE_ONLY"
+        },
+        "geometry": {
+          "type": "object"
+        },
+        "parameter_domain": {
+          "$ref": "#/$defs/domain"
+        },
+        "closure": {
+          "$ref": "#/$defs/closure"
+        },
+        "transform": {
+          "$ref": "#/$defs/transform"
+        },
+        "samples": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sample"
+          }
+        },
+        "derivative_exclusions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "parameter",
+              "reason"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "parameter": {
+                "$ref": "#/$defs/scalar"
+              },
+              "reason": {
+                "const": "C0_KNOT"
+              }
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "class": {
+                "const": "line"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "geometry": {
+                "$ref": "#/$defs/line_geometry"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "class": {
+                "const": "polyline"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "geometry": {
+                "$ref": "#/$defs/polyline_geometry"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "class": {
+                "const": "circle"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "geometry": {
+                "$ref": "#/$defs/circle_geometry"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "class": {
+                "const": "circular_arc"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "geometry": {
+                "$ref": "#/$defs/circular_arc_geometry"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "class": {
+                "const": "ellipse"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "geometry": {
+                "$ref": "#/$defs/ellipse_geometry"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "class": {
+                "const": "elliptical_arc"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "geometry": {
+                "$ref": "#/$defs/elliptical_arc_geometry"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "class": {
+                "const": "bezier"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "geometry": {
+                "$ref": "#/$defs/bezier_geometry"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "class": {
+                "const": "bspline"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "geometry": {
+                "$ref": "#/$defs/bspline_geometry"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "class": {
+                "const": "nurbs"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "geometry": {
+                "$ref": "#/$defs/nurbs_geometry"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "class": {
+                "const": "unsupported"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "geometry": {
+                "$ref": "#/$defs/unsupported_geometry"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -26,3 +26,10 @@ quarantined (ADR 0006) until the disagreement is explained. If they agree, the f
 
 Agreement can raise confidence in a real-world drawing, but it can never be used to certify a PVec
 capability. Only the known-truth probes can.
+
+## Amendment (ADR 0009)
+
+The two converters are whichever the corpus revision names in its manifest, not always CAD Exchanger
+and ODA. The decision above already reads generically, so nothing in it changes. What a pair of
+converters can claim is recorded in `oracle_scope` (ADR 0009), and two converters of one lineage don't
+count as a dual oracle.

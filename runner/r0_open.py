@@ -23,6 +23,7 @@ Anything else quarantines the probe (ADR 0006).
 import hashlib
 import json
 import math
+import re
 import sys
 from pathlib import Path
 
@@ -43,6 +44,86 @@ STATEMENT = (
 TYPE_OF = {"line": "LINE", "circle": "CIRCLE", "circular_arc": "ARC", "ellipse": "ELLIPSE",
            "elliptical_arc": "ELLIPSE", "polyline": "LWPOLYLINE", "bezier": "SPLINE", "bspline": "SPLINE",
            "nurbs": "SPLINE"}
+
+
+# ADR 0009: how far a fixture's oracles reach. r0-open is NONE (no STEP oracle ran). A revision that
+# uses open converters says OPEN_CONVERTERS; one that uses the licensed SDKs says VENDOR_CONVERTERS.
+ORACLE_SCOPES = ("NONE", "OPEN_CONVERTERS", "VENDOR_CONVERTERS")
+EVIDENCE_SCOPES = ("READER_MAPPING_ONLY", "STEP_ORACLE")
+VENDOR_NAME = re.compile(r"cad\s*-?exchanger|cadex|(?<![a-z])oda|open\s*design", re.I)
+CONVERTER_FIELDS = ("id", "version", "source_commit", "lineage", "image_digest")
+
+
+def oracle_scope_of(entry):
+    """The oracle scope of a manifest or a fixture entry. The r0-open manifest predates the field and is
+    pinned, so `oracles: none` stands for NONE there. Anything else without the field has no scope."""
+    if "oracle_scope" in entry:
+        return entry["oracle_scope"]
+    return "NONE" if entry.get("oracles") == "none" else None
+
+
+def lineage_problems(converters):
+    """Two converters that decode DWG through one lineage are one oracle, not two (ADR 0009)."""
+    seen, out = {}, []
+    for c in converters:
+        lin = str(c.get("lineage", "")).strip().lower()
+        if not lin:
+            out.append("converter %r lacks lineage" % c.get("id"))
+            continue
+        if lin in seen:
+            out.append("converters %s and %s share the lineage %r, so they cannot be a dual oracle" % (seen[lin], c.get("id"), c["lineage"]))
+        seen[lin] = c.get("id")
+    return out
+
+
+def scope_problems(m):
+    """What is wrong with a manifest's scope fields, as a list of sentences (empty means fine)."""
+    out = []
+    top_scope, top_ev = oracle_scope_of(m), m.get("evidence_scope")
+    if top_scope not in ORACLE_SCOPES:
+        out.append("oracle_scope %r is not one of %s" % (top_scope, ", ".join(ORACLE_SCOPES)))
+    if top_ev not in EVIDENCE_SCOPES:
+        out.append("evidence_scope %r is not one of %s" % (top_ev, ", ".join(EVIDENCE_SCOPES)))
+    conv = m.get("converters")
+    if top_ev == "STEP_ORACLE" or top_scope in ("OPEN_CONVERTERS", "VENDOR_CONVERTERS"):
+        if top_scope == "NONE":
+            out.append("evidence_scope STEP_ORACLE needs an oracle_scope other than NONE")
+        named = [c for c in conv if isinstance(c, dict)] if isinstance(conv, list) else []
+        if len(named) < 2:
+            out.append("a STEP oracle revision needs two named converters, the manifest lists %s" % (len(named) if isinstance(conv, list) else repr(conv)))
+        for c in named:
+            miss = [k for k in CONVERTER_FIELDS if k != "lineage" and not str(c.get(k, "")).strip()]
+            if miss:
+                out.append("converter %r lacks %s" % (c.get("id"), ", ".join(miss)))
+            if not re.fullmatch(r"sha256:[0-9a-f]{64}", str(c.get("image_digest", ""))):
+                out.append("converter %r: image_digest must be sha256:<64 hex>" % c.get("id"))
+            if top_scope == "OPEN_CONVERTERS" and c.get("links_occt") is not False:
+                out.append("converter %r: an open converter must state links_occt false (it would share OCCT with the evaluator, ADR 0004)" % c.get("id"))
+        if len(named) >= 2:
+            out += lineage_problems(named)
+        if top_scope == "VENDOR_CONVERTERS":
+            for c in named:
+                if not any(VENDOR_NAME.search(str(c.get(k, ""))) for k in ("id", "lineage")):
+                    out.append("VENDOR_CONVERTERS needs vendor converters, but %r names no vendor" % c.get("id"))
+            if m.get("oracles") != "vendor" or m.get("step_oracle") != "vendor":
+                out.append("VENDOR_CONVERTERS needs oracles and step_oracle to say vendor")
+        if top_scope == "OPEN_CONVERTERS":
+            names = [m.get("oracles"), m.get("step_oracle")] + [str(c.get(k, "")) for c in named for k in ("id", "version", "lineage", "source_commit")]
+            if any(n and VENDOR_NAME.search(str(n)) for n in names) or m.get("oracles") == "vendor" or m.get("step_oracle") == "vendor":
+                out.append("OPEN_CONVERTERS never names a vendor: a vendor appears in oracles, step_oracle or a converter field")
+    rank = {s: i for i, s in enumerate(ORACLE_SCOPES)}
+    for f in m.get("fixtures", []):
+        fs, fe = oracle_scope_of(f), f.get("evidence_scope")
+        if fs not in ORACLE_SCOPES or fe not in EVIDENCE_SCOPES:
+            out.append("fixture %s: unknown scope (oracle_scope %r, evidence_scope %r)" % (f.get("id"), fs, fe))
+            continue
+        if top_scope in rank and fs != top_scope and not (fs == "NONE" and rank[top_scope] > 0):
+            out.append("fixture %s claims oracle_scope %s but its revision says %s" % (f.get("id"), fs, top_scope))
+        if fe == "STEP_ORACLE" and fs == "NONE":
+            out.append("fixture %s: evidence_scope STEP_ORACLE needs an oracle_scope other than NONE" % f.get("id"))
+        if f.get("evidence_class") == "DUAL_ORACLE_EQUIVALENT" and (fs == "NONE" or fe != "STEP_ORACLE"):
+            out.append("fixture %s: DUAL_ORACLE_EQUIVALENT needs STEP_ORACLE evidence and an oracle_scope other than NONE" % f.get("id"))
+    return out
 
 
 COMMON_MODE = (

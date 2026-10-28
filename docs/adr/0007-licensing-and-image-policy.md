@@ -26,3 +26,13 @@ them somehow, and both are x86_64 only.
 ## Consequences
 
 Regenerating the corpus needs the licensee. Reading the corpus doesn't.
+
+## Amendment (ADR 0009)
+
+There is a second class of image, open images, next to the non-redistributable ones. An open image holds
+only open-licensed components, is rebuilt from pinned inputs, is multi-arch, and is published to GHCR and
+consumed by digest, never by tag. The ACadSharp converter image and the step-validator image are open
+images built here. The LibreDWG converter is GPL, so its image is built and published from
+`libviprs/pvec-oracle-libredwg` and is never a build context of this repository: I pull it by digest and
+only exchange files with it. The no-credential rules above apply to open images unchanged, and the MIT
+`LICENSE` file at the root of this repository is what allows publishing them.
