@@ -1,0 +1,184 @@
+{
+  "checks": {
+    "ACadSharp": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "LINE",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "LINE"
+      },
+      {
+        "expected": "0x3fe0000000000000",
+        "field": "start[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe0000000000000"
+      },
+      {
+        "expected": "0x3fd0000000000000",
+        "field": "start[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fd0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "start[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x400e000000000000",
+        "field": "end[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x400e000000000000"
+      },
+      {
+        "expected": "0x4004000000000000",
+        "field": "end[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4004000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "end[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      }
+    ],
+    "LibreDWG": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "LINE",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "LINE"
+      },
+      {
+        "expected": "0x3fe0000000000000",
+        "field": "start[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe0000000000000"
+      },
+      {
+        "expected": "0x3fd0000000000000",
+        "field": "start[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fd0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "start[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x400e000000000000",
+        "field": "end[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x400e000000000000"
+      },
+      {
+        "expected": "0x4004000000000000",
+        "field": "end[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4004000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "end[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      }
+    ],
+    "acadrust": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "LINE",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "LINE"
+      },
+      {
+        "expected": "0x3fe0000000000000",
+        "field": "start[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe0000000000000"
+      },
+      {
+        "expected": "0x3fd0000000000000",
+        "field": "start[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fd0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "start[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x400e000000000000",
+        "field": "end[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x400e000000000000"
+      },
+      {
+        "expected": "0x4004000000000000",
+        "field": "end[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4004000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "end[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      }
+    ]
+  },
+  "evidence": null,
+  "fixture_id": "line-001",
+  "numeric_policy_version": "PVec numeric policy v1",
+  "reader_vs_reader_differences": {},
+  "reason": null,
+  "verdict": "AGREE"
+}

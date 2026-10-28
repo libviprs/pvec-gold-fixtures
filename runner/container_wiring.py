@@ -1,4 +1,4 @@
-"""What the pvec corpus tests rely on to start the vendor-corpus container (libviprs/pvec-gold-fixtures#53).
+"""What the pvec corpus tests rely on to start the corpus container (libviprs/pvec-gold-fixtures#53).
 
     python3 -m runner.container_wiring check-pin corpus/container.pin.json [--strict]
     python3 -m runner.container_wiring check-layout corpus/r0-open
@@ -75,7 +75,7 @@ def container_state(docker, env):
         return True, "container runtime available"
     if env.get("PVEC_DEV_RUN") == "1" and not env.get("CI"):
         return True, "SKIP: container unavailable (%s); skipped because PVEC_DEV_RUN=1, a developer run" % why
-    return False, "container unavailable (%s): the vendor corpus tests cannot run without it, so this run fails" % why
+    return False, "container unavailable (%s): the corpus tests cannot run without it, so this run fails" % why
 
 
 def main(argv):

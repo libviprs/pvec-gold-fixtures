@@ -44,8 +44,7 @@ class Gen(unittest.TestCase):
 
     def start(self, *extra, env=None):
         cmd = [sys.executable, "-m", "runner.generate", "generate", "--fixtures", str(self.fx), "--truth", str(self.truth),
-               "--primary", "cadex-converter", "--secondary", "oda-converter", "--oracle-scope", "VENDOR_CONVERTERS",
-               "--lineage", "cadex-converter=cadex", "--lineage", "oda-converter=oda"] + list(extra)
+               "--lineage", "acadsharp-converter=acadsharp", "--lineage", "libredwg-converter=libredwg"] + list(extra)
         return subprocess.Popen(cmd, cwd=ROOT, env=env or self.env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
 
     def run_gen(self, *extra, env=None):
@@ -79,7 +78,7 @@ class Gen(unittest.TestCase):
         m = json.loads((self.fx / "alpha-001" / "generated" / "manifest.json").read_text())
         self.assertEqual(m["numeric_policy_version"], "PVec numeric policy v1")
         self.assertEqual(m["evaluator_version"], "1")
-        self.assertEqual(m["oracle_scope"], "VENDOR_CONVERTERS")
+        self.assertEqual(m["oracle_scope"], "OPEN_CONVERTERS")
         self.assertEqual(len(m["source_sha256"]), 64)
         self.assertEqual(len(m["converters"]), 2)
         for c in m["converters"]:
@@ -101,7 +100,7 @@ class Gen(unittest.TestCase):
         self.assertNotEqual(rc, 0)
 
     def test_converter_failure_quarantines_continues_and_exits_nonzero_with_a_count(self):
-        env = dict(self.env, FAKE_FAIL="cadex-converter")
+        env = dict(self.env, FAKE_FAIL="acadsharp-converter")
         rc, out = self.run_gen("alpha-001", "beta-001", env=env)
         self.assertNotEqual(rc, 0)
         for n in ("alpha-001", "beta-001"):
@@ -115,7 +114,7 @@ class Gen(unittest.TestCase):
         self.assertIn(DOWN, self.calls()[-1])
 
     def test_teardown_runs_after_a_converter_failure(self):
-        self.run_gen("alpha-001", env=dict(self.env, FAKE_FAIL="oda-converter"))
+        self.run_gen("alpha-001", env=dict(self.env, FAKE_FAIL="libredwg-converter"))
         self.assertIn(DOWN, self.calls()[-1])
 
     def test_teardown_runs_after_an_exception(self):
@@ -125,9 +124,9 @@ class Gen(unittest.TestCase):
         self.assertIn(DOWN, self.calls()[-1])
 
     def test_sigint_mid_conversion_tears_down(self):
-        p = self.start("alpha-001", env=dict(self.env, FAKE_HANG="oda-converter"))
+        p = self.start("alpha-001", env=dict(self.env, FAKE_HANG="libredwg-converter"))
         for _ in range(100):
-            if any(" run " in c and "oda-converter" in c for c in self.calls()):
+            if any(" run " in c and "libredwg-converter" in c for c in self.calls()):
                 break
             time.sleep(0.1)
         else:
@@ -139,7 +138,7 @@ class Gen(unittest.TestCase):
         self.assertIn(DOWN, self.calls()[-1])
 
     def test_refuses_to_start_when_an_image_digest_cannot_be_resolved(self):
-        rc, out = self.run_gen("alpha-001", env=dict(self.env, FAKE_NO_IMAGE="pvec-gold/oda-converter:local"))
+        rc, out = self.run_gen("alpha-001", env=dict(self.env, FAKE_NO_IMAGE="pvec-gold/libredwg-converter:local"))
         self.assertNotEqual(rc, 0)
         self.assertIn("image digest", out)
         self.assertFalse(any(" run " in c for c in self.calls()), "no container may start")

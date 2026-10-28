@@ -43,4 +43,4 @@ written by acadrust and cross-read by ACadSharp (ADR 0008).
   `downstream_disposition` in the manifest, and a mapper must not emit a curve for it.
 - Oracles: none. STEP oracle: none. No file is attributed to CAD Exchanger or ODA, and no fixture is
   `DUAL_ORACLE_EQUIVALENT`. The two readers share a DWG specification, so a shared misreading would not show.
-- The next revision is vendor-qualified (#42) and will say here why each fixture's class moved.
+- The next revision is `r2-open` (ADR 0010) and will say here why each fixture's class moved.

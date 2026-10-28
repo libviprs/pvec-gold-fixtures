@@ -3,11 +3,13 @@
     python3 -m runner.qualify_probes --probes fixtures/known-truth --primary ID DIR --secondary ID DIR \
         --lineage ID=NAME --lineage ID=NAME --out reports/phase1/probe-qualification.json [--resolved FILE]
 
-ID is the converter's name in the report (for example acadsharp-dwg2step, libredwg-dwg2step, cadex or oda).
+ID is the converter's name in the report (for example acadsharp-dwg2step or libredwg-dwg2step).
 DIR holds <probe-id>/primary.verification.json (+ primary.status.json) for the primary converter and
 <probe-id>/secondary.verification.json (+ secondary.status.json) for the secondary one. With --lineage for
 both ids is required: two converters of one lineage, or two equal ids, are refused as a dual oracle (ADR 0009),
 and the report records the lineages so a verdict always shows whose decoders produced it.
+--resolved FILE is a JSON list of {"probe": ID, "explanation": TEXT}: a cross-converter discrepancy on that
+probe stops blocking its capability, and the explanation goes into the report. A bare id is refused.
 Comparison reads the normalised evaluator records, never STEP text, and every threshold comes from the
 vendored policy. The verdict rules do not look at the ids.
 
@@ -22,7 +24,7 @@ import sys
 from pathlib import Path
 
 from . import canon, curves, expected_math as em, numeric, structural, verification
-from .r0_open import ORACLE_SCOPES, VENDOR_NAME, lineage_problems
+from .r0_open import lineage_problems
 
 STRUCTURAL_EXACT = "STRUCTURAL_EXACT"
 GEOMETRIC = "GEOMETRIC_EXACT_REPARAMETERIZED"
@@ -55,7 +57,7 @@ PROFILE_ONLY = {
     "shear-001": "shear-chain-001",
     "general-affine-001": "general-affine-chain-001",
 }
-CONVERTERS = {"cadex": "primary", "oda": "secondary"}   # the ids of the licensed pair; the default when a report names none
+CONVERTERS = {"acadsharp-dwg2step": "primary", "libredwg-dwg2step": "secondary"}   # the default pair when a report names none
 SAMPLES = 256   # sampling resolution for nearest-point search; refinement below does the precision work
 GOLDEN = (math.sqrt(5.0) - 1.0) / 2.0
 
@@ -340,7 +342,6 @@ def main(argv):
     ap.add_argument("--probes", action="append", help="a directory of probe records, repeatable (default: fixtures/known-truth and fixtures/edge)")
     ap.add_argument("--primary", nargs=2, metavar=("ID", "DIR"), required=True)
     ap.add_argument("--secondary", nargs=2, metavar=("ID", "DIR"), help="omit for a single-oracle run (the open route today)")
-    ap.add_argument("--oracle-scope", default="OPEN_CONVERTERS", choices=[x for x in ORACLE_SCOPES if x != "NONE"])
     ap.add_argument("--excluded", metavar="QUARANTINE_JSON", help="a corpus quarantine.json: its excluded probes have no source.dwg")
     ap.add_argument("--platform", default="linux/amd64", help="platform the converters ran on, recorded in the report")
     ap.add_argument("--lineage", action="append", default=[], metavar="ID=NAME")
@@ -355,10 +356,6 @@ def main(argv):
     bad = lineage_problems([{"id": i, "lineage": lin.get(i, "")} for i in ids])
     if bad:
         raise SystemExit(bad[0])
-    if a.oracle_scope == "OPEN_CONVERTERS":
-        named = [i for i in ids + [lin[i] for i in ids] if VENDOR_NAME.search(i)]
-        if named:
-            raise SystemExit("oracle scope OPEN_CONVERTERS never names a vendor, but %r does (ADR 0009)" % named[0])
     pol = numeric.load_policy()
     probes = {}
     dirs = a.probes or ["fixtures/known-truth", "fixtures/edge"]
@@ -370,6 +367,11 @@ def main(argv):
             if i == 0 or d["fixture_id"] in listed:
                 probes[d["fixture_id"]] = d
     resolved = json.loads(Path(a.resolved).read_text()) if a.resolved else []
+    for r in resolved:
+        if not isinstance(r, dict) or not str(r.get("explanation", "")).strip():
+            raise SystemExit("--resolved entries are {\"probe\": ID, \"explanation\": TEXT}; %r has no explanation" % (r,))
+        if r.get("probe") not in probes:
+            raise SystemExit("--resolved names %r, which is not a probe" % (r.get("probe"),))
     def outputs_for(pid):
         out = {pid_: load_outputs(pdir, pid, "primary")}
         if sid_:
@@ -378,9 +380,10 @@ def main(argv):
     no_source = {}
     if a.excluded:
         no_source = {e["id"]: "%s: %s" % (e["reason"], e["evidence"]) for e in json.loads(Path(a.excluded).read_text())["excluded"]}
-    rep = build_report(pol, probes, outputs_for, resolved, no_source)
+    rep = build_report(pol, probes, outputs_for, [r["probe"] for r in resolved], no_source)
+    rep["resolved"] = resolved
     rep["lineages"] = {i: lin[i] for i in ids}
-    rep["oracle_scope"] = a.oracle_scope
+    rep["oracle_scope"] = "OPEN_CONVERTERS"
     rep["platform"] = a.platform
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     Path(a.out).write_text(json.dumps(rep, indent=2) + "\n")

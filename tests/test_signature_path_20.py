@@ -102,19 +102,19 @@ class Rederivation(unittest.TestCase):
         from runner import verify_signatures as v
         with tempfile.TemporaryDirectory() as t:
             sig = tiny_set(t)
-            sig["entities"] = [{"class": "line", "geometry": {"start": normalize.stored(1.0)}}]
+            sig["entities"] = [{"class": "circle", "geometry": {"radius": normalize.stored(1.0)}}]
             for fx in ("one-001", "two-001"):
                 (Path(t) / fx / "signature.json").write_text(normalize.dumps(sig))
             from runner import signatures
             signatures.write_manifest(t, ["one-001", "two-001"], sig["versions"])
             fresh = copy.deepcopy(sig)
             bad = copy.deepcopy(sig)
-            bad["entities"][0]["geometry"]["start"] = normalize.stored(1.0000000000000002)
+            bad["entities"][0]["geometry"]["radius"] = normalize.stored(1.0000000000000002)
             (Path(t) / "two-001" / "signature.json").write_text(normalize.dumps(bad))
             signatures.write_manifest(t, ["one-001", "two-001"], sig["versions"])
             diffs = v.verify(t, lambda step: copy.deepcopy(fresh))
             self.assertEqual(sorted(diffs), ["two-001"])
-            self.assertTrue(any("entities[0].geometry.start" in p for p in diffs["two-001"]), diffs)
+            self.assertTrue(any("entities[0].geometry.radius" in p for p in diffs["two-001"]), diffs)
 
     def test_a_byte_difference_with_no_named_field_still_fails(self):
         from runner import verify_signatures as v

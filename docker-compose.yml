@@ -1,68 +1,10 @@
 # Converter and validator services. Phase 2 (O2.3) adds fixture-runner and the one-command path.
 #
-# The two converter images are commercial and never published: build them locally (see the
-# Dockerfile headers). Each licence arrives at run time from a host path named by an environment
-# variable and is mounted read-only; it is never in the image, the repository or a log. Both run
-# on the native x86_64 host. There is no network, so a licence that needs a licence server will
-# have to be an explicit decision, recorded in the qualification document.
-#
-# Unset variables do not stop compose from parsing, so step-validator can be used alone. They stop
-# the converters instead: an empty build arg fails the Dockerfile check, and a licence path that is
-# not set or does not exist should fail at container start (create_host_path is off, so no empty
-# directory is ever mounted in its place; not exercised, since the converter images cannot be built here).
+# Every image here is open (ADR 0010). The LibreDWG converter image is built and published from
+# libviprs/pvec-oracle-libredwg and will be added here by digest, never as a build context.
 name: pvec-gold-fixtures
 
-x-converter: &converter
-  platform: linux/amd64
-  network_mode: none
-  read_only: true
-  tmpfs:
-    - /tmp
-  security_opt:
-    - no-new-privileges:true
-  cap_drop:
-    - ALL
-
 services:
-  cadex-converter:
-    <<: *converter
-    image: pvec-gold/cadex-converter:local
-    build:
-      context: .
-      dockerfile: docker/cadex/Dockerfile
-      args:
-        CADEX_ARTIFACT: ${CADEX_ARTIFACT:-}
-        CADEX_SHA256: ${CADEX_SHA256:-}
-        CADEX_VERSION: ${CADEX_VERSION:-}
-    volumes:
-      - type: bind
-        source: ${CADEX_LICENSE_FILE:-/set/CADEX_LICENSE_FILE}
-        target: /run/secrets/cadex-license
-        read_only: true
-        bind:
-          create_host_path: false
-      - ${FIXTURE_DIR:-./fixtures}:/fixtures
-
-  oda-converter:
-    <<: *converter
-    image: pvec-gold/oda-converter:local
-    build:
-      context: .
-      dockerfile: docker/oda/Dockerfile
-      args:
-        ODA_DRAWINGS_ARTIFACT: ${ODA_DRAWINGS_ARTIFACT:-}
-        ODA_DRAWINGS_SHA256: ${ODA_DRAWINGS_SHA256:-}
-        ODA_STEP_ARTIFACT: ${ODA_STEP_ARTIFACT:-}
-        ODA_STEP_SHA256: ${ODA_STEP_SHA256:-}
-    volumes:
-      - type: bind
-        source: ${ODA_ACTIVATION_FILE:-/set/ODA_ACTIVATION_FILE}
-        target: /run/secrets/oda-activation
-        read_only: true
-        bind:
-          create_host_path: false
-      - ${FIXTURE_DIR:-./fixtures}:/fixtures
-
   # The open converter (ACadSharp, MIT): no licence, runs on either architecture. The limits come from
   # docs/benchmarks/orchestration-tuning.md: a conversion peaks at about 21 MiB in the cgroup (58 MiB
   # resident) on the largest r0-open fixture, so 256m leaves a wide margin, and one cpu doubles the
@@ -84,6 +26,33 @@ services:
       - ALL
     mem_limit: 256m
     memswap_limit: 256m
+    cpus: 2
+    logging:
+      driver: json-file
+      options:
+        max-size: 1m
+        max-file: "3"
+    volumes:
+      - ${FIXTURE_DIR:-./fixtures}:/fixtures
+
+  # The second open converter (LibreDWG, GPL-3.0-or-later), a different decoder lineage from ACadSharp.
+  # It is an image reference and never a build: the Dockerfile lives in libviprs/pvec-oracle-libredwg, so
+  # no GPL source is a build context here and the only thing that crosses is the process boundary and the
+  # files it writes. Set LIBREDWG_IMAGE to the digest reference (name@sha256:...) or to a local image id.
+  # Commands: `dwg2step --in --out --status` and `dwgdump --in --out`; the image has no entrypoint.
+  libredwg-converter:
+    image: ${LIBREDWG_IMAGE:-pvec-oracle-libredwg:local}
+    platform: ${LIBREDWG_PLATFORM:-linux/amd64}
+    network_mode: none
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 512m
+    memswap_limit: 512m
     cpus: 2
     logging:
       driver: json-file

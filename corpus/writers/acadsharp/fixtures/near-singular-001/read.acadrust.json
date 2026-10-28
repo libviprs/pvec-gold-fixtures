@@ -1,0 +1,60 @@
+{
+  "blocks": [
+    {
+      "entities": [
+        {
+          "block": "PROBE_NEAR_SINGULAR_001_L1",
+          "insert_point": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "rotation": "0x0000000000000000",
+          "scale": [
+            "0x3ff0000000000000",
+            "0x3d719799812dea11",
+            "0x3ff0000000000000"
+          ],
+          "type": "INSERT"
+        }
+      ],
+      "name": "*Model_Space"
+    },
+    {
+      "entities": [
+        {
+          "end": [
+            "0x400e000000000000",
+            "0x4004000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "start": [
+            "0x3fe0000000000000",
+            "0x3fd0000000000000",
+            "0x0000000000000000"
+          ],
+          "type": "LINE"
+        }
+      ],
+      "name": "PROBE_NEAR_SINGULAR_001_L1"
+    }
+  ],
+  "dwg_sha256": "ef1b7de368c7bf9b5d10fa7007bf123b7a370b5815b873e999ec962e5403c5ad",
+  "dwg_version": "AC1032",
+  "layers": [
+    {
+      "frozen": false,
+      "name": "0",
+      "on": true
+    }
+  ],
+  "reader": "acadrust@0.5.5+d35691f",
+  "schema": "pvec-gold/r0-open-dwg-read/2"
+}

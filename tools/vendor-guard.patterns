@@ -2,7 +2,7 @@
 #   path-prefix   a repository path that starts with this
 #   path-glob     a shell glob matched against the file name only
 #   content-regex an extended regex (grep -E, case-insensitive) matched against text files
-# docs/converters/archive.md must list every pattern here verbatim; tests/test_vendor_guard.py checks it.
+# docs/converters/images-and-setup.md describes the guard; this file is the list.
 path-prefix vendor/
 path-glob *.so
 path-glob *.so.*

@@ -1,0 +1,24 @@
+{
+  "excluded": [
+    {
+      "evidence": "op 'matrix' (a general matrix) has no single INSERT form: one INSERT carries translation, one rotation about the normal and three scales, and no shear. A three-level nested INSERT chain could carry its 2x2 part through a singular value decomposition, but those factors would be derived values compared under policy and not EXACT, and the probe's own truth is a rejection outcome that no reader-mapping check can exercise, so that was not attempted",
+      "file": null,
+      "id": "general-affine-001",
+      "reason": "UNSUPPORTED_ENTITY"
+    },
+    {
+      "evidence": "op 'matrix' (a general matrix) has no single INSERT form: one INSERT carries translation, one rotation about the normal and three scales, and no shear. A three-level nested INSERT chain could carry its 2x2 part through a singular value decomposition, but those factors would be derived values compared under policy and not EXACT, and the probe's own truth is a rejection outcome that no reader-mapping check can exercise, so that was not attempted",
+      "file": null,
+      "id": "shear-001",
+      "reason": "UNSUPPORTED_ENTITY"
+    },
+    {
+      "evidence": "ACadSharp's Insert scale setters throw on a zero scale (asked for [1, 0, 1]), so the file would not carry the transform that was authored",
+      "file": null,
+      "id": "singular-001",
+      "reason": "UNSUPPORTED_ENTITY"
+    }
+  ],
+  "quarantined": [],
+  "writer_family": "acadsharp"
+}

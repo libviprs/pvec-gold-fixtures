@@ -12,7 +12,7 @@
       "properties": {"fixture_id": {"type": "string", "minLength": 1}, "corpus_revision": {"type": "string", "minLength": 1},
                      "oracle_revision": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "derivation": {"const": "STEP_SIGNATURE"}}},
     "oracle": {"type": "object", "required": ["oracle_scope", "converters", "evidence_scope", "evidence_class", "is_source_truth", "classification"], "additionalProperties": false,
-      "properties": {"oracle_scope": {"enum": ["OPEN_CONVERTERS", "VENDOR_CONVERTERS"]},
+      "properties": {"oracle_scope": {"enum": ["OPEN_CONVERTERS"]},
                      "converters": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "object", "required": ["id", "version", "lineage", "image_digest"], "additionalProperties": false,
                        "properties": {"id": {"type": "string"}, "version": {"type": "string"}, "lineage": {"type": "string"}, "image_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}}}},
                      "evidence_scope": {"const": "STEP_ORACLE"}, "evidence_class": {"const": "DUAL_ORACLE_EQUIVALENT"},
