@@ -19,6 +19,10 @@ decision and needs a registry session this repository never handles).
   multi-arch index (see the `FROM` lines in `tools/converters/acadsharp/Dockerfile`).
 - ACadSharp: upstream `DomCR/ACadSharp` at `d7dc111023477d8a9fffc2153139459c95b4f345` (3.7.1), the same
   commit the r0-open cross-reader used. The build checks the clone against `ACADSHARP_COMMIT`.
+  One patch goes on top, `tools/converters/acadsharp/patches/0001-insert-keep-zero-scale.patch`: `Insert.cs` throws on a zero
+  scale, a DWG can store one, and upstream master dropped the same guard. Without the patch a drawing that holds a zero scale
+  is refused as `INPUT_MALFORMED` (12) before the flattener sees it. The patch only removes the three guards, so nothing else
+  reads differently. The status record still says `3.7.1+d7dc111`.
 - Policy: `policy/pvec-numeric-policy.v1.json` is copied into the image. The converter reads one number
   from it, `REL`, for the near-singular refusal below, and carries no threshold of its own.
 
@@ -71,15 +75,21 @@ INSERT's normal). Nothing is left as an instance, so STEP's uniform-scale-only
 - A bulge becomes a circular arc through the two vertices. A negative bulge is written counter-clockwise
   from the second vertex to the first, which is the authored "equivalent arc".
 - Polylines arrive as one `LINE` or arc edge per segment, closed ones with the implicit closing segment.
-- Refused with exit 15: an INSERT chain whose composed 2D map has `|ad - bc| <= REL * big^2` (NP-19), named
-  `NEAR_SINGULAR_TRANSFORM` in the message; MINSERT arrays; nesting deeper than 64 or a block that contains
-  itself; a spline with fit points only.
+- Refused with exit 15: an INSERT chain whose composed 2D map has a determinant of exactly zero, named
+  `SINGULAR_TRANSFORM` in the message (singular-001), or one with `|ad - bc| <= REL * big^2` (NP-19), named
+  `NEAR_SINGULAR_TRANSFORM`; MINSERT arrays; nesting deeper than 64 or a block that contains
+  itself.
+- A spline with fit points only (no control points) is skipped for that entity and counted in `warnings` as
+  `skipped N entity(ies) of type Spline (fit points only)`: fit points alone do not fix a B-spline, so I do not turn them
+  into poles, and the rest of the drawing converts.
 - Other entity types (text, hatches, dimensions) are skipped, and the count per type goes into `warnings`.
   The r0-open probes contain none.
 
 Drawing units: metre, unitless (written as metre and warned about), millimetre, centimetre and kilometre are
-declared in the STEP context and values are never rescaled. Inches and feet stop with exit 15 until someone
-needs them.
+declared in the STEP context and the stored values are left alone. Inches and feet have no SI prefix, so every length is
+multiplied by 0.0254 or 0.3048 (their definitions in metre) at the root of the flattening, the context declares metre, and
+`warnings` says so. Any other unit exits 15 and names the value. `tests/data/units-feet-001.dwg` is the one feet drawing
+(`tests/data/README.md`); the inch case is `blocks-dynamic-linear-001`.
 
 ## What OCCT did that I did not expect
 
