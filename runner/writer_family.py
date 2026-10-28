@@ -27,21 +27,26 @@ def verdict(pol, fid, writer, own, records, corpus=None):
     reader named own is the writer family's own reader; every other record is compared with it."""
     res = {"checks": {}, "reader_vs_reader_differences": {}}
     missing = sorted(n for n, r in records.items() if r is None)
-    if missing:
-        res["verdict"], res["reason"] = "UNREADABLE", "MALFORMED_FIXTURE"
-        res["evidence"] = "a reader could not open the DWG: " + ", ".join(missing)
-        return res
+    present = {n: r for n, r in records.items() if r is not None}
     bad = []
-    for name in sorted(records):
-        c = judge(pol, fid, records[name], corpus)
+    for name in sorted(present):
+        c = judge(pol, fid, present[name], corpus)
         res["checks"][name] = c.items
         if not c.ok:
             bad.append("%s differs from the authored truth at: %s" % (name, ", ".join(i["field"] for i in c.items if not i["ok"])[:300]))
-    for name in sorted(n for n in records if n != own):
-        d = diff(strip(records[own]), strip(records[name]))
+    first = own if own in present else (sorted(present)[0] if present else None)
+    for name in sorted(n for n in present if n != first):
+        d = diff(strip(present[first]), strip(present[name]))
         if d:
-            res["reader_vs_reader_differences"]["%s vs %s" % (own, name)] = d
-            bad.append("%s and %s decoded different records at: %s" % (own, name, ", ".join(d)[:300]))
+            res["reader_vs_reader_differences"]["%s vs %s" % (first, name)] = d
+            bad.append("%s and %s decoded different records at: %s" % (first, name, ", ".join(d)[:300]))
+    if missing:
+        # A reader that cannot open the file means the three-reader rule cannot be met. What the others saw is kept, so the
+        # quarantine says whether they agree with the truth and each other.
+        res["verdict"], res["reason"] = "UNREADABLE", "MALFORMED_FIXTURE"
+        res["evidence"] = "a reader could not open the DWG: %s; of the readers that could (%s), %s" % (
+            ", ".join(missing), ", ".join(sorted(present)), "; ".join(bad) if bad else "all match the authored truth and decode the same record")
+        return res
     if bad:
         res["verdict"], res["reason"], res["evidence"] = "DISAGREE", "UNRESOLVED_DISAGREEMENT", "; ".join(bad)
     else:
@@ -54,8 +59,9 @@ def comparison_doc(pol, fid, v):
 
 
 def measure_determinism(base):
-    """Count identical and differing DWGs between two runs, raw and with the stamped header fields pinned, and name
-    the fields that change the bytes when left raw. Reads files only."""
+    """Count identical and differing DWGs between two runs. When the family also has raw and pinned-header runs
+    (ACadSharp stamps the file), report both and name the stamped fields that change the bytes when left raw. Reads
+    files only."""
     base = Path(base)
 
     def compare(a, b):
@@ -63,6 +69,9 @@ def measure_determinism(base):
         same = sum((base / a / i / "source.dwg").read_bytes() == (base / b / i / "source.dwg").read_bytes() for i in ids)
         return {"runs": 2, "compared": len(ids), "identical": same, "differing": len(ids) - same}
 
+    if not (base / "raw1").is_dir():
+        return {"runs": 2, **{k: v for k, v in compare("run1", "run2").items() if k != "runs"},
+                "note": "the writer is run twice on the same inputs and the DWGs compared byte for byte; no header field is pinned"}
     pinned = (base / "run1" / "arc-seam-001" / "source.dwg").read_bytes()
     leave = {p.name[len("leave-"):]: (p / "arc-seam-001" / "source.dwg").read_bytes() != pinned for p in sorted(base.glob("leave-*"))}
     return {
@@ -109,6 +118,7 @@ def assemble(base, corpus, info):
     writer, dwg_version = rep["writer"], rep["dwg_version"]
     readers = info["readers"]
     own = info["own_reader"]
+    family = info["families"][dwg_version] if "families" in info else info["family"]
     fixtures, excluded, quarantined = [], [], []
     for item in rep["fixtures"]:
         fid = item["id"]
@@ -164,7 +174,7 @@ def assemble(base, corpus, info):
     excluded.sort(key=lambda f: f["id"])
     manifest = {
         "schema_version": "pvec-gold/writer-family-manifest/1",
-        "writer_family": info["family"],
+        "writer_family": family,
         "of_corpus": "r0-open",
         "status": "CANDIDATE",
         "oracles": "none",
@@ -184,7 +194,7 @@ def assemble(base, corpus, info):
         "fixtures": fixtures,
     }
     dump_json(manifest, corpus / "manifest.json")
-    dump_json({"writer_family": info["family"], "quarantined": quarantined, "excluded": excluded}, corpus / "quarantine.json")
+    dump_json({"writer_family": family, "quarantined": quarantined, "excluded": excluded}, corpus / "quarantine.json")
     write_sums(corpus)
     return manifest
 
@@ -233,6 +243,8 @@ def check(corpus):
             records[r["name"]] = load_json(corpus / r["record"])
             if records[r["name"]]["dwg_sha256"] != f["dwg"]["sha256"]:
                 problems.append("%s: the %s record is for a different DWG" % (fid, r["name"]))
+            if records[r["name"]].get("dwg_version") != f["dwg"]["dwg_version"]:
+                problems.append("%s: the %s record says %s, the manifest says the DWG is %s" % (fid, r["name"], records[r["name"]].get("dwg_version"), f["dwg"]["dwg_version"]))
         v = verdict(pol, fid, m["writer"], own, records, corpus)
         if v["verdict"] != f["cross_read"]["verdict"]:
             problems.append("%s: recomputed verdict %s, manifest says %s" % (fid, v["verdict"], f["cross_read"]["verdict"]))

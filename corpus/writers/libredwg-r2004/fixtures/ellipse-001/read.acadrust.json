@@ -1,0 +1,42 @@
+{
+  "blocks": [
+    {
+      "entities": [
+        {
+          "center": [
+            "0x4000000000000000",
+            "0x3ff0000000000000",
+            "0x0000000000000000"
+          ],
+          "end_param": "0x401921fb54442d18",
+          "layer": "0",
+          "major_axis": [
+            "0x40070a3d70a3d70a",
+            "0x3feae147ae147ae2",
+            "0x0000000000000000"
+          ],
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "ratio": "0x3fef5c28f5c28f5c",
+          "start_param": "0x0000000000000000",
+          "type": "ELLIPSE"
+        }
+      ],
+      "name": "*Model_Space"
+    }
+  ],
+  "dwg_sha256": "b4bb9334c5f3a1bee4db111ab42ed7f34872d0bac4b3ba76daaea1f228e16bb8",
+  "dwg_version": "AC1018",
+  "layers": [
+    {
+      "frozen": false,
+      "name": "0",
+      "on": true
+    }
+  ],
+  "reader": "acadrust@0.5.5+d35691f",
+  "schema": "pvec-gold/r0-open-dwg-read/2"
+}

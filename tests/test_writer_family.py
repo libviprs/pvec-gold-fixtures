@@ -11,6 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 R0 = ROOT / "corpus" / "r0-open"
 FAMILY = ROOT / "corpus" / "writers" / "acadsharp"
+WRITERS = ROOT / "corpus" / "writers"
 PARAMS = ROOT / "tools" / "authoring" / "params"
 
 
@@ -62,6 +63,18 @@ class ThreeReaderRule(unittest.TestCase):
         self.assertEqual(v["verdict"], "UNREADABLE")
         self.assertEqual(v["reason"], "MALFORMED_FIXTURE")
         self.assertIn("acadrust", v["evidence"])
+
+    def test_an_unreadable_file_still_says_what_the_other_readers_saw(self):
+        r = self.records()
+        r["ACadSharp"] = None
+        v = self.wf.verdict(self.pol, "line-001", "ACadSharp@x", "ACadSharp", r)
+        self.assertEqual(v["verdict"], "UNREADABLE")
+        self.assertIn("acadrust", v["evidence"])
+        self.assertIn("all match the authored truth", v["evidence"])
+        r["LibreDWG"]["blocks"][0]["entities"][0]["end"][0] = "0x3ff0000000000001"
+        v = self.wf.verdict(self.pol, "line-001", "ACadSharp@x", "ACadSharp", r)
+        self.assertEqual(v["verdict"], "UNREADABLE")
+        self.assertIn("LibreDWG differs from the authored truth", v["evidence"])
 
     def test_reader_ids_do_not_count_as_a_difference(self):
         r = self.records()
@@ -122,6 +135,62 @@ class AcadsharpCorpus(unittest.TestCase):
     def test_check_recomputes_every_verdict_from_the_stored_records(self):
         from runner import writer_family
         self.assertEqual(writer_family.check(FAMILY), [])
+
+
+class LibredwgCorpora(unittest.TestCase):
+    """The third writer family: LibreDWG's dwgwrite, as R2000 and R2004 (it refuses r2007 and does not write r2010 and later reliably)."""
+    VERSIONS = {"libredwg-r2000": "AC1015", "libredwg-r2004": "AC1018"}
+
+    def each(self):
+        for name, ver in self.VERSIONS.items():
+            p = WRITERS / name / "manifest.json"
+            self.assertTrue(p.is_file(), "corpus/writers/%s/manifest.json does not exist yet" % name)
+            yield name, ver, load(p), load(WRITERS / name / "quarantine.json")
+
+    def test_every_probe_is_written_or_excluded_with_a_reason(self):
+        for name, ver, m, q in self.each():
+            got = [f["id"] for f in m["fixtures"]] + [e["id"] for e in q["excluded"]]
+            self.assertEqual(sorted(got), probe_ids(), name)
+            for e in q["excluded"]:
+                self.assertTrue(e["evidence"].strip(), (name, e["id"]))
+
+    def test_dwg_version_and_writer_are_recorded_per_fixture(self):
+        for name, ver, m, q in self.each():
+            self.assertEqual(m["dwg_version"], ver, name)
+            self.assertTrue(m["fixtures"], name)
+            for f in m["fixtures"]:
+                self.assertEqual(f["dwg"]["dwg_version"], ver, (name, f["id"]))
+                self.assertRegex(f["dwg"]["writer"], r"^LibreDWG@\S+$", (name, f["id"]))
+
+    def test_three_readers_per_fixture_and_a_verdict_or_a_quarantine_with_the_fields(self):
+        for name, ver, m, q in self.each():
+            qd = {x["id"]: x for x in q["quarantined"]}
+            for f in m["fixtures"]:
+                self.assertEqual(sorted(r["name"] for r in f["reads"]), ["ACadSharp", "LibreDWG", "acadrust"], (name, f["id"]))
+                if f["cross_read"]["verdict"] == "AGREE":
+                    self.assertEqual(f["status"], "ACCEPTED")
+                else:
+                    self.assertEqual(f["status"], "QUARANTINED")
+                    self.assertTrue(qd[f["id"]]["evidence"].strip(), (name, f["id"]))
+
+    def test_determinism_was_measured_twice(self):
+        for name, ver, m, q in self.each():
+            d = m["determinism"]
+            self.assertEqual(d["runs"], 2, name)
+            self.assertEqual(d["compared"], d["identical"] + d["differing"], name)
+            self.assertGreater(d["compared"], 0, name)
+
+    def test_check_recomputes_every_verdict(self):
+        from runner import writer_family
+        for name, ver, m, q in self.each():
+            self.assertEqual(writer_family.check(WRITERS / name), [], name)
+
+    def test_the_doc_states_which_versions_the_tool_refuses(self):
+        t = (WRITERS / "README.md").read_text()
+        self.assertIn("r2007", t)
+        self.assertRegex(t, r"r2010")
+        self.assertIn("dwgwrite", t)
+        self.assertIn("dwg_version", t)
 
 
 if __name__ == "__main__":

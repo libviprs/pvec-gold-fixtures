@@ -1,0 +1,35 @@
+{
+  "blocks": [
+    {
+      "entities": [
+        {
+          "center": [
+            "0x3ff8000000000000",
+            "0xc002000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "radius": "0x4006000000000000",
+          "type": "CIRCLE"
+        }
+      ],
+      "name": "*Model_Space"
+    }
+  ],
+  "dwg_sha256": "ed54e864080e1a9fb9ce05ddeda357b5abb420efe96812ec1503fb231af6703d",
+  "dwg_version": "AC1018",
+  "layers": [
+    {
+      "frozen": false,
+      "name": "0",
+      "on": true
+    }
+  ],
+  "reader": "LibreDWG@0.14+patch0001",
+  "schema": "pvec-gold/r0-open-dwg-read/2"
+}

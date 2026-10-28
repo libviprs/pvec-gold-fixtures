@@ -1,0 +1,112 @@
+{
+  "blocks": [
+    {
+      "entities": [
+        {
+          "block": "PROBE_NESTED_BLOCKS_001_L1",
+          "insert_point": [
+            "0x4010000000000000",
+            "0x3ff0000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "rotation": "0x0000000000000000",
+          "scale": [
+            "0x3ff0000000000000",
+            "0x3ff0000000000000",
+            "0x3ff0000000000000"
+          ],
+          "type": "INSERT"
+        }
+      ],
+      "name": "*Model_Space"
+    },
+    {
+      "entities": [
+        {
+          "block": "PROBE_NESTED_BLOCKS_001_L2",
+          "insert_point": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "rotation": "0x3ff921fb54442d18",
+          "scale": [
+            "0x3ff0000000000000",
+            "0x3ff0000000000000",
+            "0x3ff0000000000000"
+          ],
+          "type": "INSERT"
+        }
+      ],
+      "name": "PROBE_NESTED_BLOCKS_001_L1"
+    },
+    {
+      "entities": [
+        {
+          "block": "PROBE_NESTED_BLOCKS_001_L3",
+          "insert_point": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "rotation": "0x0000000000000000",
+          "scale": [
+            "0x4000000000000000",
+            "0x3ff0000000000000",
+            "0x3ff0000000000000"
+          ],
+          "type": "INSERT"
+        }
+      ],
+      "name": "PROBE_NESTED_BLOCKS_001_L2"
+    },
+    {
+      "entities": [
+        {
+          "end": [
+            "0x400e000000000000",
+            "0x4004000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "start": [
+            "0x3fe0000000000000",
+            "0x3fd0000000000000",
+            "0x0000000000000000"
+          ],
+          "type": "LINE"
+        }
+      ],
+      "name": "PROBE_NESTED_BLOCKS_001_L3"
+    }
+  ],
+  "dwg_sha256": "2f5f961c56697f13a449a7f228ff5ae62ac2dca98f0183a2428c7beb771748fe",
+  "dwg_version": "AC1018",
+  "layers": [
+    {
+      "frozen": false,
+      "name": "0",
+      "on": true
+    }
+  ],
+  "reader": "acadrust@0.5.5+d35691f",
+  "schema": "pvec-gold/r0-open-dwg-read/2"
+}

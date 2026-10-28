@@ -1,0 +1,1 @@
+{"id":"translation-001","group":"transforms","kind":"transform","description":"A line translated by (3.5, -1.25, 2).","base":{"class":"line","start":["0.5","0.25","0"],"end":["3.75","2.5","0"]},"ops":[{"op":"translate","v":["3.5","-1.25","2"],"classification":"TRANSLATION"}],"expect":"line"}
