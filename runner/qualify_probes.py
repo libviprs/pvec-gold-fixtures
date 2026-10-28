@@ -77,7 +77,18 @@ class Placed:
 
     def nearest(self, q):
         pts = self.samples()
-        i = min(range(len(pts)), key=lambda k: curves.dist(pts[k], q))
+        ds = [curves.dist(p, q) for p in pts]
+        # On a closed curve the first and last samples are one point, so the nearest sample can be a tie
+        # and the true nearest point sits next to either of them. Refine around every tied sample.
+        near = [k for k, d in enumerate(ds) if d <= min(ds) * (1 + 1e-9)]
+        best = None
+        for i in near:
+            cand = self._refine(q, i)
+            if best is None or curves.dist(cand, q) < curves.dist(best, q):
+                best = cand
+        return best
+
+    def _refine(self, q, i):
         lo, hi = max(i - 1, 0) / SAMPLES, min(i + 1, SAMPLES) / SAMPLES
         f = lambda u: curves.dist(self.at(u), q)  # noqa: E731
         a, b = lo, hi
@@ -241,21 +252,26 @@ def capability_verdicts(pol, results, resolved=()):
     convs = list(next(iter(results.values()))) if results else list(CONVERTERS)
     rows = []
     for cap, probes in CAPABILITIES.items():
-        per_conv = {}
-        for conv in convs:
-            classes = [probe_class(results[p][conv]) for p in probes if p in results]
-            per_conv[conv] = max(classes, key=lambda k: RANK[k]) if classes else MISSING
         # rejection probes are judged by expectation, not by class
         rej = [p for p in probes if p in results and all("expectation_met" in c for conv in convs for c in results[p][conv])]
-        rej_fail = [p for p in rej if not all(c["expectation_met"] for conv in convs for c in results[p][conv])]
+        per_conv = {}
+        for conv in convs:
+            classes = [probe_class(results[p][conv]) for p in probes if p in results and p not in rej]
+            per_conv[conv] = max(classes, key=lambda k: RANK[k]) if classes else MISSING
+        not_run = [p for p in rej if any(c.get("not_run") for conv in convs for c in results[p][conv])]
+        rej_fail = [p for p in rej if p not in not_run and not all(c["expectation_met"] for conv in convs for c in results[p][conv])]
         best = min(per_conv.values(), key=lambda k: RANK[k])
         disc = [p for p in probes if p in results and p not in rej
                 and len({probe_class(results[p][conv]) in EXACT for conv in convs}) > 1 and p not in resolved]
-        cert_struct = best == STRUCTURAL_EXACT and not disc and not rej_fail
-        cert_geom = best in EXACT and not disc and not rej_fail
+        cert_struct = best == STRUCTURAL_EXACT and not disc and not rej_fail and not not_run
+        cert_geom = best in EXACT and not disc and not rej_fail and not not_run
         reasons = []
-        if per_conv and all(k == BOUNDED for k in per_conv.values()):
+        if len(per_conv) > 1 and all(k == BOUNDED for k in per_conv.values()):
             reasons.append("both converters land in BOUNDED_APPROXIMATION: not certified even though they agree")
+        elif len(per_conv) == 1 and best == BOUNDED:
+            reasons.append("the converter lands in BOUNDED_APPROXIMATION: not certified")
+        if not_run:
+            reasons.append("probes not run (no source.dwg): %s" % ", ".join(not_run))
         if best not in EXACT and not reasons:
             reasons.append("no converter produced an exact representation (best: %s)" % best)
         if disc:
@@ -300,6 +316,8 @@ def build_report(pol, probes, outputs_for, resolved=(), no_source=None):
             for c in cells:
                 if pid in (no_source or {}) and c["evidence"].get("reason", "").startswith("no converter output"):
                     c["evidence"]["reason"] = "no source.dwg in the corpus, so the converter was not run: " + no_source[pid]
+                    c["not_run"] = True
+                    c["expectation_met"] = False   # an expectation nobody exercised has not been met
     ids = list(next(iter(results.values()))) if results else []
     caps = capability_verdicts(pol, results, resolved)
     if len(ids) == 1:
