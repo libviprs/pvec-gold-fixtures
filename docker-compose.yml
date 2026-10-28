@@ -39,9 +39,11 @@ services:
   # It is an image reference and never a build: the Dockerfile lives in libviprs/pvec-oracle-libredwg, so
   # no GPL source is a build context here and the only thing that crosses is the process boundary and the
   # files it writes. Set LIBREDWG_IMAGE to the digest reference (name@sha256:...) or to a local image id.
-  # Commands: `dwg2step --in --out --status` and `dwgdump --in --out`; the image has no entrypoint.
+  # The image has no entrypoint, so the service sets one: runner.generate passes `--in --out --status` and nothing else.
+  # `dwgdump` is not run through this service.
   libredwg-converter:
     image: ${LIBREDWG_IMAGE:-pvec-oracle-libredwg:local}
+    entrypoint: ["dwg2step"]
     platform: ${LIBREDWG_PLATFORM:-linux/amd64}
     network_mode: none
     read_only: true
