@@ -1,0 +1,10 @@
+{
+  "purpose": "The images the pvec vendor-corpus tests start through Container::start, each by digest, and where the corpus appears inside them. No credential is part of this file or of the run.",
+  "credentials": "none",
+  "mount": { "source": "corpus/r0-open", "target": "/corpus", "read_only": true },
+  "layout": "/corpus/manifest.json, /corpus/fixtures/<fixture-id>/source.dwg (and the generated artifacts beside it)",
+  "images": [
+    { "id": "dwg2step-acadsharp", "role": "open converter (oracle_scope OPEN_CONVERTERS)", "image": "ghcr.io/libviprs/pvec-gold-dwg2step-acadsharp", "digest": null },
+    { "id": "step-validator", "role": "independent evaluator", "image": "pvec-gold/step-validator:local", "digest": null }
+  ]
+}
