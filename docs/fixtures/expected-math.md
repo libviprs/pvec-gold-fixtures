@@ -115,8 +115,17 @@ traced back to those parameters, it doesn't belong in the record.
 ## Assertions
 
 `assertions` lists what the fixture claims, split into `STRUCTURAL` (class, knots, weights,
-transform, parameter order preserved) and `GEOMETRIC` (the world-space result, equivalent shape
-under reparameterisation). The evidence classes themselves are defined once, in the ADR that O1.9
+parameter order preserved), `GEOMETRIC` (the world-space result, equivalent shape under
+reparameterisation) and `SOURCE_MAPPING`.
+
+`SOURCE_MAPPING` holds exactly one claim, `TRANSFORM_PRESERVED`. Per pvec ADR 0017 a PVec artifact is
+curve-only: it has no block table, no instance and no transform. So the matrix and its determinant
+are checked by the source mapping (libviprs) against the drawing, never in the container. The entity
+still records `INSTANCE_PLUS_TRANSFORM` and the matrix as authored, because that is what the mapping
+is held to, and the artifact-facing claim for it is the `GEOMETRIC` `WORLD_SPACE_RESULT`, generated
+from the world-space curve and checked exactly. The validator refuses a `STRUCTURAL`
+`TRANSFORM_PRESERVED`, and refuses an instance that has a world-space curve but no
+`WORLD_SPACE_RESULT`. The evidence classes themselves are defined once, in the ADR that O1.9
 adds, and are only named here.
 
 ## Worked example

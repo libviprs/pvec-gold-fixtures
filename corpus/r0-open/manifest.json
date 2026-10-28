@@ -703,7 +703,7 @@
       "expected": {
         "canonical_path": "fixtures/known-truth/transforms/near-singular-001/expected.math.json",
         "path": "fixtures/near-singular-001/expected.math.json",
-        "sha256": "39b2cca461ed18c2e895d41d3aa8d5e794cf9472ec187ff417cc91341b561428"
+        "sha256": "dddef110f3d8699aca973cf3d1a2cd31283affe124d5da4d7c3412fcbcb8a4e0"
       },
       "group": "transforms",
       "id": "near-singular-001",
@@ -747,7 +747,7 @@
       "expected": {
         "canonical_path": "fixtures/known-truth/blocks/nested-blocks-001/expected.math.json",
         "path": "fixtures/nested-blocks-001/expected.math.json",
-        "sha256": "be8480a3f1eae8d490362fc064e3dbe92b0f9fb5216a42ae7a8866e418d248dd"
+        "sha256": "c7bff2967f0962ebb1893041bcc57abfda38c85948f3ce3942a74a567a9ff37a"
       },
       "group": "blocks",
       "id": "nested-blocks-001",
@@ -791,7 +791,7 @@
       "expected": {
         "canonical_path": "fixtures/known-truth/transforms/nonuniform-scale-circle-001/expected.math.json",
         "path": "fixtures/nonuniform-scale-circle-001/expected.math.json",
-        "sha256": "8b2d2175c47d28d6ddf826eb499a259d0aa5d6b75c7478972d63ac28cf2abcc4"
+        "sha256": "9d9e1c1e5564f909314b4c74d94fc964b443c23a0212f673e6398cf6eaf6e733"
       },
       "group": "transforms",
       "id": "nonuniform-scale-circle-001",
@@ -835,7 +835,7 @@
       "expected": {
         "canonical_path": "fixtures/known-truth/transforms/nonuniform-scale-rotated-001/expected.math.json",
         "path": "fixtures/nonuniform-scale-rotated-001/expected.math.json",
-        "sha256": "46dd01c1eb737f0457a2b0b015b5e869f66ae54c66a559ae0df99c8e837e4f73"
+        "sha256": "4871cc827251f04a9fb261a7a69002ed7d2639e1e7c4ac69e2878623935ca9f1"
       },
       "group": "transforms",
       "id": "nonuniform-scale-rotated-001",
@@ -1099,7 +1099,7 @@
       "expected": {
         "canonical_path": "fixtures/known-truth/transforms/reflection-001/expected.math.json",
         "path": "fixtures/reflection-001/expected.math.json",
-        "sha256": "150fbefe7d74e0044eaa0ebaa0b7ba40c096d5e946f7d643dcc1ca6d3ee22bb3"
+        "sha256": "37f5991b7b06d07ffdf3b3bc627cd92c9d9e383f7df9bfa2feeacd502875fe64"
       },
       "group": "transforms",
       "id": "reflection-001",
@@ -1187,7 +1187,7 @@
       "expected": {
         "canonical_path": "fixtures/known-truth/transforms/rotation-irrational-001/expected.math.json",
         "path": "fixtures/rotation-irrational-001/expected.math.json",
-        "sha256": "74ef2743f142e061fe494e332126abac54c9ccb65a7f82dc7928e1b02dd4d36e"
+        "sha256": "85e4f5f959d5f368b9bed9f4d766e5efcacff33c55cc610fbb95bb70a20fb8fe"
       },
       "group": "transforms",
       "id": "rotation-irrational-001",
@@ -1275,7 +1275,7 @@
       "expected": {
         "canonical_path": "fixtures/known-truth/transforms/translation-001/expected.math.json",
         "path": "fixtures/translation-001/expected.math.json",
-        "sha256": "64a2bb1026d3a9f3e7a824c8c941bc51d33f014c7d278f9868f4fde163991189"
+        "sha256": "158201b897af18dcb468000f16b9157055550717213bb3458b238f0c6e3c3c0f"
       },
       "group": "transforms",
       "id": "translation-001",
@@ -1319,7 +1319,7 @@
       "expected": {
         "canonical_path": "fixtures/known-truth/transforms/uniform-scale-001/expected.math.json",
         "path": "fixtures/uniform-scale-001/expected.math.json",
-        "sha256": "297c820d2b3040b40fec26ee8b30a19b6557b7b782e74cd78ec3c86009f5516c"
+        "sha256": "9a0565b7a146bee951771aabfa866b5ffdc82f0c1730e2e3617289f9ebcd2531"
       },
       "group": "transforms",
       "id": "uniform-scale-001",
