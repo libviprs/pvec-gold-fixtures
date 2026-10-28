@@ -178,7 +178,7 @@ converters land them. The report is `reports/r2-open/probe-qualification.json`, 
   unlisted divergence), on x86_64 and on arm64. The release verifies with the standard library only.
 - STEP bytes are identical across x86_64 and arm64 for all 41 fixtures that have STEP. Signatures differ in their derived last
   digits for 14 of 39 (same cause as before: OCCT's values from the Debian package), and the frozen set is the x86_64 one.
-- **OCCT from source.** See the recommendation in section 8.
+- **OCCT from source.** Bitwise identical signatures across architectures at full scale, and identical to the frozen ones. See the recommendation in section 8.
 - **LibreDWG R2004 outputs in git.** `corpus/writers/libredwg-r2004` holds 213 files and 47.8 MB (about 46 MB of DWG, which does
   not compress); `libredwg-r2000` is 1.2 MB and `acadsharp` 1.3 MB. ACadSharp at its pin cannot open the R2004 files, so all of
   them are quarantined. I recommend moving the R2004 DWGs out of the tree and keeping ids and hashes only (the manifest and
@@ -188,7 +188,22 @@ converters land them. The report is `reports/r2-open/probe-qualification.json`, 
 
 ## 8. Recommendation: should the validator image ship OCCT from source?
 
-<!-- occt-recommendation -->
+I recommend shipping it, as its own follow-up change, and I did not switch it here (`docker/step-validator/Dockerfile` and
+`docker-compose.yml` are unchanged). The spike is in `docs/validator/occt-from-source.md`. I repeated it at full scale: the whole
+`r2-open` clean-host run (59 fixtures, two converters, 78 signatures) with `Dockerfile.occt-src` as the validator, on native
+x86_64 (mars) and native arm64 (mercury), both PASS with no unlisted divergence.
+
+| comparison over the 78 signatures (and 80 STEP files) | identical signatures | identical STEP |
+|---|---|---|
+| Debian OCCT, x86_64 against arm64 | 53 of 78 | 80 of 80 |
+| OCCT from source, x86_64 against arm64 | **78 of 78** | 80 of 80 |
+| Debian x86_64 against source x86_64 (the frozen set) | **78 of 78** | 80 of 80 |
+
+So switching changes no frozen signature, and removes the 25 last-digit differences across architectures completely, which the
+policy comparison tolerated but a bitwise consumer could not. What it costs: a 3 to 7 minute OCCT build (its own cacheable stage),
+and we stop getting Debian's patched OCCT, so a bump of the pinned tarball (`V7_6_3`, SHA-256 checked in the build) becomes our job. I
+would keep the numeric-policy comparison as the contract anyway (#74) and treat bitwise identity as a bonus the image provides. The
+condition I would put on the follow-up is one more run like this one after any OCCT bump.
 
 ## 9. Decisions
 

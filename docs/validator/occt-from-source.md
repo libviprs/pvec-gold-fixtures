@@ -48,3 +48,9 @@ an arm64 run passes with the Debian library. This spike shows the stronger thing
 build, no tolerance is needed for these 29 fixtures. I have not switched the shipped image, because it costs a 3 to 7
 minute OCCT build (cacheable as its own stage) and the policy comparison is the right contract regardless. If bitwise
 signatures across architectures are ever wanted, `Dockerfile.occt-src` is the way, and it has been measured.
+
+## Repeated at full scale (#78)
+
+The `r2-open` clean-host run with this image as the validator, on native x86_64 and native arm64, gives 78 of 78 identical signatures
+across the two architectures and 78 of 78 identical to the Debian x86_64 set; the Debian image gives 53 of 78 across architectures.
+The recommendation is in `reports/final-audit-r2-open.md`, section 8. The shipped image is still the Debian one.
