@@ -12,9 +12,12 @@ rm -rf "$OUT"
 mkdir -p "$OUT/run1" "$OUT/run2"
 $B all --root /work --out "$OUT/run1" --version "$VER" >/dev/null
 $B all --root /work --out "$OUT/run2" --version "$VER" >/dev/null
+n=0; same=0
 for f in $(cd "$OUT/run1" && find . -name source.dwg | sort); do
-  if cmp -s "$OUT/run1/$f" "$OUT/run2/$f"; then echo "deterministic $f"; else echo "DIFFERS $f"; fi
+  n=$((n+1))
+  if cmp -s "$OUT/run1/$f" "$OUT/run2/$f"; then same=$((same+1)); echo "deterministic $f"; else echo "DIFFERS $f"; fi
 done
+echo "$same of $n identical"
 for g in edge mixed degenerate; do
   for d in "$OUT"/run1/$g/*/; do
     $B read --dwg "$d/source.dwg" --out "$d/read.acadrust.json" || echo "READFAIL $d"

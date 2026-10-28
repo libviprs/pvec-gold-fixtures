@@ -144,7 +144,11 @@ def run_all():
 
 
 def tearDownModule():
-    base = _cache.get("base")
+    for b in (_cache.get("base"), _cache.get("base_rw")):
+        _rm_scratch(b)
+
+
+def _rm_scratch(base):
     if base and base.exists():
         # inside this tree's own .out-* scratch directory (gitignored), made by this process
         docker("run", "--rm", "--platform", PLATFORM, *mounts(base.parent), "alpine:3.20", "rm", "-rf", cpath(base), check=False)
@@ -521,6 +525,83 @@ def hashlib_text(s):
 def _scratch():
     SCRATCH.mkdir(exist_ok=True)
     return str(SCRATCH)
+
+
+# ---- issue 68: real-world drawings --------------------------------------------------------------
+
+RW = ROOT / "fixtures" / "real-world"
+FEET = ROOT / "tests" / "data" / "units-feet-001.dwg"   # line-001 re-written with INSUNITS 2 (feet), see tests/data/README.md
+INCH, FOOT = 0.0254, 0.3048
+
+
+def rw_run(fx, src=None, tag=None):
+    """Convert one real-world drawing (or a given DWG) once per module and evaluate it when it converted."""
+    key = ("rw", tag or fx)
+    if key not in _cache:
+        base = SCRATCH / ("rw-%d" % os.getpid())
+        _cache.setdefault("base_rw", base)
+        r = convert(src or RW / fx / "source.dwg", base / (tag or fx))
+        r["eval"] = evaluate(r["step"]) if r["code"] == 0 else None
+        _cache[key] = r
+    return _cache[key]
+
+
+def skipped(status):
+    """{type: count} from the converter's 'skipped N entity(ies) of type T' warnings."""
+    out = {}
+    for w in status["warnings"]:
+        m = re.fullmatch(r"skipped (\d+) entity\(ies\) of type (.+)", w)
+        if m:
+            out[m.group(2)] = int(m.group(1))
+    return out
+
+
+@needs_docker
+class RealWorld(unittest.TestCase):
+    def test_a_drawing_in_inches_is_scaled_to_metre_and_says_so(self):
+        r = rw_run("blocks-dynamic-linear-001")
+        self.assertEqual(r["code"], 0, r["stderr"] + json.dumps(r["status"].get("error")))
+        self.assertTrue(any("inch" in w.lower() and "0.0254" in w for w in r["status"]["warnings"]), r["status"]["warnings"][-3:])
+        self.assertIn("LENGTH_UNIT()NAMED_UNIT(*)SI_UNIT($,.METRE.)", r["step"].read_text())
+        ev = r["eval"]
+        self.assertEqual(ev["units"]["canonical"], "metre")
+        self.assertEqual(canon.check_scalar(ev["units"]["scale_to_canonical"]), 1.0)
+        # census.acadsharp.json: the drawing spans x -5 .. 22.5 and y -7.5 .. 7.5 in inches
+        circles = [e for e in ev["entities"] if e["class"] == "circle"]
+        self.assertTrue(circles)
+        xs = [canon.check_scalar(e["geometry"]["center"][0]) + sg * canon.check_scalar(e["geometry"]["radius"]) for e in circles for sg in (-1, 1)]
+        self.assertTrue(POL.near(max(xs), 22.5 * INCH, 22.5 * INCH), max(xs))
+        self.assertTrue(POL.near(min(xs), -5.0 * INCH, 5.0 * INCH), min(xs))
+
+    def test_a_drawing_in_feet_is_scaled_to_metre_and_says_so(self):
+        r = rw_run(None, FEET, "feet")
+        self.assertEqual(r["code"], 0, r["stderr"] + json.dumps(r["status"].get("error")))
+        self.assertTrue(any("feet" in w.lower() and "0.3048" in w for w in r["status"]["warnings"]), r["status"]["warnings"][-3:])
+        want = authored("line-001")[0][0]["geometry"]
+        g = r["eval"]["entities"][0]
+        self.assertEqual(g["class"], "line")
+        for got, key in ((sample_point(g, 0), "start"), (sample_point(g, len(g["samples"]) - 1), "end")):
+            exp = [canon.check_scalar(c) * FOOT for c in want[key]]
+            self.assertTrue(all(POL.near(a, b, 3.75 * FOOT) for a, b in zip(got, exp)), (key, got, exp))
+
+    def test_a_fit_point_only_spline_is_skipped_for_that_entity_and_the_rest_converts(self):
+        r = rw_run("general-sample-ac1032-001")
+        self.assertEqual(r["code"], 0, r["stderr"] + json.dumps(r["status"].get("error")))
+        self.assertEqual(r["status"]["status"], "OK")
+        sk = skipped(r["status"])
+        fit = [k for k in sk if k.startswith("Spline") and "fit" in k]
+        self.assertEqual(len(fit), 1, sk)
+        self.assertGreaterEqual(sk[fit[0]], 1)
+        self.assertGreater(len(r["eval"]["entities"]), 10)
+        self.assertEqual([e["id"] for e in r["eval"]["entities"] if e["class"] == "unsupported"], [])
+
+    def test_a_drawing_with_no_curve_in_model_space_is_still_refused_and_names_what_it_skipped(self):
+        # the only model-space entity is an AEC wall object; the lines and polylines sit in blocks nothing inserts
+        r = rw_run("arch-aecobjects-001")
+        self.assertEqual(r["code"], 15)
+        self.assertFalse(r["step"].exists())
+        self.assertEqual(r["status"]["error"]["message"], "no supported curve in model space")
+        self.assertEqual(skipped(r["status"]), {"Wall": 1})
 
 
 @needs_docker

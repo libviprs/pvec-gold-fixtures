@@ -230,6 +230,25 @@ def generate(a):
 
 
 def teardown(a):
+    """Remove everything the run started. Inside the fixture-runner container `compose down` is not usable: the
+    runner is itself a one-off container of the project, so down removes it too, SIGTERMs it halfway through its own
+    teardown and turns a clean run into exit 130 before the leak check. There the project's other containers and
+    volumes go by label, and the runner's own container is left for `compose run --rm` to remove."""
+    me = os.environ.get("HOSTNAME", "")
+    project = None
+    cfg = docker("compose", "-f", str(a.compose_file), "config", "--format", "json")
+    if cfg.returncode == 0:
+        project = json.loads(cfg.stdout).get("name")
+    flt = "label=com.docker.compose.project=%s" % (project or a.compose_file.resolve().parent.name.lower())
+    ids = docker("container", "ls", "-aq", "--filter", flt).stdout.split()
+    if me and any(i.startswith(me) or me.startswith(i) for i in ids):
+        others = [i for i in ids if not (i.startswith(me) or me.startswith(i))]
+        if others:
+            docker("rm", "-f", "-v", *others)
+        vols = docker("volume", "ls", "-q", "--filter", flt).stdout.split()
+        if vols:
+            docker("volume", "rm", "-f", *vols)
+        return
     docker("compose", "-f", str(a.compose_file), "down", "--volumes", "--remove-orphans")
 
 

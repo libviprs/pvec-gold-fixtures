@@ -59,10 +59,9 @@ provenance record), changes one curve entity, and runs the result through `step_
 |---|---|---|
 | `weights-to-1` | every rational weight becomes 1 | `nonunit-weight-001`, `nurbs-d2-offconic-001`, `nurbs-d3-001` (to `BOUNDED_APPROXIMATION`) |
 | `knot-collapse` | the first interior knot is merged into the next one | `bspline-d3-001`, `bspline-d5-001`, `closed-by-endpoint-001`, `nonunit-weight-001`, `nurbs-d2-offconic-001`, `nurbs-d3-001` (to `BOUNDED_APPROXIMATION`) |
-| `reparameterise` | every knot is scaled by 2 | the same eight probes as the structural-exact ones for ACadSharp, seven for LibreDWG (to `GEOMETRIC_EXACT_REPARAMETERIZED`) |
+| `reparameterise` | every knot is scaled by 2 | `bspline-d3-001`, `bspline-d5-001`, `closed-by-endpoint-001`, `closed-periodic-001`, `nonunit-weight-001`, `nurbs-d2-offconic-001`, `nurbs-d3-001`, `repeated-knot-c0-001` (to `GEOMETRIC_EXACT_REPARAMETERIZED`) |
 
-LibreDWG's converter does not write `closed-periodic-001` the way the authored record has it (its plain output is already
-`BOUNDED_APPROXIMATION`), so that probe is the one `reparameterise` cannot move there. `tests/test_discrimination.py` names every
+`tests/test_discrimination.py` names every
 probe, so a probe that stops being caught, or a new one, fails it. The class checks need the evaluator (`STEP_EVAL`); the
 last run is in `reports/phase1/discrimination.json`.
 
