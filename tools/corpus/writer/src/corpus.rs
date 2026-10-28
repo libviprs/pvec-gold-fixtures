@@ -111,10 +111,13 @@ fn build_negative(variant: &str, version: DxfVersion) -> Result<CadDocument, Ski
             EntityType::MText(m)
         }
         "solid3d" => EntityType::Solid3D(Solid3D::from_sat(SAT)),
-        "mesh" => EntityType::Mesh(Mesh::from_triangles(
-            vec![o, Vector3::new(1.0, 0.0, 0.0), Vector3::new(0.0, 1.0, 0.0)],
-            &[(0, 1, 2)],
-        )),
+        "mesh" => {
+            let mut m = Mesh::from_triangles(vec![o, Vector3::new(1.0, 0.0, 0.0), Vector3::new(0.0, 1.0, 0.0)], &[(0, 1, 2)]);
+            // Mesh::compute_edges collects the edges in a HashSet, so their order, and the DWG, changes from one
+            // build to the next. Ascending order is the one the file gets every time.
+            m.edges.sort_by_key(|e| (e.start, e.end));
+            EntityType::Mesh(m)
+        }
         "region" => EntityType::Region(Region::from_sat(SAT)),
         "proxy" => EntityType::Unknown(UnknownEntity::new("ACAD_PROXY_ENTITY")),
         "ole" => {
@@ -222,4 +225,42 @@ pub fn run() {
         }
     }
     write_group(&out.join("negative"), &ver, rep);
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn mesh_bytes(n: usize) -> Vec<u8> {
+        let doc = build_negative("mesh", DxfVersion::AC1032).unwrap_or_else(|_| panic!("mesh-001 did not build"));
+        let f = std::env::temp_dir().join(format!("mesh-det-{}-{n}.dwg", std::process::id()));
+        DwgWriter::write_to_file(&f, &doc).unwrap();
+        let b = fs::read(&f).unwrap();
+        fs::remove_file(&f).unwrap();
+        b
+    }
+
+    // #73: acadrust's Mesh::compute_edges walks a HashSet, so the edge list, and with it the DWG, changed from
+    // one build to the next. The same mesh built many times has to give the same bytes.
+    #[test]
+    fn mesh_001_is_byte_identical_across_builds() {
+        let first = mesh_bytes(0);
+        for n in 1..40 {
+            assert_eq!(first, mesh_bytes(n), "build {n} differs from build 0");
+        }
+    }
+
+    #[test]
+    fn mesh_001_edges_are_in_ascending_order() {
+        match build_negative("mesh", DxfVersion::AC1032) {
+            Ok(doc) => {
+                let m = doc.entities().find_map(|e| if let EntityType::Mesh(m) = e { Some(m) } else { None }).expect("a mesh");
+                let ks: Vec<(usize, usize)> = m.edges.iter().map(|e| (e.start, e.end)).collect();
+                let mut s = ks.clone();
+                s.sort();
+                assert_eq!(ks, s);
+            }
+            Err(_) => panic!("mesh-001 did not build"),
+        }
+    }
 }

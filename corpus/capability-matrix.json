@@ -524,6 +524,16 @@
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
+          "id": "general-affine-chain-001",
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "fixtures/edge/general-affine-chain-001/open-route.json"
+          }
+        },
+        {
+          "evidence_class": "KNOWN_TRUTH_EXACT",
+          "evidence_scope": "READER_MAPPING_ONLY",
           "id": "mixed-entity-001",
           "step_evidence": {
             "class": "BOUNDED_APPROXIMATION",
@@ -589,6 +599,16 @@
             "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
             "converter": "acadsharp-dwg2step",
             "source": "reports/phase1/probe-qualification.json"
+          }
+        },
+        {
+          "evidence_class": "KNOWN_TRUTH_EXACT",
+          "evidence_scope": "READER_MAPPING_ONLY",
+          "id": "shear-chain-001",
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "fixtures/edge/shear-chain-001/open-route.json"
           }
         },
         {

@@ -12,7 +12,7 @@ REPORT = ROOT / "reports" / "phase1" / "probe-qualification.json"
 KT = ROOT / "fixtures" / "known-truth"
 POL = numeric.load_policy()
 OPEN = "acadsharp-dwg2step"
-NO_DWG = ("shear-001", "general-affine-001", "singular-001")
+NO_DWG = ("singular-001",)   # shear-001 and general-affine-001 are profile-only (#69): no DWG on purpose, not converter probes
 
 
 class SingleOracle(unittest.TestCase):
