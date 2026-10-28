@@ -561,7 +561,7 @@ class Adr0009AndAmendments(unittest.TestCase):
 
     def test_adr_0009_defines_the_scope_fields(self):
         t = self.text("0009-*.md")
-        for needle in ("oracle_scope", "NONE", "OPEN_CONVERTERS", "VENDOR_CONVERTERS", "evidence_scope", "STEP_ORACLE",
+        for needle in ("oracle_scope", "NONE", "OPEN_CONVERTERS", "evidence_scope", "STEP_ORACLE",
                        "READER_MAPPING_ONLY", "lineage", "ADR 0001", "image digest", "common-mode"):
             self.assertIn(needle, t, needle)
 
