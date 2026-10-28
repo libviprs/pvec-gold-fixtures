@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <!-- Where upstream ACadSharp's src/ is checked out (the container clones the pinned commit). -->
+    <AcsSrc Condition="'$(AcsSrc)' == ''">/tmp/acs/src</AcsSrc>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(AcsSrc)/ACadSharp/ACadSharp.csproj" SetTargetFramework="TargetFramework=net10.0" />
+  </ItemGroup>
+</Project>
