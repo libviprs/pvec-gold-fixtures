@@ -1,10 +1,11 @@
 """Assemble reports/bench/*.json from the per-host run files and render docs/benchmarks/*.md from them.
 
-    python3 bench/report.py RUNS_DIR
+    python3 bench/report.py RUNS_DIR [--extras-only]
 
 RUNS_DIR holds what bench/converters/run.py, bench/validation/run.py and bench/orchestration/run.py wrote on
 each host, as conv-<host>.json, val-<host>.json and orch-<host>.json, plus sig-arm/ (the signatures a native
-arm64 regeneration produced) for the cross-architecture comparison. The documents are rendered, not typed, so
+arm64 regeneration produced) for the cross-architecture comparison. Issue 77 adds conv-libredwg-mars.json, orch-libredwg-mars.json, geo-mars.json and geo-mercury.json;
+--extras-only reads just those and adds their records and sections to the committed reports. The documents are rendered, not typed, so
 every number in them is one in the JSON.
 """
 import json
@@ -63,8 +64,9 @@ def main(runs):
     sp = dict(val["x64"]["signature_path"], arch="x64", arm64=val["arm64"]["signature_path"])
     (out / "validation.json").write_text(json.dumps({
         "schema": "pvec-gold/bench-validation/1", "runs": [val["x64"], val["arm64"]],
-        "not_measured": {"adaptive_geometric": "no adaptive geometric comparison stage exists in this repository (O2.5 and O2.6 are not built), so there is no converged sample count to report"},
+        "not_measured": {},
         "cross_architecture": xarch, "signature_path": sp}, indent=2, sort_keys=True) + "\n")
+    extras(runs, out)
     if orch:
         (out / "orchestration.json").write_text(json.dumps({"schema": "pvec-gold/bench-orchestration/1", "runs": list(orch.values())}, indent=2, sort_keys=True) + "\n")
 
@@ -74,6 +76,122 @@ def main(runs):
     (docs / "validation.md").write_text(render_val(val, xarch, by_fx, sp))
     if orch:
         (docs / "orchestration-tuning.md").write_text(render_orch(orch, conv))
+    extras_docs(runs, out, docs)
+
+
+def splice(path, name, text):
+    """Put text between <!-- name --> markers at the end of a rendered page, replacing what an earlier call put there."""
+    a, b = "<!-- %s -->" % name, "<!-- /%s -->" % name
+    t = Path(path).read_text()
+    if a in t:
+        t = t[:t.index(a)].rstrip("\n") + "\n"
+    Path(path).write_text(t.rstrip("\n") + "\n\n" + a + "\n" + text.rstrip("\n") + "\n" + b + "\n")
+
+
+def extras(runs, out):
+    """The records of issue 77: the second converter's throughput and orchestration, and the timed compare_geometric stage."""
+    conv, orch = load(runs, "conv", "libredwg-mars"), load(runs, "orch", "libredwg-mars")
+    conv["not_measured"] = {"arm64": "no arm64 image of the LibreDWG converter is held here; its Dockerfile lives in libviprs/pvec-oracle-libredwg and I did not build it on mercury"}
+    (out / "libredwg-throughput.json").write_text(json.dumps(conv, indent=2, sort_keys=True) + "\n")
+    (out / "libredwg-orchestration.json").write_text(json.dumps(orch, indent=2, sort_keys=True) + "\n")
+    geo = {"schema": "pvec-gold/bench-geometric/1", "runs": [load(runs, "geo", h) for h in ("mars", "mercury")]}
+    (out / "geometric.json").write_text(json.dumps(geo, indent=2, sort_keys=True) + "\n")
+
+
+def extras_docs(runs, out, docs):
+    conv, orch = json.loads((out / "libredwg-throughput.json").read_text()), json.loads((out / "libredwg-orchestration.json").read_text())
+    geo = json.loads((out / "geometric.json").read_text())
+    first = json.loads((out / "orchestration.json").read_text())["runs"][0]
+    splice(docs / "converter-throughput.md", "second-converter", render_conv2(conv))
+    splice(docs / "orchestration-tuning.md", "second-converter", render_orch2(orch, first))
+    val = json.loads((out / "validation.json").read_text())["runs"][0]
+    step = sum(sum(m[k]["median"] for k in ("load_s", "normalise_s", "structural_s", "report_s")) for m in val["fixtures"].values())
+    splice(docs / "validation.md", "compare-geometric", render_geo(geo, step))
+
+
+def render_conv2(c):
+    ids = sorted(c["fixtures"])
+    med = lambda k: sorted(m[k]["median"] for m in c["fixtures"].values())
+    L = ["## Second converter: libredwg-dwg2step", "",
+         "Issue 77. The converter is `%s`, from `libviprs/pvec-oracle-libredwg` (GPL-3.0-or-later; its image is used by id and never a build context here). "
+         "Same harness as above (`bench/converters/run.py --converter libredwg-dwg2step`), same %d `r0-open` DWGs, %d repeats of one throw-away container each, concurrency %d." % (c["converter_version"], len(ids), c["repeats"], c["concurrency"]), "",
+         "- **native x86_64**: host `mars`, platform `%s`, image `%s` (`%s`), memory limit %s. No emulation. Load average when the run started: %s." % (c["platform"], c["image"], c["image_id"], c["mem_limit"], " ".join(c["load_avg_before"])),
+         "- **native arm64: not measured.** %s" % c["not_measured"]["arm64"],
+         "- Licence: none. The concurrency limit is the cap in `docker/converter-limits.json` (%d), which concurrency 1 does not reach." % c["licence_limit"],
+         "- This converter is a python script over `dwgread`, so `conversion` below includes the python start and no runtime warm-up. The no-op (no arguments, exit 10) is %s ms total and %s ms inside." % (ms(c["noop"]["median"]), ms(c["noop"]["inner_s"]["median"])), "",
+         "| fixture | startup | conversion | peak RSS MiB | cgroup MiB | STEP bytes | failure rate |", "|---|---|---|---|---|---|---|"]
+    for fx in ids:
+        m = c["fixtures"][fx]
+        L.append("| %s | %s (%s) | %s (%s) | %.1f | %.1f | %d | %.2f |" % (fx, ms(m["startup_s"]["median"]), ms(m["startup_s"]["iqr"]), ms(m["conversion_s"]["median"]), ms(m["conversion_s"]["iqr"]),
+                                                                  m["peak_rss_mib"]["median"], m["cgroup_peak_mib"]["median"], m["step_bytes"]["median"], m["failure_rate"]))
+    L += ["", "Median ms, interquartile range in brackets, as above.", "",
+          "- Conversion medians run from %s to %s ms across the corpus; peak RSS is %.1f MiB at most and the cgroup peak %.1f MiB. These probes are a handful of curves each, so this says nothing yet about a real drawing."
+          % (ms(med("conversion_s")[0]), ms(med("conversion_s")[-1]), max(m["peak_rss_mib"]["median"] for m in c["fixtures"].values()), max(m["cgroup_peak_mib"]["median"] for m in c["fixtures"].values())),
+          "- Container creation is again the larger part: about %s ms of startup against about %s ms of conversion per call (medians over fixtures)." % (ms(sorted(m["startup_s"]["median"] for m in c["fixtures"].values())[len(ids) // 2]), ms(med("conversion_s")[len(ids) // 2]))]
+    L += ["- Failure rate over the corpus: %.4f. %s" % (c["failure_rate"], "Every failure is the designed refusal:" if c["failures"] else "No failures.")]
+    for f in c["failures"]:
+        L.append("  - %s, exit %s: %s" % (f["fixture"], ",".join(map(str, f["exit_codes"])), f["cause"].replace("|", "/")))
+    return "\n".join(L)
+
+
+def render_orch2(o, first):
+    t1 = {r["parallel"]: r for r in first["table"]}
+    t2 = {r["parallel"]: r for r in o["table"]}
+    L = ["## Both converters", "",
+         "Issue 77. The same harness (`bench/orchestration/run.py`, through `runner.regenerate`), host `mars`, **native x86_64**, 3 repeats, per-container limits 2 cpus; ACadSharp at 256m, `libredwg-dwg2step` at 512m (the compose limits). "
+         "Wall time to convert, evaluate and normalise the 30 `r0-open` DWGs:", "",
+         "| parallelism | acadsharp-dwg2step median wall (s) | fixtures per second | libredwg-dwg2step median wall (s) | fixtures per second |", "|---|---|---|---|---|"]
+    for par in (1, 2, 4, 8):
+        L.append("| %d | %.2f | %.1f | %.2f | %.1f |" % (par, t1[par]["wall_s"]["median"], t1[par]["fixtures_per_s"], t2[par]["wall_s"]["median"], t2[par]["fixtures_per_s"]))
+    ch = o["chosen"]["parallel"]
+    L += ["", "## libredwg-dwg2step", "",
+          "Image `%s` (`%s`). Raw record: `reports/bench/libredwg-orchestration.json`. %s" % (o["image"], o["image_id"], o["eval_image_note"].capitalize() + "."), "",
+          "**Chosen: parallelism %d** (%.2f s for the corpus, %.1f fixtures per second), the smallest value within 10%% of the best. **Cap: %d** in `docker/converter-limits.json`. %s" % (
+              ch, t2[ch]["wall_s"]["median"], t2[ch]["fixtures_per_s"], o["cap"], o["cap_basis"]), "",
+          "**Memory**: largest fixture `%s`, peak %.1f MiB in the cgroup and %.1f MiB resident. The limit is **%d MiB** (`mem_limit` of the `libredwg-converter` service), about %.0fx the cgroup peak; %d containers were OOM-killed. "
+          "That is generous for these probes, and a real drawing needs its own measurement, so I did not lower it." % (
+              o["largest_fixture"], o["observed_peak_cgroup_mib"], o["observed_peak_rss_mib"], o["chosen"]["memory_limit_mib"], o["chosen"]["memory_limit_mib"] / o["observed_peak_cgroup_mib"], o["oom_killed"]), "",
+          "Cpu limit, four-fixture subset (`%s`, 9 repeats), median over the fixtures, ms:" % o["experiments_conversion_subset"], "",
+          "| setting | conversion | total (`docker run`) |", "|---|---|---|"]
+    for k in ("unlimited", "cpus_1", "cpus_2", "cpus_4"):
+        L.append("| %s | %s | %s |" % (k, ms(o["experiments"][k]["conversion_s_median"]), ms(o["experiments"][k]["total_s_median"])))
+    L += ["", "The converter is single threaded, so a cpu limit changes nothing measurable (differences are inside the spread). I kept 2, as for the other converter, because a second cpu is what `dwgread` and the python start would use if they overlapped, and it costs nothing here. "
+          "There are no runtime switches to try.", "",
+          "- **Resume**: a parallelism-4 run interrupted with SIGINT after %d fixtures were done; the rerun skipped %d and regenerated %d. Untouched fixtures hashed identically before and after: **%s**." % (
+              o["resume"]["done_before_interrupt"], o["resume"]["skipped_on_rerun"], o["resume"]["regenerated_on_rerun"], o["resume"]["untouched_hashes_identical"]),
+          "- **Teardown under parallelism**: a parallelism-8 run aborted with SIGINT left %d labelled containers, %d new `gold-` containers and %d volumes labelled by the run. "
+          "`mars` is shared, so I count only what the runner names or labels; a raw before and after diff of the host would count other people's containers." % (
+              o["teardown"]["leftover_labelled_containers"], o["teardown"]["new_containers"], o["teardown"]["new_volumes"]),
+          "- **Refusal**: `near-singular-001` is refused by both converters with `NEAR_SINGULAR_TRANSFORM` (exit 15) and recorded as refused, not failed. Unexpected failures: %d." % len(o["unexpected_failures"]),
+          "- `runner.regenerate --converter libredwg-dwg2step --converter-image IMAGE` runs the binary `dwg2step` of the image (it has no entrypoint) and defaults to 512m."]
+    return "\n".join(L)
+
+
+def render_geo(g, step_sum):
+    x, a = g["runs"]
+    ids = sorted(x["fixtures"])
+    from collections import Counter
+    cl = Counter(m["class"] for m in x["fixtures"].values())
+    same = all(x["fixtures"][f]["class"] == a["fixtures"][f]["class"] for f in ids)
+    deep = max((m["quantities"]["refinement"] or {"deepest_level": 0})["deepest_level"] for m in x["fixtures"].values())
+    L = ["## compare_geometric", "",
+         "Issue 77. `runner.compare_geometric.compare` against each fixture's known truth, timed on its own by `bench/validation/geometric.py` (%d repeats per fixture, the comparison alone with the inputs already parsed, no OCCT). "
+         "Raw record: `reports/bench/geometric.json`. **native x86_64** on `mars` and **native arm64** on `mercury`, no emulation, over the %d accepted fixtures." % (x["repeats"], len(ids)), "",
+         "This stage is adaptive (the curve deviation is refined until the estimate is stable by the numeric policy), so its cost follows the curve and not just the entity count. "
+         "Over all fixtures the medians sum to **%.2f s** native x86_64 and %.2f s native arm64, against %.2f s for the load, normalise, structural and report stages together on x86_64, so it is the dominant stage of a full comparison. "
+         "The deepest refinement any quantity needed was level %d. The verdict is the same on both architectures for every fixture: %s." % (
+             x["total_median_s"], a["total_median_s"],
+             step_sum, deep, "yes" if same else "NO, see the JSON"), "",
+         "Classes over the %d fixtures: %s. A `BOUNDED_APPROXIMATION` here means the stage measured a bound; this page times the stage and does not argue about those verdicts." % (
+             len(ids), ", ".join("%d %s" % (n, k) for k, n in sorted(cl.items()))), "",
+         "| fixture | x64 median ms | x64 iqr | arm64 median ms | arm64 iqr | entities | quantities | deepest refinement (samples) | class |", "|---|---|---|---|---|---|---|---|---|"]
+    for fx in ids:
+        m, n = x["fixtures"][fx], a["fixtures"][fx]
+        r = m["quantities"]["refinement"]
+        L.append("| %s | %s | %s | %s | %s | %d | %d | %s | %s |" % (fx, ms(m["compare_geometric_s"]["median"]), ms(m["compare_geometric_s"]["iqr"]), ms(n["compare_geometric_s"]["median"]), ms(n["compare_geometric_s"]["iqr"]),
+                                                              m["entities"], m["quantities"]["count"], ("level %d (%d)" % (r["deepest_level"], r["sample_count"])) if r else "closed form", m["class"]))
+    L += ["", "Five most expensive on x86_64: %s." % ", ".join("%s (%s ms)" % (f, ms(x["fixtures"][f]["compare_geometric_s"]["median"])) for f in x["most_expensive"])]
+    return "\n".join(L)
 
 
 def render_conv(conv, ids):
@@ -88,7 +206,7 @@ def render_conv(conv, ids):
          "- Every row is %d repeats of one throw-away container, one at a time (concurrency %d). Median and the interquartile range are reported; min and max are in the JSON." % (x["repeats"], x["concurrency"]),
          "- Licence: the converter is MIT and takes no licence. The concurrency limit applied is %d, the cap in `docker/converter-limits.json` (a cap I set). "
          "Concurrency 1 is below it, so the limit did not bound these numbers; it bounds the parallel runs in `orchestration-tuning.md`. "
-         "Only the ACadSharp converter is measured here; the LibreDWG converter has no throughput numbers yet, see `docs/open-route-status.md`." % x["licence_limit"],
+         "The table below is ACadSharp; the LibreDWG converter (`libredwg-dwg2step`) is measured in the last section." % x["licence_limit"],
          "- Host load average when the run started, x86_64: %s; arm64: %s. `mars` is shared, so its absolute times carry some noise." % (" ".join(x["load_avg_before"]), " ".join(a["load_avg_before"])), "",
          "## What is separated from what", "",
          "`total` is `docker run` as seen from outside. `conversion` is the converter process inside the container, timed there, dotnet runtime start included. "
@@ -122,7 +240,7 @@ def render_conv(conv, ids):
           "There is no other failure on either architecture.", "",
           "## Not measured", "",
           "- The named real-world subset: there is none here (no real-world drawing is held, issue 11). Recorded in `docs/open-route-status.md`.",
-          "- LibreDWG converter throughput: not measured yet. The scheduler treats a converter with no listed limit as 1.", ""]
+          "- LibreDWG converter on arm64: no arm64 image of it is held here, see the last section.", ""]
     return "\n".join(L)
 
 
@@ -140,7 +258,7 @@ def render_val(val, xarch, by_fx, sp):
          "| normalise | `runner.normalize` plus the schema and scalar checks on the signature |",
          "| structural | `runner.structural.structural_diff` of the derived signature against the frozen one, entity by entity |",
          "| report | building and serialising the comparison report |",
-         "| adaptive_geometric | **not measured**: no adaptive geometric comparison stage exists in this repository (O2.5 and O2.6 are not built), so there is no converged sample count to report. Listed in `docs/open-route-status.md` as waiting on that work |", "",
+         "| compare_geometric | `runner.compare_geometric.compare` of the frozen signature against the fixture's known truth (`expected.math.json`): endpoints, adaptive curve deviation, bounding box, arc length, tangent and curvature. Timed on its own by `bench/validation/geometric.py`, see the section below |", "",
          "## Per fixture (median ms)", "",
          "| fixture | x64 load | x64 normalise | x64 structural | x64 report | arm64 load | arm64 normalise | arm64 structural | arm64 report |", "|---|---|---|---|---|---|---|---|---|"]
     def f3(v):
@@ -225,4 +343,9 @@ def render_orch(orch, conv):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    if sys.argv[2:] == ["--extras-only"]:
+        # Adds the issue 77 records and sections to the committed reports without re-rendering the rest (that needs every run file).
+        extras(Path(sys.argv[1]), ROOT / "reports" / "bench")
+        extras_docs(Path(sys.argv[1]), ROOT / "reports" / "bench", ROOT / "docs" / "benchmarks")
+    else:
+        main(sys.argv[1])

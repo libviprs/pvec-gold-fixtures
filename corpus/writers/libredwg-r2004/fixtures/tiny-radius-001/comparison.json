@@ -1,0 +1,140 @@
+{
+  "checks": {
+    "LibreDWG": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "CIRCLE",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "CIRCLE"
+      },
+      {
+        "expected": "0x3fe0000000000000",
+        "field": "center[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe0000000000000"
+      },
+      {
+        "expected": "0x3fe0000000000000",
+        "field": "center[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "center[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ee4f8b588e368f1",
+        "field": "radius",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ee4f8b588e368f1"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "normal[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "normal[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "normal[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      }
+    ],
+    "acadrust": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "CIRCLE",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "CIRCLE"
+      },
+      {
+        "expected": "0x3fe0000000000000",
+        "field": "center[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe0000000000000"
+      },
+      {
+        "expected": "0x3fe0000000000000",
+        "field": "center[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "center[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ee4f8b588e368f1",
+        "field": "radius",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ee4f8b588e368f1"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "normal[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "normal[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "normal[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      }
+    ]
+  },
+  "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+  "fixture_id": "tiny-radius-001",
+  "numeric_policy_version": "PVec numeric policy v1",
+  "reader_vs_reader_differences": {},
+  "reason": "MALFORMED_FIXTURE",
+  "verdict": "UNREADABLE"
+}

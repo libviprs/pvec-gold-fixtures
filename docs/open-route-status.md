@@ -19,7 +19,7 @@ The open-route version mutates the expected and evaluator records (`tests/test_p
 - `shear-001` and `general-affine-001` have no DWG, because a single INSERT cannot carry shear. Chain probes and profile-only tags are #69. `singular-001` needs a writer that stores a zero scale, which is #70. Until then `affine_transform` stays `BLOCKED`.
 - Both converters now convert `blocks-dynamic-linear-001` (inches, scaled to metre) and `general-sample-ac1032-001` (inches, one fit-point-only spline skipped per entity). `arch-aecobjects-001` still exits 15 in both: its only model-space entity is an AEC wall object, and the lines and polylines sit in blocks nothing inserts, so there is no curve to write. The `r1-open` records under `fixtures/real-world/` are the frozen run with the old converter and are re-recorded by the next revision, not here.
 - The real-world set is three public drawings. More from openly licensed sources is #76. AutoCAD-written bytes enter only through that set, with provenance.
-- `r0-open` is written by acadrust only. A second family, ACadSharp's `DwgWriter`, is in `corpus/writers/acadsharp`, and LibreDWG's R2000 and R2004 writer is #72. Every `r1-open` DWG regenerates byte for byte.
+- `r0-open` is written by acadrust. Two more writer families are in `corpus/writers` (see its README): ACadSharp's `DwgWriter` (AC1032, 30 of 30 AGREE) and LibreDWG's `dwgwrite` as R2000 (30 of 30 AGREE) and R2004 (30 of 30 quarantined, only because ACadSharp at its pin cannot open LibreDWG's R2004 files). Every `r1-open` DWG regenerates byte for byte.
 
 ## Signatures across architectures
 
@@ -27,7 +27,7 @@ STEP bytes match on native x86_64 and native arm64, but 10 of 29 signatures diff
 
 ## Benchmarks
 
-Only the ACadSharp converter is measured (`docker/converter-limits.json` has a limit for it alone). Throughput, memory and the orchestration table for the LibreDWG converter, and timing the geometric comparison stage, are #77.
+Both converters are measured on native x86_64 (`docs/benchmarks/converter-throughput.md`, `orchestration-tuning.md`), and `docker/converter-limits.json` has a cap for each. The LibreDWG converter has no arm64 numbers because no arm64 image of it is held here. The geometric comparison stage is timed on both architectures in `docs/benchmarks/validation.md`. All of it is on the 30 small probes, so none of it says how a real drawing behaves.
 
 ## Images and the next revision
 

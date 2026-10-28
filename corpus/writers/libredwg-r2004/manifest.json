@@ -1,0 +1,1851 @@
+{
+  "adr": "docs/adr/0008-open-writer-known-truth-corpus.md",
+  "container_images": {
+    "acadrust_reader": "rust:1.99.1-bookworm sha256:e12566d5abc17a0da741628782cdb504b68b8961f5bfcf677936bf3e8b32de29 (linux/amd64, native x86_64 on MARS)",
+    "skeleton_and_acadsharp_reader": "mcr.microsoft.com/dotnet/sdk:10.0.401-noble sha256:e70cdb7f80b0348f5cb85f19a8f670fca061f033d57eed12fa003d58b0e06317 (linux/amd64, native x86_64 on MARS)",
+    "writer_and_libredwg_reader": "pvec-oracle-libredwg local image id sha256:3c32156802d83574cda1c62e8b44779a02723ead5e8fb2f4c9ad3ae6d1564985 (linux/amd64, built locally from libviprs/pvec-oracle-libredwg main at 8aa7ab1, not published, used by id and never built from this repository)"
+  },
+  "determinism": {
+    "compared": 30,
+    "differing": 0,
+    "identical": 30,
+    "note": "the writer is run twice on the same inputs and the DWGs compared byte for byte; no header field is pinned",
+    "runs": 2
+  },
+  "dwg_version": "AC1018",
+  "evidence_scope": "READER_MAPPING_ONLY",
+  "evidence_statement": "KNOWN_TRUTH_EXACT here means one thing: the DWG bytes, decoded by three open readers, carry the authored mathematics, exactly where the DWG stores it verbatim and within PVec numeric policy v1 where it stores a derived value. There is no STEP oracle: no STEP file was produced, read or compared, and nothing here says how any converter treats these drawings.",
+  "fixtures": [
+    {
+      "capabilities": [
+        "trimmed_curve"
+      ],
+      "comparison": {
+        "path": "fixtures/arc-seam-001/comparison.json",
+        "sha256": "0656f81ca90d577c002dad9d9923b1ccb4cf65513f61498dd03f145798f67038"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/arc-seam-001/source.dwg",
+        "sha256": "754af67c2848deef19f1be43e07df13fe9d9394e847c56206f404e679b439f3c",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/arc-seam-001/expected.math.json",
+        "path": "fixtures/arc-seam-001/expected.math.json",
+        "sha256": "6d2fe3988208c5ad230679d0ecd5bb01156a1ddb8ea112ac05987947833f9372"
+      },
+      "group": "curves",
+      "id": "arc-seam-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/arc-seam-001.json",
+        "path": "fixtures/arc-seam-001/params.json",
+        "sha256": "200dfbed0961269a6c36f60b815be4f9fd9f74400f1229c223ab874f9b07c14c"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/arc-seam-001/read.libredwg.json",
+          "sha256": "855b05270c5fd14f28ce2a0d51800396bdaefc93fe023102b81fd0144cdbc88d"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/arc-seam-001/read.acadrust.json",
+          "sha256": "f5acf820815aece649303c97d83655fba38f11bba268d51410171fcbf944ebf9"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/arc-seam-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "bezier"
+      ],
+      "comparison": {
+        "path": "fixtures/bezier-d3-001/comparison.json",
+        "sha256": "a8aad7aa0f7d7a8e075771f9ceab35554d41326803bdf9ee401fda9552a9fed8"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/bezier-d3-001/source.dwg",
+        "sha256": "68ae302329b1199e7ac4cb135990fe679f4aad89d315ac1ac8670666fb566947",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/bezier-d3-001/expected.math.json",
+        "path": "fixtures/bezier-d3-001/expected.math.json",
+        "sha256": "965622a3eef06a5f6bf2a176f377d7d0797fd23201da4ac2dd011c30cec12b5e"
+      },
+      "group": "curves",
+      "id": "bezier-d3-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/bezier-d3-001.json",
+        "path": "fixtures/bezier-d3-001/params.json",
+        "sha256": "1a33fae522edd77ad2e81631fa6c62cd1b6ba71bf329025068973639b012480b"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/bezier-d3-001/read.libredwg.json",
+          "sha256": "0b651649008740352cadedf2cb3521c1b807f541d367d86846826bf21db4fa7d"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/bezier-d3-001/read.acadrust.json",
+          "sha256": "873fcbafeed974a64a07224a149e5bc83f6c99bb9a99eba7ee3227fe92d3070e"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/bezier-d3-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "bspline"
+      ],
+      "comparison": {
+        "path": "fixtures/bspline-d3-001/comparison.json",
+        "sha256": "2e4414fd943cd6fbc3a4959ecd05e347351f195037246b6b6ddf768dc7778a74"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/bspline-d3-001/source.dwg",
+        "sha256": "91290ffef38e9cbeeab7e0910ddab3f34ff86f1aead80382aa0722ec07ebb539",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/bspline-d3-001/expected.math.json",
+        "path": "fixtures/bspline-d3-001/expected.math.json",
+        "sha256": "eb30a52b6320501d09328f02ab2117d9a56fb9d532d2d11d254ba375fffc7205"
+      },
+      "group": "curves",
+      "id": "bspline-d3-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/bspline-d3-001.json",
+        "path": "fixtures/bspline-d3-001/params.json",
+        "sha256": "99029a3890ffd5b7790285e02388721165ba13d0f1de454754ba0999b3ad7b07"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/bspline-d3-001/read.libredwg.json",
+          "sha256": "fa42caf1c4254df1c4493bc1728e9f507258779f008f034cd9bd20d521632601"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/bspline-d3-001/read.acadrust.json",
+          "sha256": "01ce070b2cb4e526d8fba07de06dcf00053a6247490d1b6e84fe3132c9b00c53"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/bspline-d3-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "bspline"
+      ],
+      "comparison": {
+        "path": "fixtures/bspline-d5-001/comparison.json",
+        "sha256": "c0e059976c694fa2da6e66c5e14aae55a9dff105c930d05d773f8ee44cb2a6c1"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/bspline-d5-001/source.dwg",
+        "sha256": "c30b2fd2521257c95d6569ab84d7c8231409c2660b5554dd493ef63589a9d68a",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/bspline-d5-001/expected.math.json",
+        "path": "fixtures/bspline-d5-001/expected.math.json",
+        "sha256": "fc17564b207fab9682b508f14c4ef31455dcdedd72d5ce391cde78e2a8f7fc50"
+      },
+      "group": "curves",
+      "id": "bspline-d5-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/bspline-d5-001.json",
+        "path": "fixtures/bspline-d5-001/params.json",
+        "sha256": "81af31abac0c0f749668c401dc50c33439ddc8a015bcdde8d1ce406a115a436b"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/bspline-d5-001/read.libredwg.json",
+          "sha256": "e2408cbb51ca988bdd1df08bb37e002ef81140d6dbae1393d85a7326414d40ce"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/bspline-d5-001/read.acadrust.json",
+          "sha256": "f6848687403eb87d73c47f831fd42c2250113f6dded9546933a757351328293c"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/bspline-d5-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "composite_curve"
+      ],
+      "comparison": {
+        "path": "fixtures/bulge-arc-001/comparison.json",
+        "sha256": "83dccd0d57e44daf6006feb24f3f92c826e36a722fdc5267e19b2353f1690daf"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/bulge-arc-001/source.dwg",
+        "sha256": "1fc4a37ac3be281e8694005386feee75effae414e07b75cf7b15fa9cf609069a",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/bulge-arc-001/expected.math.json",
+        "path": "fixtures/bulge-arc-001/expected.math.json",
+        "sha256": "0e9095d8c58d4f77c40cd47b9dc5eb84598ce5439fd499eb51fc4e341f7f7143"
+      },
+      "group": "curves",
+      "id": "bulge-arc-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/bulge-arc-001.json",
+        "path": "fixtures/bulge-arc-001/params.json",
+        "sha256": "9bba6becede820a71514035e106bbf698748bc9b2366b09015be54deca7d6b9b"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/bulge-arc-001/read.libredwg.json",
+          "sha256": "652492f95b2937ce772959505c0276a02616b229cb91ec08bd3e993dcc5ce91e"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/bulge-arc-001/read.acadrust.json",
+          "sha256": "dc3251ba9465538bcda119f0901e702bb88827ec8d8fe57ab8e3d0047ead3596"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/bulge-arc-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "composite_curve"
+      ],
+      "comparison": {
+        "path": "fixtures/bulge-arc-neg-001/comparison.json",
+        "sha256": "c570e389450b9986e3459983f20e1a7b024794ff2c25937e75d8b7363bf4a1bf"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/bulge-arc-neg-001/source.dwg",
+        "sha256": "fa6e32a96d8d9d7119bdf8ecc4dc023ad8fb8b2f0ac2cee429618c3031007df9",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/bulge-arc-neg-001/expected.math.json",
+        "path": "fixtures/bulge-arc-neg-001/expected.math.json",
+        "sha256": "827c7ab87a38cc36a6169187e2a7aa7d454d6311b345387a669dd5fa9f3925a4"
+      },
+      "group": "curves",
+      "id": "bulge-arc-neg-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/bulge-arc-neg-001.json",
+        "path": "fixtures/bulge-arc-neg-001/params.json",
+        "sha256": "e13f358a1abd0739e7b2dd4334545c81e63071fa6c2785ea7e7fa13f77e9597c"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/bulge-arc-neg-001/read.libredwg.json",
+          "sha256": "05ff2757afae16468ae12df7f13942e5c9d463dddbff9b08d0e573e717269091"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/bulge-arc-neg-001/read.acadrust.json",
+          "sha256": "d788b7b83410530dc3ffab1af460209e5e2783b45acd9aaa481b2cae814cb756"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/bulge-arc-neg-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "circle"
+      ],
+      "comparison": {
+        "path": "fixtures/circle-001/comparison.json",
+        "sha256": "84d02210e1307b5079eeab86f49cc7fe99e4df5efb13dba4c3fd543cbdb6c68d"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/circle-001/source.dwg",
+        "sha256": "ed54e864080e1a9fb9ce05ddeda357b5abb420efe96812ec1503fb231af6703d",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/circle-001/expected.math.json",
+        "path": "fixtures/circle-001/expected.math.json",
+        "sha256": "f94047294db98e3efed1a60f055f132427b5b97637b311a2bdd83ab7f67d211f"
+      },
+      "group": "curves",
+      "id": "circle-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/circle-001.json",
+        "path": "fixtures/circle-001/params.json",
+        "sha256": "5dc9c00f3abd27762805dfd29f0107a6c0cf3855600686e763413052c189a41e"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/circle-001/read.libredwg.json",
+          "sha256": "667fc7c18bf8305637a3e7a618a81e727e302a490a4f1484fe3f9e448f6fc08c"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/circle-001/read.acadrust.json",
+          "sha256": "3606fa991373c41de9dc95ba2ef396d6dc82885157efdf5fedb37bab08fa42c8"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/circle-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "bspline"
+      ],
+      "comparison": {
+        "path": "fixtures/closed-by-endpoint-001/comparison.json",
+        "sha256": "6ba8e8c2506eed00444ae939642565ef7f9025289d2ae058e6c89978cf2bf501"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/closed-by-endpoint-001/source.dwg",
+        "sha256": "3dab1143479e35224ffa89aefeaff688ead608e33bb25d9bb4bed1154b512d54",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/closed-by-endpoint-001/expected.math.json",
+        "path": "fixtures/closed-by-endpoint-001/expected.math.json",
+        "sha256": "59fdb5c4780da69ffbee9dabc98232398e9484cd118ebecda56fbe9e0bc5b919"
+      },
+      "group": "curves",
+      "id": "closed-by-endpoint-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/closed-by-endpoint-001.json",
+        "path": "fixtures/closed-by-endpoint-001/params.json",
+        "sha256": "1d8e1bda328edb442dd92ae37edc87e5622264b4cfcc7d71eb371f60b78b2c8b"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/closed-by-endpoint-001/read.libredwg.json",
+          "sha256": "7ab656570aa294053224e3c40bddbfcc2a260d3d287c85902c85b7e23c00340d"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/closed-by-endpoint-001/read.acadrust.json",
+          "sha256": "d7a165224cd823a43dc85dc0125a2a7bfc8f38bc09c11a70710de80fdb3f8491"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/closed-by-endpoint-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "bspline"
+      ],
+      "comparison": {
+        "path": "fixtures/closed-periodic-001/comparison.json",
+        "sha256": "7beb983ef6bdd6d55edff1f9b21e4e340d7721d37b38719908e0153317fbf4ab"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/closed-periodic-001/source.dwg",
+        "sha256": "46756fb83288e86f55cdf3c6cb4688a4974800c468d8babf23a4bbd0f8a6fb04",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/closed-periodic-001/expected.math.json",
+        "path": "fixtures/closed-periodic-001/expected.math.json",
+        "sha256": "9cf4c5f9d7912aaf28489f0fdfe1c1d2d8a315d24807fd149981a6425a3f0f4e"
+      },
+      "group": "curves",
+      "id": "closed-periodic-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/closed-periodic-001.json",
+        "path": "fixtures/closed-periodic-001/params.json",
+        "sha256": "61e7bd9a86644fac6b0f33c031b01e1836259c8e6ea498f36f66fd93c6394be0"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/closed-periodic-001/read.libredwg.json",
+          "sha256": "015ec7ff0a710375be608063c60604a9aa4db38bd3d3d4dec4bc39294052f987"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/closed-periodic-001/read.acadrust.json",
+          "sha256": "9834d43a966a73a314936162564d8f70633ee9ec9596b102c72e1842b8f93448"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/closed-periodic-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "ellipse"
+      ],
+      "comparison": {
+        "path": "fixtures/ellipse-001/comparison.json",
+        "sha256": "775fb36f399d114facb4f166f027ccb64bdfbd7e7af2f3fcf6ddbbaa4f7dfd82"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/ellipse-001/source.dwg",
+        "sha256": "b4bb9334c5f3a1bee4db111ab42ed7f34872d0bac4b3ba76daaea1f228e16bb8",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/ellipse-001/expected.math.json",
+        "path": "fixtures/ellipse-001/expected.math.json",
+        "sha256": "54a23e1dcdee2d2fbfd884f03dcd3a825bc2e3884eb74db4581ae74b038189fe"
+      },
+      "group": "curves",
+      "id": "ellipse-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/ellipse-001.json",
+        "path": "fixtures/ellipse-001/params.json",
+        "sha256": "ae16ecbef802c4206a7a292c347501c184fad21da8f1c182d5c759e66ae770e4"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/ellipse-001/read.libredwg.json",
+          "sha256": "93d038e49d8304242ae3835a177e536f143b18d67bf7df1ff6476527eb67099f"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/ellipse-001/read.acadrust.json",
+          "sha256": "988994898e908690739de0b331e10783201edadd3e375c4e428d534a1952d0d0"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/ellipse-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "trimmed_curve"
+      ],
+      "comparison": {
+        "path": "fixtures/elliptical-arc-001/comparison.json",
+        "sha256": "3b9b9b480330a3209868cc5a2095c23713ba3aad8792e8e5c7f803dde53af086"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/elliptical-arc-001/source.dwg",
+        "sha256": "7a70085173835ed4af673c65475429f560d784e74894111a77aa0c5e23c2f1c2",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/elliptical-arc-001/expected.math.json",
+        "path": "fixtures/elliptical-arc-001/expected.math.json",
+        "sha256": "bc65acf5704c4f390d42bcb634e41c988ac7e9898b749bf04f88e810fa86ea01"
+      },
+      "group": "curves",
+      "id": "elliptical-arc-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/elliptical-arc-001.json",
+        "path": "fixtures/elliptical-arc-001/params.json",
+        "sha256": "1e846dd5e37b11b80ebaf367c090cb2db51ba222f5e2bb5b9347f57a097dd11e"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/elliptical-arc-001/read.libredwg.json",
+          "sha256": "26a652917c6466e1d400682569cb5f42fa687cd221846b6a50729c03f14331e9"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/elliptical-arc-001/read.acadrust.json",
+          "sha256": "07b8740a4415950d105fbd68094d747788c0e66b737937474ae885b7b0f4b9b9"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/elliptical-arc-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "polyline"
+      ],
+      "comparison": {
+        "path": "fixtures/large-coords-001/comparison.json",
+        "sha256": "b002060e61a27532aa5cd962d7fe03a3a7b1b32febdf28b8b68ba8c45dd3ccb0"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/large-coords-001/source.dwg",
+        "sha256": "c58551a8e1ba4ed6fcb5491705fcdf2a9ed1a2468c587f1c95d6eae4b61a15af",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/large-coords-001/expected.math.json",
+        "path": "fixtures/large-coords-001/expected.math.json",
+        "sha256": "a117564978c3144cb2f97e87f7679993c85c4399c0c2e28f265a151180815829"
+      },
+      "group": "curves",
+      "id": "large-coords-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/large-coords-001.json",
+        "path": "fixtures/large-coords-001/params.json",
+        "sha256": "f8daf3f990972c9583f070cab3cf8c4fe70035558b5a132cfe9a4b6673ae97b0"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/large-coords-001/read.libredwg.json",
+          "sha256": "2d806c82b759e22f3b499328a18b595ca30d3ef4198178e226a41bada95c94a3"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/large-coords-001/read.acadrust.json",
+          "sha256": "cccf8dc7ced55216094aaeea87a18439f182efebc58c17a1975fe2d07a73c36f"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/large-coords-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [],
+      "capabilities_note": "layer state (off, frozen) is source visibility information whose use is libviprs policy (N1.4); the PVec 2D semantic profile has no capability for it",
+      "comparison": {
+        "path": "fixtures/layer-state-001/comparison.json",
+        "sha256": "08c518268020f8aca67d084c1cf59d57691139366d3eb1638c9171fe91efeec6"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/layer-state-001/source.dwg",
+        "sha256": "38d08a9d02b6ceb8fb6cbe2439b8504fa6930334e897a418d775b562a758a6d1",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/layer-state-001/expected.math.json",
+        "path": "fixtures/layer-state-001/expected.math.json",
+        "sha256": "f108d0fda48fa9b1de50a06d2739e2762d052b665d7e0fca7a7a7a01cca3f728"
+      },
+      "group": "curves",
+      "id": "layer-state-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/layer-state-001.json",
+        "path": "fixtures/layer-state-001/params.json",
+        "sha256": "e6ed8a080609cf7f15739ef4b62abaa5338ea1113a422bef40a1e919629cf97d"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/layer-state-001/read.libredwg.json",
+          "sha256": "04d9de8d00a16aaf80a705bbc29f83b4a43f5414170700b8d719ef94af00ddb8"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/layer-state-001/read.acadrust.json",
+          "sha256": "c6cb95f3c801ede1a36a95e8dc66ded2da3cf80b9b4ff408ea6f8bd81d3ff68a"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/layer-state-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "line"
+      ],
+      "comparison": {
+        "path": "fixtures/line-001/comparison.json",
+        "sha256": "66ade6669e689ae56533f6efc493dbd2c1fb1646de887b4a45b6c72ba2dc08a0"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/line-001/source.dwg",
+        "sha256": "c3173df99c1868c76088e4bf9fcccf2cd5e3cca33d24d036cc42646b113721b5",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/line-001/expected.math.json",
+        "path": "fixtures/line-001/expected.math.json",
+        "sha256": "d99f4c11195e3bedb97f369685f0163ae522c55c286fafb39c641d3b27e1683f"
+      },
+      "group": "curves",
+      "id": "line-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/line-001.json",
+        "path": "fixtures/line-001/params.json",
+        "sha256": "cf720c6704204448dd8d328055e291507b97a9d0e8c0bd42b0d6a92330f9e61f"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/line-001/read.libredwg.json",
+          "sha256": "e7f9003ebf6c3b4cd83fe761ce309ebd16e5e45615bff9a4b9657b890bf19044"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/line-001/read.acadrust.json",
+          "sha256": "ac9ce6c8e82d1520d9084d07ae008e932761e603f52ac31f3f08a32e98403218"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/line-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "polyline"
+      ],
+      "comparison": {
+        "path": "fixtures/lwpolyline-closed-001/comparison.json",
+        "sha256": "0a3f6a6443a83caa7ee3a1ea345c6f0c6d4e14dad489dd2a78a8f0b6f200c0ea"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/lwpolyline-closed-001/source.dwg",
+        "sha256": "1e3e74966f1dd6bb0106edbd945eefd786146583485b04d8d0f6f99075b375a8",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/lwpolyline-closed-001/expected.math.json",
+        "path": "fixtures/lwpolyline-closed-001/expected.math.json",
+        "sha256": "98d02d643a76c2f86cefdc1f33b406c1ceae573705870bd211ef5500c42be03d"
+      },
+      "group": "curves",
+      "id": "lwpolyline-closed-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/lwpolyline-closed-001.json",
+        "path": "fixtures/lwpolyline-closed-001/params.json",
+        "sha256": "5d63b6a66c37d5260c1366081a9ad89780026176606b870cb3a566a12ff7deee"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/lwpolyline-closed-001/read.libredwg.json",
+          "sha256": "ea60a3fb2d039ff7646b0f9df918eb606af82fd39eedd02ce427ddbf07121029"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/lwpolyline-closed-001/read.acadrust.json",
+          "sha256": "2d3c23412ec1fb49e9a7b975d690a1ecc32d9b57d65e3e05f4ec284dd82fffe0"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/lwpolyline-closed-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "affine_transform"
+      ],
+      "comparison": {
+        "path": "fixtures/near-singular-001/comparison.json",
+        "sha256": "77d55fea71934899fc3da1cf5378a0c02bf94b8b95a3dbb36540e2caf61b2b66"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "downstream_disposition": "NEAR_SINGULAR_TRANSFORM (QUARANTINE): the DWG carries this transform as authored, so reader mapping is checked, but a mapper must not emit a curve for this entity",
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/near-singular-001/source.dwg",
+        "sha256": "fddc859b0523874f8a27675b53b3581513cfa10e36d62b3bc389b12993b0ea6c",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/transforms/near-singular-001/expected.math.json",
+        "path": "fixtures/near-singular-001/expected.math.json",
+        "sha256": "dddef110f3d8699aca973cf3d1a2cd31283affe124d5da4d7c3412fcbcb8a4e0"
+      },
+      "group": "transforms",
+      "id": "near-singular-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/transforms/near-singular-001.json",
+        "path": "fixtures/near-singular-001/params.json",
+        "sha256": "b1b74e139efd9faca16abfc9a0c59a7c4c8a0d5754ab688cf1ce7920a7857e1e"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/near-singular-001/read.libredwg.json",
+          "sha256": "d0e7402818fb0e72cf3151c727b5233900854beeae880c38135c62986cfbf43a"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/near-singular-001/read.acadrust.json",
+          "sha256": "771dda1e013d47dc657dcbb537c7ec73d79cebd0758b5286bda94333e0adade6"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/near-singular-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "affine_transform"
+      ],
+      "comparison": {
+        "path": "fixtures/nested-blocks-001/comparison.json",
+        "sha256": "e2fd4bf3f0943dac71745207d89a1cc686eb82b2bccb2af2f90aa992c98f0592"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/nested-blocks-001/source.dwg",
+        "sha256": "2f5f961c56697f13a449a7f228ff5ae62ac2dca98f0183a2428c7beb771748fe",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/blocks/nested-blocks-001/expected.math.json",
+        "path": "fixtures/nested-blocks-001/expected.math.json",
+        "sha256": "c7bff2967f0962ebb1893041bcc57abfda38c85948f3ce3942a74a567a9ff37a"
+      },
+      "group": "blocks",
+      "id": "nested-blocks-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/blocks/nested-blocks-001.json",
+        "path": "fixtures/nested-blocks-001/params.json",
+        "sha256": "25afce88e129e44253f69c7a3e037b688bfbc06e4a1467099523e70b127164dd"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/nested-blocks-001/read.libredwg.json",
+          "sha256": "ddee3ffa53b487a5370925e438809bb9ff4b339f31dbc17d719a679ea9ce0b2e"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/nested-blocks-001/read.acadrust.json",
+          "sha256": "3428beed12cf978773a8ef090aa44b3f0a3b9aafda6c266e8b1e0490e08809bb"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/nested-blocks-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "affine_transform"
+      ],
+      "comparison": {
+        "path": "fixtures/nonuniform-scale-circle-001/comparison.json",
+        "sha256": "462e96006871615aa0424207afc4ea478dcc11b02529b6c92351f72e59afda10"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/nonuniform-scale-circle-001/source.dwg",
+        "sha256": "cc307e88edfa765da5346da0403c5549473ac7acdaefcda349b78d51bb17c74f",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/transforms/nonuniform-scale-circle-001/expected.math.json",
+        "path": "fixtures/nonuniform-scale-circle-001/expected.math.json",
+        "sha256": "9d9e1c1e5564f909314b4c74d94fc964b443c23a0212f673e6398cf6eaf6e733"
+      },
+      "group": "transforms",
+      "id": "nonuniform-scale-circle-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/transforms/nonuniform-scale-circle-001.json",
+        "path": "fixtures/nonuniform-scale-circle-001/params.json",
+        "sha256": "ad28b8a4fddfced4927cf5b992cc254bc1cba3aafa556bfe89719bd57fa4c7bc"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/nonuniform-scale-circle-001/read.libredwg.json",
+          "sha256": "a6210428d315926f44bfe2545941a493dce285154bdbb91e43bdc9ec423d1a20"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/nonuniform-scale-circle-001/read.acadrust.json",
+          "sha256": "2879cc29e48be514ceea33bbcc2bc1a94075537b6b6aa9a9f5fda7ce38aa5486"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/nonuniform-scale-circle-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "affine_transform"
+      ],
+      "comparison": {
+        "path": "fixtures/nonuniform-scale-rotated-001/comparison.json",
+        "sha256": "7da6dd961d151d1c9a02a4f58a238498a1041e9b73c5bf2b7551a0867b893250"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/nonuniform-scale-rotated-001/source.dwg",
+        "sha256": "7c3a47e6c83426024b6fdc261a47295147c14271b4657702f5f947ec03ccb3c2",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/transforms/nonuniform-scale-rotated-001/expected.math.json",
+        "path": "fixtures/nonuniform-scale-rotated-001/expected.math.json",
+        "sha256": "4871cc827251f04a9fb261a7a69002ed7d2639e1e7c4ac69e2878623935ca9f1"
+      },
+      "group": "transforms",
+      "id": "nonuniform-scale-rotated-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/transforms/nonuniform-scale-rotated-001.json",
+        "path": "fixtures/nonuniform-scale-rotated-001/params.json",
+        "sha256": "df3ccd47dc77610938e36ea038795a471586d9a1097563ee303024244ece7d50"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/nonuniform-scale-rotated-001/read.libredwg.json",
+          "sha256": "dd94d269da4b43ff105f3d1ed3378388d136670a54073355f19a125272623dce"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/nonuniform-scale-rotated-001/read.acadrust.json",
+          "sha256": "e8b9c41a456a743ba2e0baa31b550603e6e2874d12909288eb1235d024606cb0"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/nonuniform-scale-rotated-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "nurbs"
+      ],
+      "comparison": {
+        "path": "fixtures/nonunit-weight-001/comparison.json",
+        "sha256": "3a2f8392399839adbe41b7a1177d3248846918e4a0d22663ad337069fc840730"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/nonunit-weight-001/source.dwg",
+        "sha256": "1bb81c442bd0a8a58ce753f5779e8009075768d265e45a065c175b37c96197c0",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/nonunit-weight-001/expected.math.json",
+        "path": "fixtures/nonunit-weight-001/expected.math.json",
+        "sha256": "20f633fa9e4bd4fef43c5810d73ddac6a645872e7815b078b92be9630eeb655d"
+      },
+      "group": "curves",
+      "id": "nonunit-weight-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/nonunit-weight-001.json",
+        "path": "fixtures/nonunit-weight-001/params.json",
+        "sha256": "40d8a924b74c127345ea0123d11167042f14cfce417c10f989017c279fbd34c8"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/nonunit-weight-001/read.libredwg.json",
+          "sha256": "e922980ae79da1d96b49dabd5eac2cbecaa3d304d62743938b0bbc067fec0199"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/nonunit-weight-001/read.acadrust.json",
+          "sha256": "247ec5e0d7ccd3d1f7696e3fd9d343a4bcc1441ccb02331a3de56f63aa242302"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/nonunit-weight-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "nurbs"
+      ],
+      "comparison": {
+        "path": "fixtures/nurbs-d2-offconic-001/comparison.json",
+        "sha256": "4621f68ef2f9cb9fd433547c1316248baf56bf8efe8aef61742634a55c682fde"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/nurbs-d2-offconic-001/source.dwg",
+        "sha256": "fe1a63a5fe39843d24d4acb8f3240c980c8e45fdf01798696b51a85a9e4d5618",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/nurbs-d2-offconic-001/expected.math.json",
+        "path": "fixtures/nurbs-d2-offconic-001/expected.math.json",
+        "sha256": "b656f2000669b33ca99e114412fbe59bcaa07e272eea66dac35a4f67af80c352"
+      },
+      "group": "curves",
+      "id": "nurbs-d2-offconic-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/nurbs-d2-offconic-001.json",
+        "path": "fixtures/nurbs-d2-offconic-001/params.json",
+        "sha256": "99ce11b1aadff41b43c42b7670a535396ad8277b23d5e3cffb0bcbd344043199"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/nurbs-d2-offconic-001/read.libredwg.json",
+          "sha256": "62af14da1fd7d1ddb52c1b7de865122fa4baf0e7a91bf64f9a35db537700064c"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/nurbs-d2-offconic-001/read.acadrust.json",
+          "sha256": "8f428a8463f37e81422cfbed87e7115d37cc65cb7ece8b0909672d53ffe73e1b"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/nurbs-d2-offconic-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "nurbs"
+      ],
+      "comparison": {
+        "path": "fixtures/nurbs-d3-001/comparison.json",
+        "sha256": "6346bfb78b344b6e5edf9d1255189f03d423eb19cb1105205972fb9a136d3d9b"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/nurbs-d3-001/source.dwg",
+        "sha256": "696fa631778fca7c010af1104da8203144117f055e2930c576c43f7ffc667ed7",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/nurbs-d3-001/expected.math.json",
+        "path": "fixtures/nurbs-d3-001/expected.math.json",
+        "sha256": "b8ff6b5114f069fcd12775b2e2bed62e5a74ba5792d1d2b287e0f2c1f27ca0df"
+      },
+      "group": "curves",
+      "id": "nurbs-d3-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/nurbs-d3-001.json",
+        "path": "fixtures/nurbs-d3-001/params.json",
+        "sha256": "0ead9c9be85db528025cfce85967d87aa8ec252adc15b1c04fdbca84218fa455"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/nurbs-d3-001/read.libredwg.json",
+          "sha256": "0822d71d9a80a25933e63d2b2d7eeaded447c6dac920c11e4891dc2e0ac44e23"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/nurbs-d3-001/read.acadrust.json",
+          "sha256": "c6a16c05cc01d93a29d54589b500afea1147f5b914734e266345352bf8a03189"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/nurbs-d3-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "polyline"
+      ],
+      "comparison": {
+        "path": "fixtures/polyline-001/comparison.json",
+        "sha256": "31e3770012493b0ed5a42cb35830e38a19f2b2764d2bb5d0fc5925ec448bf413"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/polyline-001/source.dwg",
+        "sha256": "972730bf2534b57cedda02c769c0eecf631b8968320fe5a505b6369bccf88810",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/polyline-001/expected.math.json",
+        "path": "fixtures/polyline-001/expected.math.json",
+        "sha256": "a4866da7c7d3183fdd7e05bf70efc4aa76edfb19687080a4b5ee2089a35c1f50"
+      },
+      "group": "curves",
+      "id": "polyline-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/polyline-001.json",
+        "path": "fixtures/polyline-001/params.json",
+        "sha256": "3e16a822c823bc404b1cdb6de0d38163ad011d31fe76c7c1acf9a940a086767c"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/polyline-001/read.libredwg.json",
+          "sha256": "4981bf8680265b5b69fe390eca0ef3a658feff779f940f1264c624e4811b635b"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/polyline-001/read.acadrust.json",
+          "sha256": "9a8b5309f52586cb50ab7003c44a76d7b82d4eae6804463fe250ddbd0235957e"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/polyline-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "polyline"
+      ],
+      "comparison": {
+        "path": "fixtures/polyline2d-001/comparison.json",
+        "sha256": "adc2692b34c2a8b2c34ca3bb0cfb5d56c9c0295a359acb38350794843e2d1cd7"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/polyline2d-001/source.dwg",
+        "sha256": "58a6347d46ac81ddd45f4b82fb6840a6edea9b5c2472f3c053d77ece3d626759",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/polyline2d-001/expected.math.json",
+        "path": "fixtures/polyline2d-001/expected.math.json",
+        "sha256": "bde791885f9a9d84799d0db995f5df1288f48a285096e5a74ffaa2f46d8afa06"
+      },
+      "group": "curves",
+      "id": "polyline2d-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/polyline2d-001.json",
+        "path": "fixtures/polyline2d-001/params.json",
+        "sha256": "7bc3c6b7b27fbb98474e292c25798478d71f5e196e5968f401bdc435d6c6fcf4"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/polyline2d-001/read.libredwg.json",
+          "sha256": "84cf2b5d55c2f566b37eac8b415a17f540f906d21e1d820cd1bb340ae2318df7"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/polyline2d-001/read.acadrust.json",
+          "sha256": "9045e03be12e70221ced1f9cf833b072f1b65a7341f8cbb669a7e320c89f4443"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/polyline2d-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "affine_transform"
+      ],
+      "comparison": {
+        "path": "fixtures/reflection-001/comparison.json",
+        "sha256": "7a70531bf1c4f35f8c57c2c92a6c0bf892da4ae45c86c358761f70c045eb9082"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/reflection-001/source.dwg",
+        "sha256": "943d3e0b60c8f9489ced63fa3cc9d9e0ed6c5429a0a81f157110ec907f82d934",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/transforms/reflection-001/expected.math.json",
+        "path": "fixtures/reflection-001/expected.math.json",
+        "sha256": "37f5991b7b06d07ffdf3b3bc627cd92c9d9e383f7df9bfa2feeacd502875fe64"
+      },
+      "group": "transforms",
+      "id": "reflection-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/transforms/reflection-001.json",
+        "path": "fixtures/reflection-001/params.json",
+        "sha256": "a20dd45749ea33bf7c83bfeb4843a0051d6d0e8f7e42f08e8187dcb3239e02df"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/reflection-001/read.libredwg.json",
+          "sha256": "b648410a0ac33b0d2397264d4e883f843c190361949c850efa735d35b6fcf33a"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/reflection-001/read.acadrust.json",
+          "sha256": "5ea27749e58e9c83b6248f4032caf85f565f9f41a19ec8eb5a9354a88642916e"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/reflection-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "bspline"
+      ],
+      "comparison": {
+        "path": "fixtures/repeated-knot-c0-001/comparison.json",
+        "sha256": "10d841ea052c9591402331029261445dc8135671e2647195de687c29d456e49d"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/repeated-knot-c0-001/source.dwg",
+        "sha256": "39875280e74da3e3a6d79b591b5aa05ee682b3fea3ee5bf6a257a04d002d5277",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/repeated-knot-c0-001/expected.math.json",
+        "path": "fixtures/repeated-knot-c0-001/expected.math.json",
+        "sha256": "556712f19e67c3a0da67b51cf0b6f99a4707b0ed1d1fe7fb56927fe304ca15ee"
+      },
+      "group": "curves",
+      "id": "repeated-knot-c0-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/repeated-knot-c0-001.json",
+        "path": "fixtures/repeated-knot-c0-001/params.json",
+        "sha256": "155e54dfb968858b7c8aab903a5f4148a5459d1891c092c03b7f58612b098c5e"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/repeated-knot-c0-001/read.libredwg.json",
+          "sha256": "6e5e977852ba139aa2f4079b04dd5525669cd3fa9e7c9eed6ddcdacb168a1af9"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/repeated-knot-c0-001/read.acadrust.json",
+          "sha256": "4a9a04ee920e8e938e4f354b21c6f633cc6cce6956550c6a0b3a1c5026307d1c"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/repeated-knot-c0-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "affine_transform"
+      ],
+      "comparison": {
+        "path": "fixtures/rotation-irrational-001/comparison.json",
+        "sha256": "ddd135251b4a714d1f4bea66cda335762b505974b9572a7fc74cb7bafee5c6cc"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/rotation-irrational-001/source.dwg",
+        "sha256": "5e1b804a4d5205f99dcdde0a82ddfa7ebcd23f0fd37758d82119e9cdbcbbc2ec",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/transforms/rotation-irrational-001/expected.math.json",
+        "path": "fixtures/rotation-irrational-001/expected.math.json",
+        "sha256": "85e4f5f959d5f368b9bed9f4d766e5efcacff33c55cc610fbb95bb70a20fb8fe"
+      },
+      "group": "transforms",
+      "id": "rotation-irrational-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/transforms/rotation-irrational-001.json",
+        "path": "fixtures/rotation-irrational-001/params.json",
+        "sha256": "16d1933b9523ab9798999440e4077c2186a3590a275322489756e9844f50c0f7"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/rotation-irrational-001/read.libredwg.json",
+          "sha256": "a63214ae1ad2c87876a4beb37550e48fc9abf09dcb45dac5edd048b8a0a091c4"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/rotation-irrational-001/read.acadrust.json",
+          "sha256": "e15a2271920bdc9fdc08034f995e7762fe0af4ec3acd76d909b7005c26edea64"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/rotation-irrational-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "circle"
+      ],
+      "comparison": {
+        "path": "fixtures/tiny-radius-001/comparison.json",
+        "sha256": "15d7823f24ed2d388d601c434a8844c858332df4dc8eacf55239e9f9a37b9a3c"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/tiny-radius-001/source.dwg",
+        "sha256": "66e671e5b1555b5c231bc8aeb740f1b341c21910e7de65832787fd0b03379429",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/tiny-radius-001/expected.math.json",
+        "path": "fixtures/tiny-radius-001/expected.math.json",
+        "sha256": "57f68fc85563b611928a73177a05b8099dde40a428fa0719979029e4c397f02c"
+      },
+      "group": "curves",
+      "id": "tiny-radius-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/tiny-radius-001.json",
+        "path": "fixtures/tiny-radius-001/params.json",
+        "sha256": "e0db5f4fb2c976125d7b7f5b4dd6e415a852c5d43ee5907c0989060adf1fe10b"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/tiny-radius-001/read.libredwg.json",
+          "sha256": "aa369a829185a5275eccc3d54e3823265bab6da1e592c51552ea97b3a7ea36b3"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/tiny-radius-001/read.acadrust.json",
+          "sha256": "3dbf28d4cdf80b298bcecd9df6b9d2bce303acfdda79a4b424ec4e710108326a"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/tiny-radius-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "affine_transform"
+      ],
+      "comparison": {
+        "path": "fixtures/translation-001/comparison.json",
+        "sha256": "320f58e38a91c636e343ee8d559acabdfbd3bdca89c2513d844f7bdb99446c4a"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/translation-001/source.dwg",
+        "sha256": "7123eb417fbd8483fad766a4a9505bbeb2da6a1d7298605094b0cf57a07f17f1",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/transforms/translation-001/expected.math.json",
+        "path": "fixtures/translation-001/expected.math.json",
+        "sha256": "158201b897af18dcb468000f16b9157055550717213bb3458b238f0c6e3c3c0f"
+      },
+      "group": "transforms",
+      "id": "translation-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/transforms/translation-001.json",
+        "path": "fixtures/translation-001/params.json",
+        "sha256": "19e662b978c3653292b63d9fc3e533b2fcfb967ee1988052cd0e0430db4ffcb0"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/translation-001/read.libredwg.json",
+          "sha256": "87c0dc48ec1038e1e4b155e3547ccd3ca5fb9ba8efcbf452cfdf7516877c9405"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/translation-001/read.acadrust.json",
+          "sha256": "87937c1f491e3a54ad60426607012e3ff379456daebefa3201d9d51f21cc7410"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/translation-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    },
+    {
+      "capabilities": [
+        "affine_transform"
+      ],
+      "comparison": {
+        "path": "fixtures/uniform-scale-001/comparison.json",
+        "sha256": "ee57d6a640d0176c4cfa7bb5644441c2d13c57b561fec0eb18932b80e87d0f48"
+      },
+      "cross_read": {
+        "verdict": "UNREADABLE"
+      },
+      "dwg": {
+        "dwg_version": "AC1018",
+        "path": "fixtures/uniform-scale-001/source.dwg",
+        "sha256": "ae6744cc58452f67bde5f928932c093f4f2ea4219706a39ae8730eb9ba15cdfc",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "QUARANTINED",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/transforms/uniform-scale-001/expected.math.json",
+        "path": "fixtures/uniform-scale-001/expected.math.json",
+        "sha256": "9a0565b7a146bee951771aabfa866b5ffdc82f0c1730e2e3617289f9ebcd2531"
+      },
+      "group": "transforms",
+      "id": "uniform-scale-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/transforms/uniform-scale-001.json",
+        "path": "fixtures/uniform-scale-001/params.json",
+        "sha256": "7b11a72ec654fb88f5a2240096690d747befdd6944411206468dc18c1f64ca16"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "quarantine": {
+        "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+        "reason": "MALFORMED_FIXTURE"
+      },
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/uniform-scale-001/read.libredwg.json",
+          "sha256": "5588e22989e1a51ba07ba4ad3b5be42c81d0ed27e063fd511f559b5bb85af83f"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/uniform-scale-001/read.acadrust.json",
+          "sha256": "9976b606b601bb72969baa417dc5299a931176560a6ffb3301ba716b0a9a904b"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/uniform-scale-001/read.acadsharp.json",
+          "sha256": null
+        }
+      ],
+      "status": "QUARANTINED"
+    }
+  ],
+  "numeric_policy_version": "PVec numeric policy v1",
+  "of_corpus": "r0-open",
+  "oracles": "none",
+  "own_reader": "LibreDWG",
+  "readers": [
+    {
+      "name": "LibreDWG",
+      "reader": "LibreDWG@0.14+patch0001",
+      "role": "own reader of the writer family",
+      "source": "dwgdump from the pvec-oracle-libredwg image (LibreDWG 0.14, dwgread with doubles printed to 17 digits), run as a separate process"
+    },
+    {
+      "name": "acadrust",
+      "reader": "acadrust@0.5.5+d35691f",
+      "role": "cross reader (a different writer family's reader)",
+      "source": "https://github.com/libviprs/acadrust at d35691f483534e4affc3a4065486e168c898ac7d, DwgReader, via tools/r0-open/rust (command read)"
+    },
+    {
+      "name": "ACadSharp",
+      "reader": "ACadSharp@3.7.1+d7dc111",
+      "role": "cross reader (a different writer family's reader)",
+      "source": "ACadSharp at d7dc111, DwgReader.Read, via tools/r0-open/acadsharp-dump"
+    }
+  ],
+  "schema_version": "pvec-gold/writer-family-manifest/1",
+  "self_contained": "this directory holds every DWG, every read record and a hash-pinned copy of each authored record and parameter file; nothing outside it is needed to run `check`",
+  "status": "CANDIDATE",
+  "step_oracle": "none",
+  "writer": "LibreDWG@0.14+patch0001",
+  "writer_family": "libredwg-r2004",
+  "writer_source": "GNU LibreDWG 0.14 dwgwrite (the build of the pvec-oracle-libredwg image: the stock source plus its one patch, which only changes how dwgread prints doubles), run as a separate process on JSON that tools/corpus/writer-libredwg/author.py writes from the authored expected.math.json records and the parameter files. dwgwrite is invoked as 'dwgwrite --as r2000|r2004 -I JSON'. LibreDWG refuses r2007 and does not write r2010 and later reliably (its manual: those formats still fail CRC and audit checks), so R2000 (AC1015) and R2004 (AC1018) are the only versions this family covers."
+}

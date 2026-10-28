@@ -1,0 +1,36 @@
+{
+  "families": {
+    "AC1015": "libredwg-r2000",
+    "AC1018": "libredwg-r2004"
+  },
+  "own_reader": "LibreDWG",
+  "writer_source": "GNU LibreDWG 0.14 dwgwrite (the build of the pvec-oracle-libredwg image: the stock source plus its one patch, which only changes how dwgread prints doubles), run as a separate process on JSON that tools/corpus/writer-libredwg/author.py writes from the authored expected.math.json records and the parameter files. dwgwrite is invoked as 'dwgwrite --as r2000|r2004 -I JSON'. LibreDWG refuses r2007 and does not write r2010 and later reliably (its manual: those formats still fail CRC and audit checks), so R2000 (AC1015) and R2004 (AC1018) are the only versions this family covers.",
+  "readers": [
+    {
+      "name": "LibreDWG",
+      "reader": "LibreDWG@0.14+patch0001",
+      "role": "own reader of the writer family",
+      "file": "libredwg.read.json",
+      "source": "dwgdump from the pvec-oracle-libredwg image (LibreDWG 0.14, dwgread with doubles printed to 17 digits), run as a separate process"
+    },
+    {
+      "name": "acadrust",
+      "reader": "acadrust@0.5.5+d35691f",
+      "role": "cross reader (a different writer family's reader)",
+      "file": "acadrust.read.json",
+      "source": "https://github.com/libviprs/acadrust at d35691f483534e4affc3a4065486e168c898ac7d, DwgReader, via tools/r0-open/rust (command read)"
+    },
+    {
+      "name": "ACadSharp",
+      "reader": "ACadSharp@3.7.1+d7dc111",
+      "role": "cross reader (a different writer family's reader)",
+      "file": "acadsharp.read.json",
+      "source": "ACadSharp at d7dc111, DwgReader.Read, via tools/r0-open/acadsharp-dump"
+    }
+  ],
+  "images": {
+    "writer_and_libredwg_reader": "pvec-oracle-libredwg local image id sha256:3c32156802d83574cda1c62e8b44779a02723ead5e8fb2f4c9ad3ae6d1564985 (linux/amd64, built locally from libviprs/pvec-oracle-libredwg main at 8aa7ab1, not published, used by id and never built from this repository)",
+    "skeleton_and_acadsharp_reader": "mcr.microsoft.com/dotnet/sdk:10.0.401-noble sha256:e70cdb7f80b0348f5cb85f19a8f670fca061f033d57eed12fa003d58b0e06317 (linux/amd64, native x86_64 on MARS)",
+    "acadrust_reader": "rust:1.99.1-bookworm sha256:e12566d5abc17a0da741628782cdb504b68b8961f5bfcf677936bf3e8b32de29 (linux/amd64, native x86_64 on MARS)"
+  }
+}

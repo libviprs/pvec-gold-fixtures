@@ -1,0 +1,109 @@
+{
+  "arch": "x64",
+  "cap": 8,
+  "cap_basis": "I set the cap to 8, the top of the range I measured. Wall time still falls at 8 (see the table), so the cap and not the host bounds throughput, and I did not measure above it. No licence is involved.",
+  "chosen": {
+    "cpus": 2.0,
+    "memory_limit_mib": 512,
+    "parallel": 8,
+    "rule": "smallest parallelism within 10% of the best median wall"
+  },
+  "converter": "libredwg-dwg2step",
+  "emulated": false,
+  "eval_image_note": "step_eval ran from the step-validator test image (local tag g77-stepval:amd64, id sha256:b2d9634dbed9)",
+  "experiments": {
+    "cpus_1": {
+      "conversion_s_median": 0.0301317375,
+      "total_s_median": 0.1815381890628487
+    },
+    "cpus_2": {
+      "conversion_s_median": 0.029788217,
+      "total_s_median": 0.18914338550530374
+    },
+    "cpus_4": {
+      "conversion_s_median": 0.031873009,
+      "total_s_median": 0.2063646629685536
+    },
+    "unlimited": {
+      "conversion_s_median": 0.030301598,
+      "total_s_median": 0.20233155199093744
+    }
+  },
+  "experiments_conversion_subset": "line-001,nurbs-d3-001,nested-blocks-001,polyline-001",
+  "host": "mars",
+  "image": "g77-libredwg:local",
+  "image_id": "sha256:df38155d4d343f75e465e8c190f8734a7b83de1f261849f0377a31a544f970c5",
+  "largest_fixture": "large-coords-001",
+  "leftover_containers": 0,
+  "leftover_volumes": 0,
+  "load_avg": [
+    "6.72",
+    "6.25",
+    "5.16"
+  ],
+  "native": true,
+  "observed_peak_cgroup_mib": 11.37109375,
+  "observed_peak_rss_mib": 18.703125,
+  "oom_killed": 0,
+  "resume": {
+    "done_before_interrupt": 8,
+    "regenerated_on_rerun": 22,
+    "skipped_exactly_the_finished": true,
+    "skipped_on_rerun": 8,
+    "untouched_hashes_identical": true
+  },
+  "schema": "pvec-gold/bench-orchestration-run/1",
+  "table": [
+    {
+      "fixtures": 30,
+      "fixtures_per_s": 1.7390296214712189,
+      "parallel": 1,
+      "wall_s": {
+        "max": 18.884,
+        "median": 17.251,
+        "min": 12.754,
+        "n": 3
+      }
+    },
+    {
+      "fixtures": 30,
+      "fixtures_per_s": 4.758883248730965,
+      "parallel": 2,
+      "wall_s": {
+        "max": 6.823,
+        "median": 6.304,
+        "min": 6.113,
+        "n": 3
+      }
+    },
+    {
+      "fixtures": 30,
+      "fixtures_per_s": 9.325458501709667,
+      "parallel": 4,
+      "wall_s": {
+        "max": 3.256,
+        "median": 3.217,
+        "min": 3.075,
+        "n": 3
+      }
+    },
+    {
+      "fixtures": 30,
+      "fixtures_per_s": 15.015015015015015,
+      "parallel": 8,
+      "wall_s": {
+        "max": 2.014,
+        "median": 1.998,
+        "min": 1.748,
+        "n": 3
+      }
+    }
+  ],
+  "teardown": {
+    "leftover_labelled_containers": 0,
+    "new_containers": 0,
+    "new_volumes": 0,
+    "signal": "SIGINT at parallelism 8"
+  },
+  "unexpected_failures": []
+}

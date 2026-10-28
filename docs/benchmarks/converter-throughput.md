@@ -8,7 +8,7 @@ Issue 20 (O3.1). The converter measured is the open one, `dwg2step-acadsharp` (A
 - **native arm64**, for comparison only: host `mercury`, platform `linux/arm64`, image `gold-dwg2step-acadsharp:test-arm64` (`sha256:26b1ecdc991e8168ad9b227fe2c5756fe5b49c08c24671eca8d1d4d0664a9587`).
 - No number here came from local Rosetta or any other emulation. Nothing ran on the Mac.
 - Every row is 7 repeats of one throw-away container, one at a time (concurrency 1). Median and the interquartile range are reported; min and max are in the JSON.
-- Licence: the converter is MIT and takes no licence. The concurrency limit applied is 8, the cap in `docker/converter-limits.json` (a cap I set). Concurrency 1 is below it, so the limit did not bound these numbers; it bounds the parallel runs in `orchestration-tuning.md`. Only the ACadSharp converter is measured here; the LibreDWG converter has no throughput numbers yet, see `docs/open-route-status.md`.
+- Licence: the converter is MIT and takes no licence. The concurrency limit applied is 8, the cap in `docker/converter-limits.json` (a cap I set). Concurrency 1 is below it, so the limit did not bound these numbers; it bounds the parallel runs in `orchestration-tuning.md`. The table below is ACadSharp; the LibreDWG converter (`libredwg-dwg2step`) is measured in the last section.
 - Host load average when the run started, x86_64: 5.75 3.08 1.51; arm64: 0.08 0.14 0.15. `mars` is shared, so its absolute times carry some noise.
 
 ## What is separated from what
@@ -75,4 +75,55 @@ That one is the designed refusal (NP-19, `near-singular-001`), not a defect: the
 ## Not measured
 
 - The named real-world subset: there is none here (no real-world drawing is held, issue 11). Recorded in `docs/open-route-status.md`.
-- LibreDWG converter throughput: not measured yet. The scheduler treats a converter with no listed limit as 1.
+- LibreDWG converter on arm64: no arm64 image of it is held here, see the last section.
+
+<!-- second-converter -->
+## Second converter: libredwg-dwg2step
+
+Issue 77. The converter is `pvec-oracle-libredwg dwg2step 1 (LibreDWG 0.14+patch0001)`, from `libviprs/pvec-oracle-libredwg` (GPL-3.0-or-later; its image is used by id and never a build context here). Same harness as above (`bench/converters/run.py --converter libredwg-dwg2step`), same 30 `r0-open` DWGs, 7 repeats of one throw-away container each, concurrency 1.
+
+- **native x86_64**: host `mars`, platform `linux/amd64`, image `g77-libredwg:local` (`sha256:df38155d4d343f75e465e8c190f8734a7b83de1f261849f0377a31a544f970c5`), memory limit 512m. No emulation. Load average when the run started: 5.35 4.97 4.15.
+- **native arm64: not measured.** no arm64 image of the LibreDWG converter is held here; its Dockerfile lives in libviprs/pvec-oracle-libredwg and I did not build it on mercury
+- Licence: none. The concurrency limit is the cap in `docker/converter-limits.json` (8), which concurrency 1 does not reach.
+- This converter is a python script over `dwgread`, so `conversion` below includes the python start and no runtime warm-up. The no-op (no arguments, exit 10) is 245 ms total and 27 ms inside.
+
+| fixture | startup | conversion | peak RSS MiB | cgroup MiB | STEP bytes | failure rate |
+|---|---|---|---|---|---|---|
+| arc-seam-001 | 192 (33) | 39 (1) | 18.4 | 10.4 | 1781 | 0.00 |
+| bezier-d3-001 | 257 (63) | 34 (7) | 18.2 | 10.5 | 1783 | 0.00 |
+| bspline-d3-001 | 202 (33) | 33 (6) | 18.2 | 10.4 | 1968 | 0.00 |
+| bspline-d5-001 | 154 (13) | 31 (4) | 18.3 | 10.6 | 2063 | 0.00 |
+| bulge-arc-001 | 166 (33) | 31 (5) | 18.4 | 10.7 | 1880 | 0.00 |
+| bulge-arc-neg-001 | 153 (16) | 38 (8) | 18.5 | 10.4 | 1883 | 0.00 |
+| circle-001 | 163 (11) | 33 (6) | 18.5 | 10.6 | 1802 | 0.00 |
+| closed-by-endpoint-001 | 150 (35) | 31 (4) | 18.2 | 10.8 | 1930 | 0.00 |
+| closed-periodic-001 | 162 (13) | 29 (3) | 18.3 | 10.8 | 2312 | 0.00 |
+| ellipse-001 | 163 (11) | 29 (2) | 18.3 | 10.7 | 1850 | 0.00 |
+| elliptical-arc-001 | 167 (12) | 30 (2) | 18.5 | 10.6 | 1852 | 0.00 |
+| large-coords-001 | 159 (13) | 30 (2) | 18.4 | 10.8 | 2300 | 0.00 |
+| layer-state-001 | 146 (24) | 30 (2) | 18.3 | 10.9 | 2305 | 0.00 |
+| line-001 | 157 (11) | 31 (2) | 18.4 | 10.8 | 1783 | 0.00 |
+| lwpolyline-closed-001 | 174 (32) | 30 (3) | 18.2 | 10.9 | 2576 | 0.00 |
+| near-singular-001 | 155 (26) | 29 (4) | 18.4 | 10.7 | 0 | 1.00 |
+| nested-blocks-001 | 155 (8) | 31 (3) | 18.5 | 10.8 | 1782 | 0.00 |
+| nonuniform-scale-circle-001 | 150 (5) | 31 (2) | 18.4 | 10.7 | 1800 | 0.00 |
+| nonuniform-scale-rotated-001 | 154 (18) | 29 (4) | 18.4 | 10.8 | 1851 | 0.00 |
+| nonunit-weight-001 | 159 (26) | 30 (5) | 18.3 | 10.9 | 1999 | 0.00 |
+| nurbs-d2-offconic-001 | 146 (5) | 29 (4) | 18.2 | 11.1 | 2037 | 0.00 |
+| nurbs-d3-001 | 162 (21) | 28 (4) | 18.3 | 11.0 | 2083 | 0.00 |
+| polyline-001 | 150 (17) | 31 (4) | 18.4 | 10.8 | 2574 | 0.00 |
+| polyline2d-001 | 151 (16) | 30 (3) | 18.4 | 10.8 | 2561 | 0.00 |
+| reflection-001 | 152 (15) | 30 (1) | 18.4 | 10.8 | 1802 | 0.00 |
+| repeated-knot-c0-001 | 151 (11) | 30 (6) | 18.3 | 10.6 | 1916 | 0.00 |
+| rotation-irrational-001 | 157 (20) | 29 (2) | 18.3 | 10.8 | 1817 | 0.00 |
+| tiny-radius-001 | 198 (62) | 32 (4) | 18.3 | 10.6 | 1818 | 0.00 |
+| translation-001 | 235 (48) | 34 (6) | 18.4 | 10.5 | 1781 | 0.00 |
+| uniform-scale-001 | 238 (21) | 37 (5) | 18.4 | 10.7 | 1800 | 0.00 |
+
+Median ms, interquartile range in brackets, as above.
+
+- Conversion medians run from 28 to 39 ms across the corpus; peak RSS is 18.5 MiB at most and the cgroup peak 11.1 MiB. These probes are a handful of curves each, so this says nothing yet about a real drawing.
+- Container creation is again the larger part: about 159 ms of startup against about 31 ms of conversion per call (medians over fixtures).
+- Failure rate over the corpus: 0.0333. Every failure is the designed refusal:
+  - near-singular-001, exit 15: ERROR (exit 15): {"code": 15, "class": "CONVERSION_FAILED", "message": "NEAR_SINGULAR_TRANSFORM: INSERT of PROBE_NEAR_SINGULAR_001_L1 maps the plane with /ad - bc/ <= REL * big^2 (NP-19); no curve is written"}
+<!-- /second-converter -->

@@ -1,0 +1,87 @@
+{
+  "blocks": [
+    {
+      "entities": [
+        {
+          "block": "PROBE_NONUNIFORM_SCALE_ROTATED_001_L1",
+          "insert_point": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "rotation": "0x3fedac670561bb50",
+          "scale": [
+            "0x3ff0000000000000",
+            "0x3ff0000000000000",
+            "0x3ff0000000000000"
+          ],
+          "type": "INSERT"
+        }
+      ],
+      "name": "*Model_Space"
+    },
+    {
+      "entities": [
+        {
+          "block": "PROBE_NONUNIFORM_SCALE_ROTATED_001_L2",
+          "insert_point": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "rotation": "0x0000000000000000",
+          "scale": [
+            "0x4008000000000000",
+            "0x3ff0000000000000",
+            "0x3ff0000000000000"
+          ],
+          "type": "INSERT"
+        }
+      ],
+      "name": "PROBE_NONUNIFORM_SCALE_ROTATED_001_L1"
+    },
+    {
+      "entities": [
+        {
+          "center": [
+            "0x3ff0000000000000",
+            "0x3ff0000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "radius": "0x4000000000000000",
+          "type": "CIRCLE"
+        }
+      ],
+      "name": "PROBE_NONUNIFORM_SCALE_ROTATED_001_L2"
+    }
+  ],
+  "dwg_sha256": "7c3a47e6c83426024b6fdc261a47295147c14271b4657702f5f947ec03ccb3c2",
+  "dwg_version": "AC1018",
+  "layers": [
+    {
+      "frozen": false,
+      "name": "0",
+      "on": true
+    }
+  ],
+  "reader": "LibreDWG@0.14+patch0001",
+  "schema": "pvec-gold/r0-open-dwg-read/2"
+}

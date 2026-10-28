@@ -1,0 +1,43 @@
+{
+  "blocks": [
+    {
+      "entities": [
+        {
+          "closed": false,
+          "elevation": "0x0000000000000000",
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "type": "LWPOLYLINE",
+          "vertices": [
+            [
+              "0x3ff0000000000000",
+              "0x3fe0000000000000",
+              "0x3fd999999999999a"
+            ],
+            [
+              "0x4012000000000000",
+              "0x4002000000000000",
+              "0x0000000000000000"
+            ]
+          ]
+        }
+      ],
+      "name": "*Model_Space"
+    }
+  ],
+  "dwg_sha256": "944ac77cdd7bc1a59e7e4cda34edef60df221ce7e11542144aabd4f3bb890f76",
+  "dwg_version": "AC1015",
+  "layers": [
+    {
+      "frozen": false,
+      "name": "0",
+      "on": true
+    }
+  ],
+  "reader": "acadrust@0.5.5+d35691f",
+  "schema": "pvec-gold/r0-open-dwg-read/2"
+}

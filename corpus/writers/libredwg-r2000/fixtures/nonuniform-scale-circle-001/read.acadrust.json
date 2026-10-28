@@ -1,0 +1,61 @@
+{
+  "blocks": [
+    {
+      "entities": [
+        {
+          "block": "PROBE_NONUNIFORM_SCALE_CIRCLE_001_L1",
+          "insert_point": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "rotation": "0x0000000000000000",
+          "scale": [
+            "0x4008000000000000",
+            "0x3ff0000000000000",
+            "0x3ff0000000000000"
+          ],
+          "type": "INSERT"
+        }
+      ],
+      "name": "*Model_Space"
+    },
+    {
+      "entities": [
+        {
+          "center": [
+            "0x3ff0000000000000",
+            "0x3ff0000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "radius": "0x4000000000000000",
+          "type": "CIRCLE"
+        }
+      ],
+      "name": "PROBE_NONUNIFORM_SCALE_CIRCLE_001_L1"
+    }
+  ],
+  "dwg_sha256": "7bd646409f4c010b03ea5604490a47b548052b86d5f8c01a9de8e06756f7225c",
+  "dwg_version": "AC1015",
+  "layers": [
+    {
+      "frozen": false,
+      "name": "0",
+      "on": true
+    }
+  ],
+  "reader": "acadrust@0.5.5+d35691f",
+  "schema": "pvec-gold/r0-open-dwg-read/2"
+}

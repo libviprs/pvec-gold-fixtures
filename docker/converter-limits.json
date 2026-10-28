@@ -1,4 +1,5 @@
 {
-  "note": "Most converter containers that may run at once. The scheduler (runner/scheduler.py) refuses a request above this and caps the pool at it. A converter not listed here, or listed with null, gets 1: an unknown limit is never read as unlimited.",
-  "acadsharp-dwg2step": 8
+  "note": "Most converter containers that may run at once. The scheduler (runner/scheduler.py) refuses a request above this and caps the pool at it. A converter not listed here, or listed with null, gets 1: an unknown limit is never read as unlimited. Both caps are 8, the top of the parallelism range measured in docs/benchmarks/orchestration-tuning.md (wall time was still falling at 8 for both); neither is a licence limit.",
+  "acadsharp-dwg2step": 8,
+  "libredwg-dwg2step": 8
 }
