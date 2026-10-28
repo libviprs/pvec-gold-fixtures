@@ -2,9 +2,8 @@
 
 Status: **run on the open route** (ADR 0009, `oracle_scope: OPEN_CONVERTERS`), with two oracles of different lineages:
 `acadsharp-dwg2step` (ACadSharp, issue 48) and `libredwg-dwg2step` (LibreDWG, issue 65) on the 30 `r0-open` DWGs, evaluated by
-`step_eval`, native x86_64 (`linux/amd64`, MARS). The exit gate is green for that scope. Nothing here says CAD Exchanger or ODA
-agree with anything: the licensed converters were never run, and what they still owe is in
-[vendor-deferred.md](vendor-deferred.md). The two converters agree on every cell. The first two-column run did not: `closed-periodic-001` was
+`step_eval`, native x86_64 (`linux/amd64`, MARS). The exit gate is green for that scope. What is still open is in
+[open-route-status.md](open-route-status.md). The two converters agree on every cell. The first two-column run did not: `closed-periodic-001` was
 `BOUNDED_APPROXIMATION` (0.092) for LibreDWG, because its converter wrapped periodic splines on a rotated basis. That was a bug in the
 converter, not something to resolve with an explanation, so it is fixed there (pvec-oracle-libredwg#3) and the report is from the
 run after the fix, with no `--resolved` file.
@@ -12,8 +11,8 @@ run after the fix, with no `--resolved` file.
 ## What the qualification does
 
 `runner/qualify_probes.py` takes, for every known-truth probe (`fixtures/known-truth/`) and each
-converter, the normalised evaluator record (`primary.verification.json` for CAD Exchanger,
-`secondary.verification.json` for ODA) and its converter status, and gives every expected entity one
+converter, the normalised evaluator record (`primary.verification.json` for the primary converter,
+`secondary.verification.json` for the secondary) and its converter status, and gives every expected entity one
 class. It reads the evaluator records, never STEP text, evaluates curves with its own pure-Python
 evaluator (`runner/curves.py`, nothing shared with the OCCT-based `step_eval`), and takes every threshold
 from the adopted policy (PVec numeric policy v1, NP-04 and NP-05), whose version id is in the report.
@@ -166,12 +165,12 @@ certified for both oracles.
 The comparison input is mutated in `tests/test_probes.py`: renormalising weights to 1, collapsing a knot and reparameterising
 each change the structural class of at least three named probes, reversing a curve turns the reflection comparison red, and
 `tests/test_qualify.py` shows a weight renormalisation and a 32-gon for a circle land in `BOUNDED_APPROXIMATION` with their bound. Those mutate
-records, not STEP output from a vendor converter; the vendor version of the criterion is in [vendor-deferred.md](vendor-deferred.md).
+records, not STEP output from a converter; the run on real converter output is in [open-route-status.md](open-route-status.md).
 
 ## Exit statement
 
 No mass generation until the converters, the evaluator and the known-truth method pass the pathological probe suite. On the open
 route they do, for two oracles: `acadsharp-dwg2step` and `libredwg-dwg2step` each reproduce 28 of the 32 probes exactly, refuse the near-singular one as authored, and the other three were never run,
 the evaluator self-test and the `expected.math.json` round trip are green, and the gate is green. That releases open-route
-generation (`OPEN_CONVERTERS`) with the `affine_transform` caveat above. It does not release a `VENDOR_CONVERTERS` claim, and it does not make
+generation (`OPEN_CONVERTERS`) with the `affine_transform` caveat above. It does not make
 anything `DUAL_ORACLE_EQUIVALENT`.

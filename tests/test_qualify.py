@@ -331,8 +331,7 @@ class NamedConverters(unittest.TestCase):
 
     def test_the_qualification_doc_names_the_new_flags(self):
         t = (ROOT / "docs" / "phase1-converter-qualification.md").read_text()
-        self.assertIn("--primary", t)
-        self.assertIn("--secondary", t)
+        self.assertIn("--primary acadsharp-dwg2step DIR --secondary libredwg-dwg2step DIR", t)
 
 
 class StatusRecord(unittest.TestCase):

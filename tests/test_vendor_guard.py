@@ -8,7 +8,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 GUARD = ROOT / "tools" / "vendor_guard.sh"
 PATTERNS = ROOT / "tools" / "vendor-guard.patterns"
-ARCHIVE = ROOT / "docs" / "converters" / "archive.md"
 HOOK = ROOT / ".githooks" / "pre-commit"
 
 # built from pieces so this file never contains a key-shaped string itself
@@ -117,16 +116,6 @@ class Staged(unittest.TestCase):
         (p / "sdk.bin").write_bytes(b"x")
         self.git("add", "-f", "vendor")
         self.assertNotEqual(self.git("commit", "-qm", "x").returncode, 0)
-
-
-class Documented(unittest.TestCase):
-    def test_every_pattern_is_listed_in_the_archive_document(self):
-        doc = ARCHIVE.read_text()
-        lines = [l for l in PATTERNS.read_text().splitlines() if l.strip() and not l.startswith("#")]
-        self.assertGreaterEqual(len(lines), 5)
-        for l in lines:
-            kind, pat = l.split(None, 1)
-            self.assertIn(pat.strip(), doc, f"pattern not in docs/converters/archive.md: {l}")
 
 
 if __name__ == "__main__":

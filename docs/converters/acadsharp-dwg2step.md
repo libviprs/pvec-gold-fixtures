@@ -2,7 +2,7 @@
 
 Route A of the open converter plan: ACadSharp's `DwgReader` decodes the DWG, a small Part 21 writer I wrote
 (`tools/converters/acadsharp/Step21.cs`) produces AP242, and nothing else is involved. MIT code all the
-way down, no licence, no vendor SDK. The evaluator (`step_eval`, OCCT) never runs inside this image, so the
+way down, no licence, no closed-source SDK. The evaluator (`step_eval`, OCCT) never runs inside this image, so the
 converter cannot be its own witness.
 
 ```
