@@ -1488,10 +1488,10 @@
     },
     {
       "id": "a18",
-      "kind": "STRUCTURAL",
+      "kind": "SOURCE_MAPPING",
       "entity": "mixed-entity-001.nested-line",
       "claim": "TRANSFORM_PRESERVED",
-      "statement": "The source keeps an instance plus the stated transform; the matrix and determinant survive as written."
+      "statement": "Checked in the source mapping, not in the artifact (pvec ADR 0017: PVec is curve-only): the mapping reads the instance plus the stated transform and keeps the matrix and determinant as written while it flattens the instance to the world-space curve."
     },
     {
       "id": "a19",
@@ -1502,10 +1502,10 @@
     },
     {
       "id": "a20",
-      "kind": "STRUCTURAL",
+      "kind": "SOURCE_MAPPING",
       "entity": "mixed-entity-001.scaled-circle",
       "claim": "TRANSFORM_PRESERVED",
-      "statement": "The source keeps an instance plus the stated transform; the matrix and determinant survive as written."
+      "statement": "Checked in the source mapping, not in the artifact (pvec ADR 0017: PVec is curve-only): the mapping reads the instance plus the stated transform and keeps the matrix and determinant as written while it flattens the instance to the world-space curve."
     },
     {
       "id": "a21",

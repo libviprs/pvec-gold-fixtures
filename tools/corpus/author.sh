@@ -8,7 +8,7 @@ host=${NAS:-devshell@192.168.0.100}
 name=gold-py-$(basename "$here")
 "$here/tools/py.sh" python3 tools/authoring/author_corpus.py "$@"
 if [ "${1:-}" != "--check" ]; then
-  for d in known-truth/edge mixed known-truth/degenerate negative; do
+  for d in edge mixed degenerate negative; do
     mkdir -p "$here/fixtures/$d"
     ssh -o BatchMode=yes -o LogLevel=ERROR "$host" "tar -cf - -C /work/nas-work/$name/fixtures/$d ." | tar -xf - -C "$here/fixtures/$d"
   done

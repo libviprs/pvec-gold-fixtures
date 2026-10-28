@@ -75,7 +75,7 @@ def edge_fixtures():
                 "(tools/corpus/writer) and checked against it by two readers, so the evidence is reader mapping only "
                 "(`READER_MAPPING_ONLY`). No expected value comes from `primary.step` or `secondary.step`, and no STEP file was produced for it."
                 % (s["description"], str(p.relative_to(ROOT))))
-        yield "known-truth/" + str(rel), {"expected.math.json": expected, "README.md": readme(s["id"], body)}
+        yield str(rel), {"expected.math.json": expected, "README.md": readme(s["id"], body)}
 
 
 def mixed_fixtures():
@@ -154,7 +154,7 @@ def degenerate_fixtures():
                 "emitted. It has no `expected.math.json` because the record validator rejects a zero-length line, a zero radius "
                 "and a spline with no extent, which is the point. The DWG carries the entity as authored."
                 % (s["description"], rel, REJECTIONS[s["reason"]]))
-        yield "known-truth/degenerate/" + s["id"], {"expected.rejection.json": json.dumps(doc, indent=2) + "\n", "README.md": readme(s["id"], body)}
+        yield "degenerate/" + s["id"], {"expected.rejection.json": json.dumps(doc, indent=2) + "\n", "README.md": readme(s["id"], body)}
 
 
 # ---- negative ---------------------------------------------------------------------------------------

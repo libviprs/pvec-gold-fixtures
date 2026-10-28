@@ -180,7 +180,8 @@ pub fn run() {
     let root = PathBuf::from(arg(&args, "--root").unwrap());
     let out = PathBuf::from(arg(&args, "--out").unwrap());
     let ver = arg(&args, "--version").unwrap_or_else(|| "AC1032".into());
-    let kt = root.join("fixtures/known-truth");
+    let kt = root.join("fixtures/edge");
+    let kt_mixed = root.join("fixtures/mixed");
     let params = root.join("tools/authoring/corpus-params");
 
     // edge: ordinary single-entity probes, through the r0-open writer unchanged.
@@ -192,7 +193,7 @@ pub fn run() {
     for p in param_files(&params.join("mixed")) {
         let pj = load(&p);
         let id = pj["id"].as_str().unwrap().to_string();
-        let ep = find_expected(&kt, &id).unwrap_or_else(|| panic!("no expected.math.json for {id}"));
+        let ep = find_expected(&kt_mixed, &id).unwrap_or_else(|| panic!("no expected.math.json for {id}"));
         match build_mixed(&id, &load(&ep), &pj, version_of(&ver)) {
             Ok(doc) => save(&out.join("mixed"), &id, &doc, &mut rep),
             Err(s) => rep.push(skipped(&id, s)),

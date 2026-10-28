@@ -132,8 +132,8 @@ class NegativeSuite(unittest.TestCase):
         with tempfile.TemporaryDirectory() as t:
             t = Path(t)
             (t / "fixtures/negative/hatch-001").mkdir(parents=True)
-            (t / "fixtures/known-truth/edge/hatch-001").mkdir(parents=True)
-            (t / "fixtures/known-truth/edge/hatch-001/expected.math.json").write_text("{}")
+            (t / "fixtures/edge/hatch-001").mkdir(parents=True)
+            (t / "fixtures/edge/hatch-001/expected.math.json").write_text("{}")
             problems = corpus().mutual_exclusion_problems(t)
             self.assertTrue(any("hatch-001" in p for p in problems), problems)
 
@@ -146,7 +146,7 @@ class Degenerate(unittest.TestCase):
 
     def test_each_degenerate_fixture_carries_an_expected_rejection(self):
         for fid, code in self.EXPECT.items():
-            d = KT / "degenerate" / fid
+            d = FX / "degenerate" / fid
             r = load(d / "expected.rejection.json")
             self.assertEqual(r["expected_rejection"]["classification"], code)
             self.assertEqual(r["expected_rejection"]["disposition"], "REJECT")
@@ -156,7 +156,7 @@ class Degenerate(unittest.TestCase):
 
     def test_both_readers_return_the_degenerate_entity_and_the_refusal_matches(self):
         for fid, code in self.EXPECT.items():
-            cmp_ = load(KT / "degenerate" / fid / "comparison.json")
+            cmp_ = load(FX / "degenerate" / fid / "comparison.json")
             self.assertEqual(cmp_["verdict"], "AGREE", fid)
             self.assertEqual(cmp_["produced_rejection"], {"acadrust": code, "acadsharp": code}, fid)
 
@@ -190,11 +190,11 @@ class Degenerate(unittest.TestCase):
 
 class EdgeAndMixed(unittest.TestCase):
     def test_edge_cases_cover_boundary_and_extreme_scale(self):
-        ids = {d.name for d in dirs(KT / "edge")}
+        ids = {d.name for d in dirs(FX / "edge")}
         self.assertTrue({"bspline-nonunit-domain-001", "arc-tiny-sweep-001", "huge-extent-001", "tiny-extent-001"} <= ids, ids)
-        huge = load(KT / "edge/huge-extent-001/expected.math.json")["entities"][0]["geometry"]
+        huge = load(FX / "edge/huge-extent-001/expected.math.json")["entities"][0]["geometry"]
         self.assertGreater(float(huge["radius"]["decimal"]), 1e6)
-        tiny = load(KT / "edge/tiny-extent-001/expected.math.json")["entities"][0]["geometry"]
+        tiny = load(FX / "edge/tiny-extent-001/expected.math.json")["entities"][0]["geometry"]
         self.assertLess(abs(float(tiny["end"][0]["decimal"])), float("1e-8"))
 
     def test_mixed_drawing_has_five_classes_transforms_and_nested_blocks(self):
@@ -205,7 +205,7 @@ class EdgeAndMixed(unittest.TestCase):
         self.assertTrue(any("transform" in e for e in doc["entities"]))
 
     def test_edge_and_mixed_fixtures_are_complete_and_both_readers_agree_with_the_record(self):
-        found = dirs(KT / "edge") + dirs(FX / "mixed")
+        found = dirs(FX / "edge") + dirs(FX / "mixed")
         self.assertGreaterEqual(len(found), 5)
         for d in found:
             for name in ("expected.math.json", "README.md", "params.json", "source.dwg", "read.acadrust.json", "read.acadsharp.json", "comparison.json"):
@@ -346,7 +346,7 @@ class Manifest(unittest.TestCase):
         c = corpus()
         with tempfile.TemporaryDirectory() as t:
             t = Path(t)
-            d = t / "fixtures/known-truth/edge/e-001"
+            d = t / "fixtures/edge/e-001"
             d.mkdir(parents=True)
             (d / "expected.math.json").write_text("{}")
             problems = c.fixture_artifact_problems(t, "edge", "e-001", "ACCEPTED")

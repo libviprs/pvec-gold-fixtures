@@ -44,9 +44,9 @@ POLICY = {"HATCH": "IGNORED", "TEXT": "IGNORED", "MTEXT": "IGNORED", "WIPEOUT": 
 # group -> (directory under fixtures/, required files)
 COMMON = ("source.dwg", "README.md", "params.json", "read.acadrust.json", "read.acadsharp.json", "comparison.json")
 GROUPS = {
-    "edge": ("known-truth/edge", COMMON + ("expected.math.json",)),
+    "edge": ("edge", COMMON + ("expected.math.json",)),
     "mixed": ("mixed", COMMON + ("expected.math.json",)),
-    "degenerate": ("known-truth/degenerate", COMMON + ("expected.rejection.json",)),
+    "degenerate": ("degenerate", COMMON + ("expected.rejection.json",)),
     "negative": ("negative", ("source.dwg", "README.md", "params.json", "expected.classification.json", "census.acadsharp.json", "comparison.json")),
     "real-world": ("real-world", ("source.dwg", "README.md", "census.acadsharp.json", "metrics.json", "comparison.json")),
 }
@@ -145,7 +145,7 @@ def all_fixture_ids(root):
     """Ids by place: negative, real-world, known truth (r1 groups and the r0-open bundle)."""
     root = Path(root)
     kt = set()
-    for p in list((root / "fixtures" / "known-truth").rglob("*")) + list((root / "fixtures" / "mixed").rglob("*")):
+    for p in [q for g in ("known-truth", "edge", "mixed", "degenerate") for q in (root / "fixtures" / g).rglob("*")]:
         if p.is_dir() and any((p / n).is_file() for n in ("expected.math.json", "expected.rejection.json")):
             kt.add(p.name)
     r0dir = root / "corpus" / "r0-open" / "fixtures"
