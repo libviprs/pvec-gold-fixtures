@@ -263,22 +263,22 @@
       }
     },
     "closed-periodic-001": {
-      "baseline": "BOUNDED_APPROXIMATION",
+      "baseline": "STRUCTURAL_EXACT",
       "mutations": {
         "knot-collapse": {
           "applies": false,
           "changed": false,
-          "class": "BOUNDED_APPROXIMATION"
+          "class": "STRUCTURAL_EXACT"
         },
         "reparameterise": {
           "applies": true,
-          "changed": false,
-          "class": "BOUNDED_APPROXIMATION"
+          "changed": true,
+          "class": "GEOMETRIC_EXACT_REPARAMETERIZED"
         },
         "weights-to-1": {
           "applies": false,
           "changed": false,
-          "class": "BOUNDED_APPROXIMATION"
+          "class": "STRUCTURAL_EXACT"
         }
       }
     },

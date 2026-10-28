@@ -86,12 +86,24 @@ public sealed class Flattener
     public readonly SortedDictionary<string, int> Skipped = new(StringComparer.Ordinal);
     static readonly double TwoPi = Math.PI * 2.0;
 
-    public Flattener(double rel) { _rel = rel; }
+    readonly double _toMetre;   // 1.0 unless the drawing's unit has to be scaled to metre (inches, feet)
+
+    public Flattener(double rel, double toMetre = 1.0) { _rel = rel; _toMetre = toMetre; }
 
     public void Run(CadDocument doc)
     {
         var model = doc.ModelSpace;
-        Walk(model, Affine.Eye(), 0, new HashSet<string>(StringComparer.Ordinal));
+        // A unit scale is a uniform scale at the root of every path, so a circle stays a circle with radius r * s and
+        // nothing else in the flattening needs to know about units. At 1.0 the root stays the identity and no stored
+        // value is recomputed.
+        var root = Affine.Eye();
+        if (_toMetre != 1.0)
+        {
+            root.L[0, 0] = root.L[1, 1] = root.L[2, 2] = _toMetre;
+            root.Identity = false;
+            root.Scale = _toMetre;
+        }
+        Walk(model, root, 0, new HashSet<string>(StringComparer.Ordinal));
     }
 
     void Walk(BlockRecord br, Affine m, int depth, HashSet<string> open)
@@ -316,8 +328,16 @@ public sealed class Flattener
         int d = s.Degree;
         var poles = s.ControlPoints.Select(p => m.Apply(V3.From(p))).ToList();
         int n = poles.Count;
+        if (n == 0 && s.FitPoints.Count > 0)
+        {
+            // Fit points alone do not fix a B-spline (the tangents and the fitting method do), so this entity is
+            // left out and counted, and the rest of the drawing converts.
+            const string kind = "Spline (fit points only)";
+            Skipped[kind] = Skipped.GetValueOrDefault(kind) + 1;
+            return;
+        }
         if (n == 0)
-            throw new ConvertException(15, "CONVERSION_FAILED", s.FitPoints.Count > 0 ? "SPLINE with fit points only (no control points) is not supported" : "SPLINE without control points");
+            throw new ConvertException(15, "CONVERSION_FAILED", "SPLINE without control points");
         if (n < d + 1) throw new ConvertException(15, "CONVERSION_FAILED", "SPLINE with fewer than degree + 1 control points");
         var knots = s.Knots.ToList();
         List<double> weights = null;
