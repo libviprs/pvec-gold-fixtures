@@ -1,0 +1,48 @@
+# step-validator with Open CASCADE built from a pinned source tarball with -ffp-contract=off (issue 75, a spike).
+# Same step_eval, same base image as docker/step-validator/Dockerfile; only the OCCT library differs: the Debian
+# package was built with the compiler's default contraction (fused multiply-add on aarch64), this one is not.
+# Build from the repository root:  docker build -f docker/step-validator/Dockerfile.occt-src --target test .
+# Only the toolkits step_eval links, and what they need, are built (no Visualization, no OCAF, no Draw).
+ARG BASE=debian:bookworm-slim@sha256:7c7b2c966bc9ee8cedfeef67e0e279108992c77681fa595db4a9d65c06ccc587
+FROM ${BASE} AS occt
+ARG OCCT_TAG=V7_6_3
+ARG OCCT_SHA256=3f95808e2c5060c5b5001770b5e42c7d9a849b23d925272bc70a5a2377413aa9
+ARG JOBS=4
+ARG FLAGS="-O2 -ffp-contract=off"
+RUN apt-get update && apt-get install -y --no-install-recommends g++ make cmake ca-certificates curl \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /occt
+RUN curl -fsSL -o occt.tgz "https://github.com/Open-Cascade-SAS/OCCT/archive/refs/tags/${OCCT_TAG}.tar.gz" \
+    && echo "${OCCT_SHA256}  occt.tgz" | sha256sum -c - \
+    && mkdir src && tar -xzf occt.tgz -C src --strip-components=1 && rm occt.tgz
+RUN cmake -S src -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/occt \
+        -DCMAKE_CXX_FLAGS="${FLAGS}" -DCMAKE_C_FLAGS="${FLAGS}" \
+        -DBUILD_LIBRARY_TYPE=Shared -DBUILD_MODULE_ApplicationFramework=OFF -DBUILD_MODULE_Visualization=OFF \
+        -DBUILD_MODULE_Draw=OFF -DBUILD_MODULE_DataExchange=OFF \
+        -DBUILD_ADDITIONAL_TOOLKITS="TKXSBase;TKSTEPBase;TKSTEPAttr;TKSTEP209;TKSTEP" \
+        -DUSE_FREETYPE=OFF -DUSE_TBB=OFF -DUSE_RAPIDJSON=OFF -DUSE_OPENGL=OFF -DUSE_GLES2=OFF -DUSE_XLIB=OFF \
+        -DBUILD_DOC_Overview=OFF -DBUILD_Inspector=OFF \
+    && cmake --build build -j"${JOBS}" && cmake --install build \
+    && grep -c -e "-ffp-contract=off" build/CMakeCache.txt
+
+FROM occt AS build
+WORKDIR /src
+COPY validator/CMakeLists.txt validator/CMakeLists.txt
+COPY validator/src validator/src
+RUN cmake -S validator -B build -DCMAKE_BUILD_TYPE=Release -DOpenCASCADE_DIR=/opt/occt/lib/cmake/opencascade \
+    && cmake --build build -j4
+
+FROM ${BASE} AS runtime
+RUN apt-get update && apt-get install -y --no-install-recommends python3 libstdc++6 \
+    && rm -rf /var/lib/apt/lists/*
+COPY --from=occt /opt/occt/lib /opt/occt/lib
+COPY --from=build /src/build/step_eval /usr/local/bin/step_eval
+ENV LD_LIBRARY_PATH=/opt/occt/lib
+WORKDIR /work
+
+FROM runtime AS test
+RUN apt-get update && apt-get install -y --no-install-recommends python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir --break-system-packages -r /tmp/requirements.txt
+ENV STEP_EVAL=/usr/local/bin/step_eval

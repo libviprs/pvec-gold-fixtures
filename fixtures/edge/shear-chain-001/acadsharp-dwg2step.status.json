@@ -1,0 +1,13 @@
+{
+  "schema_version": "pvec-gold/converter-status/1",
+  "converter": "acadsharp-dwg2step",
+  "status": "OK",
+  "exit_code": 0,
+  "input": {"path": "/v/fixtures/edge/shear-chain-001/source.dwg", "sha256": "a67001359899ce960a491a8b78a19ca5184ed1ea153e7ce47414d9d1b7b78301"},
+  "output": {"path": "/v/.out-corpus-open/edge/shear-chain-001/primary.step", "sha256": "7980ba86e5a4776453055e2a6661ab49085cba4c87b432117d1d82608cda7874"},
+  "product": {"name": "ACadSharp", "version": "3.7.1\u002Bd7dc111"},
+  "declared_schema": "AP242_MANAGED_MODEL_BASED_3D_ENGINEERING_MIM_LF { 1 0 10303 442 1 1 4 }",
+  "wall_time_seconds": "0.123",
+  "warnings": ["INSUNITS is unitless: values are written unscaled and labelled metre"],
+  "error": null
+}

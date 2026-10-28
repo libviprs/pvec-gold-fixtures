@@ -1,0 +1,394 @@
+{
+  "checks": {
+    "ACadSharp": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "LWPOLYLINE",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "LWPOLYLINE"
+      },
+      {
+        "expected": 2,
+        "field": "vertex_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 2
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "vertex[0].x",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3fe0000000000000",
+        "field": "vertex[0].y",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[0].z(elevation)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3fd999999999999a",
+        "field": "vertex[0].bulge",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fd999999999999a"
+      },
+      {
+        "expected": "0x4012000000000000",
+        "field": "vertex[1].x",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4012000000000000"
+      },
+      {
+        "expected": "0x4002000000000000",
+        "field": "vertex[1].y",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4002000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[1].z(elevation)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[1].bulge",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": false,
+        "field": "closed",
+        "mode": "EXACT",
+        "ok": true,
+        "read": false
+      },
+      {
+        "expected": "0x3ffd4ccccccccccd",
+        "field": "derived_arc.center[0]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3ffd4cccccccccce"
+      },
+      {
+        "expected": "0x4009b33333333333",
+        "field": "derived_arc.center[1]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4009b33333333332"
+      },
+      {
+        "expected": "0x4006b232f3cf319b",
+        "field": "derived_arc.radius",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4006b232f3cf319c"
+      },
+      {
+        "expected": "0x4011a8fc021c4dcf",
+        "field": "derived_arc.start_angle",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4011a8fc021c4dcf"
+      },
+      {
+        "expected": "0x3ff85a376b677dc0",
+        "field": "derived_arc.sweep_angle",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3ff85a376b677dc0"
+      },
+      {
+        "expected": "CCW",
+        "field": "derived_arc.sense_about_normal",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "CCW"
+      }
+    ],
+    "LibreDWG": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "LWPOLYLINE",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "LWPOLYLINE"
+      },
+      {
+        "expected": 2,
+        "field": "vertex_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 2
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "vertex[0].x",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3fe0000000000000",
+        "field": "vertex[0].y",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[0].z(elevation)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3fd999999999999a",
+        "field": "vertex[0].bulge",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fd999999999999a"
+      },
+      {
+        "expected": "0x4012000000000000",
+        "field": "vertex[1].x",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4012000000000000"
+      },
+      {
+        "expected": "0x4002000000000000",
+        "field": "vertex[1].y",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4002000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[1].z(elevation)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[1].bulge",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": false,
+        "field": "closed",
+        "mode": "EXACT",
+        "ok": true,
+        "read": false
+      },
+      {
+        "expected": "0x3ffd4ccccccccccd",
+        "field": "derived_arc.center[0]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3ffd4cccccccccce"
+      },
+      {
+        "expected": "0x4009b33333333333",
+        "field": "derived_arc.center[1]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4009b33333333332"
+      },
+      {
+        "expected": "0x4006b232f3cf319b",
+        "field": "derived_arc.radius",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4006b232f3cf319c"
+      },
+      {
+        "expected": "0x4011a8fc021c4dcf",
+        "field": "derived_arc.start_angle",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4011a8fc021c4dcf"
+      },
+      {
+        "expected": "0x3ff85a376b677dc0",
+        "field": "derived_arc.sweep_angle",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3ff85a376b677dc0"
+      },
+      {
+        "expected": "CCW",
+        "field": "derived_arc.sense_about_normal",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "CCW"
+      }
+    ],
+    "acadrust": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "LWPOLYLINE",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "LWPOLYLINE"
+      },
+      {
+        "expected": 2,
+        "field": "vertex_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 2
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "vertex[0].x",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3fe0000000000000",
+        "field": "vertex[0].y",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fe0000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[0].z(elevation)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3fd999999999999a",
+        "field": "vertex[0].bulge",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3fd999999999999a"
+      },
+      {
+        "expected": "0x4012000000000000",
+        "field": "vertex[1].x",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4012000000000000"
+      },
+      {
+        "expected": "0x4002000000000000",
+        "field": "vertex[1].y",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4002000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[1].z(elevation)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "vertex[1].bulge",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": false,
+        "field": "closed",
+        "mode": "EXACT",
+        "ok": true,
+        "read": false
+      },
+      {
+        "expected": "0x3ffd4ccccccccccd",
+        "field": "derived_arc.center[0]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3ffd4cccccccccce"
+      },
+      {
+        "expected": "0x4009b33333333333",
+        "field": "derived_arc.center[1]",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4009b33333333332"
+      },
+      {
+        "expected": "0x4006b232f3cf319b",
+        "field": "derived_arc.radius",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4006b232f3cf319c"
+      },
+      {
+        "expected": "0x4011a8fc021c4dcf",
+        "field": "derived_arc.start_angle",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x4011a8fc021c4dcf"
+      },
+      {
+        "expected": "0x3ff85a376b677dc0",
+        "field": "derived_arc.sweep_angle",
+        "mode": "POLICY",
+        "ok": true,
+        "read": "0x3ff85a376b677dc0"
+      },
+      {
+        "expected": "CCW",
+        "field": "derived_arc.sense_about_normal",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "CCW"
+      }
+    ]
+  },
+  "evidence": null,
+  "fixture_id": "bulge-arc-001",
+  "numeric_policy_version": "PVec numeric policy v1",
+  "reader_vs_reader_differences": {},
+  "reason": null,
+  "verdict": "AGREE"
+}

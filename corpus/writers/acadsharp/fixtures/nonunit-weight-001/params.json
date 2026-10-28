@@ -1,0 +1,1 @@
+{"id":"nonunit-weight-001","kind":"nurbs","description":"A clamped quadratic NURBS with one weight (50) far from 1.0 and the rest exactly 1.","degree":2,"control_points":[["0","0","0"],["1","1","0"],["2","3","0"],["3","1","0"],["4","0","0"]],"weights":["1","1","50","1","1"],"knots":[["0",3],["0.45",1],["0.8",1],["1",3]]}

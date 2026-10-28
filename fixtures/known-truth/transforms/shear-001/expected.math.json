@@ -14,7 +14,7 @@
     "derivation": "AUTHORING_PARAMETERS",
     "authoring_script": "tools/authoring/author_probes.py",
     "parameter_file": "tools/authoring/params/transforms/shear-001.json",
-    "parameter_file_sha256": "950ce093e6a9fb64248e175fb86d150654c20d774d8b69ccf7829787235c7052",
+    "parameter_file_sha256": "16d942031f51bcd416516cc67d4765812449e8fbf1003e511fa2f7fb6964fd2a",
     "parameters": {
       "id": "shear-001",
       "group": "transforms",
@@ -61,6 +61,10 @@
       "rejection": {
         "classification": "UNREPRESENTABLE_TRANSFORM",
         "disposition": "QUARANTINE"
+      },
+      "profile_only": {
+        "chain_probe": "shear-chain-001",
+        "reason": "A single INSERT carries a translation, one rotation, three scales and no shear, so no writer can store this matrix in one INSERT and there is no DWG for this record on purpose. It is a profile-only probe: it states what pvec must do with a single stored matrix of this kind (pvec ADR 0012 and 0017). The DWG path is covered by shear-chain-001, a three-INSERT chain that reaches the same world-space line."
       }
     }
   },

@@ -35,6 +35,35 @@ services:
     volumes:
       - ${FIXTURE_DIR:-./fixtures}:/fixtures
 
+  # The second open converter (LibreDWG, GPL-3.0-or-later), a different decoder lineage from ACadSharp.
+  # It is an image reference and never a build: the Dockerfile lives in libviprs/pvec-oracle-libredwg, so
+  # no GPL source is a build context here and the only thing that crosses is the process boundary and the
+  # files it writes. Set LIBREDWG_IMAGE to the digest reference (name@sha256:...) or to a local image id.
+  # The image has no entrypoint, so the service sets one: runner.generate passes `--in --out --status` and nothing else.
+  # `dwgdump` is not run through this service.
+  libredwg-converter:
+    image: ${LIBREDWG_IMAGE:-pvec-oracle-libredwg:local}
+    entrypoint: ["dwg2step"]
+    platform: ${LIBREDWG_PLATFORM:-linux/amd64}
+    network_mode: none
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 512m
+    memswap_limit: 512m
+    cpus: 2
+    logging:
+      driver: json-file
+      options:
+        max-size: 1m
+        max-file: "3"
+    volumes:
+      - ${FIXTURE_DIR:-./fixtures}:/fixtures
+
   step-validator:
     image: pvec-gold/step-validator:local
     platform: ${VALIDATOR_PLATFORM:-linux/amd64}
@@ -64,6 +93,9 @@ services:
     working_dir: ${PWD}
     environment:
       FIXTURE_DIR: ${FIXTURE_DIR:-${PWD}/fixtures}
+      # the runner asks compose for the converter images itself, so the choices have to reach it
+      LIBREDWG_IMAGE: ${LIBREDWG_IMAGE:-pvec-oracle-libredwg:local}
+      LIBREDWG_PLATFORM: ${LIBREDWG_PLATFORM:-linux/amd64}
     volumes:
       - ${PWD}:${PWD}
       - /var/run/docker.sock:/var/run/docker.sock

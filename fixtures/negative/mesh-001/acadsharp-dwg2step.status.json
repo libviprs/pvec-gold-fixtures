@@ -3,11 +3,11 @@
   "converter": "acadsharp-dwg2step",
   "status": "ERROR",
   "exit_code": 15,
-  "input": {"path": "/v/fixtures/negative/mesh-001/source.dwg", "sha256": "fec5347306c1d2e330088e2805badec86472740f95a61daa8dc22bdc37a0f52b"},
+  "input": {"path": "/v/fixtures/negative/mesh-001/source.dwg", "sha256": "6fb6a5a476227b75100dc81fd22274c2973e77dec15ddc86a3222e166a99f82c"},
   "output": null,
   "product": {"name": "ACadSharp", "version": "3.7.1\u002Bd7dc111"},
   "declared_schema": null,
-  "wall_time_seconds": "0.111",
+  "wall_time_seconds": "0.115",
   "warnings": ["skipped 1 entity(ies) of type Mesh"],
   "error": {"code": 15, "class": "CONVERSION_FAILED", "message": "no supported curve in model space"}
 }

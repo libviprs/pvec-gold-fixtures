@@ -8,6 +8,8 @@ DIR holds <probe-id>/primary.verification.json (+ primary.status.json) for the p
 <probe-id>/secondary.verification.json (+ secondary.status.json) for the secondary one. With --lineage for
 both ids is required: two converters of one lineage, or two equal ids, are refused as a dual oracle (ADR 0009),
 and the report records the lineages so a verdict always shows whose decoders produced it.
+--resolved FILE is a JSON list of {"probe": ID, "explanation": TEXT}: a cross-converter discrepancy on that
+probe stops blocking its capability, and the explanation goes into the report. A bare id is refused.
 Comparison reads the normalised evaluator records, never STEP text, and every threshold comes from the
 vendored policy. The verdict rules do not look at the ids.
 
@@ -45,8 +47,15 @@ CAPABILITIES = {
     "bspline": ["bspline-d3-001", "bspline-d5-001", "repeated-knot-c0-001", "closed-by-endpoint-001", "closed-periodic-001"],
     "nurbs": ["nurbs-d3-001", "nurbs-d2-offconic-001", "nonunit-weight-001"],
     "affine_transform": ["translation-001", "rotation-irrational-001", "uniform-scale-001", "nonuniform-scale-circle-001",
-                         "nonuniform-scale-rotated-001", "reflection-001", "shear-001", "general-affine-001",
+                         "nonuniform-scale-rotated-001", "reflection-001", "shear-chain-001", "general-affine-chain-001",
                          "nested-blocks-001", "near-singular-001", "singular-001"],
+}
+# Rejection records that have no DWG on purpose: no writer stores a shear in one INSERT, so these state what pvec
+# must do with a single stored matrix (pvec ADR 0012 and 0017) and are not converter probes. The chain probes beside
+# them carry the same maps through a DWG. Their parameter files carry the same tag.
+PROFILE_ONLY = {
+    "shear-001": "shear-chain-001",
+    "general-affine-001": "general-affine-chain-001",
 }
 CONVERTERS = {"acadsharp-dwg2step": "primary", "libredwg-dwg2step": "secondary"}   # the default pair when a report names none
 SAMPLES = 256   # sampling resolution for nearest-point search; refinement below does the precision work
@@ -302,8 +311,8 @@ def load_outputs(root, probe, prefix):
 
 def is_converter_probe(doc):
     """Layer state has no STEP form, so a probe that records it (layer-state-001) is a DWG reader-mapping
-    probe only and is not put through the converters."""
-    return not any("layer" in e for e in doc["entities"])
+    probe only and is not put through the converters. A profile-only record has no DWG to convert."""
+    return doc["fixture_id"] not in PROFILE_ONLY and not any("layer" in e for e in doc["entities"])
 
 
 def build_report(pol, probes, outputs_for, resolved=(), no_source=None):
@@ -330,7 +339,7 @@ def build_report(pol, probes, outputs_for, resolved=(), no_source=None):
 
 def main(argv):
     ap = argparse.ArgumentParser()
-    ap.add_argument("--probes", default="fixtures/known-truth")
+    ap.add_argument("--probes", action="append", help="a directory of probe records, repeatable (default: fixtures/known-truth and fixtures/edge)")
     ap.add_argument("--primary", nargs=2, metavar=("ID", "DIR"), required=True)
     ap.add_argument("--secondary", nargs=2, metavar=("ID", "DIR"), help="omit for a single-oracle run (the open route today)")
     ap.add_argument("--excluded", metavar="QUARANTINE_JSON", help="a corpus quarantine.json: its excluded probes have no source.dwg")
@@ -349,10 +358,20 @@ def main(argv):
         raise SystemExit(bad[0])
     pol = numeric.load_policy()
     probes = {}
-    for f in sorted(Path(a.probes).rglob("expected.math.json")):
-        d = em.load(f)
-        probes[d["fixture_id"]] = d
+    dirs = a.probes or ["fixtures/known-truth", "fixtures/edge"]
+    listed = {p for ps in CAPABILITIES.values() for p in ps}
+    for i, base in enumerate(dirs):
+        for f in sorted(Path(base).rglob("expected.math.json")):
+            d = em.load(f)
+            # the first directory is the probe set; later ones (the edge group) only contribute probes a capability names
+            if i == 0 or d["fixture_id"] in listed:
+                probes[d["fixture_id"]] = d
     resolved = json.loads(Path(a.resolved).read_text()) if a.resolved else []
+    for r in resolved:
+        if not isinstance(r, dict) or not str(r.get("explanation", "")).strip():
+            raise SystemExit("--resolved entries are {\"probe\": ID, \"explanation\": TEXT}; %r has no explanation" % (r,))
+        if r.get("probe") not in probes:
+            raise SystemExit("--resolved names %r, which is not a probe" % (r.get("probe"),))
     def outputs_for(pid):
         out = {pid_: load_outputs(pdir, pid, "primary")}
         if sid_:
@@ -361,7 +380,8 @@ def main(argv):
     no_source = {}
     if a.excluded:
         no_source = {e["id"]: "%s: %s" % (e["reason"], e["evidence"]) for e in json.loads(Path(a.excluded).read_text())["excluded"]}
-    rep = build_report(pol, probes, outputs_for, resolved, no_source)
+    rep = build_report(pol, probes, outputs_for, [r["probe"] for r in resolved], no_source)
+    rep["resolved"] = resolved
     rep["lineages"] = {i: lin[i] for i in ids}
     rep["oracle_scope"] = "OPEN_CONVERTERS"
     rep["platform"] = a.platform
