@@ -356,6 +356,32 @@ class Divergence(unittest.TestCase):
             self.assertTrue(any("extra-001" in x for x in r2_open.divergences(Path(t) / "a", Path(t) / "b")))
 
 
+class Audit(unittest.TestCase):
+    QUAL = {"converters": {"primary": A, "secondary": B},
+            "capabilities": [{"capability": "line", "status": "CERTIFIED", "by_converter": {A: "STRUCTURAL_EXACT", B: "STRUCTURAL_EXACT"}, "probes": ["line-001"]}]}
+
+    def test_blocks_count_what_the_manifest_holds(self):
+        with tempfile.TemporaryDirectory() as t:
+            _, _, _, m = build_in(t, ES, SPECS)
+            b = r2_open.audit_blocks(m, self.QUAL)
+            self.assertIn("| KNOWN_TRUTH_EXACT | STEP_ORACLE | 1 |", b["register"])
+            self.assertIn("Quarantined fixtures: **1**", b["quarantine"])
+            self.assertIn("| `dimension-001` | STEP_ORACLE | primary, secondary | none |", b["quarantine"])
+            self.assertIn("| line | CERTIFIED |", b["capabilities"])
+
+    def test_sync_replaces_only_the_generated_blocks_and_reports_drift(self):
+        with tempfile.TemporaryDirectory() as t:
+            _, _, _, m = build_in(t, ES, SPECS)
+            b = r2_open.audit_blocks(m, self.QUAL)
+            p = Path(t) / "audit.md"
+            p.write_text("prose\n" + "".join("<!-- gen:%s -->\nold\n<!-- /gen:%s -->\nmore prose\n" % (n, n) for n in b))
+            self.assertFalse(r2_open.sync_audit(p, b))
+            self.assertFalse(r2_open.sync_audit(p, b, write=True))
+            self.assertTrue(r2_open.sync_audit(p, b))
+            self.assertTrue(p.read_text().startswith("prose\n"))
+            self.assertIn("more prose", p.read_text())
+
+
 class CleanHostScript(unittest.TestCase):
     def setUp(self):
         self.text = (ROOT / "tools" / "clean_host_r2.sh").read_text()

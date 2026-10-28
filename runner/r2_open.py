@@ -26,7 +26,7 @@ REVISION = "r2-open"
 BEGIN, END = "<!-- r2-open-moves -->", "<!-- /r2-open-moves -->"
 ROLES = ("primary", "secondary")
 BY_DESIGN = "QUARANTINED"
-REJECTION_SCOPES = ("REJECTION_EXPECTED", "CLASSIFICATION_EXPECTED")
+LINEAGE_NAMES = {"acadsharp": "ACadSharp", "libredwg": "LibreDWG"}   # how the committed qualification reports spell them
 
 
 class Refused(Exception):
@@ -269,6 +269,47 @@ def write_changelog(root, m):
     p.write_text(text[:a + len(BEGIN)] + "\n" + render_moves(m) + text[b:])
 
 
+# ---- the audit -------------------------------------------------------------------------------
+
+def audit_blocks(m, qual):
+    """The numbers in reports/final-audit-r2-open.md, derived from the revision and the probe report."""
+    fx = m["fixtures"]
+    by = {}
+    for e in fx:
+        by.setdefault((e["evidence_class"], e["evidence_scope"]), []).append(e["id"])
+    reg = ["| evidence class | evidence scope | fixtures |", "|---|---|---|"]
+    reg += ["| %s | %s | %d |" % (c, s, len(v)) for (c, s), v in sorted(by.items())]
+    quarantined = [e for e in fx if e["evidence_class"] == "QUARANTINED"]
+    q = ["Quarantined fixtures: **%d**, every one by design (negative suite and degenerate group); none has an unknown or empty reason." % len(quarantined), "",
+         "| fixture | scope | refused by | converter failure |", "|---|---|---|---|"]
+    for e in quarantined:
+        so = e["step_oracle"]
+        ref = ", ".join(r for r in ROLES if so["refused"][r]) or "neither"
+        q.append("| `%s` | %s | %s | %s |" % (e["id"], e["evidence_scope"], ref, ", ".join(e.get("converter_failures") or []) or "none"))
+    held = [x for x in m["moves"] if x["from"] == x["to"] and x["why"] and x["id"] not in {e["id"] for e in quarantined}]
+    h = ["Held back (no move), with the run's reason: **%d**." % len(held), ""] + ["- `%s`: %s" % (x["id"], x["why"]) for x in held]
+    cap = ["| capability | status | %s | %s | probes |" % tuple(qual["converters"].values()), "|---|---|---|---|---|"]
+    a, b = qual["converters"]["primary"], qual["converters"]["secondary"]
+    for c in qual["capabilities"]:
+        cap.append("| %s | %s | %s | %s | %s |" % (c["capability"], c["status"], c["by_converter"].get(a, ""), c["by_converter"].get(b, ""), len(c["probes"])))
+    stats = ["Fixtures: **%d**. Both converters ran on every one. Converter pair: `%s` (%s) and `%s` (%s), OCCT %s." % (
+        len(fx), m["converters"][0]["id"], m["converters"][0]["lineage"], m["converters"][1]["id"], m["converters"][1]["lineage"], m["occt_version"])]
+    return {"register": "\n".join(reg), "quarantine": "\n".join(q), "held": "\n".join(h), "capabilities": "\n".join(cap), "stats": "\n".join(stats)}
+
+
+def sync_audit(path, blocks, write=False):
+    text = Path(path).read_text()
+    new = text
+    for name, body in blocks.items():
+        pat = re.compile(r"(<!-- gen:%s -->\n)(.*?)(\n<!-- /gen:%s -->)" % (name, name), re.S)
+        if not pat.search(new):
+            raise Refused("audit has no gen:%s block" % name)
+        new = pat.sub(lambda mo: mo.group(1) + body + mo.group(3), new)
+    if write:
+        Path(path).write_text(new)
+    return new == text
+
+
 # ---- the release -----------------------------------------------------------------------------
 
 def release(corpus, rel, name):
@@ -426,7 +467,8 @@ def qualify(out, m):
     dest = out / "reports" / REVISION / "probe-qualification.json"
     qp.main(["--probes", str(ROOT / "fixtures" / "known-truth"), "--probes", str(ROOT / "fixtures" / "edge"),
              "--primary", a["id"], str(q), "--secondary", b["id"], str(q),
-             "--lineage", "%s=%s" % (a["id"], a["lineage"]), "--lineage", "%s=%s" % (b["id"], b["lineage"]),
+             "--lineage", "%s=%s" % (a["id"], LINEAGE_NAMES.get(a["lineage"], a["lineage"])),
+             "--lineage", "%s=%s" % (b["id"], LINEAGE_NAMES.get(b["lineage"], b["lineage"])),
              "--excluded", str(ROOT / "corpus" / "r1-open" / "quarantine.json"), "--platform", a["platform"], "--out", str(dest)])
     return dest
 
