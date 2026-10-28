@@ -13,7 +13,7 @@ The 30 `r0-open` DWGs converted, evaluated and normalised, a fresh output tree e
 | 4 | 4.91 | 4.86 | 5.14 | 6.1 |
 | 8 | 2.62 | 2.39 | 2.98 | 11.4 |
 
-**Chosen: parallelism 8** (2.62 s for the corpus, 11.4 fixtures per second), the smallest value within 10% of the best (8 at 2.62 s). The cap for this converter is 8 (docker/converter-limits.json: a cap I set, not a vendor licence), and the table stops there. Wall time still halves with every doubling, so on this host **the cap is what bounds throughput**, not the host: I did not measure above it, so I do not know where it flattens. The scheduler refuses a request above the cap and limits its pool to it; a vendor converter with an unknown limit runs at 1.
+**Chosen: parallelism 8** (2.62 s for the corpus, 11.4 fixtures per second), the smallest value within 10% of the best (8 at 2.62 s). The cap for this converter is 8 (docker/converter-limits.json: a cap I set), and the table stops there. Wall time still halves with every doubling, so on this host **the cap is what bounds throughput**, not the host: I did not measure above it, so I do not know where it flattens. The scheduler refuses a request above the cap and limits its pool to it; a converter with no listed limit runs at 1.
 
 ## Per-container limits
 

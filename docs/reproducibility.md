@@ -86,8 +86,8 @@ the STEP bytes are identical, and `python3 -m runner.verify_signatures signature
 The manifest's STEP hash is the SHA-256 of the STEP text with the time stamp replaced by `<TIMESTAMP>`, and the
 shipped `step/*.step` carry that literal. The signature hashes are the same as in `signatures/manifest.json`.
 
-## What a licensee adds
+## The second converter
 
-The same procedure with the licensed pair is in [vendor-deferred.md](vendor-deferred.md). The vendor images are
-built from the licensee's artifacts on the native x86_64 host, and their licences come from the documented secret
-paths ([converters/licensing-and-setup.md](converters/licensing-and-setup.md)).
+The same procedure with the LibreDWG converter added as the secondary is tracked in
+[open-route-status.md](open-route-status.md). Its image is consumed by digest
+([converters/images-and-setup.md](converters/images-and-setup.md)).

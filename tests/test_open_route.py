@@ -162,11 +162,11 @@ class FrozenDocs(unittest.TestCase):
             self.assertIn("GREEN " + name, t)
         self.assertIn("phase 1 exit gate: GREEN", t)
 
-    def test_vendor_deferred_names_issues_2_and_6(self):
-        t = self.read("docs/vendor-deferred.md")
-        self.assertRegex(t, r"(?m)^## .*issues 2 and 6")
-        for word in ("CAD Exchanger", "ODA", "second oracle", "discrimination"):
-            self.assertIn(word, t)
+    def test_the_open_route_status_names_the_second_oracle_and_the_discrimination_run(self):
+        t = self.read("docs/open-route-status.md")
+        self.assertRegex(t, r"(?m)^## .*second oracle")
+        for word in ("libredwg", "discrimination", "#65", "#67"):
+            self.assertIn(word, t.lower() if word.islower() else t)
 
 
 if __name__ == "__main__":
