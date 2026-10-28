@@ -1,0 +1,32 @@
+# Patterns tools/vendor_guard.sh refuses. One per line: <kind> <pattern>
+#   path-prefix   a repository path that starts with this
+#   path-glob     a shell glob matched against the file name only
+#   content-regex an extended regex (grep -E, case-insensitive) matched against text files
+# docs/converters/archive.md must list every pattern here verbatim; tests/test_vendor_guard.py checks it.
+path-prefix vendor/
+path-glob *.so
+path-glob *.so.*
+path-glob *.dll
+path-glob *.dylib
+path-glob *.exe
+path-glob *.msi
+path-glob *.deb
+path-glob *.rpm
+path-glob *.run
+path-glob ODA*.zip
+path-glob ODA*.tar*
+path-glob Teigha*
+path-glob CadExchanger*
+path-glob cadexchanger*
+path-glob *.lic
+path-glob *.licence
+path-glob *.license
+path-glob *activation*
+path-glob *.pem
+path-glob *.key
+path-glob *.p12
+path-glob *.pfx
+content-regex -----BEGIN [A-Z ]*PRIVATE KEY-----
+content-regex (licen[cs]e|activation|serial|secret|api|access|auth)[_ -]?(key|code|token)[[:space:]]*[:=][[:space:]]*["']?[A-Za-z0-9+/_.-]{16,}
+content-regex gh[pousr]_[A-Za-z0-9]{36,}
+content-regex AKIA[0-9A-Z]{16}

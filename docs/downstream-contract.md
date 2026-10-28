@@ -54,3 +54,23 @@ the bytes. It needs `step_eval`, so it runs in the step-validator image, on nati
 the job and names the fields that differ; a byte difference with no differing field fails as such. It was
 exercised once with a mutated signature (one `f64_hex` changed with the manifest rewritten to match), and it
 named the field. See `docs/benchmarks/validation.md`.
+
+## Release pinning
+
+A frozen release is `corpus/release/<version>/` (today `r0-open-1`, a candidate that is not tagged). Pin the
+version and the SHA-256 of its `manifest.json`, and verify before use:
+
+```
+cd corpus/release/<version> && sha256sum -c SHA256SUMS
+```
+
+That needs `sha256sum` and nothing else (`python3 -m runner.reproduce verify <dir>` does the same with python
+only). The manifest pins eight things: corpus revision, source hashes, signature hashes, STEP hashes, image
+references, converter versions, evaluator version and numeric policy version. Its signature hashes are the
+`signatures/manifest.json` ones; its STEP hashes are of the text with the `FILE_NAME` time stamp replaced by
+`<TIMESTAMP>`, which is how `step/*.step` is shipped.
+
+No proprietary converter, evaluator, docker or vendor network access is needed to read a release. The evidence is
+`KNOWN_TRUTH_EXACT` for reader mapping only with `oracle_scope: NONE` on the corpus, and one open converter behind
+the STEP files ([evidence-classes.md](evidence-classes.md)); converter agreement is never source truth. Whether PVec
+becomes the default blueprint path is `P8.7` and `N8.7`'s decision, not an assumption here.

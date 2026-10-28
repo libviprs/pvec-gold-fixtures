@@ -10,6 +10,11 @@ Per fixture (FIXTURES/<id>/source.dwg), results land in FIXTURES/<id>/generated/
     STEP files; normalise both records to signatures; compare; classify the evidence (ADR 0001, 0006);
     accept or quarantine; write verdict.json, manifest.json and checksums.sha256.
 
+The defaults are the open route: acadsharp-converter and libredwg-converter, oracle scope OPEN_CONVERTERS. The
+licensed pair is passed explicitly: --primary cadex-converter --secondary oda-converter --oracle-scope
+VENDOR_CONVERTERS. The libredwg-converter service is not in docker-compose.yml yet (its image is built in
+libviprs/pvec-oracle-libredwg), so a run with the defaults refuses until it is.
+
 The services are the docker-compose.yml ones, driven with `docker compose run --rm`, so the bind mounts
 and the no-network, read-only settings are the compose file's. Nothing here knows a vendor command line,
 a licence or a key. Any way out of the run ends in `docker compose down --volumes --remove-orphans`:
@@ -239,10 +244,10 @@ def main(argv):
     ap.add_argument("--fixtures", default=os.environ.get("FIXTURE_DIR", str(ROOT / "fixtures")))
     ap.add_argument("--truth", default=str(ROOT / "fixtures" / "known-truth"))
     ap.add_argument("--compose-file", default=str(ROOT / "docker-compose.yml"))
-    ap.add_argument("--primary", default="cadex-converter")
-    ap.add_argument("--secondary", default="oda-converter")
+    ap.add_argument("--primary", default="acadsharp-converter")
+    ap.add_argument("--secondary", default="libredwg-converter")
     ap.add_argument("--validator", default="step-validator")
-    ap.add_argument("--oracle-scope", default="VENDOR_CONVERTERS", choices=[s for s in ORACLE_SCOPES if s != "NONE"])
+    ap.add_argument("--oracle-scope", default="OPEN_CONVERTERS", choices=[s for s in ORACLE_SCOPES if s != "NONE"])
     ap.add_argument("--lineage", action="append", default=[], metavar="SERVICE=NAME")
     ap.add_argument("--policy-dir")
     ap.add_argument("--check-leaks", action="store_true")
