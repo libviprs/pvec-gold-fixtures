@@ -30,3 +30,29 @@ What waits on a licence or on another repository:
   signatures, verdict, manifest, plus `checksums.sha256` over them. Reconcile with the tracker list if it differs.
 - `Container::start` in `crates/pvec-hermetic`, the digest pin in the pvec repository and making `precision`
   required for the vendor revision are pvec changes and are not made here.
+
+## Clean-host run, audit, freeze, archive and the documentation set (issues 24 and 27)
+
+What runs for real, on the open route (`oracle_scope: OPEN_CONVERTERS`, one open converter so far): a clean-host
+rebuild on MARS (`tools/clean_host.sh`), the corpus's DWGs rewritten from the authored parameters, converted
+twice, evaluated and normalised, and compared against a frozen manifest (`corpus/release/r0-open-1/`). The
+final audit (`reports/final-audit.md`) walks the four registers for `r0-open`. The vendor guard
+(`tools/vendor_guard.sh`), the archive document and the documentation set are done in full, because none of them
+needs a licence.
+
+What waits on a licence, for a licensee to run:
+
+- A clean-host run of the `VENDOR_CONVERTERS` path: rebuild `cadex-converter` and `oda-converter` from the
+  licensee's artifacts on the native x86_64 host (the build commands are in `docs/converters/archive.md`), with
+  the licence paths from `docs/converters/licensing-and-setup.md`, then run `docker compose run --rm
+  fixture-runner generate` and compare against a manifest whose `converters` pin names the vendor builds.
+  `tools/clean_host.sh` is the model; its driver would call `generate` where it now calls `runner.reproduce`.
+- The end-to-end rebuild of both licensed images from the repository plus an entitlement (issue 27's third
+  criterion). The Dockerfiles' failure paths are exercised (`tools/check_converter_images.sh`), the success path
+  is not, because `install.sh` in both is a placeholder until an artifact exists. No native x64 result for it
+  is recorded because there is none.
+- Exact vendor versions and SHA-256 pins for the archive document. The licensee fills them in at first build.
+- A `DUAL_ORACLE_EQUIVALENT` certification row and any `VENDOR_CONVERTERS` fixture in the audit's
+  capability table. The table says which capabilities rest on what today, and the vendor rows stay empty.
+- The vendor-written release (`corpus/release/<version>/` with vendor converter pins), a different manifest from
+  the open one, signed off after the vendor audit.
