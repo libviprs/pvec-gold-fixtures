@@ -1,0 +1,19 @@
+{
+  "converter": "libredwg-dwg2step",
+  "image": "pvec-oracle-libredwg (wp3-converter-image, 88d3975), built locally, not pushed",
+  "image_id": "sha256:78296435f60a50dccedce277123ce1b3fc4aa1dc1e467d69440401ef0c025221",
+  "platform": "linux/amd64",
+  "command": "dwg2step --in source.dwg --out <probe>.step --status <probe>.status.json",
+  "source": "corpus/r0-open/fixtures/<probe>/source.dwg",
+  "files": {
+    "bezier-d3-001.step": "853ed0190f6d5c2de407c1dd939e8a5cc49dcce78ce7cd48038eb66473028b96",
+    "bspline-d3-001.step": "1ac968fe3e68e96cb63d78552309b54d548b5406e0f1dca20911ee022fd7ed10",
+    "bspline-d5-001.step": "1fdedffd53e02995dff771246e98a151caa59d07945971d446daac90422194d0",
+    "closed-by-endpoint-001.step": "28a9de7af0f17773941f0dfebd2d8eb33b401de9b9e6f84404c635b7077a8b21",
+    "closed-periodic-001.step": "d4ef2b23a4353e4de7ec67d5e539d7f8165deed756e736478bf0790f1c71649f",
+    "nonunit-weight-001.step": "ae7ef26d5eb50a787205634a53f3b5d854ca6c6aabdbdf842a783d25455746b2",
+    "nurbs-d2-offconic-001.step": "086fbf696368490ccdae07d70c3d9fe1db14742b074f337dce9e3a498840cb0b",
+    "nurbs-d3-001.step": "f091fe93ee8b3150503b739722e904e5ccffe4977ded3da144916189da3fb4e6",
+    "repeated-knot-c0-001.step": "3856b3f76aebc99040ab377ec336474f516f9a861f1ef92c82742c43d4e9ad87"
+  }
+}
