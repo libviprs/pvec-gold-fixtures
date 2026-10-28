@@ -1,0 +1,138 @@
+{
+  "blocks": [
+    {
+      "entities": [
+        {
+          "block": "PROBE_GENERAL_AFFINE_CHAIN_001_L1",
+          "insert_point": [
+            "0x3ff0000000000000",
+            "0x4000000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "rotation": "0x0000000000000000",
+          "scale": [
+            "0x3ff0000000000000",
+            "0x3ff0000000000000",
+            "0x3ff0000000000000"
+          ],
+          "type": "INSERT"
+        }
+      ],
+      "name": "*Model_Space"
+    },
+    {
+      "entities": [
+        {
+          "block": "PROBE_GENERAL_AFFINE_CHAIN_001_L2",
+          "insert_point": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "rotation": "0xc007889b1cea2109",
+          "scale": [
+            "0x3ff0000000000000",
+            "0x3ff0000000000000",
+            "0x3ff0000000000000"
+          ],
+          "type": "INSERT"
+        }
+      ],
+      "name": "PROBE_GENERAL_AFFINE_CHAIN_001_L1"
+    },
+    {
+      "entities": [
+        {
+          "block": "PROBE_GENERAL_AFFINE_CHAIN_001_L3",
+          "insert_point": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "rotation": "0x0000000000000000",
+          "scale": [
+            "0x3ff3fc8a74ea0575",
+            "0x3fec6f6a01ad1a22",
+            "0x3ff0000000000000"
+          ],
+          "type": "INSERT"
+        }
+      ],
+      "name": "PROBE_GENERAL_AFFINE_CHAIN_001_L2"
+    },
+    {
+      "entities": [
+        {
+          "block": "PROBE_GENERAL_AFFINE_CHAIN_001_L4",
+          "insert_point": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "rotation": "0x40060720d61ca042",
+          "scale": [
+            "0x3ff0000000000000",
+            "0x3ff0000000000000",
+            "0x3ff0000000000000"
+          ],
+          "type": "INSERT"
+        }
+      ],
+      "name": "PROBE_GENERAL_AFFINE_CHAIN_001_L3"
+    },
+    {
+      "entities": [
+        {
+          "end": [
+            "0x400e000000000000",
+            "0x4004000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "start": [
+            "0x3fe0000000000000",
+            "0x3fd0000000000000",
+            "0x0000000000000000"
+          ],
+          "type": "LINE"
+        }
+      ],
+      "name": "PROBE_GENERAL_AFFINE_CHAIN_001_L4"
+    }
+  ],
+  "dwg_sha256": "f08d1c84596c9ce6765ad1a3922081c11bcec418127892ebf7b1eb31fddb1289",
+  "dwg_version": "AC1032",
+  "layers": [
+    {
+      "frozen": false,
+      "name": "0",
+      "on": true
+    }
+  ],
+  "reader": "ACadSharp@3.7.1+d7dc111",
+  "schema": "pvec-gold/r0-open-dwg-read/2"
+}
