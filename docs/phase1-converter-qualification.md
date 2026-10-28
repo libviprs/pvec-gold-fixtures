@@ -2,16 +2,16 @@
 
 Status: **run on the open route** (ADR 0009, `oracle_scope: OPEN_CONVERTERS`), with one oracle: the
 `acadsharp-dwg2step` converter (lineage ACadSharp, issue 48) on the 30 `r0-open` DWGs, evaluated by `step_eval`,
-native x86_64 (`linux/amd64`, MARS). The exit gate is green for that scope. Nothing here says CAD Exchanger or ODA
-agree with anything: the licensed converters were never run, and what they still owe is in
-[vendor-deferred.md](vendor-deferred.md). There is no second open converter yet either, so no cell can be
+native x86_64 (`linux/amd64`, MARS). The exit gate is green for that scope. Nothing here says a second converter
+agrees with anything. What is still open is in
+[open-route-status.md](open-route-status.md). There is no second open converter in the report yet, so no cell can be
 `DUAL_ORACLE_EQUIVALENT`, and the report says "single oracle" on every capability.
 
 ## What the qualification does
 
 `runner/qualify_probes.py` takes, for every known-truth probe (`fixtures/known-truth/`) and each
-converter, the normalised evaluator record (`primary.verification.json` for CAD Exchanger,
-`secondary.verification.json` for ODA) and its converter status, and gives every expected entity one
+converter, the normalised evaluator record (`primary.verification.json` for the primary converter,
+`secondary.verification.json` for the secondary) and its converter status, and gives every expected entity one
 class. It reads the evaluator records, never STEP text, evaluates curves with its own pure-Python
 evaluator (`runner/curves.py`, nothing shared with the OCCT-based `step_eval`), and takes every threshold
 from the adopted policy (PVec numeric policy v1, NP-04 and NP-05), whose version id is in the report.
@@ -75,8 +75,8 @@ about what either converter actually does.
 
 Open route, one oracle (what produced the numbers below): `tools/qualify/open_route.sh mars`, which runs
 `python3 -m runner.qualify_probes --primary acadsharp-dwg2step DIR --lineage acadsharp-dwg2step=ACadSharp --excluded corpus/r0-open/quarantine.json`
-in a throw-away container. With a second converter, add `--secondary ID DIR` and its lineage. The licensed pair is
-`--primary cadex DIR --secondary oda DIR --lineage cadex=NAME --lineage oda=NAME --oracle-scope VENDOR_CONVERTERS`.
+in a throw-away container. With the second open converter, add `--secondary ID DIR` and its lineage:
+`--primary acadsharp-dwg2step DIR --secondary libredwg-dwg2step DIR --lineage acadsharp-dwg2step=ACadSharp --lineage libredwg-dwg2step=LibreDWG`.
 
 ## Probe-by-converter matrix
 
@@ -161,12 +161,12 @@ certified for this oracle only.
 The comparison input is mutated in `tests/test_probes.py`: renormalising weights to 1, collapsing a knot and reparameterising
 each change the structural class of at least three named probes, reversing a curve turns the reflection comparison red, and
 `tests/test_qualify.py` shows a weight renormalisation and a 32-gon for a circle land in `BOUNDED_APPROXIMATION` with their bound. Those mutate
-records, not STEP output from a vendor converter; the vendor version of the criterion is in [vendor-deferred.md](vendor-deferred.md).
+records, not STEP output from a converter; the run on real converter output is in [open-route-status.md](open-route-status.md).
 
 ## Exit statement
 
 No mass generation until the converters, the evaluator and the known-truth method pass the pathological probe suite. On the open
 route they do, for one oracle: `acadsharp-dwg2step` reproduces 28 of the 32 probes exactly, refuses the near-singular one as authored, and the other three were never run,
 the evaluator self-test and the `expected.math.json` round trip are green, and the gate is green. That releases open-route
-generation (`OPEN_CONVERTERS`) with the `affine_transform` caveat above. It does not release a `VENDOR_CONVERTERS` claim, and it does not make
+generation (`OPEN_CONVERTERS`) with the `affine_transform` caveat above. It does not make
 anything `DUAL_ORACLE_EQUIVALENT`.

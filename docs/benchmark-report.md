@@ -2,8 +2,8 @@
 
 The measurements are in `docs/benchmarks/`, written with the benchmark work (issue 20). This page collects the
 headline numbers and adds the clean-host timings. Every number says whether it is native x64 or arm64, and none came
-from Rosetta or any emulation. The converter measured is the open one, `dwg2step-acadsharp`; the licensed converters
-were not measured because they are not available here ([vendor-deferred.md](vendor-deferred.md)).
+from Rosetta or any emulation. The converter measured is the open one, `dwg2step-acadsharp`; the LibreDWG converter
+is not measured yet ([open-route-status.md](open-route-status.md)).
 
 | measurement | native x64 (mars) | native arm64 (mercury) | detail |
 |---|---|---|---|
@@ -17,4 +17,4 @@ were not measured because they are not available here ([vendor-deferred.md](vend
 | clean host, 29 fixtures converted twice, evaluated, normalised | 62 s | 37 s | the same page |
 
 Not measured, and said so in the benchmark pages: the adaptive geometric comparison (the stage does not exist yet),
-and anything for CAD Exchanger or ODA.
+and anything for the LibreDWG converter.

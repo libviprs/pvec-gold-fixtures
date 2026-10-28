@@ -18,7 +18,7 @@
     "statement": {"type": "string", "minLength": 1},
     "evidence": {"oneOf": [{"type": "null"}, {"type": "object", "required": ["class", "is_source_truth", "evidence_scope", "oracle_scope"], "additionalProperties": false,
               "properties": {"class": {"const": "DUAL_ORACLE_EQUIVALENT"}, "is_source_truth": {"const": false},
-                             "evidence_scope": {"const": "STEP_ORACLE"}, "oracle_scope": {"enum": ["OPEN_CONVERTERS", "VENDOR_CONVERTERS"]}}}]},
+                             "evidence_scope": {"const": "STEP_ORACLE"}, "oracle_scope": {"enum": ["OPEN_CONVERTERS"]}}}]},
     "quarantine": {"oneOf": [{"type": "null"}, {"type": "object", "required": ["state", "reason", "detail"], "additionalProperties": false,
               "properties": {"state": {"const": "QUARANTINED"},
                              "reason": {"enum": ["UNRESOLVED_DISAGREEMENT", "UNSUPPORTED_ENTITY", "APPROXIMATION"]},

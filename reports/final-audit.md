@@ -1,8 +1,8 @@
 # Final corpus audit: r0-open
 
 I walked the four registers once by hand before the freeze. The scope is the open route (`oracle_scope: NONE` on the
-corpus, one open converter behind the STEP files), because nothing else exists here; what needs a licence is in
-[docs/vendor-deferred.md](../docs/vendor-deferred.md).
+corpus, one open converter behind the STEP files), because nothing else exists here; what is still open is in
+[docs/open-route-status.md](../docs/open-route-status.md).
 
 **Audited:** corpus revision `r0-open` in full, with its STEP artifacts, and the registers of `r1-open` (which includes
 `r0-open` by hash and adds edge, mixed, degenerate, negative and real-world groups) from its manifest, quarantine list
@@ -43,7 +43,7 @@ derived fields (an arc's end angle, an ellipse's major axis, an INSERT's rotatio
 pass or fail, not the measured deviation, so there is no per-field bound to quote. On the STEP side no geometric
 comparison against a second converter exists (O2.5 and O2.6 are not built), so no `BOUNDED_APPROXIMATION` was
 measured, and I am not claiming there is none: **the STEP-side bound is unmeasured**. No approximation is in the release,
-so none blocks the freeze, and the measurement is a gap for the vendor or second-open-converter route.
+so none blocks the freeze, and the measurement is a gap for the second-open-converter route.
 
 ## 3. Negative-suite and unsupported-type register
 
@@ -62,7 +62,7 @@ ones, public ACadSharp samples under MIT (`arch-aecobjects-001`, `blocks-dynamic
 `general-sample-ac1032-001`), each with a licence identifier and a `PUBLIC_REDISTRIBUTABLE` verdict, re-confirmed against
 `corpus/provenance.json`. None was removed for a missing licence, and there is no private pack. The provenance file
 states the drawing classes it does not cover (structural, mechanical, electrical, civil, industrial, spline-heavy, large
-coordinates), and I carry that gap forward unchanged. `tools/vendor_guard.sh --tree` is clean: no vendor bytes, licence file
+coordinates), and I carry that gap forward unchanged. `tools/vendor_guard.sh --tree` is clean: no third-party binaries, licence file
 or key-shaped string.
 
 ## Converter discrepancies
@@ -93,7 +93,7 @@ the STEP route.
 | affine_transform | 8 | `KNOWN_TRUTH_EXACT`, reader mapping only | the same |
 
 The STEP files and signatures are regression artifacts of one open converter. They say what `dwg2step-acadsharp`
-wrote, not that a STEP route is exact, and nothing here says CAD Exchanger or ODA agree.
+wrote, not that a STEP route is exact, and nothing here says any other converter agrees.
 
 ## Per fixture
 
@@ -134,5 +134,5 @@ wrote, not that a STEP route is exact, and nothing here says CAD Exchanger or OD
 
 The audit admits a freeze of `r0-open-1` as an open-scope candidate: no unknown quarantine reason, no unbounded
 approximation claim, a verdict on every fixture, and a clean second clean-host run. It does not admit any claim beyond
-reader mapping, and the three gaps (STEP-side bounds, the O2.8 suite, vendor rows) are carried to
-`docs/vendor-deferred.md`.
+reader mapping, and the gaps (STEP-side bounds, the O2.8 suite) are carried to
+`docs/open-route-status.md`. ADR 0010 retired the vendor rows of the capability table, so there are none to fill.

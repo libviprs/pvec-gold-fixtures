@@ -7,6 +7,7 @@ from runner import expected_math as em, numeric, phase1_gate as g, qualify_probe
 
 ROOT = Path(__file__).resolve().parent.parent
 POL = numeric.load_policy()
+A, B = "acadsharp-dwg2step", "libredwg-dwg2step"
 
 
 def full_report(mutate=None):
@@ -21,6 +22,9 @@ def full_report(mutate=None):
 
 
 class Gate(unittest.TestCase):
+    def test_the_default_converter_pair_is_the_two_open_ones(self):
+        self.assertEqual(q.CONVERTERS, {A: "primary", B: "secondary"})
+
     def check(self, rep):
         with tempfile.TemporaryDirectory() as t:
             p = Path(t) / "r.json"
@@ -35,11 +39,11 @@ class Gate(unittest.TestCase):
 
     def test_blank_or_unknown_cell_is_red(self):
         def blank(r):
-            r["probes"]["line-001"]["cadex"][0]["evidence"] = {}
+            r["probes"]["line-001"][A][0]["evidence"] = {}
         self.assertTrue(any("no class or no evidence" in e for e in self.check(full_report(blank))))
 
         def unknown(r):
-            r["probes"]["line-001"]["oda"][0]["class"] = "UNKNOWN"
+            r["probes"]["line-001"][B][0]["class"] = "UNKNOWN"
         self.assertTrue(self.check(full_report(unknown)))
 
     def test_missing_probe_or_converter_is_red(self):
@@ -48,12 +52,12 @@ class Gate(unittest.TestCase):
         self.assertTrue(any("circle-001" in e for e in self.check(full_report(drop))))
 
         def drop2(r):
-            r["probes"]["line-001"]["oda"] = []
+            r["probes"]["line-001"][B] = []
         self.assertTrue(any("no cell" in e for e in self.check(full_report(drop2))))
 
     def test_bounded_cell_needs_its_bound_and_parameter(self):
         def b(r):
-            r["probes"]["line-001"]["cadex"][0] = {"entity": "line-001", "class": q.BOUNDED, "evidence": {"bound": 0.1}}
+            r["probes"]["line-001"][A][0] = {"entity": "line-001", "class": q.BOUNDED, "evidence": {"bound": 0.1}}
         self.assertTrue(any("bounded approximation" in e for e in self.check(full_report(b))))
 
     def test_wrong_policy_version_is_red(self):

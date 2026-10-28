@@ -282,13 +282,24 @@ def provenance(root):
     return load(p)["fixtures"] if p.is_file() else {}
 
 
+def private_records(root):
+    p = Path(root) / "corpus" / "provenance.json"
+    return load(p).get("private", {}) if p.is_file() else {}
+
+
 def private_path_problems(root):
+    """PRIVATE sources are id and hash only: no DWG under the fixture id, and no DWG anywhere whose hash is a private one."""
     root = Path(root)
     out = []
     for fid, rec in provenance(root).items():
         if rec.get("redistribution_verdict") == "PRIVATE":
             out += ["%s is PRIVATE and its DWG bytes are in the repository: %s" % (fid, p.relative_to(root))
                     for base in (root / "fixtures").rglob(fid) if base.is_dir() for p in base.rglob("*.dwg")]
+    for pid, rec in private_records(root).items():
+        hashes = set(rec.get("files", {}).values())
+        for p in (root / "fixtures").rglob("*.dwg"):
+            if pid in p.parts or r0.sha256(p) in hashes:
+                out.append("%s is PRIVATE and its DWG bytes are in the repository: %s" % (pid, p.relative_to(root)))
     return out
 
 

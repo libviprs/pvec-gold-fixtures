@@ -18,14 +18,14 @@ them. It says how to read them, and what two extra fields (ADR 0008 and ADR 0009
 - `evidence_scope`: `READER_MAPPING_ONLY` means the DWG bytes carry the authored numbers when decoded by open
   readers, and no STEP file was involved. `STEP_ORACLE` means a converter's STEP output, read by the
   evaluator, was part of the evidence.
-- `oracle_scope`: `NONE`, `OPEN_CONVERTERS` or `VENDOR_CONVERTERS`, so a consumer who needs vendor agreement
-  filters on it instead of reading a class as more than it says.
+- `oracle_scope`: `NONE` or `OPEN_CONVERTERS` (ADR 0010), so a consumer filters on it instead of reading a
+  class as more than it says.
 
 The revision in the repository today is `r0-open`: every fixture is `KNOWN_TRUTH_EXACT`, with
 `evidence_scope: READER_MAPPING_ONLY` and `oracle_scope: NONE`. The STEP outputs of the open converter in the
 release candidate are regression artifacts of one converter. No fixture is `DUAL_ORACLE_EQUIVALENT`, because a
 second independent converter has not run on them (the LibreDWG route lives in `libviprs/pvec-oracle-libredwg`),
-and none is `VENDOR_CONVERTERS`.
+and none has an oracle scope other than `NONE`.
 
 ## What the classes do not say
 

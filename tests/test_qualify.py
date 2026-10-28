@@ -169,11 +169,11 @@ F = float
 
 
 class Capabilities(unittest.TestCase):
-    def results(self, cad, oda, probes):
-        return {p: {"cadex": [{"entity": "x", "class": cad, "evidence": {}}], "oda": [{"entity": "x", "class": oda, "evidence": {}}]} for p in probes}
+    def results(self, first, second, probes):
+        return {p: {OPEN_IDS[0]: [{"entity": "x", "class": first, "evidence": {}}], OPEN_IDS[1]: [{"entity": "x", "class": second, "evidence": {}}]} for p in probes}
 
-    def row(self, cad, oda, resolved=()):
-        res = self.results(cad, oda, q.CAPABILITIES["line"])
+    def row(self, first, second, resolved=()):
+        res = self.results(first, second, q.CAPABILITIES["line"])
         return q.capability_verdicts(POL, res, resolved)[0]
 
     def test_both_bounded_is_not_certified_even_though_they_agree(self):
@@ -215,7 +215,7 @@ class EndToEnd(unittest.TestCase):
                     continue
                 docs.append(curve_of(e) if "world" not in e else e["world"])
             v = ver(*docs)
-            return {"cadex": (v, None), "oda": (v, None)}
+            return {OPEN_IDS[0]: (v, None), OPEN_IDS[1]: (v, None)}
         rep = q.build_report(POL, probes, outputs)
         self.assertEqual(rep["numeric_policy_version"], POL.version)
         for pid, per in rep["probes"].items():
@@ -243,7 +243,7 @@ def status_record(converter):
 
 
 class NamedConverters(unittest.TestCase):
-    """The qualification no longer assumes the two vendors: the converters are whichever ids the run names."""
+    """The converters are whichever ids the run names, and the default pair is the two open ones."""
 
     def outputs(self, ids):
         probes = {"line-001": probe("line-001")}
@@ -274,8 +274,15 @@ class NamedConverters(unittest.TestCase):
                 with self.assertRaises(SystemExit):
                     q.main(base + bad)
 
+    def test_the_default_pair_is_the_two_open_converters_and_there_is_one_oracle_scope(self):
+        self.assertEqual(q.CONVERTERS, {OPEN_IDS[0]: "primary", OPEN_IDS[1]: "secondary"})
+        with tempfile.TemporaryDirectory() as t:
+            with self.assertRaises(SystemExit):
+                q.main(["--probes", str(KT), "--out", str(Path(t) / "r.json"), "--primary", OPEN_IDS[0], t,
+                        "--lineage", OPEN_IDS[0] + "=ACadSharp", "--oracle-scope", "OPEN_CONVERTERS"])
+
     def test_the_verdict_rules_do_not_depend_on_the_ids(self):
-        for ids in (OPEN_IDS, ("cadex", "oda")):
+        for ids in (OPEN_IDS, ("alpha", "beta")):
             res = {p: {ids[0]: [{"entity": "x", "class": q.BOUNDED, "evidence": {}}],
                        ids[1]: [{"entity": "x", "class": q.BOUNDED, "evidence": {}}]} for p in q.CAPABILITIES["line"]}
             r = q.capability_verdicts(POL, res)[0]
@@ -324,9 +331,7 @@ class NamedConverters(unittest.TestCase):
 
     def test_the_qualification_doc_names_the_new_flags(self):
         t = (ROOT / "docs" / "phase1-converter-qualification.md").read_text()
-        self.assertNotIn("--cadex", t)
-        self.assertNotIn("--oda", t)
-        self.assertIn("--primary cadex DIR --secondary oda DIR", t)
+        self.assertIn("--primary acadsharp-dwg2step DIR --secondary libredwg-dwg2step DIR", t)
 
 
 class StatusRecord(unittest.TestCase):
@@ -336,7 +341,7 @@ class StatusRecord(unittest.TestCase):
         return list(jsonschema.Draft202012Validator(self.schema).iter_errors(rec))
 
     def test_status_record_converter_is_a_named_id(self):
-        for ok in ("acadsharp-dwg2step", "libredwg-dwg2step", "cadex", "oda"):
+        for ok in ("acadsharp-dwg2step", "libredwg-dwg2step"):
             self.assertEqual(self.errors(status_record(ok)), [], ok)
         for bad in ("", "CAD Exchanger", "Has_Upper", "-lead", "a" * 65, 7, None):
             self.assertTrue(self.errors(status_record(bad)), repr(bad))

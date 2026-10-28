@@ -68,10 +68,8 @@ class Limit(unittest.TestCase):
         self.e.run(["f%02d" % i for i in range(12)], job, parallel=3, limit=3)
         self.assertEqual(peak[0], 3)
 
-    def test_the_limit_for_a_converter_comes_from_the_limits_file_and_an_unknown_vendor_is_one(self):
+    def test_the_limit_for_a_converter_comes_from_the_limits_file_and_an_unlisted_converter_is_one(self):
         self.assertGreaterEqual(scheduler.limit_for("acadsharp-dwg2step"), 1)
-        self.assertEqual(scheduler.limit_for("cadex"), 1)
-        self.assertEqual(scheduler.limit_for("oda"), 1)
         self.assertEqual(scheduler.limit_for("a-converter-nobody-listed"), 1)
 
 
