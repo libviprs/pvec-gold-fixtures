@@ -251,7 +251,7 @@
       "additionalProperties": false,
       "properties": {
         "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
-        "kind": { "enum": ["STRUCTURAL", "GEOMETRIC"] },
+        "kind": { "enum": ["STRUCTURAL", "GEOMETRIC", "SOURCE_MAPPING"] },
         "entity": { "type": "string" },
         "claim": {
           "enum": ["CLASS_PRESERVED", "DEGREE_PRESERVED", "CONTROL_POINTS_PRESERVED", "KNOTS_PRESERVED", "WEIGHTS_PRESERVED", "PARAMETERIZATION_PRESERVED", "VERTEX_ORDER_PRESERVED", "CLOSURE_KIND_PRESERVED", "TRANSFORM_PRESERVED", "ORIENTATION_PRESERVED", "WORLD_SPACE_RESULT", "REJECTED", "LAYER_STATE_PRESERVED"]
