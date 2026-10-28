@@ -6,7 +6,7 @@
 What this proves, and only this: a DWG that one open family wrote carries, when decoded by that
 family's reader and by the other family's reader, the numbers that were authored before any DWG
 existed (expected.math.json and the parameter files it names). It is a statement about the DWG
-reader mapping. No STEP file, no CAD Exchanger and no ODA component is involved, and no oracle
+reader mapping. No STEP file and no converter is involved, and no oracle
 other than the authored mathematics is used (docs/adr/0008-open-writer-known-truth-corpus.md).
 
 Two comparison modes, recorded per field so nobody has to guess:
@@ -46,11 +46,10 @@ TYPE_OF = {"line": "LINE", "circle": "CIRCLE", "circular_arc": "ARC", "ellipse":
            "nurbs": "SPLINE"}
 
 
-# ADR 0009: how far a fixture's oracles reach. r0-open is NONE (no STEP oracle ran). A revision that
-# uses open converters says OPEN_CONVERTERS; one that uses the licensed SDKs says VENDOR_CONVERTERS.
-ORACLE_SCOPES = ("NONE", "OPEN_CONVERTERS", "VENDOR_CONVERTERS")
+# ADR 0009 and 0010: how far a fixture's oracles reach. r0-open is NONE (no STEP oracle ran). A revision
+# that uses open converters says OPEN_CONVERTERS.
+ORACLE_SCOPES = ("NONE", "OPEN_CONVERTERS")
 EVIDENCE_SCOPES = ("READER_MAPPING_ONLY", "STEP_ORACLE")
-VENDOR_NAME = re.compile(r"cad\s*-?exchanger|cadex|(?<![a-z])oda|open\s*design", re.I)
 CONVERTER_FIELDS = ("id", "version", "source_commit", "lineage", "image_digest")
 
 
@@ -85,7 +84,7 @@ def scope_problems(m):
     if top_ev not in EVIDENCE_SCOPES:
         out.append("evidence_scope %r is not one of %s" % (top_ev, ", ".join(EVIDENCE_SCOPES)))
     conv = m.get("converters")
-    if top_ev == "STEP_ORACLE" or top_scope in ("OPEN_CONVERTERS", "VENDOR_CONVERTERS"):
+    if top_ev == "STEP_ORACLE" or top_scope == "OPEN_CONVERTERS":
         if top_scope == "NONE":
             out.append("evidence_scope STEP_ORACLE needs an oracle_scope other than NONE")
         named = [c for c in conv if isinstance(c, dict)] if isinstance(conv, list) else []
@@ -101,16 +100,6 @@ def scope_problems(m):
                 out.append("converter %r: an open converter must state links_occt false (it would share OCCT with the evaluator, ADR 0004)" % c.get("id"))
         if len(named) >= 2:
             out += lineage_problems(named)
-        if top_scope == "VENDOR_CONVERTERS":
-            for c in named:
-                if not any(VENDOR_NAME.search(str(c.get(k, ""))) for k in ("id", "lineage")):
-                    out.append("VENDOR_CONVERTERS needs vendor converters, but %r names no vendor" % c.get("id"))
-            if m.get("oracles") != "vendor" or m.get("step_oracle") != "vendor":
-                out.append("VENDOR_CONVERTERS needs oracles and step_oracle to say vendor")
-        if top_scope == "OPEN_CONVERTERS":
-            names = [m.get("oracles"), m.get("step_oracle")] + [str(c.get(k, "")) for c in named for k in ("id", "version", "lineage", "source_commit")]
-            if any(n and VENDOR_NAME.search(str(n)) for n in names) or m.get("oracles") == "vendor" or m.get("step_oracle") == "vendor":
-                out.append("OPEN_CONVERTERS never names a vendor: a vendor appears in oracles, step_oracle or a converter field")
     rank = {s: i for i, s in enumerate(ORACLE_SCOPES)}
     for f in m.get("fixtures", []):
         fs, fe = oracle_scope_of(f), f.get("evidence_scope")
@@ -749,15 +738,12 @@ def write_pin(corpus):
 # ---- honesty scan --------------------------------------------------------------------------
 
 STEP_EXTENSIONS = {".step", ".stp", ".stpz", ".stepz", ".p21", ".p21z", ".stpx", ".stpnc", ".ap242", ".ap203", ".ap214"}
-VENDOR = __import__("re").compile(r"cad\s*exchanger|cadex|\boda\b|open\s+design", __import__("re").I)
-NEGATION = __import__("re").compile(r"\b(no|not|nothing|never|none|neither|nor|without|absent|missing)\b|n't", __import__("re").I)
 BINARY_SUFFIXES = {".dwg"}
 
 
 def honesty_problems(corpus):
     """The ADR's rules as a scan over every file in the corpus directory and its changelog: no STEP file by
-    any case or extension, no STEP content under another name, and no vendor named except in a sentence that
-    says it is absent."""
+    any case or extension, and no STEP content under another name."""
     import re
     corpus = Path(corpus)
     problems = []
@@ -776,11 +762,6 @@ def honesty_problems(corpus):
             continue
         if p.suffix.lower() in BINARY_SUFFIXES:
             continue
-        text = p.read_text(errors="replace")
-        for para in re.split(r"\n\s*\n", text):
-            for sent in re.split(r"(?<=[.!?])\s+|\n", " ".join(para.split()) if p.suffix == ".md" else para):
-                if VENDOR.search(sent) and not NEGATION.search(sent):
-                    problems.append("%s: a vendor is named without a negation (%s)" % (rel, " ".join(sent.split())[:90]))
     return problems
 
 

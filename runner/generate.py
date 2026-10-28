@@ -10,14 +10,11 @@ Per fixture (FIXTURES/<id>/source.dwg), results land in FIXTURES/<id>/generated/
     STEP files; normalise both records to signatures; compare; classify the evidence (ADR 0001, 0006);
     accept or quarantine; write verdict.json, manifest.json and checksums.sha256.
 
-The defaults are the open route: acadsharp-converter and libredwg-converter, oracle scope OPEN_CONVERTERS. The
-licensed pair is passed explicitly: --primary cadex-converter --secondary oda-converter --oracle-scope
-VENDOR_CONVERTERS. The libredwg-converter service is not in docker-compose.yml yet (its image is built in
+The converters are acadsharp-converter and libredwg-converter, oracle scope OPEN_CONVERTERS (ADR 0010). The libredwg-converter service is not in docker-compose.yml yet (its image is built in
 libviprs/pvec-oracle-libredwg), so a run with the defaults refuses until it is.
 
 The services are the docker-compose.yml ones, driven with `docker compose run --rm`, so the bind mounts
-and the no-network, read-only settings are the compose file's. Nothing here knows a vendor command line,
-a licence or a key. Any way out of the run ends in `docker compose down --volumes --remove-orphans`:
+and the no-network, read-only settings are the compose file's. Nothing here knows a licence or a key. Any way out of the run ends in `docker compose down --volumes --remove-orphans`:
 success, a converter that exits non-zero, an exception, SIGINT or SIGTERM. A converter failure quarantines
 that fixture with its reason and the run goes on; the exit status is non-zero if anything was quarantined.
 
@@ -39,12 +36,11 @@ import sys
 from pathlib import Path
 
 from . import expected_math as em, normalize, numeric, qualify_probes as qp, verification
-from .r0_open import ORACLE_SCOPES, lineage_problems
+from .r0_open import lineage_problems
 
 ROOT = Path(__file__).resolve().parent.parent
 DOCKER = os.environ.get("DOCKER", "docker")
-LINEAGE = {"cadex-converter": "cadex", "oda-converter": "oda", "acadsharp-converter": "acadsharp",
-           "libredwg-converter": "libredwg"}
+LINEAGE = {"acadsharp-converter": "acadsharp", "libredwg-converter": "libredwg"}
 EXACT = (qp.STRUCTURAL_EXACT, qp.GEOMETRIC)
 ARTIFACTS = ("primary.step", "secondary.step", "primary.status.json", "secondary.status.json",
              "primary.verification.json", "secondary.verification.json", "primary.signature.json",
@@ -192,12 +188,12 @@ def run_fixture(a, pol, lin, info, arch, fid):
         detail = "; ".join("%s: %s: %s" % p for p in problems)
     verdict = {"schema_version": "pvec-gold/fixture-verdict/1", "fixture_id": fid, "evidence_class": cls, "reason": reason,
                "detail": detail, "known_truth": truth is not None, "cells": cells, "signature_differences": differing,
-               "oracle_scope": a.oracle_scope, "evidence_scope": "STEP_ORACLE"}
+               "oracle_scope": "OPEN_CONVERTERS", "evidence_scope": "STEP_ORACLE"}
     manifest = {"schema_version": "pvec-gold/fixture-manifest/1", "fixture_id": fid, "source_sha256": src_sha,
                 "numeric_policy_version": pol.version,
                 "evaluator_version": ((ver.get("primary") or {}).get("tool") or {}).get("evaluator_version"),
                 "occt_version": ((ver.get("primary") or {}).get("tool") or {}).get("occt_version"),
-                "oracle_scope": a.oracle_scope, "evidence_scope": "STEP_ORACLE",
+                "oracle_scope": "OPEN_CONVERTERS", "evidence_scope": "STEP_ORACLE",
                 "converters": [{"role": r, "service": s, "id": (status[r] or {}).get("converter"), "version": ((status[r] or {}).get("product") or {}).get("version"),
                                 "lineage": lin[s], "image": info[s]["image"], "image_digest": info[s]["image_digest"], "platform": info[s]["platform"]}
                                for r, s in (("primary", a.primary), ("secondary", a.secondary))],
@@ -247,7 +243,6 @@ def main(argv):
     ap.add_argument("--primary", default="acadsharp-converter")
     ap.add_argument("--secondary", default="libredwg-converter")
     ap.add_argument("--validator", default="step-validator")
-    ap.add_argument("--oracle-scope", default="OPEN_CONVERTERS", choices=[s for s in ORACLE_SCOPES if s != "NONE"])
     ap.add_argument("--lineage", action="append", default=[], metavar="SERVICE=NAME")
     ap.add_argument("--policy-dir")
     ap.add_argument("--check-leaks", action="store_true")

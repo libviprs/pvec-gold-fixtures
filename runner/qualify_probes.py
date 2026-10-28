@@ -3,7 +3,7 @@
     python3 -m runner.qualify_probes --probes fixtures/known-truth --primary ID DIR --secondary ID DIR \
         --lineage ID=NAME --lineage ID=NAME --out reports/phase1/probe-qualification.json [--resolved FILE]
 
-ID is the converter's name in the report (for example acadsharp-dwg2step, libredwg-dwg2step, cadex or oda).
+ID is the converter's name in the report (for example acadsharp-dwg2step or libredwg-dwg2step).
 DIR holds <probe-id>/primary.verification.json (+ primary.status.json) for the primary converter and
 <probe-id>/secondary.verification.json (+ secondary.status.json) for the secondary one. With --lineage for
 both ids is required: two converters of one lineage, or two equal ids, are refused as a dual oracle (ADR 0009),
@@ -22,7 +22,7 @@ import sys
 from pathlib import Path
 
 from . import canon, curves, expected_math as em, numeric, structural, verification
-from .r0_open import ORACLE_SCOPES, VENDOR_NAME, lineage_problems
+from .r0_open import lineage_problems
 
 STRUCTURAL_EXACT = "STRUCTURAL_EXACT"
 GEOMETRIC = "GEOMETRIC_EXACT_REPARAMETERIZED"
@@ -48,7 +48,7 @@ CAPABILITIES = {
                          "nonuniform-scale-rotated-001", "reflection-001", "shear-001", "general-affine-001",
                          "nested-blocks-001", "near-singular-001", "singular-001"],
 }
-CONVERTERS = {"cadex": "primary", "oda": "secondary"}   # the ids of the licensed pair; the default when a report names none
+CONVERTERS = {"acadsharp-dwg2step": "primary", "libredwg-dwg2step": "secondary"}   # the default pair when a report names none
 SAMPLES = 256   # sampling resolution for nearest-point search; refinement below does the precision work
 GOLDEN = (math.sqrt(5.0) - 1.0) / 2.0
 
@@ -333,7 +333,6 @@ def main(argv):
     ap.add_argument("--probes", default="fixtures/known-truth")
     ap.add_argument("--primary", nargs=2, metavar=("ID", "DIR"), required=True)
     ap.add_argument("--secondary", nargs=2, metavar=("ID", "DIR"), help="omit for a single-oracle run (the open route today)")
-    ap.add_argument("--oracle-scope", default="OPEN_CONVERTERS", choices=[x for x in ORACLE_SCOPES if x != "NONE"])
     ap.add_argument("--excluded", metavar="QUARANTINE_JSON", help="a corpus quarantine.json: its excluded probes have no source.dwg")
     ap.add_argument("--platform", default="linux/amd64", help="platform the converters ran on, recorded in the report")
     ap.add_argument("--lineage", action="append", default=[], metavar="ID=NAME")
@@ -348,10 +347,6 @@ def main(argv):
     bad = lineage_problems([{"id": i, "lineage": lin.get(i, "")} for i in ids])
     if bad:
         raise SystemExit(bad[0])
-    if a.oracle_scope == "OPEN_CONVERTERS":
-        named = [i for i in ids + [lin[i] for i in ids] if VENDOR_NAME.search(i)]
-        if named:
-            raise SystemExit("oracle scope OPEN_CONVERTERS never names a vendor, but %r does (ADR 0009)" % named[0])
     pol = numeric.load_policy()
     probes = {}
     for f in sorted(Path(a.probes).rglob("expected.math.json")):
@@ -368,7 +363,7 @@ def main(argv):
         no_source = {e["id"]: "%s: %s" % (e["reason"], e["evidence"]) for e in json.loads(Path(a.excluded).read_text())["excluded"]}
     rep = build_report(pol, probes, outputs_for, resolved, no_source)
     rep["lineages"] = {i: lin[i] for i in ids}
-    rep["oracle_scope"] = a.oracle_scope
+    rep["oracle_scope"] = "OPEN_CONVERTERS"
     rep["platform"] = a.platform
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     Path(a.out).write_text(json.dumps(rep, indent=2) + "\n")

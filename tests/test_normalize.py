@@ -171,7 +171,7 @@ class Content(unittest.TestCase):
         rec = record("x64", "circle")
         rec["entities"][0]["id"] = "#4711"
         bad_keys = {"id", "entity_id", "step_id", "offset", "file_offset", "converter", "converters", "producer", "tool"}
-        words = re.compile(r"#\d+|cadex|cad exchanger|\boda\b|acadsharp|libredwg|acadrust|dwg2step|converter", re.I)
+        words = re.compile(r"#\d+|acadsharp|libredwg|acadrust|dwg2step|converter", re.I)
         sig = norm().normalize(rec)
 
         def walk(node, path):
