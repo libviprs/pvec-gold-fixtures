@@ -7,8 +7,8 @@ before any DWG exists).
 
 ## Context
 
-Epic O (#1) is blocked. Every task that needs a DWG waits on a vendor DWG writer (the ODA Drawings SDK)
-or a STEP converter (CAD Exchanger, ODA STEP), and none of them is qualified, so O1.5 and O1.6 have
+Epic O (#1) is blocked. Every task that needs a DWG waits on a licensed DWG writer or a licensed STEP
+converter, and none of them is qualified, so O1.5 and O1.6 have
 `expected.math.json` records and no `source.dwg` anywhere. The downstream repositories (`pvec`,
 `libviprs`, `maplibre-pvec`) need something real to read, and a corpus that can be built today by an
 open writer is better than a pipeline that waits on a licence.
@@ -75,7 +75,7 @@ nothing about what a reader reports.
 
 - The manifest says `oracles: none` and `step_oracle: none`. No STEP file exists in the revision, and
   none may be added to it.
-- Nothing is attributed to CAD Exchanger or ODA, in any file or field. Their outputs and their writer
+- Nothing is attributed to a licensed tool, in any file or field. Their outputs and their writer
   are absent from this revision, and any mention is of what is missing.
 - No fixture is `DUAL_ORACLE_EQUIVALENT` (ADR 0003). That class needs two converters, and there are none.
 - The class of an accepted fixture is `KNOWN_TRUTH_EXACT` with the scope field `evidence_scope:
@@ -110,15 +110,19 @@ manifest says so in `downstream_disposition`, and so does its README: a mapper m
 It gives the downstream repositories real DWGs, with authored truth for what a DWG reader should return,
 which is what a DWG reader mapping test needs. It does not say how any converter or STEP path treats these
 drawings, that the authored mathematics is what an AutoCAD-class application would draw from them, or
-anything about the STEP evaluator. The vendor-qualified part of O1.5 and O1.6 (the ODA writer, STEP
-verdicts, byte-identical regeneration under it, the discrimination criteria that inject into STEP
-outputs) is tracked in #42, and a later revision supersedes `r0-open`, with `corpus/CHANGELOG.md`
-explaining each fixture's class change.
+anything about the STEP evaluator. The STEP-side part of O1.5 and O1.6 (STEP verdicts, regeneration under more than one writer, the
+discrimination criteria that inject into STEP outputs) is now covered by `r2-open` under ADR 0010, which
+supersedes the earlier plan tracked in #42. A later revision supersedes `r0-open`, with
+`corpus/CHANGELOG.md` explaining each fixture's class change.
 
 ## Consequences
 
 `r0-open` can be rebuilt by anyone with Docker (`tools/r0-open/run.sh`), and read by anyone with Python
 (`runner/r0_open.py check`). The honesty rules are executable: `tests/test_r0_open.py` fails if a STEP file
-appears, a vendor is named as a producer, a fixture takes the `DUAL_ORACLE_EQUIVALENT` class, or a verdict
+appears, a licensed tool is named as a producer, a fixture takes the `DUAL_ORACLE_EQUIVALENT` class, or a verdict
 doesn't recompute. A second open writer (ACadSharp's `DwgWriter`, read by acadrust) is the natural next
 revision, and it would test the other direction of the rule.
+
+## Amendment (ADR 0010)
+
+The blockers named in the context are licensed tools, and ADR 0010 drops them from the requirements. The open writer is therefore the plan, and the open converters of ADR 0009 are the oracles.

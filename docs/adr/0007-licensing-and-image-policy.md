@@ -1,39 +1,28 @@
 # ADR 0007: licensing and image policy
 
-Status: frozen at the phase 1 exit gate (open route, 2026-10-28). The vendor image checks it asks for have not run, because there
-is no licence here; they are listed in `docs/vendor-deferred.md`. Panel finding answered: 9.
+Status: frozen at the phase 1 exit gate (open route, 2026-10-28). ADR 0010 removes the licensed images, so the open image policy below is the whole policy. Panel finding answered: 9.
 
 ## Context
 
-Both converter SDKs are commercial. Their images can't be redistributed, their licences have to reach
-them somehow, and both are x86_64 only.
+The converters and the evaluator run in containers, and other repositories consume what they produce. Images have to be reproducible, safe to publish, and free of anything that must stay on one machine.
 
 ## Decision
 
-- The CAD Exchanger and ODA images are non-redistributable. They are built locally from artifacts the
-  licensee supplies, pinned by SHA-256, and are never published to a registry. The build fails loudly
-  if a pinned artifact is absent or different, and never fetches or substitutes one.
-- Licences and activation material come from documented secret paths at run time, mounted read-only.
-  No credential is written to a file, echoed into a log, or copied to the build host. The scan that
-  checks image history, layers and logs for licence material is `tools/check_no_licence.sh`.
-- Both SDKs are x86_64. They are built and run in containers on the native x86_64 host through
-  `tools/nas.sh`, never under Rosetta, and every `docker run` passes an explicit `--platform`. Every
-  report says which results are native x64 and which are arm64.
-- The step-validator image has no proprietary component, which is what lets the other repositories
-  consume its output.
-- Ordinary CI in `pvec`, `libviprs` and `maplibre-pvec` runs with no proprietary converter present.
-  It reads the frozen artifacts instead.
+- Every image is one of the open images. An open image holds only open-licensed components, is rebuilt from pinned inputs, is multi-arch where the code allows, is published to GHCR and is consumed by digest, never by tag. The ACadSharp converter image and the step-validator image are built here. The MIT `LICENSE` file at the root of this repository is what allows publishing them.
+- The LibreDWG converter is GPL, so its image is built and published from `libviprs/pvec-oracle-libredwg` and is never a build context of this repository. I pull it by digest and only exchange files with it.
+- No credential, licence file or activation material is written to a file, echoed into a log, or copied to a build host. The scan that checks image history, layers and logs is `tools/check_no_licence.sh`, and `tools/vendor_guard.sh` refuses such material in the tree.
+- Every `docker run` passes an explicit `--platform`, and every report says which results are native x64 and which are arm64.
+- The step-validator image has no closed-source component, which is what lets the other repositories consume its output.
+- Ordinary CI in `pvec`, `libviprs` and `maplibre-pvec` runs with no converter present. It reads the frozen artifacts instead.
 
 ## Consequences
 
-Regenerating the corpus needs the licensee. Reading the corpus doesn't.
+Anyone with Docker can regenerate the corpus, and reading it needs nothing at all.
 
 ## Amendment (ADR 0009)
 
-There is a second class of image, open images, next to the non-redistributable ones. An open image holds
-only open-licensed components, is rebuilt from pinned inputs, is multi-arch, and is published to GHCR and
-consumed by digest, never by tag. The ACadSharp converter image and the step-validator image are open
-images built here. The LibreDWG converter is GPL, so its image is built and published from
-`libviprs/pvec-oracle-libredwg` and is never a build context of this repository: I pull it by digest and
-only exchange files with it. The no-credential rules above apply to open images unchanged, and the MIT
-`LICENSE` file at the root of this repository is what allows publishing them.
+The open image class (open components, pinned inputs, multi-arch, consumed by digest) and the LibreDWG rule were added here. ADR 0010 folds them into the body above.
+
+## Amendment (ADR 0010)
+
+This ADR was rewritten as the open image policy. The earlier clauses about non-redistributable images, licence secret paths and x86_64-only converter builds are withdrawn, because only open software takes part in the pipeline.
