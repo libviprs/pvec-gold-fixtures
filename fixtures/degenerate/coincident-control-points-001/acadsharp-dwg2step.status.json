@@ -1,0 +1,13 @@
+{
+  "schema_version": "pvec-gold/converter-status/1",
+  "converter": "acadsharp-dwg2step",
+  "status": "OK",
+  "exit_code": 0,
+  "input": {"path": "/v/fixtures/degenerate/coincident-control-points-001/source.dwg", "sha256": "c14f31c157b8decd060f51cef4c6df587e71181184efd15aad4800b3e8aebe4f"},
+  "output": {"path": "/v/.out-corpus-open/degenerate/coincident-control-points-001/primary.step", "sha256": "4c9cca41de332771f960d8940ea7f243e2cbcea600437b41cab04b5c886192b5"},
+  "product": {"name": "ACadSharp", "version": "3.7.1\u002Bd7dc111"},
+  "declared_schema": "AP242_MANAGED_MODEL_BASED_3D_ENGINEERING_MIM_LF { 1 0 10303 442 1 1 4 }",
+  "wall_time_seconds": "0.116",
+  "warnings": ["INSUNITS is unitless: values are written unscaled and labelled metre"],
+  "error": null
+}

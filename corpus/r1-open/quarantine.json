@@ -22,19 +22,19 @@
   ],
   "quarantined": [
     {
-      "evidence": "intentionally degenerate; the expected outcome is DEGENERATE_COINCIDENT_CONTROL_POINTS and no geometry",
+      "evidence": "intentionally degenerate; the expected outcome is DEGENERATE_COINCIDENT_CONTROL_POINTS and no geometry. acadsharp-dwg2step run: CONVERTER_EMITTED_GEOMETRY",
       "group": "degenerate",
       "id": "coincident-control-points-001",
       "reason": "MALFORMED_FIXTURE"
     },
     {
-      "evidence": "intentionally degenerate; the expected outcome is DEGENERATE_ZERO_LENGTH_SEGMENT and no geometry",
+      "evidence": "intentionally degenerate; the expected outcome is DEGENERATE_ZERO_LENGTH_SEGMENT and no geometry. acadsharp-dwg2step run: REFUSED",
       "group": "degenerate",
       "id": "zero-length-segment-001",
       "reason": "MALFORMED_FIXTURE"
     },
     {
-      "evidence": "intentionally degenerate; the expected outcome is DEGENERATE_ZERO_RADIUS and no geometry",
+      "evidence": "intentionally degenerate; the expected outcome is DEGENERATE_ZERO_RADIUS and no geometry. acadsharp-dwg2step run: CONVERTER_EMITTED_GEOMETRY",
       "group": "degenerate",
       "id": "zero-radius-001",
       "reason": "MALFORMED_FIXTURE"

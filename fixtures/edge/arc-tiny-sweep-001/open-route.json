@@ -1,0 +1,23 @@
+{
+  "classes": [
+    {
+      "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+      "direction": "SAME",
+      "entity": "arc-tiny-sweep-001",
+      "max_deviation": 2.168404344971009e-19
+    }
+  ],
+  "converter": "acadsharp-dwg2step",
+  "curves_evaluated": 1,
+  "exit_code": 0,
+  "numeric_policy_version": "PVec numeric policy v1",
+  "oracle_scope": "OPEN_CONVERTERS",
+  "product": {
+    "name": "ACadSharp",
+    "version": "3.7.1+d7dc111"
+  },
+  "single_oracle": true,
+  "status": "OK",
+  "step_emitted": true,
+  "worst_class": "GEOMETRIC_EXACT_REPARAMETERIZED"
+}

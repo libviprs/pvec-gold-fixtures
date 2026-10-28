@@ -1,0 +1,13 @@
+{
+  "schema_version": "pvec-gold/converter-status/1",
+  "converter": "acadsharp-dwg2step",
+  "status": "ERROR",
+  "exit_code": 15,
+  "input": {"path": "/v/fixtures/negative/dimension-001/source.dwg", "sha256": "48bfc6d5f3b5e0462d1db39872fd901811270fe324ea3f7f105e230ba4744344"},
+  "output": null,
+  "product": {"name": "ACadSharp", "version": "3.7.1\u002Bd7dc111"},
+  "declared_schema": null,
+  "wall_time_seconds": "0.113",
+  "warnings": ["skipped 1 entity(ies) of type DimensionLinear"],
+  "error": {"code": 15, "class": "CONVERSION_FAILED", "message": "no supported curve in model space"}
+}

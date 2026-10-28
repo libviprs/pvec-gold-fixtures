@@ -1,6 +1,6 @@
 {
   "corpus_revision": "r1-open",
-  "evidence_note": "KNOWN_TRUTH_EXACT here is reader mapping only (evidence_scope READER_MAPPING_ONLY): no STEP representation has been compared, so step_evidence is null on every row until the open converters run.",
+  "evidence_note": "KNOWN_TRUTH_EXACT here is reader mapping only (evidence_scope READER_MAPPING_ONLY). step_evidence is the one open converter's class for the fixture (null where it has not run); one converter is a single oracle, so no row reaches STEP_ORACLE (ADR 0009).",
   "numeric_policy_version": "PVec numeric policy v1",
   "profile": {
     "commit": "1bb79deae4d97dfcb2a5ad4c120e1bffb7d215d5",
@@ -16,19 +16,31 @@
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "large-coords-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "line-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "polyline-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         }
       ],
       "profile_section": 1,
@@ -41,19 +53,31 @@
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "circle-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "ellipse-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "nonuniform-scale-rotated-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         }
       ],
       "profile_section": 2,
@@ -66,19 +90,31 @@
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "arc-seam-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "circle-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "ellipse-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         }
       ],
       "profile_section": 3,
@@ -91,19 +127,31 @@
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "line-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "mixed-entity-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "BOUNDED_APPROXIMATION",
+            "converter": "acadsharp-dwg2step",
+            "source": "fixtures/mixed/mixed-entity-001/open-route.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "tiny-extent-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "MISSING",
+            "converter": "acadsharp-dwg2step",
+            "source": "fixtures/edge/tiny-extent-001/open-route.json"
+          }
         }
       ],
       "profile_section": 4,
@@ -121,31 +169,51 @@
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "large-coords-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "lwpolyline-closed-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "mixed-entity-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "BOUNDED_APPROXIMATION",
+            "converter": "acadsharp-dwg2step",
+            "source": "fixtures/mixed/mixed-entity-001/open-route.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "polyline-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "polyline2d-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         }
       ],
       "profile_section": 5,
@@ -158,25 +226,41 @@
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "circle-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "huge-extent-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "fixtures/edge/huge-extent-001/open-route.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "mixed-entity-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "BOUNDED_APPROXIMATION",
+            "converter": "acadsharp-dwg2step",
+            "source": "fixtures/mixed/mixed-entity-001/open-route.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "tiny-radius-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         }
       ],
       "profile_section": 6,
@@ -194,13 +278,21 @@
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "ellipse-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "mixed-entity-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "BOUNDED_APPROXIMATION",
+            "converter": "acadsharp-dwg2step",
+            "source": "fixtures/mixed/mixed-entity-001/open-route.json"
+          }
         }
       ],
       "profile_section": 7,
@@ -213,25 +305,41 @@
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "arc-seam-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "arc-tiny-sweep-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "fixtures/edge/arc-tiny-sweep-001/open-route.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "elliptical-arc-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "mixed-entity-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "BOUNDED_APPROXIMATION",
+            "converter": "acadsharp-dwg2step",
+            "source": "fixtures/mixed/mixed-entity-001/open-route.json"
+          }
         }
       ],
       "profile_section": 8,
@@ -244,19 +352,31 @@
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "bulge-arc-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "bulge-arc-neg-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "mixed-entity-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "BOUNDED_APPROXIMATION",
+            "converter": "acadsharp-dwg2step",
+            "source": "fixtures/mixed/mixed-entity-001/open-route.json"
+          }
         }
       ],
       "profile_section": 9,
@@ -269,7 +389,11 @@
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "bezier-d3-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         }
       ],
       "profile_section": 10,
@@ -282,37 +406,61 @@
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "bspline-d3-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "STRUCTURAL_EXACT",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "bspline-d5-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "STRUCTURAL_EXACT",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "bspline-nonunit-domain-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "STRUCTURAL_EXACT",
+            "converter": "acadsharp-dwg2step",
+            "source": "fixtures/edge/bspline-nonunit-domain-001/open-route.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "closed-by-endpoint-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "STRUCTURAL_EXACT",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "closed-periodic-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "STRUCTURAL_EXACT",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "repeated-knot-c0-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "STRUCTURAL_EXACT",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         }
       ],
       "profile_section": 11,
@@ -330,25 +478,41 @@
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "mixed-entity-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "BOUNDED_APPROXIMATION",
+            "converter": "acadsharp-dwg2step",
+            "source": "fixtures/mixed/mixed-entity-001/open-route.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "nonunit-weight-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "STRUCTURAL_EXACT",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "nurbs-d2-offconic-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "STRUCTURAL_EXACT",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "nurbs-d3-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "STRUCTURAL_EXACT",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         }
       ],
       "profile_section": 12,
@@ -361,55 +525,91 @@
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "mixed-entity-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "BOUNDED_APPROXIMATION",
+            "converter": "acadsharp-dwg2step",
+            "source": "fixtures/mixed/mixed-entity-001/open-route.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "near-singular-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "UNSUPPORTED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "nested-blocks-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "nonuniform-scale-circle-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "nonuniform-scale-rotated-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "reflection-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "rotation-irrational-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "translation-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         },
         {
           "evidence_class": "KNOWN_TRUTH_EXACT",
           "evidence_scope": "READER_MAPPING_ONLY",
           "id": "uniform-scale-001",
-          "step_evidence": null
+          "step_evidence": {
+            "class": "GEOMETRIC_EXACT_REPARAMETERIZED",
+            "converter": "acadsharp-dwg2step",
+            "source": "reports/phase1/probe-qualification.json"
+          }
         }
       ],
       "profile_section": 13,

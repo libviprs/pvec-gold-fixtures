@@ -1,6 +1,6 @@
 """Corpus revision r1-open: the edge, mixed-entity, degenerate, negative and real-world fixtures.
 
-    python3 -m runner.corpus assemble RAW_DIR REAL_WORLD_RAW_DIR   build fixtures/**, matrix, manifest from a run
+    python3 -m runner.corpus assemble RAW REAL_WORLD_RAW OPEN_RUN    build fixtures/**, matrix, manifest from a run
     python3 -m runner.corpus check [ROOT]                          every rule below, on the committed tree
 
 What a pipeline owes, per group (docs/adr/0009 for the oracle words, ADR 0006 for quarantine):
@@ -19,7 +19,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-from . import corpus_release, numeric, r0_open as r0
+from . import corpus_release, numeric, qualify_probes as q, r0_open as r0
 
 ROOT = Path(__file__).resolve().parent.parent
 REVISION = "r1-open"
@@ -42,15 +42,17 @@ POLICY = {"HATCH": "IGNORED", "TEXT": "IGNORED", "MTEXT": "IGNORED", "WIPEOUT": 
           "OLE2FRAME": "UNSUPPORTED", "ACAD_TABLE": "UNSUPPORTED", "XREF": "UNSUPPORTED", "ACAD_PROXY_ENTITY": "UNSUPPORTED"}
 
 # group -> (directory under fixtures/, required files)
-COMMON = ("source.dwg", "README.md", "params.json", "read.acadrust.json", "read.acadsharp.json", "comparison.json")
+OPEN = ("acadsharp-dwg2step.status.json", "open-route.json")
+COMMON = ("source.dwg", "README.md", "params.json", "read.acadrust.json", "read.acadsharp.json", "comparison.json") + OPEN
 GROUPS = {
     "edge": ("edge", COMMON + ("expected.math.json",)),
     "mixed": ("mixed", COMMON + ("expected.math.json",)),
     "degenerate": ("degenerate", COMMON + ("expected.rejection.json",)),
-    "negative": ("negative", ("source.dwg", "README.md", "params.json", "expected.classification.json", "census.acadsharp.json", "comparison.json")),
-    "real-world": ("real-world", ("source.dwg", "README.md", "census.acadsharp.json", "metrics.json", "comparison.json")),
+    "negative": ("negative", ("source.dwg", "README.md", "params.json", "expected.classification.json", "census.acadsharp.json", "comparison.json") + OPEN),
+    "real-world": ("real-world", ("source.dwg", "README.md", "census.acadsharp.json", "metrics.json", "comparison.json") + OPEN),
 }
 READERS = ("acadrust", "acadsharp")
+CONVERTER = "acadsharp-dwg2step"
 
 
 class ProvenanceError(Exception):
@@ -138,6 +140,7 @@ def negative_problems(d):
     out += ["%s: %s" % (d.name, p) for p in cmp_["problems"]]
     if load(d / "comparison.json") != cmp_:
         out.append("%s: comparison.json is stale" % d.name)
+    out += ["%s: %s" % (d.name, p) for p in open_route_problems("negative", load(d / "open-route.json"))]
     return out
 
 
@@ -296,6 +299,78 @@ def real_world_metrics(census, discipline):
             "largest_extent_side": s["extent"]["largest_side"] if s["extent"] else None}
 
 
+# ---- the open-converter run ----------------------------------------------------------------------------------------
+
+def open_route_verdict(group, step_emitted, curves):
+    """What the converter's output means for a group that has an expected refusal."""
+    if group == "negative":
+        return "STEP_EMITTED" if step_emitted else "NO_STEP_EMITTED"
+    if group == "degenerate":
+        return "CONVERTER_EMITTED_GEOMETRY" if step_emitted and curves else "REFUSED"
+    return None
+
+
+def open_route_problems(group, rec):
+    if group == "negative" and rec.get("verdict") != "NO_STEP_EMITTED":
+        return ["the open converter wrote a STEP file for a negative fixture, which is accepted geometry"]
+    return []
+
+
+def open_route_failures(root):
+    """Degenerate fixtures the converter did not refuse. They are findings about the converter, listed and not hidden."""
+    return sorted(d.name for d in fixture_dirs(root, "degenerate") if load(d / "open-route.json")["verdict"] != "REFUSED")
+
+
+def match_entities(pol, exp, ver, status):
+    """Classify each expected entity of a multi-entity drawing against its best distinct STEP curve."""
+    pool = list(ver["entities"]) if ver else []
+    out = []
+    for ent in exp["entities"]:
+        if not pool:
+            out.append(q.classify_entity(pol, ent, None if ver is None else {"entities": []}, status))
+            continue
+        scored = [(q.RANK[c["class"]], i, c) for i, a in enumerate(pool) for c in [q.classify_entity(pol, ent, {"entities": [a]}, status)]]
+        _, i, best = min(scored, key=lambda t: (t[0], t[1]))
+        pool.pop(i)
+        out.append(best)
+    return out
+
+
+def brief(cell):
+    ev = cell["evidence"]
+    return {k: ev[k] for k in ("reason", "max_deviation", "direction") if k in ev}
+
+
+def open_route_record(group, d, run, pol):
+    """Copy the converter's artifacts for one fixture into its directory and derive open-route.json."""
+    d, run = Path(d), Path(run)
+    for name, src in ((CONVERTER + ".status.json", "primary.status.json"), (CONVERTER + ".step", "primary.step"),
+                      (CONVERTER + ".verification.json", "primary.verification.json")):
+        if (run / src).is_file():
+            (d / name).write_bytes((run / src).read_bytes())
+        elif (d / name).exists():
+            (d / name).unlink()
+    ver, status = q.load_outputs(run.parent, run.name, "primary")
+    emitted = (d / (CONVERTER + ".step")).is_file()
+    curves = len(ver["entities"]) if ver else 0
+    rec = {"converter": CONVERTER, "product": status.get("product"), "oracle_scope": "OPEN_CONVERTERS", "single_oracle": True,
+           "exit_code": status["exit_code"], "status": status["status"], "step_emitted": emitted, "curves_evaluated": curves,
+           "numeric_policy_version": pol.version}
+    if status.get("error"):
+        rec["error"] = status["error"]
+    if group == "real-world":
+        rec["differential"] = "SINGLE_OPEN_CONVERTER_ONLY"
+    verdict = open_route_verdict(group, emitted, curves)
+    if verdict:
+        rec["verdict"] = verdict
+    if group in ("edge", "mixed"):
+        exp = load(d / "expected.math.json")
+        cells = match_entities(pol, exp, ver, status) if group == "mixed" else q.qualify_probe(pol, exp, {CONVERTER: (ver, status)})[CONVERTER]
+        rec["classes"] = [{"entity": e["id"], "class": c["class"], **brief(c)} for e, c in zip(exp["entities"], cells)]
+        rec["worst_class"] = max((c["class"] for c in cells), key=lambda k: q.RANK[k])
+    return rec
+
+
 # ---- capability matrix --------------------------------------------------------------------------------------
 
 PROFILE = {"repository": "libviprs/pvec", "document": "docs/ISO_PROFILE.md", "commit": "1bb79deae4d97dfcb2a5ad4c120e1bffb7d215d5",
@@ -331,17 +406,33 @@ def evidence_index(root):
     return idx
 
 
+def step_evidence(root, fid):
+    """The open converter's result for a fixture, from its own open-route.json or the phase 1 qualification report."""
+    root = Path(root)
+    for g in ("edge", "mixed"):
+        p = root / "fixtures" / g / fid / "open-route.json"
+        if p.is_file():
+            r = load(p)
+            return {"converter": CONVERTER, "class": r["worst_class"], "source": str(p.relative_to(root))}
+    rp = root / "reports" / "phase1" / "probe-qualification.json"
+    if rp.is_file():
+        cells = load(rp)["probes"].get(fid, {}).get(CONVERTER)
+        if cells:
+            return {"converter": CONVERTER, "class": max((c["class"] for c in cells), key=lambda k: q.RANK[k]), "source": "reports/phase1/probe-qualification.json"}
+    return None
+
+
 def build_matrix(root):
     idx = evidence_index(root)
     rows = []
     for cap in sorted(SECTIONS, key=SECTIONS.get):
         ids = sorted(set(i for i, caps in r0.CAPABILITIES_OF.items() if cap in caps) | set(EXTRA.get(cap, [])))
         rows.append({"capability": cap, "profile_section": SECTIONS[cap],
-                     "fixtures": [{"id": i, "evidence_class": idx[i][0], "evidence_scope": idx[i][1], "step_evidence": None} for i in ids if i in idx],
+                     "fixtures": [{"id": i, "evidence_class": idx[i][0], "evidence_scope": idx[i][1], "step_evidence": step_evidence(root, i)} for i in ids if i in idx],
                      "refusals": [{"id": i, "expected": "REJECT"} for i in REFUSED.get(cap, [])]})
     return {"schema_version": "pvec-gold/capability-matrix/1", "corpus_revision": REVISION, "profile": PROFILE,
             "numeric_policy_version": numeric.load_policy().version,
-            "evidence_note": "KNOWN_TRUTH_EXACT here is reader mapping only (evidence_scope READER_MAPPING_ONLY): no STEP representation has been compared, so step_evidence is null on every row until the open converters run.",
+            "evidence_note": "KNOWN_TRUTH_EXACT here is reader mapping only (evidence_scope READER_MAPPING_ONLY). step_evidence is the one open converter's class for the fixture (null where it has not run); one converter is a single oracle, so no row reaches STEP_ORACLE (ADR 0009).",
             "rows": rows}
 
 
@@ -385,7 +476,8 @@ def fixture_entry(root, group, d, prov):
         rec = load(d / "expected.rejection.json")
         entry["evidence_class"] = "QUARANTINED"
         entry["evidence_scope"] = "REJECTION_EXPECTED"
-        entry["quarantine"] = {"reason": rec["quarantine_reason"], "evidence": "intentionally degenerate; the expected outcome is %s and no geometry" % rec["expected_rejection"]["classification"]}
+        entry["quarantine"] = {"reason": rec["quarantine_reason"], "evidence": "intentionally degenerate; the expected outcome is %s and no geometry. %s run: %s"
+                                % (rec["expected_rejection"]["classification"], CONVERTER, load(d / "open-route.json")["verdict"])}
         entry["dwg_version"] = load(d / "read.acadsharp.json")["dwg_version"]
     elif group == "negative":
         rec = load(d / "expected.classification.json")
@@ -448,10 +540,32 @@ def write_sums(rev):
     (Path(rev) / "SHA256SUMS").write_text("".join("%s  %s\n" % (r0.sha256(Path(rev) / n), n) for n in names))
 
 
+README = """# corpus revision r1-open
+
+The second candidate revision. It includes `r0-open` by reference (bundle and manifest hashes in `manifest.json`)
+and adds five groups, each in its own directory under `fixtures/`: `edge` (valid extreme and boundary cases),
+`mixed` (one drawing with seven curve classes, nested blocks and transforms), `degenerate` (entities that must be
+refused), `negative` (one entity outside PVec v1 each, with an expected classification) and `real-world` (public
+drawings with a provenance record). `manifest.json` is the index, `quarantine.json` lists everything quarantined
+with its reason, and `SHA256SUMS` covers the files in this directory. The per-fixture hashes are in the manifest.
+
+Read this before you rely on it. `oracle_scope` is `NONE`: one open converter (`acadsharp-dwg2step`) has run over the
+fixtures and its result is recorded in each `open-route.json`, but ADR 0009 needs two converters with different
+lineages before a fixture can claim `STEP_ORACLE`, and the second one does not exist yet. `KNOWN_TRUTH_EXACT` here
+means reader mapping only, exactly as in `r0-open`. Real-world fixtures are `REAL_WORLD_DIFFERENTIAL` and never
+known truth. The negative and degenerate fixtures are `QUARANTINED` by design (ADR 0006).
+
+To check it with no DWG library, no converter and no Docker:
+
+    python3 -m runner.corpus check
+    python3 -m runner.corpus_release build . OUT && python3 OUT/verify_release.py OUT
+"""
+
+
 # ---- assemble ---------------------------------------------------------------------------------------------------
 
-def assemble(raw, rw_raw, info, root=ROOT):
-    root, raw, rw_raw = Path(root), Path(raw), Path(rw_raw)
+def assemble(raw, rw_raw, open_run, info, root=ROOT):
+    root, raw, rw_raw, open_run = Path(root), Path(raw), Path(rw_raw), Path(open_run)
     pol = numeric.load_policy()
     authoring = root / "tools" / "authoring"
     params = {p.stem: p for g in ("edge", "mixed", "degenerate") for p in (authoring / "corpus-params" / g).glob("*.json")}
@@ -506,6 +620,9 @@ def assemble(raw, rw_raw, info, root=ROOT):
               "note": "No converter output exists for this drawing yet. When two open converters agree on it the agreement is recorded as DUAL_ORACLE_EQUIVALENT and is not source truth (agreement_record in runner/corpus.py)."}, d / "comparison.json")
         (d / "README.md").write_text("# %s\n\n%s drawing, %d entities, DWG %s, from %s under %s. %s\n\nI keep it for regression and for spotting differences between providers. It has no authored mathematics, so it is never `KNOWN_TRUTH_EXACT`; the class is `REAL_WORLD_DIFFERENTIAL`. Provenance and the licence basis are in `corpus/provenance.json`.\n"
                                       % (fid, prov[fid]["discipline"], m["entity_count"], m["dwg_version"], prov[fid]["origin"], prov[fid]["licence"], prov[fid].get("note", "")))
+    for group in GROUPS:
+        for d in fixture_dirs(root, group):
+            dump(open_route_record(group, d, open_run / group / d.name, pol), d / "open-route.json")
     manifest = build_manifest(root, info)
     rev = root / "corpus" / REVISION
     rev.mkdir(parents=True, exist_ok=True)
@@ -513,6 +630,7 @@ def assemble(raw, rw_raw, info, root=ROOT):
     q = build_quarantine(root, manifest)
     q["excluded"] = q["excluded"] + sorted(excluded, key=lambda e: e["id"])
     dump(q, rev / "quarantine.json")
+    (rev / "README.md").write_text(README)
     write_sums(rev)
     dump(build_matrix(root), root / "corpus" / "capability-matrix.json")
     return manifest
@@ -572,9 +690,9 @@ def check(root=ROOT):
 
 
 def main(argv):
-    if argv[:1] == ["assemble"] and len(argv) == 3:
+    if argv[:1] == ["assemble"] and len(argv) == 4:
         info = load(ROOT / "tools" / "corpus" / "writer-info.json")
-        assemble(argv[1], argv[2], info)
+        assemble(argv[1], argv[2], argv[3], info)
         return 0
     if argv[:1] == ["check"]:
         problems = check(argv[1] if len(argv) > 1 else ROOT)
