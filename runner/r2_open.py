@@ -282,7 +282,10 @@ def release(corpus, rel, name):
             if private:
                 continue
             for kind, ext, sub in (("signatures", ".signature.json", "signatures"), ("step_hashes", ".step", "step")):
-                src = corpus / e["generated"][role + (".step" if kind == "step_hashes" else ".signature.json")]["path"]
+                key = role + (".step" if kind == "step_hashes" else ".signature.json")
+                if key not in e["generated"]:
+                    continue
+                src = corpus / e["generated"][key]["path"]
                 dst = rel / sub / ("%s.%s%s" % (fid, cid, ext))
                 shutil.copyfile(src, dst)
                 pins[kind].setdefault(fid, {})[cid] = sha(dst.read_bytes())
@@ -386,6 +389,7 @@ def run(out, label, fixtures_extra=()):
     rel = out / "release" / "r2-open-1"
     release(corpus, rel, "r2-open-1")
     problems = verify_release(rel)
+    qual = qualify(out, m)
     report = {"schema_version": "pvec-gold/reproducibility/2", "label": label, "revision": REVISION, "fixtures": len(ids),
               "generate_exit": results, "unlisted_divergences": diffs, "release_problems": problems,
               "converters": [{k: c[k] for k in ("id", "lineage", "image_digest", "platform", "version")} for c in m["converters"]],
@@ -394,6 +398,27 @@ def run(out, label, fixtures_extra=()):
     (out / "reproducibility.r2-open.json").write_text(dump(report))
     print(json.dumps({"result": report["result"], "unlisted_divergences": diffs, "release_problems": problems}, indent=1))
     return 0 if report["result"] == "PASS" else 1
+
+
+def qualify(out, m):
+    """The capability table from the two converters' outputs of this run, through runner.qualify_probes."""
+    from . import qualify_probes as qp
+    out = Path(out)
+    q = out / "qual"
+    for src in sorted((out / "run-a").iterdir()):
+        for r in ROLES:
+            for kind in ("verification", "status"):
+                f = src / ("%s.%s.json" % (r, kind))
+                if f.is_file():
+                    (q / src.name).mkdir(parents=True, exist_ok=True)
+                    shutil.copyfile(f, q / src.name / f.name)
+    a, b = m["converters"]
+    dest = out / "reports" / REVISION / "probe-qualification.json"
+    qp.main(["--probes", str(ROOT / "fixtures" / "known-truth"), "--probes", str(ROOT / "fixtures" / "edge"),
+             "--primary", a["id"], str(q), "--secondary", b["id"], str(q),
+             "--lineage", "%s=%s" % (a["id"], a["lineage"]), "--lineage", "%s=%s" % (b["id"], b["lineage"]),
+             "--excluded", str(ROOT / "corpus" / "r1-open" / "quarantine.json"), "--platform", a["platform"], "--out", str(dest)])
+    return dest
 
 
 def main(argv):

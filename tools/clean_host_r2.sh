@@ -41,6 +41,6 @@ dd "docker run --rm --platform $plat -v /var/run/docker.sock:/var/run/docker.soc
 rc=$?
 set -e
 res=${RESULTS:-$here/.out-r2-$arch}; mkdir -p "$res"
-dd "tar -cf - -C /tree/.out-r2 corpus release reproducibility.r2-open.json run-a" | tar -xf - -C "$res" || true
+dd "tar -cf - -C /tree/.out-r2 corpus release reports reproducibility.r2-open.json run-a" | tar -xf - -C "$res" || true
 echo "daemon images after: $(dd docker images --format '{{.Repository}}:{{.Tag}}' | tr '\n' ' ')"
 exit $rc

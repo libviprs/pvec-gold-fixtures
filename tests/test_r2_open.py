@@ -280,6 +280,22 @@ class Release(unittest.TestCase):
             self.assertEqual(m["release"], "r2-open-1")
             self.assertEqual(sorted(m["pins"]["signatures"]["line-001"]), [A, B])
 
+    def test_a_fixture_with_a_step_and_no_signature_is_released_without_one(self):
+        # the evaluator can refuse a STEP a converter wrote (tiny-extent-001), which leaves a step and no signature
+        with tempfile.TemporaryDirectory() as t:
+            root = tree(Path(t) / "root", ES)
+            runs = Path(t) / "runs"
+            for fid, args in SPECS.items():
+                gen(runs, fid, **args)
+            (runs / "line-001" / "secondary.signature.json").unlink()
+            out = Path(t) / "out"
+            r2_open.build(root, runs, out)
+            rel = Path(t) / "rel"
+            m = r2_open.release(out, rel, "r2-open-1")
+            self.assertEqual(sorted(m["pins"]["signatures"]["line-001"]), [A])
+            self.assertEqual(sorted(m["pins"]["step_hashes"]["line-001"]), [A, B])
+            self.assertEqual(r2_open.verify_release(rel), [])
+
     def test_release_holds_no_dwg_and_no_private_bytes(self):
         with tempfile.TemporaryDirectory() as t:
             rel, _ = self.make(t)
