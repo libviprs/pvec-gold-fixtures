@@ -87,14 +87,16 @@ static class Program
             }
             r.Warnings.AddRange(notes);
 
-            var flat = new Flattener(rel);
+            var unitWarnings = new List<string>();
+            string unit = LengthUnit(doc.Header.InsUnits, unitWarnings, out bool unitOk, out double toMetre);
+            var flat = new Flattener(rel, toMetre);
             try { flat.Run(doc); }
             catch (ConvertException ce) { return Fail(r, ce.Code, ce.Klass, ce.Message); }
             foreach (var kv in flat.Skipped) r.Warnings.Add("skipped " + kv.Value + " entity(ies) of type " + kv.Key);
             if (flat.Curves.Count == 0) return Fail(r, 15, "CONVERSION_FAILED", "no supported curve in model space");
 
-            string unit = LengthUnit(doc.Header.InsUnits, r.Warnings, out bool unitOk);
-            if (!unitOk) return Fail(r, 15, "CONVERSION_FAILED", "drawing unit " + doc.Header.InsUnits + " is not supported (metre, millimetre, centimetre, kilometre and unitless are)");
+            if (!unitOk) return Fail(r, 15, "CONVERSION_FAILED", "drawing unit " + doc.Header.InsUnits + " is not supported (metre, millimetre, centimetre, kilometre, inches, feet and unitless are)");
+            r.Warnings.AddRange(unitWarnings);
 
             var w = new Step21();
             try { foreach (var c in flat.Curves) w.Write(c); }
@@ -134,11 +136,23 @@ static class Program
         return d.RootElement.GetProperty("constants").GetProperty("REL").GetDouble();
     }
 
-    static string LengthUnit(UnitsType u, List<string> warnings, out bool ok)
+    // The unit the STEP context declares, and the factor every coordinate is multiplied by on the way. Metric
+    // units the context can name are declared and left alone (factor 1). Inches and feet have no SI prefix, so they
+    // are scaled to metre by their definition (0.0254 m and 0.3048 m, exact by the 1959 agreement) and declared metre.
+    static string LengthUnit(UnitsType u, List<string> warnings, out bool ok, out double toMetre)
     {
         ok = true;
+        toMetre = 1.0;
         switch (u)
         {
+            case UnitsType.Inches:
+                toMetre = 0.0254;
+                warnings.Add("INSUNITS is inches: every length scaled by 0.0254 to metre and declared metre");
+                return "$,.METRE.";
+            case UnitsType.Feet:
+                toMetre = 0.3048;
+                warnings.Add("INSUNITS is feet: every length scaled by 0.3048 to metre and declared metre");
+                return "$,.METRE.";
             case UnitsType.Meters: return "$,.METRE.";
             case UnitsType.Millimeters: return ".MILLI.,.METRE.";
             case UnitsType.Centimeters: return ".CENTI.,.METRE.";

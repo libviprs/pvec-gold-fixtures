@@ -1,0 +1,18 @@
+[package]
+name = "singular-tool"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "r0open write and read, built against the acadrust commit that has Insert::set_scale_unchecked, for singular-001"
+build = "build.rs"
+
+[dependencies]
+# libviprs/acadrust#52: d35691f plus Insert::set_scale_unchecked and a DWG reader that stores the scale a file holds, which
+# the checked setters at d35691f rewrite to 1e-12. The sha is the tip of that branch, so the writer and reader named in
+# the fixture are one exact tree.
+acadrust = { git = "https://github.com/libviprs/acadrust", rev = "eacbc9f6470cbf38e2fd77e629ea79146e9c4a8f" }
+serde_json = "1"
+sha2 = "0.10"
+
+[profile.release]
+debug = false

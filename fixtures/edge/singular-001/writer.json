@@ -1,0 +1,25 @@
+{
+  "commit": "eacbc9f6470cbf38e2fd77e629ea79146e9c4a8f",
+  "deterministic": "two writes from the parameter file are byte-identical",
+  "dwg": {
+    "sha256": "1394adbee5a986320b5aa8c035c802c2740782b10db676e3fb9b6e00bbb2d8c8",
+    "version": "AC1032"
+  },
+  "readers": {
+    "acadrust": {
+      "commit": "eacbc9f6470cbf38e2fd77e629ea79146e9c4a8f",
+      "reader": "acadrust@0.5.5+eacbc9f"
+    },
+    "acadsharp": {
+      "patch": "tools/converters/acadsharp/patches/0001-insert-keep-zero-scale.patch",
+      "reader": "ACadSharp@3.7.1+d7dc111+insert-keep-zero-scale"
+    },
+    "libredwg": {
+      "image": "pvec-oracle-libredwg, by local id, never built from this repository",
+      "reader": "LibreDWG@0.14+patch0001"
+    }
+  },
+  "script": "tools/corpus/singular/run.sh",
+  "tool": "acadrust DwgWriter, Insert::set_scale_unchecked (libviprs/acadrust#52)",
+  "writer": "acadrust@0.5.5+eacbc9f"
+}

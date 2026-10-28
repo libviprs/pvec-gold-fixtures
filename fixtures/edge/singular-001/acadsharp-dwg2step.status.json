@@ -1,0 +1,13 @@
+{
+  "schema_version": "pvec-gold/converter-status/1",
+  "converter": "acadsharp-dwg2step",
+  "status": "ERROR",
+  "exit_code": 15,
+  "input": {"path": "/v/fixtures/edge/singular-001/source.dwg", "sha256": "1394adbee5a986320b5aa8c035c802c2740782b10db676e3fb9b6e00bbb2d8c8"},
+  "output": null,
+  "product": {"name": "ACadSharp", "version": "3.7.1\u002Bd7dc111"},
+  "declared_schema": null,
+  "wall_time_seconds": "0.114",
+  "warnings": [],
+  "error": {"code": 15, "class": "CONVERSION_FAILED", "message": "SINGULAR_TRANSFORM: the composed map of block PROBE_SINGULAR_001_L1 has |ad - bc| = 0 exactly, so it maps the plane onto a line or a point (PVec numeric policy NP-19)"}
+}

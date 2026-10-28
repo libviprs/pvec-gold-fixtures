@@ -14,6 +14,10 @@ RUN git clone -q https://github.com/DomCR/ACadSharp /opt/acadsharp \
     && git -C /opt/acadsharp checkout -q "${ACADSHARP_COMMIT}" \
     && test "$(git -C /opt/acadsharp rev-parse HEAD)" = "${ACADSHARP_COMMIT}" \
     && git -C /opt/acadsharp submodule update -q --init --recursive
+# One patch on top of the pinned commit: Insert.cs throws on a zero scale, and a DWG can store one. Upstream master
+# dropped the same guard. Without it a drawing holding scale 0 is refused as INPUT_MALFORMED before the flattener sees it.
+COPY tools/converters/acadsharp/patches /opt/patches
+RUN git -C /opt/acadsharp apply /opt/patches/0001-insert-keep-zero-scale.patch
 WORKDIR /src
 COPY tools/converters/acadsharp/Dwg2Step.csproj tools/converters/acadsharp/Program.cs tools/converters/acadsharp/Flatten.cs tools/converters/acadsharp/Step21.cs ./
 RUN dotnet publish Dwg2Step.csproj -c Release -o /out -p:AcsSrc=/opt/acadsharp/src -p:UseAppHost=false >/tmp/publish.log 2>&1 \
