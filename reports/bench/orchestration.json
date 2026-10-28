@@ -1,0 +1,118 @@
+{
+  "runs": [
+    {
+      "arch": "x64",
+      "chosen": {
+        "cpus": 2.0,
+        "memory_limit_mib": 256,
+        "parallel": 8,
+        "rule": "smallest parallelism within 10% of the best median wall"
+      },
+      "emulated": false,
+      "experiments": {
+        "TieredCompilation_0": {
+          "conversion_s_median": 0.21417892,
+          "total_s_median": 0.45426274853525683
+        },
+        "TieredPGO_0": {
+          "conversion_s_median": 0.1265043045,
+          "total_s_median": 0.38547982298769057
+        },
+        "cpus_1": {
+          "conversion_s_median": 0.304098076,
+          "total_s_median": 0.5757762359571643
+        },
+        "cpus_2": {
+          "conversion_s_median": 0.1362476495,
+          "total_s_median": 0.40745750250061974
+        },
+        "cpus_4": {
+          "conversion_s_median": 0.136387821,
+          "total_s_median": 0.3979252814897336
+        },
+        "unlimited": {
+          "conversion_s_median": 0.136575369,
+          "total_s_median": 0.3873907730448991
+        }
+      },
+      "experiments_conversion_subset": "line-001,nurbs-d3-001,nested-blocks-001,polyline-001",
+      "host": "mars",
+      "image": "gold-dwg2step-acadsharp:test-amd64",
+      "image_id": "sha256:2d97c4423580f595d37a4b1d9b9fad56fe0575901d4bce9069c0cab4796331a6",
+      "largest_fixture": "bezier-d3-001",
+      "leftover_containers": 0,
+      "leftover_volumes": 0,
+      "load_avg": [
+        "4.55",
+        "4.67",
+        "3.32"
+      ],
+      "native": true,
+      "observed_peak_cgroup_mib": 19.88671875,
+      "observed_peak_rss_mib": 57.82421875,
+      "oom_killed": 0,
+      "resume": {
+        "done_before_interrupt": 8,
+        "regenerated_on_rerun": 22,
+        "skipped_exactly_the_finished": true,
+        "skipped_on_rerun": 8,
+        "untouched_hashes_identical": true
+      },
+      "schema": "pvec-gold/bench-orchestration-run/1",
+      "table": [
+        {
+          "fixtures": 30,
+          "fixtures_per_s": 1.6854879487611665,
+          "parallel": 1,
+          "wall_s": {
+            "max": 18.494,
+            "median": 17.799,
+            "min": 16.997,
+            "n": 3
+          }
+        },
+        {
+          "fixtures": 30,
+          "fixtures_per_s": 3.186743148502231,
+          "parallel": 2,
+          "wall_s": {
+            "max": 9.737,
+            "median": 9.414,
+            "min": 9.309,
+            "n": 3
+          }
+        },
+        {
+          "fixtures": 30,
+          "fixtures_per_s": 6.112469437652812,
+          "parallel": 4,
+          "wall_s": {
+            "max": 5.144,
+            "median": 4.908,
+            "min": 4.856,
+            "n": 3
+          }
+        },
+        {
+          "fixtures": 30,
+          "fixtures_per_s": 11.432926829268292,
+          "parallel": 8,
+          "wall_s": {
+            "max": 2.977,
+            "median": 2.624,
+            "min": 2.386,
+            "n": 3
+          }
+        }
+      ],
+      "teardown": {
+        "leftover_labelled_containers": 0,
+        "new_containers": 0,
+        "new_volumes": 0,
+        "signal": "SIGINT at parallelism 8"
+      },
+      "unexpected_failures": []
+    }
+  ],
+  "schema": "pvec-gold/bench-orchestration/1"
+}

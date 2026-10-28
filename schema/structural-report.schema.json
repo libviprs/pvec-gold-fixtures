@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/libviprs/pvec-gold-fixtures/schema/structural-report.schema.json",
+  "title": "structural report",
+  "description": "Expected.math.json against one converter's signature, entity by entity and field by field. Structural means bit-for-bit on the stated fields, so there is no tolerance in this record. REPARAMETERIZED is only set from a geometric report that found the entity's geometry equal, and never makes the report structurally exact.",
+  "type": "object",
+  "required": ["schema_version", "fixture_id", "numeric_policy_version", "signature_schema_version", "stage", "class", "unmatched_produced", "entities"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "pvec-gold/structural-report/1"},
+    "fixture_id": {"type": "string", "minLength": 1},
+    "numeric_policy_version": {"type": "string", "minLength": 1},
+    "signature_schema_version": {"const": "pvec-gold/signature/1"},
+    "stage": {"type": "object", "required": ["name", "architecture"], "additionalProperties": false,
+              "properties": {"name": {"const": "compare_structural"}, "architecture": {"type": "string", "minLength": 1}}},
+    "class": {"enum": ["STRUCTURAL_EXACT", "STRUCTURAL_DIFFERS"]},
+    "unmatched_produced": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+    "entities": {"type": "array", "items": {"$ref": "#/$defs/entity"}}
+  },
+  "$defs": {
+    "value": {"oneOf": [
+      {"type": "null"}, {"type": "integer"}, {"type": "string"}, {"type": "boolean"},
+      {"type": "object", "required": ["decimal", "f64_hex"], "additionalProperties": false,
+       "properties": {"decimal": {"type": "string"}, "f64_hex": {"type": "string", "pattern": "^0x[0-9a-f]{16}$"}}}]},
+    "entity": {
+      "type": "object",
+      "required": ["entity", "matched", "signature_index", "class", "fields"],
+      "additionalProperties": false,
+      "properties": {
+        "entity": {"type": "string"},
+        "matched": {"type": "boolean"},
+        "rejection_expected": {"type": "boolean"},
+        "signature_index": {"type": ["integer", "null"]},
+        "class": {"enum": ["STRUCTURAL_EXACT", "STRUCTURAL_DIFFERS"]},
+        "fields": {"type": "array", "items": {
+          "type": "object", "required": ["field", "kind", "verdict", "expected", "produced"], "additionalProperties": false,
+          "properties": {"field": {"type": "string", "minLength": 1}, "kind": {"enum": ["INTEGER", "REAL", "CATEGORICAL"]},
+                         "verdict": {"enum": ["MATCH", "REPARAMETERIZED", "DIFFERENT"]},
+                         "expected": {"$ref": "#/$defs/value"}, "produced": {"$ref": "#/$defs/value"}}}}
+      }
+    }
+  }
+}

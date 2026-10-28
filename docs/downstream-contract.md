@@ -1,44 +1,76 @@
-# Downstream test contract
+# What a downstream test may depend on
 
-For `libviprs/pvec`, `libviprs/libviprs` and `libviprs/maplibre-pvec`. This is exactly what a consumer may
-depend on, and what it may not.
+`pvec`, `libviprs` and `maplibre-pvec` read the frozen artifacts of this repository and nothing else. This is
+the line between what they may rely on and what they may not. It is checked by `tests/test_signature_path_20.py`
+and by `runner/verify_signatures.py`.
 
-## What you read
+## Signature artifacts
 
-1. **Signatures**: `signatures/<fixture>.signature.json` in a release (schema `pvec-gold/signature/1`,
-   [fixtures/signature.md](fixtures/signature.md)). Implementation-neutral, no entity ids, no converter names.
-2. **STEP for audit**: `step/<fixture>.step`. Read it to see what a converter wrote. It is a regression artifact of
-   the converter named in the manifest, not a source of truth, and its `FILE_NAME` time stamp is the literal
-   `<TIMESTAMP>`.
-3. **The manifest**: `corpus/release/<version>/manifest.json`, which pins corpus revision, source hashes, signature
-   hashes, STEP hashes, image digests, converter versions, evaluator version and numeric policy version.
-4. **The hashes**: `SHA256SUMS` over every file of the release.
+Under `signatures/`:
 
-You pin a release by its version and the SHA-256 of its `manifest.json` (and the release's `SHA256SUMS`), and your
-CI verifies them before it uses anything:
+```
+signatures/manifest.json                 versions, and the SHA-256 of every signature and retained STEP
+signatures/<fixture-id>/signature.json   pvec-gold/signature/1, written by runner.normalize
+signatures/<fixture-id>/primary.step     the STEP file the signature was derived from (audit source)
+```
+
+Every accepted fixture ships both files. A fixture the converter refuses by design (`near-singular-001`,
+`NEAR_SINGULAR_TRANSFORM`) ships neither, and the manifest does not list it.
+
+## A downstream test may depend on
+
+- The signature JSON: `schema/signature.schema.json`, version `pvec-gold/signature/1`. The field names, the
+  `{decimal, f64_hex, precision}` scalar, the metre as the one length unit, and the sort order of entities
+  (class, then a hash of the content).
+- The manifest: `manifest_version`, `versions.schema`, `versions.evaluator`, `versions.occt`,
+  `versions.policy`, and the hash of each signature. A consumer pins the schema and policy versions it was
+  written against and calls `runner.signatures.load(dir, id, expect_schema=..., expect_policy=...)`, which
+  refuses a manifest or a signature that is not what was pinned. That module is standard library only: no
+  OCCT, no STEP parser, no converter, no jsonschema.
+- Stored values (control points, knots, weights, centres, radii, axes, parameter domains) as exact f64 bits.
+  Evaluated values (sample points, tangents, curvatures) are rounded to 12 significant digits and are a
+  property of the evaluator, not of the drawing. Compare them with the numeric policy, never bit for bit,
+  and not across architectures (see below).
+- The hashes. If a hash in the manifest does not match the file, the artifact is damaged and the test should
+  fail, not skip.
+
+## A downstream test may not depend on
+
+- STEP text. The STEP file is retained for audit and for `runner/verify_signatures.py`; its entity numbers,
+  its time stamp, its line order and its spelling of reals are the converter's. Nothing downstream parses it.
+- Entity ids of any kind: STEP `#n` numbers, the evaluator's own labels.
+- A converter being present, or its name. The signature does not say which converter made the STEP, and a
+  test that needs to know has stopped being a downstream test.
+- The signature being the same on every architecture. It is the same STEP on both (the STEP bytes are
+  identical once `SOURCE_DATE_EPOCH` is fixed), but OCCT's evaluation differs in the last digits between
+  native x86_64 and native arm64, and 12-digit rounding does not hide every such difference
+  (`docs/benchmarks/validation.md` names the fixtures and fields). The frozen signatures are the native
+  x86_64 ones.
+
+## Drift
+
+`python3 -m runner.verify_signatures signatures` re-derives every signature from its retained STEP and compares
+the bytes. It needs `step_eval`, so it runs in the step-validator image, on native x86_64. Any difference fails
+the job and names the fields that differ; a byte difference with no differing field fails as such. It was
+exercised once with a mutated signature (one `f64_hex` changed with the manifest rewritten to match), and it
+named the field. See `docs/benchmarks/validation.md`.
+
+## Release pinning
+
+A frozen release is `corpus/release/<version>/` (today `r0-open-1`, a candidate that is not tagged). Pin the
+version and the SHA-256 of its `manifest.json`, and verify before use:
 
 ```
 cd corpus/release/<version> && sha256sum -c SHA256SUMS
 ```
 
-That check needs `sha256sum` and nothing else.
+That needs `sha256sum` and nothing else (`python3 -m runner.reproduce verify <dir>` does the same with python
+only). The manifest pins eight things: corpus revision, source hashes, signature hashes, STEP hashes, image
+references, converter versions, evaluator version and numeric policy version. Its signature hashes are the
+`signatures/manifest.json` ones; its STEP hashes are of the text with the `FILE_NAME` time stamp replaced by
+`<TIMESTAMP>`, which is how `step/*.step` is shipped.
 
-## What you do not need
-
-No proprietary converter, no evaluator, no docker, and no network access to a vendor. Ordinary CI in the three
-repositories reads the frozen artifacts and nothing more. `python3 -m runner.reproduce verify <dir>` re-checks a
-release with python only.
-
-## What the evidence says
-
-Read the manifest's evidence fields before you claim anything ([evidence-classes.md](evidence-classes.md)).
-Today's release candidate is `KNOWN_TRUTH_EXACT` for reader mapping only, with `oracle_scope: NONE` on the corpus
-and one open converter behind the STEP files. It supports "the DWG carries these numbers" and "this converter's
-output has this signature". It does not support a claim that CAD Exchanger or ODA agree, and converter agreement
-is never described as source truth.
-
-## What it does not decide
-
-Whether PVec becomes the default blueprint path is `P8.7` and `N8.7`'s decision, recorded with numbers, and
-nothing here assumes the answer. EPIC L (`libviprs/libviprs#1028`) continues to ship the tessellated path, and this
-corpus serves both. The numeric thresholds are `P1.2`'s, in [numeric-policy.md](numeric-policy.md).
+No proprietary converter, evaluator, docker or vendor network access is needed to read a release. The evidence is
+`KNOWN_TRUTH_EXACT` for reader mapping only with `oracle_scope: NONE` on the corpus, and one open converter behind
+the STEP files ([evidence-classes.md](evidence-classes.md)); converter agreement is never source truth. Whether PVec
+becomes the default blueprint path is `P8.7` and `N8.7`'s decision, not an assumption here.
