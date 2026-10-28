@@ -64,7 +64,8 @@ elif "run" in args:
     sd = ROOT / "fixtures" / "validator-selftest"
     if svc == "step-validator":
         out = host(tail[tail.index("--out") + 1])
-        v = os.environ.get("FAKE_VERIF") or str(sd / "verification" / "x64" / "line.verification.json")
+        role = Path(tail[tail.index("--out") + 1]).name.split(".")[0].upper()
+        v = os.environ.get("FAKE_VERIF_" + role) or os.environ.get("FAKE_VERIF") or str(sd / "verification" / "x64" / "line.verification.json")
         d = json.loads(Path(v).read_text())
         d["numeric_policy_version"] = tail[tail.index("--policy-version") + 1]
         out.write_text(json.dumps(d))
