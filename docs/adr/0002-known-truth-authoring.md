@@ -21,9 +21,13 @@ else. The authoring script (`tools/authoring/author_probes.py` and its parameter
   explicitly in the record.
 - A fixture's provenance names its parameter file and the file's hash, and every fixture's README says
   that no expected value was taken from `primary.step` or `secondary.step`.
-- The DWG is written from the same parameters by the ODA Drawings SDK writer.
+- The DWG is written from the same parameters by an open writer named in the corpus manifest.
 
 ## Consequences
 
-The expected side of a probe can be regenerated and reviewed without any proprietary software. The
-DWG side cannot, which is why `source.dwg` is a separate step in the pipeline.
+The expected side of a probe can be regenerated and reviewed with nothing but Python. The DWG side
+needs the open writer, which is why `source.dwg` is a separate step in the pipeline.
+
+## Amendment (ADR 0010)
+
+Only open writers write the DWG. The earlier wording that named a licensed writer is withdrawn.

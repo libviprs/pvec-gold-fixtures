@@ -264,6 +264,49 @@ class RealWorld(unittest.TestCase):
             (t / "corpus/provenance.json").write_text(json.dumps({"fixtures": {"p-001": {"redistribution_verdict": "PRIVATE"}}}))
             self.assertTrue(c.private_path_problems(t))
 
+    # ---- #76: sources whose licence cannot be established stay out as id and hash only ----
+
+    PRIVATE_FIELDS = ("origin", "source_page", "page_statement", "rights_holder", "licence", "licence_basis", "acquisition_date", "redistribution_verdict", "archive_sha256", "files")
+
+    def test_private_records_carry_the_page_statement_and_hashes_and_no_bytes(self):
+        pri = load(CORPUS / "provenance.json")["private"]
+        self.assertGreaterEqual(len(pri), 2)
+        for pid, rec in pri.items():
+            for f in self.PRIVATE_FIELDS:
+                self.assertTrue(rec.get(f), "%s.%s" % (pid, f))
+            self.assertEqual(rec["redistribution_verdict"], "PRIVATE", pid)
+            self.assertRegex(rec["archive_sha256"], r"^[0-9a-f]{64}$")
+            self.assertTrue(all(len(h) == 64 and set(h) <= set("0123456789abcdef") for h in rec["files"].values()), pid)
+            self.assertFalse((FX / "real-world" / pid).exists(), pid)
+            self.assertNotIn(pid, load(CORPUS / "provenance.json")["fixtures"])
+
+    def test_a_public_record_cannot_share_a_hash_with_a_private_one(self):
+        d = load(CORPUS / "provenance.json")
+        public = {r["acquired_sha256"] for r in d["fixtures"].values()}
+        private = {h for r in d["private"].values() for h in r["files"].values()}
+        self.assertFalse(public & private)
+
+    def test_private_path_problems_flags_private_bytes_under_any_name(self):
+        c = corpus()
+        with tempfile.TemporaryDirectory() as t:
+            t = Path(t)
+            (t / "corpus").mkdir()
+            (t / "fixtures/real-world/other-001").mkdir(parents=True)
+            blob = b"AC1015 private bytes"
+            (t / "fixtures/real-world/other-001/source.dwg").write_bytes(blob)
+            (t / "corpus/provenance.json").write_text(json.dumps({"fixtures": {}, "private": {"p-001": {"redistribution_verdict": "PRIVATE", "files": {"a.dwg": hashlib.sha256(blob).hexdigest()}}}}))
+            problems = c.private_path_problems(t)
+            self.assertEqual(len(problems), 1)
+            self.assertIn("p-001", problems[0])
+            (t / "fixtures/real-world/p-001").mkdir()
+            (t / "fixtures/real-world/p-001/x.dwg").write_bytes(b"other")
+            self.assertEqual(len(c.private_path_problems(t)), 2)
+
+    def test_the_coverage_note_names_what_the_sources_did_not_settle(self):
+        cov = load(CORPUS / "provenance.json")["coverage"]
+        self.assertIn("WBDG", cov["not_covered"])
+        self.assertIn("1e6", cov["not_covered"])
+
     def test_real_world_is_never_known_truth_and_the_classifier_rejects_it_without_a_record(self):
         c = corpus()
         with tempfile.TemporaryDirectory() as t:

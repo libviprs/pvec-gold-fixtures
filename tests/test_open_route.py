@@ -37,10 +37,12 @@ class SingleOracle(unittest.TestCase):
         for row in rep["capabilities"]:
             self.assertIn("single oracle", " ".join(row["reasons"]), row["capability"])
 
-    def test_open_scope_refuses_a_vendor_id(self):
+    def test_a_second_converter_of_the_same_lineage_is_refused(self):
         with tempfile.TemporaryDirectory() as t:
             with self.assertRaises(SystemExit):
-                q.main(["--probes", str(KT), "--out", str(Path(t) / "r.json"), "--primary", "cadex", t, "--lineage", "cadex=CADEX"])
+                q.main(["--probes", str(KT), "--out", str(Path(t) / "r.json"), "--primary", "first-dwg2step", t,
+                        "--secondary", "second-dwg2step", t, "--lineage", "first-dwg2step=ACadSharp",
+                        "--lineage", "second-dwg2step=ACadSharp"])
 
     def test_probes_without_a_dwg_say_why(self):
         with tempfile.TemporaryDirectory() as t:
@@ -127,9 +129,23 @@ class FrozenDocs(unittest.TestCase):
             self.assertIn("frozen", status.lower(), f.name)
             self.assertNotIn("proposed", status.lower(), f.name)
 
-    def test_adr_0004_and_0007_keep_their_vendor_part_open(self):
+    def test_adr_0004_and_0007_cite_adr_0010(self):
         for n in ("0004-independent-step-validator", "0007-licensing-and-image-policy"):
-            self.assertIn("vendor-deferred.md", self.read("docs/adr/%s.md" % n), n)
+            self.assertIn("ADR 0010", self.read("docs/adr/%s.md" % n), n)
+
+    def test_adr_0010_is_accepted_and_supersedes_the_vendor_clauses(self):
+        t = self.read("docs/adr/0010-open-source-only.md")
+        status = re.search(r"^Status:.*", t, re.M).group(0).lower()
+        self.assertIn("accepted", status)
+        for n in ("0002", "0003", "0004", "0007", "0008", "0009"):
+            self.assertIn(n, status)
+
+    def test_no_adr_but_0010_names_a_vendor(self):
+        needle = re.compile(r"cadex|cad exchanger|\boda\b|\bvendors?\b|VENDOR_CONVERTERS|licensee|proprietary", re.I)
+        for f in sorted((ROOT / "docs" / "adr").glob("*.md")):
+            if f.name.startswith("0010-"):
+                continue
+            self.assertEqual(needle.findall(f.read_text()), [], f.name)
 
     def test_the_exit_gate_is_recorded_as_three_named_checks_with_its_open_route_result(self):
         t = self.read("docs/phase1-converter-qualification.md")
