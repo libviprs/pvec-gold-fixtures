@@ -1,0 +1,63 @@
+{
+  "blocks": [
+    {
+      "entities": [
+        {
+          "block": "PROBE_REFLECTION_001_L1",
+          "insert_point": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "rotation": "0x0000000000000000",
+          "scale": [
+            "0xbff0000000000000",
+            "0x3ff0000000000000",
+            "0x3ff0000000000000"
+          ],
+          "type": "INSERT"
+        }
+      ],
+      "name": "*Model_Space"
+    },
+    {
+      "entities": [
+        {
+          "center": [
+            "0x4000000000000000",
+            "0x3ff0000000000000",
+            "0x0000000000000000"
+          ],
+          "end_angle": "0x4004000000000000",
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "radius": "0x3ff8000000000000",
+          "start_angle": "0x3fd999999999999a",
+          "type": "ARC"
+        }
+      ],
+      "name": "PROBE_REFLECTION_001_L1"
+    }
+  ],
+  "dwg_sha256": "d8bfcd8e75019032cb1c719a028367159acc1e66f8eb5559d9e6f1c1335b4b3c",
+  "dwg_version": "AC1015",
+  "layers": [
+    {
+      "frozen": false,
+      "name": "0",
+      "on": true
+    }
+  ],
+  "reader": "ACadSharp@3.7.1+d7dc111",
+  "schema": "pvec-gold/r0-open-dwg-read/2"
+}

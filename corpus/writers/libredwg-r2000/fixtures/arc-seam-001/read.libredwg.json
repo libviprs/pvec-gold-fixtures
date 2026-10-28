@@ -1,0 +1,37 @@
+{
+  "blocks": [
+    {
+      "entities": [
+        {
+          "center": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x0000000000000000"
+          ],
+          "end_angle": "0x3fe6f0255dde9740",
+          "layer": "0",
+          "normal": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x3ff0000000000000"
+          ],
+          "radius": "0x4008000000000000",
+          "start_angle": "0x4016000000000000",
+          "type": "ARC"
+        }
+      ],
+      "name": "*Model_Space"
+    }
+  ],
+  "dwg_sha256": "c2ad869ae3aadf9de8e2d08e91a74ddedad718d863c7d462e166ed76e1302ac3",
+  "dwg_version": "AC1015",
+  "layers": [
+    {
+      "frozen": false,
+      "name": "0",
+      "on": true
+    }
+  ],
+  "reader": "LibreDWG@0.14+patch0001",
+  "schema": "pvec-gold/r0-open-dwg-read/2"
+}

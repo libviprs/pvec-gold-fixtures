@@ -1,0 +1,1 @@
+{"id":"uniform-scale-001","group":"transforms","kind":"transform","description":"A circle scaled uniformly by 2.5, so the expected result is a circle with the centre and radius scaled.","base":{"class":"circle","center":["1","-2","0"],"radius":"1.5"},"ops":[{"op":"scale","s":["2.5","2.5","2.5"],"classification":"UNIFORM_SCALE"}],"expect":"similarity"}

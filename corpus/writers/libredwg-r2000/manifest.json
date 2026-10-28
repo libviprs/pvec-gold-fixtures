@@ -1,0 +1,1731 @@
+{
+  "adr": "docs/adr/0008-open-writer-known-truth-corpus.md",
+  "container_images": {
+    "acadrust_reader": "rust:1.99.1-bookworm sha256:e12566d5abc17a0da741628782cdb504b68b8961f5bfcf677936bf3e8b32de29 (linux/amd64, native x86_64 on MARS)",
+    "skeleton_and_acadsharp_reader": "mcr.microsoft.com/dotnet/sdk:10.0.401-noble sha256:e70cdb7f80b0348f5cb85f19a8f670fca061f033d57eed12fa003d58b0e06317 (linux/amd64, native x86_64 on MARS)",
+    "writer_and_libredwg_reader": "pvec-oracle-libredwg local image id sha256:3c32156802d83574cda1c62e8b44779a02723ead5e8fb2f4c9ad3ae6d1564985 (linux/amd64, built locally from libviprs/pvec-oracle-libredwg main at 8aa7ab1, not published, used by id and never built from this repository)"
+  },
+  "determinism": {
+    "compared": 30,
+    "differing": 0,
+    "identical": 30,
+    "note": "the writer is run twice on the same inputs and the DWGs compared byte for byte; no header field is pinned",
+    "runs": 2
+  },
+  "dwg_version": "AC1015",
+  "evidence_scope": "READER_MAPPING_ONLY",
+  "evidence_statement": "KNOWN_TRUTH_EXACT here means one thing: the DWG bytes, decoded by three open readers, carry the authored mathematics, exactly where the DWG stores it verbatim and within PVec numeric policy v1 where it stores a derived value. There is no STEP oracle: no STEP file was produced, read or compared, and nothing here says how any converter treats these drawings.",
+  "fixtures": [
+    {
+      "capabilities": [
+        "trimmed_curve"
+      ],
+      "comparison": {
+        "path": "fixtures/arc-seam-001/comparison.json",
+        "sha256": "3c10707d9bc600c10e9bad19af7df55a331f36eb7af1b835f83d0461007d3caf"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/arc-seam-001/source.dwg",
+        "sha256": "c2ad869ae3aadf9de8e2d08e91a74ddedad718d863c7d462e166ed76e1302ac3",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/arc-seam-001/expected.math.json",
+        "path": "fixtures/arc-seam-001/expected.math.json",
+        "sha256": "6d2fe3988208c5ad230679d0ecd5bb01156a1ddb8ea112ac05987947833f9372"
+      },
+      "group": "curves",
+      "id": "arc-seam-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/arc-seam-001.json",
+        "path": "fixtures/arc-seam-001/params.json",
+        "sha256": "200dfbed0961269a6c36f60b815be4f9fd9f74400f1229c223ab874f9b07c14c"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/arc-seam-001/read.libredwg.json",
+          "sha256": "e7448803bd88bdf34a082343d43ab215a5b2a28e61872ce2fba80c5d05b594c5"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/arc-seam-001/read.acadrust.json",
+          "sha256": "129f7a7ac66df9b6ea3bdbabdd758c5c99b90d6fca877601f56e2fc7ca4a3da9"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/arc-seam-001/read.acadsharp.json",
+          "sha256": "81edfba9a1c9f143954d7f7e077dc158190b8f0e40ba54c518430a6a9d8c3077"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "bezier"
+      ],
+      "comparison": {
+        "path": "fixtures/bezier-d3-001/comparison.json",
+        "sha256": "8274496f64a78d028ff2f9716d5a6f912fa2bc34539705aabb4b720b37e3b199"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/bezier-d3-001/source.dwg",
+        "sha256": "310bc14468861e89d875704ca58d207c823092469ba492ac6dc880a30de8a16a",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/bezier-d3-001/expected.math.json",
+        "path": "fixtures/bezier-d3-001/expected.math.json",
+        "sha256": "965622a3eef06a5f6bf2a176f377d7d0797fd23201da4ac2dd011c30cec12b5e"
+      },
+      "group": "curves",
+      "id": "bezier-d3-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/bezier-d3-001.json",
+        "path": "fixtures/bezier-d3-001/params.json",
+        "sha256": "1a33fae522edd77ad2e81631fa6c62cd1b6ba71bf329025068973639b012480b"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/bezier-d3-001/read.libredwg.json",
+          "sha256": "ec2260bf93a25ff8b4144620bfe5a0c3e7b9bb1ce395fe37adc8587643666302"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/bezier-d3-001/read.acadrust.json",
+          "sha256": "50c37fed32dbc2c389927515c9a63d1b1f6f60ffdda1dbd92a8bed631ab5ac79"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/bezier-d3-001/read.acadsharp.json",
+          "sha256": "98c1f65bbf088197464a59a0bb929c9a65f61f06554388f3a43cf6605a6900a2"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "bspline"
+      ],
+      "comparison": {
+        "path": "fixtures/bspline-d3-001/comparison.json",
+        "sha256": "9616944a06f79e7ea9f495e98aa9c4ef223d440cef5f65b435a9d18d9f680248"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/bspline-d3-001/source.dwg",
+        "sha256": "420fe4e45cd3e5cdf73c8910b61d3844b0fa168f6d17b4fbedb926ff39e46a25",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/bspline-d3-001/expected.math.json",
+        "path": "fixtures/bspline-d3-001/expected.math.json",
+        "sha256": "eb30a52b6320501d09328f02ab2117d9a56fb9d532d2d11d254ba375fffc7205"
+      },
+      "group": "curves",
+      "id": "bspline-d3-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/bspline-d3-001.json",
+        "path": "fixtures/bspline-d3-001/params.json",
+        "sha256": "99029a3890ffd5b7790285e02388721165ba13d0f1de454754ba0999b3ad7b07"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/bspline-d3-001/read.libredwg.json",
+          "sha256": "fd3a7eda77a4130f8d9f769d64b34b67e8b4a2c10c15e8dc81f897dc50fc26dc"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/bspline-d3-001/read.acadrust.json",
+          "sha256": "fb671ba0842fcadbaec7aba0017acd9ba2c392ee9eb302be3ecccdad0874c26f"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/bspline-d3-001/read.acadsharp.json",
+          "sha256": "a8d3508e10ce03854ac36d1a9e1b7e59373d74f61420e43183f11f7790cce7a2"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "bspline"
+      ],
+      "comparison": {
+        "path": "fixtures/bspline-d5-001/comparison.json",
+        "sha256": "f876cdd7f3e7138bbb915ce2f9d1354a305fef05761cfed2760a7a75e0131293"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/bspline-d5-001/source.dwg",
+        "sha256": "07c4b218792c0108f137f3b4936b9d023fdef444cf6e7e821f8728e1d4a5f5fd",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/bspline-d5-001/expected.math.json",
+        "path": "fixtures/bspline-d5-001/expected.math.json",
+        "sha256": "fc17564b207fab9682b508f14c4ef31455dcdedd72d5ce391cde78e2a8f7fc50"
+      },
+      "group": "curves",
+      "id": "bspline-d5-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/bspline-d5-001.json",
+        "path": "fixtures/bspline-d5-001/params.json",
+        "sha256": "81af31abac0c0f749668c401dc50c33439ddc8a015bcdde8d1ce406a115a436b"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/bspline-d5-001/read.libredwg.json",
+          "sha256": "4879d0296c3a1e8993f3a0f2c9ec856ff0b8e7dd8aad541c3bb5549f6d04a6d5"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/bspline-d5-001/read.acadrust.json",
+          "sha256": "fc41bbb431724cb740cb2f6d51e2938c90438311fa9bbbfc19a4099f28b6c3c5"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/bspline-d5-001/read.acadsharp.json",
+          "sha256": "83752dde361afd2f0de62901fe91a9296e24774cc06fccdc1e2c47ad2cb7e16f"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "composite_curve"
+      ],
+      "comparison": {
+        "path": "fixtures/bulge-arc-001/comparison.json",
+        "sha256": "999bd5acfc3c532561432b0dd8068c7ae00022472f4bb80173e334f4f0008801"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/bulge-arc-001/source.dwg",
+        "sha256": "944ac77cdd7bc1a59e7e4cda34edef60df221ce7e11542144aabd4f3bb890f76",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/bulge-arc-001/expected.math.json",
+        "path": "fixtures/bulge-arc-001/expected.math.json",
+        "sha256": "0e9095d8c58d4f77c40cd47b9dc5eb84598ce5439fd499eb51fc4e341f7f7143"
+      },
+      "group": "curves",
+      "id": "bulge-arc-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/bulge-arc-001.json",
+        "path": "fixtures/bulge-arc-001/params.json",
+        "sha256": "9bba6becede820a71514035e106bbf698748bc9b2366b09015be54deca7d6b9b"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/bulge-arc-001/read.libredwg.json",
+          "sha256": "298b9c57b1539b98c81fcf85b2cde385f7ef3caee344aba7186d72b4fb25cc75"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/bulge-arc-001/read.acadrust.json",
+          "sha256": "9070311da9c82cd3006a60d4b4bb0be3df9f2c4c4f415cd70dd4cfc5c89de78c"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/bulge-arc-001/read.acadsharp.json",
+          "sha256": "9797af444ae8bdbe032903eef2229a72e445c078ec665dcaaa33c06af4d195d8"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "composite_curve"
+      ],
+      "comparison": {
+        "path": "fixtures/bulge-arc-neg-001/comparison.json",
+        "sha256": "fd8b0c3c422797f2730baeece9796503f4580ea7e8de2fd7ffa5f4bdca7587e1"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/bulge-arc-neg-001/source.dwg",
+        "sha256": "bdf116e99b3f81da50748fd701448f9f4c2bdc422ec548beb21dc00aa39d83a9",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/bulge-arc-neg-001/expected.math.json",
+        "path": "fixtures/bulge-arc-neg-001/expected.math.json",
+        "sha256": "827c7ab87a38cc36a6169187e2a7aa7d454d6311b345387a669dd5fa9f3925a4"
+      },
+      "group": "curves",
+      "id": "bulge-arc-neg-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/bulge-arc-neg-001.json",
+        "path": "fixtures/bulge-arc-neg-001/params.json",
+        "sha256": "e13f358a1abd0739e7b2dd4334545c81e63071fa6c2785ea7e7fa13f77e9597c"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/bulge-arc-neg-001/read.libredwg.json",
+          "sha256": "0a4126370f009ff237116bdfbea3989dee66dbce1edab1720fe1a0980362f365"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/bulge-arc-neg-001/read.acadrust.json",
+          "sha256": "f67f5c5cdc391089b360555c41aedc26e087f26ffe2ddd986f6835e5d532d6a8"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/bulge-arc-neg-001/read.acadsharp.json",
+          "sha256": "efe958310e4f46c388806f0e1ff3fb0c2c8eecc56071ed44eec5df2a843c89d0"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "circle"
+      ],
+      "comparison": {
+        "path": "fixtures/circle-001/comparison.json",
+        "sha256": "8f9298eb1940a03ceb4746206e6a37972c2b54fd50faf072ffdd00252f98cd05"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/circle-001/source.dwg",
+        "sha256": "b3c4aa799f3046e131c36a0baada0d48cb38fa8c445ab19f759347a1664ac17f",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/circle-001/expected.math.json",
+        "path": "fixtures/circle-001/expected.math.json",
+        "sha256": "f94047294db98e3efed1a60f055f132427b5b97637b311a2bdd83ab7f67d211f"
+      },
+      "group": "curves",
+      "id": "circle-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/circle-001.json",
+        "path": "fixtures/circle-001/params.json",
+        "sha256": "5dc9c00f3abd27762805dfd29f0107a6c0cf3855600686e763413052c189a41e"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/circle-001/read.libredwg.json",
+          "sha256": "efad0447f7881b226d4cb4a48f704b35777ef419714afa1a9c8350edb2ec0e4d"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/circle-001/read.acadrust.json",
+          "sha256": "b0f2308fd8eb6b82aacdd9772f4f1d3e5a480d74f33b3b931718fa31aa1930a1"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/circle-001/read.acadsharp.json",
+          "sha256": "edde22635d67af65b4a57dc1c7dbc19425224d47d3f8a3733a608ac4acd8a486"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "bspline"
+      ],
+      "comparison": {
+        "path": "fixtures/closed-by-endpoint-001/comparison.json",
+        "sha256": "460ee44089a939a0383f0a2d1619f108c21a1519bdfcffccc3efc31f97898186"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/closed-by-endpoint-001/source.dwg",
+        "sha256": "0bd227cf7a3715e6664c8c3e78eedae0587128c21acb1fc0d00cdcca44e1c017",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/closed-by-endpoint-001/expected.math.json",
+        "path": "fixtures/closed-by-endpoint-001/expected.math.json",
+        "sha256": "59fdb5c4780da69ffbee9dabc98232398e9484cd118ebecda56fbe9e0bc5b919"
+      },
+      "group": "curves",
+      "id": "closed-by-endpoint-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/closed-by-endpoint-001.json",
+        "path": "fixtures/closed-by-endpoint-001/params.json",
+        "sha256": "1d8e1bda328edb442dd92ae37edc87e5622264b4cfcc7d71eb371f60b78b2c8b"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/closed-by-endpoint-001/read.libredwg.json",
+          "sha256": "14c6c5640b9664551639034a4762a64afec028e6cceaf62bd5ce9643f206f582"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/closed-by-endpoint-001/read.acadrust.json",
+          "sha256": "c6c395b9824aa72beb249a3e0a9cad97ad54e82f22a93ace09671f509fb10b8a"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/closed-by-endpoint-001/read.acadsharp.json",
+          "sha256": "acdba1693dd064729d8fefe0ffe7f45ff1fd0dc1dbd466a266ae849ef04d0dfa"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "bspline"
+      ],
+      "comparison": {
+        "path": "fixtures/closed-periodic-001/comparison.json",
+        "sha256": "4e17c434fba1b52c42801f9cce32eec886ec6def0f95009dee2de21d7969ad9d"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/closed-periodic-001/source.dwg",
+        "sha256": "1fe3557cce4f766d7ffc45da32d0f23f7779057938ed2a01054bb0dab7ebe6a3",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/closed-periodic-001/expected.math.json",
+        "path": "fixtures/closed-periodic-001/expected.math.json",
+        "sha256": "9cf4c5f9d7912aaf28489f0fdfe1c1d2d8a315d24807fd149981a6425a3f0f4e"
+      },
+      "group": "curves",
+      "id": "closed-periodic-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/closed-periodic-001.json",
+        "path": "fixtures/closed-periodic-001/params.json",
+        "sha256": "61e7bd9a86644fac6b0f33c031b01e1836259c8e6ea498f36f66fd93c6394be0"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/closed-periodic-001/read.libredwg.json",
+          "sha256": "17ca124e75370028098e5637476c8b1eac57696aa3b97df18ca365555af12556"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/closed-periodic-001/read.acadrust.json",
+          "sha256": "f2fbe2a491517afd1ca0d2fd679e56d591a73277e802a667e3b3c62528f6456e"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/closed-periodic-001/read.acadsharp.json",
+          "sha256": "68a5a027a7f1101f6b103cffa855dd92864ac95ef3e77ca4de59a0e173246d30"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "ellipse"
+      ],
+      "comparison": {
+        "path": "fixtures/ellipse-001/comparison.json",
+        "sha256": "c0d850562374291db87ff99d9e364d03c24ee18368d6b7e60329c77524af3085"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/ellipse-001/source.dwg",
+        "sha256": "67eaf109688503afce626c87bf1c7f1aad049953eedcdedf78bb7daa9a72ee9e",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/ellipse-001/expected.math.json",
+        "path": "fixtures/ellipse-001/expected.math.json",
+        "sha256": "54a23e1dcdee2d2fbfd884f03dcd3a825bc2e3884eb74db4581ae74b038189fe"
+      },
+      "group": "curves",
+      "id": "ellipse-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/ellipse-001.json",
+        "path": "fixtures/ellipse-001/params.json",
+        "sha256": "ae16ecbef802c4206a7a292c347501c184fad21da8f1c182d5c759e66ae770e4"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/ellipse-001/read.libredwg.json",
+          "sha256": "46d04e3b40524bdecc89d804a048b2b3d0524b964b5d76e51050b7349095ac64"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/ellipse-001/read.acadrust.json",
+          "sha256": "a70b7c7fefd6db683be13fc8667f972e3e7cb4dd82f20a5a36b3278772ad6696"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/ellipse-001/read.acadsharp.json",
+          "sha256": "fb623de1b4384d4e3d3c6b7871c1a4ac8d20473dbe362ca27ea4f1cfd4710f4b"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "trimmed_curve"
+      ],
+      "comparison": {
+        "path": "fixtures/elliptical-arc-001/comparison.json",
+        "sha256": "a69dc52324b73bcf45ee7d49f208652f1f16d1886d0a5da6e28c77051fcb8f0e"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/elliptical-arc-001/source.dwg",
+        "sha256": "03581186c0de044d45f4f839c03575ac9a7679c7433db676566974d03d52fbe3",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/elliptical-arc-001/expected.math.json",
+        "path": "fixtures/elliptical-arc-001/expected.math.json",
+        "sha256": "bc65acf5704c4f390d42bcb634e41c988ac7e9898b749bf04f88e810fa86ea01"
+      },
+      "group": "curves",
+      "id": "elliptical-arc-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/elliptical-arc-001.json",
+        "path": "fixtures/elliptical-arc-001/params.json",
+        "sha256": "1e846dd5e37b11b80ebaf367c090cb2db51ba222f5e2bb5b9347f57a097dd11e"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/elliptical-arc-001/read.libredwg.json",
+          "sha256": "724bbb7d3efa02f1580393bdbc56c97e4182db529c104b7680774e7a06db6cc6"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/elliptical-arc-001/read.acadrust.json",
+          "sha256": "8a8d26b4910f578edb318119bbec0a5534778cdd8ed7285018006be36cbcf4e1"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/elliptical-arc-001/read.acadsharp.json",
+          "sha256": "687a8ef9fb2591531ba9e2eff5f2e754b32aeca3fbde78f2a3f763d1e6e2714c"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "polyline"
+      ],
+      "comparison": {
+        "path": "fixtures/large-coords-001/comparison.json",
+        "sha256": "47a75b85cfde84973796a358b3acd462a911f2dd19c7955249e01f6d718af35e"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/large-coords-001/source.dwg",
+        "sha256": "8c7b90e1850c665dacacfa7f358238d7bf8aa6013235786c984609f5e5261989",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/large-coords-001/expected.math.json",
+        "path": "fixtures/large-coords-001/expected.math.json",
+        "sha256": "a117564978c3144cb2f97e87f7679993c85c4399c0c2e28f265a151180815829"
+      },
+      "group": "curves",
+      "id": "large-coords-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/large-coords-001.json",
+        "path": "fixtures/large-coords-001/params.json",
+        "sha256": "f8daf3f990972c9583f070cab3cf8c4fe70035558b5a132cfe9a4b6673ae97b0"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/large-coords-001/read.libredwg.json",
+          "sha256": "48e62d7b48113a007928d08c4d251ced3bc2791bb9518a7c526e809c221d1d39"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/large-coords-001/read.acadrust.json",
+          "sha256": "ec3f792f870c9f0bbb232c709cf750031c7a6707916c8e73c669038b1db46ba0"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/large-coords-001/read.acadsharp.json",
+          "sha256": "6fc61697d2acff2e2340b5d67322c71c458c5467cb4c75a251d79a42659cbbfa"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [],
+      "capabilities_note": "layer state (off, frozen) is source visibility information whose use is libviprs policy (N1.4); the PVec 2D semantic profile has no capability for it",
+      "comparison": {
+        "path": "fixtures/layer-state-001/comparison.json",
+        "sha256": "d4ce3376544f21c85d9ab9f4a5a6371f1cb78b2488edd92dff13817c85b6a42a"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/layer-state-001/source.dwg",
+        "sha256": "a3000c3283a663a63806ff830f96a9ab9c017d8e5f287016568deb1a393a4f37",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/layer-state-001/expected.math.json",
+        "path": "fixtures/layer-state-001/expected.math.json",
+        "sha256": "f108d0fda48fa9b1de50a06d2739e2762d052b665d7e0fca7a7a7a01cca3f728"
+      },
+      "group": "curves",
+      "id": "layer-state-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/layer-state-001.json",
+        "path": "fixtures/layer-state-001/params.json",
+        "sha256": "e6ed8a080609cf7f15739ef4b62abaa5338ea1113a422bef40a1e919629cf97d"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/layer-state-001/read.libredwg.json",
+          "sha256": "28bf2b212b51fb411a5c183b01600221c0bf5d00f6b348f8d1002684d02b1a6f"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/layer-state-001/read.acadrust.json",
+          "sha256": "8704626967a40f2f93073dafa0bf181157cd3acba77e5ec2055d596a82ce2bc5"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/layer-state-001/read.acadsharp.json",
+          "sha256": "5c1a42e6502d1e27cc9a4abaeb01862d0c7bb5437fad6dc2a342fb3d498e142f"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "line"
+      ],
+      "comparison": {
+        "path": "fixtures/line-001/comparison.json",
+        "sha256": "3f781418306b7f56e15d1efae08e3a270bb7e9519f7892b9d2068edc620ad75f"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/line-001/source.dwg",
+        "sha256": "022f8a42cfbc421a674f007fb94260de09b6000282d31fd02fe50b589318d50f",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/line-001/expected.math.json",
+        "path": "fixtures/line-001/expected.math.json",
+        "sha256": "d99f4c11195e3bedb97f369685f0163ae522c55c286fafb39c641d3b27e1683f"
+      },
+      "group": "curves",
+      "id": "line-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/line-001.json",
+        "path": "fixtures/line-001/params.json",
+        "sha256": "cf720c6704204448dd8d328055e291507b97a9d0e8c0bd42b0d6a92330f9e61f"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/line-001/read.libredwg.json",
+          "sha256": "cc57e646df38bb2c6b1facbee07d08c70660367f84512e1db674be2678db8a5a"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/line-001/read.acadrust.json",
+          "sha256": "28900051eb23d5f1e9ac31ff49de0f725e7ede59aa1c16812c7b12668649d504"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/line-001/read.acadsharp.json",
+          "sha256": "9226d35e6ded588efdcc444170c1fd26256d00da8866c2af84e1c96f4cf318d7"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "polyline"
+      ],
+      "comparison": {
+        "path": "fixtures/lwpolyline-closed-001/comparison.json",
+        "sha256": "422ce49a2f587bd1d4f963729c6435e9a543d51dfbdd6bbcccce29a3ee348cd4"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/lwpolyline-closed-001/source.dwg",
+        "sha256": "77ee784e70b23b8d6fc4a9c5c65e147d9e935da8db2f9e5e965393f3d8b88c24",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/lwpolyline-closed-001/expected.math.json",
+        "path": "fixtures/lwpolyline-closed-001/expected.math.json",
+        "sha256": "98d02d643a76c2f86cefdc1f33b406c1ceae573705870bd211ef5500c42be03d"
+      },
+      "group": "curves",
+      "id": "lwpolyline-closed-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/lwpolyline-closed-001.json",
+        "path": "fixtures/lwpolyline-closed-001/params.json",
+        "sha256": "5d63b6a66c37d5260c1366081a9ad89780026176606b870cb3a566a12ff7deee"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/lwpolyline-closed-001/read.libredwg.json",
+          "sha256": "54d18056a768510dc94eb5f4612b0dd92cbd0296aa4b0dcc89cbbc0ea1fc38e0"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/lwpolyline-closed-001/read.acadrust.json",
+          "sha256": "17ec07d3380cec04cca3b681f333f7a6378b652d3bc5cff3a8ead97165ef6f69"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/lwpolyline-closed-001/read.acadsharp.json",
+          "sha256": "b75b261eac3846b56da2545209725de3a6331d0d7e7f0275e5047de0cf45707b"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "affine_transform"
+      ],
+      "comparison": {
+        "path": "fixtures/near-singular-001/comparison.json",
+        "sha256": "0c1aec454aed074e5c36f76966c569068123ecd78c42f5f58beaaafd73df4fa4"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "downstream_disposition": "NEAR_SINGULAR_TRANSFORM (QUARANTINE): the DWG carries this transform as authored, so reader mapping is checked, but a mapper must not emit a curve for this entity",
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/near-singular-001/source.dwg",
+        "sha256": "3c7114be03ba2eeafa69240927042ec772d03e02852a2a229366379158143716",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/transforms/near-singular-001/expected.math.json",
+        "path": "fixtures/near-singular-001/expected.math.json",
+        "sha256": "dddef110f3d8699aca973cf3d1a2cd31283affe124d5da4d7c3412fcbcb8a4e0"
+      },
+      "group": "transforms",
+      "id": "near-singular-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/transforms/near-singular-001.json",
+        "path": "fixtures/near-singular-001/params.json",
+        "sha256": "b1b74e139efd9faca16abfc9a0c59a7c4c8a0d5754ab688cf1ce7920a7857e1e"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/near-singular-001/read.libredwg.json",
+          "sha256": "5df9f53609af857165c5bfbd7cf9101a29490d7365295aae5766f252ba2c9c3d"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/near-singular-001/read.acadrust.json",
+          "sha256": "fcb84109cee240991d51e61e537831d04725189225f393e0c603e94cb0dec18f"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/near-singular-001/read.acadsharp.json",
+          "sha256": "dcaa4d5b0912015f122e8766bac7ad92cd8ac6de25f7e1a24094ec938043ad47"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "affine_transform"
+      ],
+      "comparison": {
+        "path": "fixtures/nested-blocks-001/comparison.json",
+        "sha256": "a2e605f67fd81ec0d0deb9d8d690ceb03ce15bc1883f88d71f0d7ce45c0712dc"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/nested-blocks-001/source.dwg",
+        "sha256": "c30fadc71efa83ed47f6bca23a444c2ec4da24a2e7bc07e095604cfcb7dbc98e",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/blocks/nested-blocks-001/expected.math.json",
+        "path": "fixtures/nested-blocks-001/expected.math.json",
+        "sha256": "c7bff2967f0962ebb1893041bcc57abfda38c85948f3ce3942a74a567a9ff37a"
+      },
+      "group": "blocks",
+      "id": "nested-blocks-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/blocks/nested-blocks-001.json",
+        "path": "fixtures/nested-blocks-001/params.json",
+        "sha256": "25afce88e129e44253f69c7a3e037b688bfbc06e4a1467099523e70b127164dd"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/nested-blocks-001/read.libredwg.json",
+          "sha256": "806ab297aab1bc7204b1d3d51c063c068f8f6f36524ddd2d7b77329174f8ef3f"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/nested-blocks-001/read.acadrust.json",
+          "sha256": "562eb2c841c1ee01e4441945eff19b1602e8e419c16084653911e15359ddd767"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/nested-blocks-001/read.acadsharp.json",
+          "sha256": "3dbbbca423b1213dc23ca20e14df50d7fbfeac4c2a925320d60413b2c7998d4b"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "affine_transform"
+      ],
+      "comparison": {
+        "path": "fixtures/nonuniform-scale-circle-001/comparison.json",
+        "sha256": "fe2409d5a342f860a2cf2434867f6763b71cecd939b59c8a1b4d1d4030af84a6"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/nonuniform-scale-circle-001/source.dwg",
+        "sha256": "7bd646409f4c010b03ea5604490a47b548052b86d5f8c01a9de8e06756f7225c",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/transforms/nonuniform-scale-circle-001/expected.math.json",
+        "path": "fixtures/nonuniform-scale-circle-001/expected.math.json",
+        "sha256": "9d9e1c1e5564f909314b4c74d94fc964b443c23a0212f673e6398cf6eaf6e733"
+      },
+      "group": "transforms",
+      "id": "nonuniform-scale-circle-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/transforms/nonuniform-scale-circle-001.json",
+        "path": "fixtures/nonuniform-scale-circle-001/params.json",
+        "sha256": "ad28b8a4fddfced4927cf5b992cc254bc1cba3aafa556bfe89719bd57fa4c7bc"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/nonuniform-scale-circle-001/read.libredwg.json",
+          "sha256": "ac41ae8bf175ed1b4a01d61794342940ca24c5efaf10e113fa514c72f4e72356"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/nonuniform-scale-circle-001/read.acadrust.json",
+          "sha256": "5b633e1cde31f96f1c6c8bddd4e8c082b436aa7d4ee06f08218af6b626d22f29"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/nonuniform-scale-circle-001/read.acadsharp.json",
+          "sha256": "2275c6cd344b56489c71090312f960618f083243cbcc7e95102243211e9eefd8"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "affine_transform"
+      ],
+      "comparison": {
+        "path": "fixtures/nonuniform-scale-rotated-001/comparison.json",
+        "sha256": "4da0da34708b7c8962e4c764da0940c45a993e90327232aaec3cc04c4b152d31"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/nonuniform-scale-rotated-001/source.dwg",
+        "sha256": "383b94c1b2a4d88fc7b2027a404c2563ceee427f1529e92a51f0fd9c11fc1de8",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/transforms/nonuniform-scale-rotated-001/expected.math.json",
+        "path": "fixtures/nonuniform-scale-rotated-001/expected.math.json",
+        "sha256": "4871cc827251f04a9fb261a7a69002ed7d2639e1e7c4ac69e2878623935ca9f1"
+      },
+      "group": "transforms",
+      "id": "nonuniform-scale-rotated-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/transforms/nonuniform-scale-rotated-001.json",
+        "path": "fixtures/nonuniform-scale-rotated-001/params.json",
+        "sha256": "df3ccd47dc77610938e36ea038795a471586d9a1097563ee303024244ece7d50"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/nonuniform-scale-rotated-001/read.libredwg.json",
+          "sha256": "38bb756f870154c366855bd4b5da467d867433a337839d876eed35ad227299b3"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/nonuniform-scale-rotated-001/read.acadrust.json",
+          "sha256": "a3b4e6fd979c967e117c7cbbc7db26bc1592e300d4ffe27d66295190359c3e08"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/nonuniform-scale-rotated-001/read.acadsharp.json",
+          "sha256": "89dfbfb0d43853c339901033203e648feb6d7002dae82f9b1d1a7e45476b7e91"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "nurbs"
+      ],
+      "comparison": {
+        "path": "fixtures/nonunit-weight-001/comparison.json",
+        "sha256": "7e08626e253a557f0dd17c122e16619f04f97268453ee0a6bdd37568f1659558"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/nonunit-weight-001/source.dwg",
+        "sha256": "fd4af792670670bbb198366f1142d374b9a26dd4d03f7eac53d96a6d0f328fc1",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/nonunit-weight-001/expected.math.json",
+        "path": "fixtures/nonunit-weight-001/expected.math.json",
+        "sha256": "20f633fa9e4bd4fef43c5810d73ddac6a645872e7815b078b92be9630eeb655d"
+      },
+      "group": "curves",
+      "id": "nonunit-weight-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/nonunit-weight-001.json",
+        "path": "fixtures/nonunit-weight-001/params.json",
+        "sha256": "40d8a924b74c127345ea0123d11167042f14cfce417c10f989017c279fbd34c8"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/nonunit-weight-001/read.libredwg.json",
+          "sha256": "b782f80398af572159564a01eb80098d4be7f4d5a9a454de1e5a708a8ebbfd42"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/nonunit-weight-001/read.acadrust.json",
+          "sha256": "87c43c2510db60ea6b117ee2a75f7a8821b19d408e0d028360df5af31d8a8045"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/nonunit-weight-001/read.acadsharp.json",
+          "sha256": "3bc773d595dc807368dc904c8158bbc005a27b3b0491ddc1ae9af7ccbdba2775"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "nurbs"
+      ],
+      "comparison": {
+        "path": "fixtures/nurbs-d2-offconic-001/comparison.json",
+        "sha256": "972cc004ca836b9b71be3b2de9686a99af5b940f530b091baab81b80817248b9"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/nurbs-d2-offconic-001/source.dwg",
+        "sha256": "a5274672e0d852a7b7591790664b8bf3f575c1d66f02848596d843d0caacb601",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/nurbs-d2-offconic-001/expected.math.json",
+        "path": "fixtures/nurbs-d2-offconic-001/expected.math.json",
+        "sha256": "b656f2000669b33ca99e114412fbe59bcaa07e272eea66dac35a4f67af80c352"
+      },
+      "group": "curves",
+      "id": "nurbs-d2-offconic-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/nurbs-d2-offconic-001.json",
+        "path": "fixtures/nurbs-d2-offconic-001/params.json",
+        "sha256": "99ce11b1aadff41b43c42b7670a535396ad8277b23d5e3cffb0bcbd344043199"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/nurbs-d2-offconic-001/read.libredwg.json",
+          "sha256": "0831da00926dafc3723722a4fee07ede736653d89b059f3a222ac6ac21915ced"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/nurbs-d2-offconic-001/read.acadrust.json",
+          "sha256": "bb32fa987c00d97363d3f35f9ff432ae8814ad5ce048c6d28b7fd6ced73a2850"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/nurbs-d2-offconic-001/read.acadsharp.json",
+          "sha256": "0770f26d18f0b31e073cc64443c59e9dca59f0cd8fa47feba5f653799fce3672"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "nurbs"
+      ],
+      "comparison": {
+        "path": "fixtures/nurbs-d3-001/comparison.json",
+        "sha256": "b00909dbacb89e02402acad044e9de11b1c6358b0f5cbc87c8a09c9cf9cbeaf1"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/nurbs-d3-001/source.dwg",
+        "sha256": "4863d902a955b59d8654ee54fd232bc7cdba50b412e24ddce1c4e5fba398be22",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/nurbs-d3-001/expected.math.json",
+        "path": "fixtures/nurbs-d3-001/expected.math.json",
+        "sha256": "b8ff6b5114f069fcd12775b2e2bed62e5a74ba5792d1d2b287e0f2c1f27ca0df"
+      },
+      "group": "curves",
+      "id": "nurbs-d3-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/nurbs-d3-001.json",
+        "path": "fixtures/nurbs-d3-001/params.json",
+        "sha256": "0ead9c9be85db528025cfce85967d87aa8ec252adc15b1c04fdbca84218fa455"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/nurbs-d3-001/read.libredwg.json",
+          "sha256": "833762899171f8cda1f69e1fe7869ec0d3b9329337f0d4148aa88bc48056acd0"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/nurbs-d3-001/read.acadrust.json",
+          "sha256": "9b31c964f9edf1d84c309cba193dfaacdb0e291f45adb80a426437f0c6e2946b"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/nurbs-d3-001/read.acadsharp.json",
+          "sha256": "07d37fa8c3308928b8ac3afa2686ca52823da82afd6da6dbbde873bd42321bff"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "polyline"
+      ],
+      "comparison": {
+        "path": "fixtures/polyline-001/comparison.json",
+        "sha256": "b733f869a59e4d2285f29cbfa51d41fe7fe7ee596cf39cba5855d45f8f2a16b3"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/polyline-001/source.dwg",
+        "sha256": "5ee81e8c42d2cb042b31d390d01d65c49a127de3142b86ed25aa48dac9d6b972",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/polyline-001/expected.math.json",
+        "path": "fixtures/polyline-001/expected.math.json",
+        "sha256": "a4866da7c7d3183fdd7e05bf70efc4aa76edfb19687080a4b5ee2089a35c1f50"
+      },
+      "group": "curves",
+      "id": "polyline-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/polyline-001.json",
+        "path": "fixtures/polyline-001/params.json",
+        "sha256": "3e16a822c823bc404b1cdb6de0d38163ad011d31fe76c7c1acf9a940a086767c"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/polyline-001/read.libredwg.json",
+          "sha256": "028b243762cca0f5640af2c5f302fb367735d8006039b155cd330f79dd7d7a03"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/polyline-001/read.acadrust.json",
+          "sha256": "01565344ed299e62ac9e58cc4f736019da9f44f1dabc33295897d7b9c1941c49"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/polyline-001/read.acadsharp.json",
+          "sha256": "c15ded24e844a687d0bb5729c10533da190c71216d26a22209a602c7d5a7a2fd"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "polyline"
+      ],
+      "comparison": {
+        "path": "fixtures/polyline2d-001/comparison.json",
+        "sha256": "53f94d0026e0f6e7e6d6d1039a63e18c3c1db8467188a1ee69c660bb830f1393"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/polyline2d-001/source.dwg",
+        "sha256": "7a6cad61b43a40c5556b590a10b9f38395a280e761cff385e709f14b3b9c9e0d",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/polyline2d-001/expected.math.json",
+        "path": "fixtures/polyline2d-001/expected.math.json",
+        "sha256": "bde791885f9a9d84799d0db995f5df1288f48a285096e5a74ffaa2f46d8afa06"
+      },
+      "group": "curves",
+      "id": "polyline2d-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/polyline2d-001.json",
+        "path": "fixtures/polyline2d-001/params.json",
+        "sha256": "7bc3c6b7b27fbb98474e292c25798478d71f5e196e5968f401bdc435d6c6fcf4"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/polyline2d-001/read.libredwg.json",
+          "sha256": "5ee6d392b9779b991d6954d76e68ca23d598867e227d392955c317c7c6a8b2a2"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/polyline2d-001/read.acadrust.json",
+          "sha256": "637b6f61560b676a4c480c04b31d677d907fd31c190d3945ea883a038f92f2e6"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/polyline2d-001/read.acadsharp.json",
+          "sha256": "769aa352ffcec3f3feb7835824480d668cc6b9e29ce3284aada81e83e70b8f1d"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "affine_transform"
+      ],
+      "comparison": {
+        "path": "fixtures/reflection-001/comparison.json",
+        "sha256": "6478ad2bf480ada8a39ac9c9e3f87b47fe7e45d1e551ded3b3f3cdcd5c94e7b2"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/reflection-001/source.dwg",
+        "sha256": "d8bfcd8e75019032cb1c719a028367159acc1e66f8eb5559d9e6f1c1335b4b3c",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/transforms/reflection-001/expected.math.json",
+        "path": "fixtures/reflection-001/expected.math.json",
+        "sha256": "37f5991b7b06d07ffdf3b3bc627cd92c9d9e383f7df9bfa2feeacd502875fe64"
+      },
+      "group": "transforms",
+      "id": "reflection-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/transforms/reflection-001.json",
+        "path": "fixtures/reflection-001/params.json",
+        "sha256": "a20dd45749ea33bf7c83bfeb4843a0051d6d0e8f7e42f08e8187dcb3239e02df"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/reflection-001/read.libredwg.json",
+          "sha256": "7e20eb54b16ea5bf48530189de6ae12ac5295a5751be8d3b39241e4a4e3f20fc"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/reflection-001/read.acadrust.json",
+          "sha256": "1b5b5d526f9c31a7c4065b2c3d1344a622129088de051be3f3053ac4991c8d7e"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/reflection-001/read.acadsharp.json",
+          "sha256": "7ddd45649a904392e838eed6dc301a1989e9fd7c92078d6231600047a6ed481d"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "bspline"
+      ],
+      "comparison": {
+        "path": "fixtures/repeated-knot-c0-001/comparison.json",
+        "sha256": "7b2f8e1cda073456e57a14bd189eae355949000f74b30e3ad0b02c30d2938357"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/repeated-knot-c0-001/source.dwg",
+        "sha256": "c4dce97c07d74ffd28a144b38338107016ac4acf73e84042bc84eb9f555b6e9d",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/repeated-knot-c0-001/expected.math.json",
+        "path": "fixtures/repeated-knot-c0-001/expected.math.json",
+        "sha256": "556712f19e67c3a0da67b51cf0b6f99a4707b0ed1d1fe7fb56927fe304ca15ee"
+      },
+      "group": "curves",
+      "id": "repeated-knot-c0-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/repeated-knot-c0-001.json",
+        "path": "fixtures/repeated-knot-c0-001/params.json",
+        "sha256": "155e54dfb968858b7c8aab903a5f4148a5459d1891c092c03b7f58612b098c5e"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/repeated-knot-c0-001/read.libredwg.json",
+          "sha256": "a2d5ba7c79967d10ae7439ac2186bb9b8d32f8baee9293d5204a1de8a2de90d6"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/repeated-knot-c0-001/read.acadrust.json",
+          "sha256": "b5f82d5845a5549e50931b466c429e90527dacda9bdf970cf88cb9ebea6fcc63"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/repeated-knot-c0-001/read.acadsharp.json",
+          "sha256": "ba892f1d100e5b9ae8c917dba9738e10df4f4f920fc85031d26f3e5cbe6b52ae"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "affine_transform"
+      ],
+      "comparison": {
+        "path": "fixtures/rotation-irrational-001/comparison.json",
+        "sha256": "b2a41609407844bb8bdb802fcffcdabbccd94ec47bbf3b71bcc9f32bb588c0a2"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/rotation-irrational-001/source.dwg",
+        "sha256": "976af6c14c4859bb0132591b036676bf3682a5fef44a4e493eae8f766e9a0b16",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/transforms/rotation-irrational-001/expected.math.json",
+        "path": "fixtures/rotation-irrational-001/expected.math.json",
+        "sha256": "85e4f5f959d5f368b9bed9f4d766e5efcacff33c55cc610fbb95bb70a20fb8fe"
+      },
+      "group": "transforms",
+      "id": "rotation-irrational-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/transforms/rotation-irrational-001.json",
+        "path": "fixtures/rotation-irrational-001/params.json",
+        "sha256": "16d1933b9523ab9798999440e4077c2186a3590a275322489756e9844f50c0f7"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/rotation-irrational-001/read.libredwg.json",
+          "sha256": "deb917f28644d74280f0cbef481d65748970b13d333a70a165f36d22b398670b"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/rotation-irrational-001/read.acadrust.json",
+          "sha256": "130ddc3cb3d3f53a5b9f5af3a00ef462ec19e01aba1aa5fa31c3009ea6c4a55f"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/rotation-irrational-001/read.acadsharp.json",
+          "sha256": "a646179e148bf2a1f2d0f8c32ea371b4614c2830c78ef2dd9bee3a3ba6742d2d"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "circle"
+      ],
+      "comparison": {
+        "path": "fixtures/tiny-radius-001/comparison.json",
+        "sha256": "4934d650b1027b91826697bb752f9a7b8c445e39f3b64fdded9fae1214a0eb05"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/tiny-radius-001/source.dwg",
+        "sha256": "ab6e96fdccd9d88bd05bdc3e07c8445a3b8c70a510fc551ea13617dbd8db58d6",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/tiny-radius-001/expected.math.json",
+        "path": "fixtures/tiny-radius-001/expected.math.json",
+        "sha256": "57f68fc85563b611928a73177a05b8099dde40a428fa0719979029e4c397f02c"
+      },
+      "group": "curves",
+      "id": "tiny-radius-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/tiny-radius-001.json",
+        "path": "fixtures/tiny-radius-001/params.json",
+        "sha256": "e0db5f4fb2c976125d7b7f5b4dd6e415a852c5d43ee5907c0989060adf1fe10b"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/tiny-radius-001/read.libredwg.json",
+          "sha256": "900e6a38a33f12a6e2c0ede3f9cedf111c8b9c7718c2917bb656cf1f0edc349a"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/tiny-radius-001/read.acadrust.json",
+          "sha256": "74819070904828088f2c3271b026a3517767690e226b3c56b941551ae81d955b"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/tiny-radius-001/read.acadsharp.json",
+          "sha256": "bfb543d9f029fdfe946ea923e4349e0639ef7fafec0c7a274d63bca406a914fe"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "affine_transform"
+      ],
+      "comparison": {
+        "path": "fixtures/translation-001/comparison.json",
+        "sha256": "91ce7c28e9f835cc93db4255a53bfc65b193e215ef108a70562c147ade547c06"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/translation-001/source.dwg",
+        "sha256": "d398d8d9e4162a54175d8bcffd7a159b7951b9201597e851944e082a27c79965",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/transforms/translation-001/expected.math.json",
+        "path": "fixtures/translation-001/expected.math.json",
+        "sha256": "158201b897af18dcb468000f16b9157055550717213bb3458b238f0c6e3c3c0f"
+      },
+      "group": "transforms",
+      "id": "translation-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/transforms/translation-001.json",
+        "path": "fixtures/translation-001/params.json",
+        "sha256": "19e662b978c3653292b63d9fc3e533b2fcfb967ee1988052cd0e0430db4ffcb0"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/translation-001/read.libredwg.json",
+          "sha256": "6380d19ba1b00139b26ccd6112ca799aea7c40172dc4289b2f07db1950e09275"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/translation-001/read.acadrust.json",
+          "sha256": "857e95ea8a7608e49d636cc830a12cc9595f9a304790c849aeac623628a05032"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/translation-001/read.acadsharp.json",
+          "sha256": "c84f7a5e6bcee81009d28e7e07ec7ea1fbb0dd8f2338316e674065d2da682504"
+        }
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "capabilities": [
+        "affine_transform"
+      ],
+      "comparison": {
+        "path": "fixtures/uniform-scale-001/comparison.json",
+        "sha256": "cfa7dcb48d864b8f63e7d35eb50f9779dce79510c64e0ecdcde2678ecea97f77"
+      },
+      "cross_read": {
+        "verdict": "AGREE"
+      },
+      "dwg": {
+        "dwg_version": "AC1015",
+        "path": "fixtures/uniform-scale-001/source.dwg",
+        "sha256": "1d7652511656c804fe675b4d3d226d2ef0d864034789db0bbe804c4528e3ede2",
+        "writer": "LibreDWG@0.14+patch0001"
+      },
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "expected": {
+        "canonical_path": "fixtures/known-truth/transforms/uniform-scale-001/expected.math.json",
+        "path": "fixtures/uniform-scale-001/expected.math.json",
+        "sha256": "9a0565b7a146bee951771aabfa866b5ffdc82f0c1730e2e3617289f9ebcd2531"
+      },
+      "group": "transforms",
+      "id": "uniform-scale-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracles": "none",
+      "parameter_file": {
+        "canonical_path": "tools/authoring/params/transforms/uniform-scale-001.json",
+        "path": "fixtures/uniform-scale-001/params.json",
+        "sha256": "7b11a72ec654fb88f5a2240096690d747befdd6944411206468dc18c1f64ca16"
+      },
+      "provenance": "SYNTHETIC_AUTHORED",
+      "reads": [
+        {
+          "name": "LibreDWG",
+          "reader": "LibreDWG@0.14+patch0001",
+          "record": "fixtures/uniform-scale-001/read.libredwg.json",
+          "sha256": "c92fda72bbe30091c1f0ba2d46d379997dc3ae2bfb938ca816c830b64cf20c46"
+        },
+        {
+          "name": "acadrust",
+          "reader": "acadrust@0.5.5+d35691f",
+          "record": "fixtures/uniform-scale-001/read.acadrust.json",
+          "sha256": "7a2546f4894e6beb0024486cf5114cca3bf05819f34c1f5f7d7073a5a1657a47"
+        },
+        {
+          "name": "ACadSharp",
+          "reader": "ACadSharp@3.7.1+d7dc111",
+          "record": "fixtures/uniform-scale-001/read.acadsharp.json",
+          "sha256": "5f0ed38cffa7dfddc8c6dd0cae9b125c118476f4889be8ed3a2a430d3fa1716c"
+        }
+      ],
+      "status": "ACCEPTED"
+    }
+  ],
+  "numeric_policy_version": "PVec numeric policy v1",
+  "of_corpus": "r0-open",
+  "oracles": "none",
+  "own_reader": "LibreDWG",
+  "readers": [
+    {
+      "name": "LibreDWG",
+      "reader": "LibreDWG@0.14+patch0001",
+      "role": "own reader of the writer family",
+      "source": "dwgdump from the pvec-oracle-libredwg image (LibreDWG 0.14, dwgread with doubles printed to 17 digits), run as a separate process"
+    },
+    {
+      "name": "acadrust",
+      "reader": "acadrust@0.5.5+d35691f",
+      "role": "cross reader (a different writer family's reader)",
+      "source": "https://github.com/libviprs/acadrust at d35691f483534e4affc3a4065486e168c898ac7d, DwgReader, via tools/r0-open/rust (command read)"
+    },
+    {
+      "name": "ACadSharp",
+      "reader": "ACadSharp@3.7.1+d7dc111",
+      "role": "cross reader (a different writer family's reader)",
+      "source": "ACadSharp at d7dc111, DwgReader.Read, via tools/r0-open/acadsharp-dump"
+    }
+  ],
+  "schema_version": "pvec-gold/writer-family-manifest/1",
+  "self_contained": "this directory holds every DWG, every read record and a hash-pinned copy of each authored record and parameter file; nothing outside it is needed to run `check`",
+  "status": "CANDIDATE",
+  "step_oracle": "none",
+  "writer": "LibreDWG@0.14+patch0001",
+  "writer_family": "libredwg-r2000",
+  "writer_source": "GNU LibreDWG 0.14 dwgwrite (the build of the pvec-oracle-libredwg image: the stock source plus its one patch, which only changes how dwgread prints doubles), run as a separate process on JSON that tools/corpus/writer-libredwg/author.py writes from the authored expected.math.json records and the parameter files. dwgwrite is invoked as 'dwgwrite --as r2000|r2004 -I JSON'. LibreDWG refuses r2007 and does not write r2010 and later reliably (its manual: those formats still fail CRC and audit checks), so R2000 (AC1015) and R2004 (AC1018) are the only versions this family covers."
+}

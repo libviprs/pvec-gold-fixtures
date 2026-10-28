@@ -1,0 +1,434 @@
+{
+  "checks": {
+    "LibreDWG": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "SPLINE",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "SPLINE"
+      },
+      {
+        "expected": 3,
+        "field": "degree",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 3
+      },
+      {
+        "expected": 4,
+        "field": "control_point_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 4
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[0][0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[0][1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[0][2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "control_point[1][0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x4004000000000000",
+        "field": "control_point[1][1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4004000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[1][2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x4008000000000000",
+        "field": "control_point[2][0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4008000000000000"
+      },
+      {
+        "expected": "0x4004000000000000",
+        "field": "control_point[2][1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4004000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[2][2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x4010000000000000",
+        "field": "control_point[3][0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4010000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[3][1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[3][2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": 8,
+        "field": "knot_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 8
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "knot[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "knot[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "knot[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "knot[3]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "knot[4]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "knot[5]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "knot[6]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "knot[7]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": false,
+        "field": "rational",
+        "mode": "EXACT",
+        "ok": true,
+        "read": false
+      },
+      {
+        "expected": 0,
+        "field": "weight_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 0
+      },
+      {
+        "expected": false,
+        "field": "closed(by knots)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": false
+      },
+      {
+        "expected": false,
+        "field": "periodic",
+        "mode": "EXACT",
+        "ok": true,
+        "read": false
+      },
+      {
+        "expected": 0,
+        "field": "fit_points",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 0
+      }
+    ],
+    "acadrust": [
+      {
+        "expected": 1,
+        "field": "model_space_entity_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 1
+      },
+      {
+        "expected": "SPLINE",
+        "field": "type",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "SPLINE"
+      },
+      {
+        "expected": 3,
+        "field": "degree",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 3
+      },
+      {
+        "expected": 4,
+        "field": "control_point_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 4
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[0][0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[0][1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[0][2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "control_point[1][0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x4004000000000000",
+        "field": "control_point[1][1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4004000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[1][2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x4008000000000000",
+        "field": "control_point[2][0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4008000000000000"
+      },
+      {
+        "expected": "0x4004000000000000",
+        "field": "control_point[2][1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4004000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[2][2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x4010000000000000",
+        "field": "control_point[3][0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x4010000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[3][1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "control_point[3][2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": 8,
+        "field": "knot_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 8
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "knot[0]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "knot[1]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "knot[2]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x0000000000000000",
+        "field": "knot[3]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x0000000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "knot[4]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "knot[5]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "knot[6]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": "0x3ff0000000000000",
+        "field": "knot[7]",
+        "mode": "EXACT",
+        "ok": true,
+        "read": "0x3ff0000000000000"
+      },
+      {
+        "expected": false,
+        "field": "rational",
+        "mode": "EXACT",
+        "ok": true,
+        "read": false
+      },
+      {
+        "expected": 0,
+        "field": "weight_count",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 0
+      },
+      {
+        "expected": false,
+        "field": "closed(by knots)",
+        "mode": "EXACT",
+        "ok": true,
+        "read": false
+      },
+      {
+        "expected": false,
+        "field": "periodic",
+        "mode": "EXACT",
+        "ok": true,
+        "read": false
+      },
+      {
+        "expected": 0,
+        "field": "fit_points",
+        "mode": "EXACT",
+        "ok": true,
+        "read": 0
+      }
+    ]
+  },
+  "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+  "fixture_id": "bezier-d3-001",
+  "numeric_policy_version": "PVec numeric policy v1",
+  "reader_vs_reader_differences": {},
+  "reason": "MALFORMED_FIXTURE",
+  "verdict": "UNREADABLE"
+}

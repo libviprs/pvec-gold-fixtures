@@ -1,0 +1,175 @@
+{
+  "excluded": [
+    {
+      "evidence": "op 'matrix' (a general matrix) has no single INSERT form: one INSERT carries translation, one rotation about the normal and three scales, and no shear. A three-level nested INSERT chain could carry its 2x2 part through a singular value decomposition, but those factors would be derived values compared under policy and not EXACT, and the probe's own truth is a rejection outcome that no reader-mapping check can exercise, so that was not attempted",
+      "file": null,
+      "id": "general-affine-001",
+      "reason": "UNSUPPORTED_ENTITY"
+    },
+    {
+      "evidence": "op 'matrix' (a general matrix) has no single INSERT form: one INSERT carries translation, one rotation about the normal and three scales, and no shear. A three-level nested INSERT chain could carry its 2x2 part through a singular value decomposition, but those factors would be derived values compared under policy and not EXACT, and the probe's own truth is a rejection outcome that no reader-mapping check can exercise, so that was not attempted",
+      "file": null,
+      "id": "shear-001",
+      "reason": "UNSUPPORTED_ENTITY"
+    },
+    {
+      "evidence": "a zero scale is not authored in this family: singular-001 is the job of the zero-scale probe, as in r0-open",
+      "file": null,
+      "id": "singular-001",
+      "reason": "UNSUPPORTED_ENTITY"
+    }
+  ],
+  "quarantined": [
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "arc-seam-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "bezier-d3-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "bspline-d3-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "bspline-d5-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "bulge-arc-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "bulge-arc-neg-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "circle-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "closed-by-endpoint-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "closed-periodic-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "ellipse-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "elliptical-arc-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "large-coords-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "layer-state-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "line-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "lwpolyline-closed-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "near-singular-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "nested-blocks-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "nonuniform-scale-circle-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "nonuniform-scale-rotated-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "nonunit-weight-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "nurbs-d2-offconic-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "nurbs-d3-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "polyline-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "polyline2d-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "reflection-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "repeated-knot-c0-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "rotation-irrational-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "tiny-radius-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "translation-001",
+      "reason": "MALFORMED_FIXTURE"
+    },
+    {
+      "evidence": "a reader could not open the DWG: ACadSharp; of the readers that could (LibreDWG, acadrust), all match the authored truth and decode the same record",
+      "id": "uniform-scale-001",
+      "reason": "MALFORMED_FIXTURE"
+    }
+  ],
+  "writer_family": "libredwg-r2004"
+}
