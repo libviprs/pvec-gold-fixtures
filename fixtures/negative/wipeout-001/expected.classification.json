@@ -1,0 +1,24 @@
+{
+  "schema_version": "pvec-gold/expected.classification/1",
+  "fixture_id": "wipeout-001",
+  "evidence_class": "QUARANTINED",
+  "quarantine_reason": "UNSUPPORTED_ENTITY",
+  "entities": [
+    {
+      "dwg_type": "WIPEOUT",
+      "count": 1,
+      "outcome": "IGNORED",
+      "reason": "A wipeout is a masking boundary, a display effect that draws nothing of its own. v1 drops it by policy."
+    }
+  ],
+  "converter_emits_nothing": false,
+  "outcome": "IGNORED",
+  "reason": "A wipeout is a masking boundary, a display effect that draws nothing of its own. v1 drops it by policy.",
+  "accepted_geometry": [],
+  "provenance": {
+    "derivation": "AUTHORING_PARAMETERS",
+    "authoring_script": "tools/authoring/author_corpus.py",
+    "parameter_file": "tools/authoring/corpus-params/negative/wipeout-001.json",
+    "parameter_file_sha256": "249b3f33c7888e236bf21b9fe0f44150cea70b6751cde5e3a5bf954c5e41d314"
+  }
+}

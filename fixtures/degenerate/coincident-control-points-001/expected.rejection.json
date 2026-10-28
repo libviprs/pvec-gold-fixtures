@@ -1,0 +1,157 @@
+{
+  "schema_version": "pvec-gold/expected.rejection/1",
+  "fixture_id": "coincident-control-points-001",
+  "evidence_class": "QUARANTINED",
+  "quarantine_reason": "MALFORMED_FIXTURE",
+  "authored": {
+    "dwg_entity": "SPLINE",
+    "geometry": {
+      "degree": 3,
+      "control_points": [
+        [
+          {
+            "decimal": "1.0",
+            "f64_hex": "0x3ff0000000000000"
+          },
+          {
+            "decimal": "1.0",
+            "f64_hex": "0x3ff0000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          }
+        ],
+        [
+          {
+            "decimal": "1.0",
+            "f64_hex": "0x3ff0000000000000"
+          },
+          {
+            "decimal": "1.0",
+            "f64_hex": "0x3ff0000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          }
+        ],
+        [
+          {
+            "decimal": "1.0",
+            "f64_hex": "0x3ff0000000000000"
+          },
+          {
+            "decimal": "1.0",
+            "f64_hex": "0x3ff0000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          }
+        ],
+        [
+          {
+            "decimal": "1.0",
+            "f64_hex": "0x3ff0000000000000"
+          },
+          {
+            "decimal": "1.0",
+            "f64_hex": "0x3ff0000000000000"
+          },
+          {
+            "decimal": "0.0",
+            "f64_hex": "0x0000000000000000"
+          }
+        ]
+      ],
+      "knots": [
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "0.0",
+          "f64_hex": "0x0000000000000000"
+        },
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        },
+        {
+          "decimal": "1.0",
+          "f64_hex": "0x3ff0000000000000"
+        }
+      ]
+    }
+  },
+  "expected_rejection": {
+    "classification": "DEGENERATE_COINCIDENT_CONTROL_POINTS",
+    "disposition": "REJECT",
+    "geometry_emitted": false
+  },
+  "provenance": {
+    "derivation": "AUTHORING_PARAMETERS",
+    "authoring_script": "tools/authoring/author_corpus.py",
+    "parameter_file": "tools/authoring/corpus-params/degenerate/coincident-control-points-001.json",
+    "parameter_file_sha256": "09d9d235e0afe9037a72fc5f83290a32b0cd158b03448370c4c3c5b7b3590517",
+    "parameters": {
+      "id": "coincident-control-points-001",
+      "kind": "degenerate",
+      "group": "degenerate",
+      "dwg_entity": "SPLINE",
+      "reason": "COINCIDENT_CONTROL_POINTS",
+      "description": "A clamped cubic SPLINE whose four control points are all (1, 1, 0). Its image is a single point however it is parameterised.",
+      "degree": 3,
+      "control_points": [
+        [
+          "1",
+          "1",
+          "0"
+        ],
+        [
+          "1",
+          "1",
+          "0"
+        ],
+        [
+          "1",
+          "1",
+          "0"
+        ],
+        [
+          "1",
+          "1",
+          "0"
+        ]
+      ],
+      "knots": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    }
+  },
+  "assertion": "A pipeline that produces geometry for this fixture has failed. Mathematics cannot state this entity as a curve, so there is no expected.math.json, and the fixture is quarantined by design (ADR 0006), never accepted."
+}

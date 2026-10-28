@@ -1,0 +1,48 @@
+{
+  "schema_version": "pvec-gold/provenance/1",
+  "corpus_revision": "r1-open",
+  "coverage": {
+    "covered": [
+      "architectural",
+      "block-heavy",
+      "general annotation-heavy (mixed discipline)"
+    ],
+    "not_covered": "structural, mechanical, electrical, civil, industrial/facility, spline-heavy and large-coordinate (above 1e6) drawings: I found no drawing in these classes with a licence I could establish, and a drawing whose licence cannot be established does not enter the corpus. The synthetic large-coords-001 and huge-extent-001 cover the large-coordinate arithmetic but are not real-world."
+  },
+  "private_pack": "none yet: every fixture here is PUBLIC_REDISTRIBUTABLE. A PRIVATE source would appear in fixtures/real-world as its id and hashes only, with the bytes in a pack outside this repository, and runner.corpus.private_path_problems fails the run if a PRIVATE DWG is present.",
+  "fixtures": {
+    "arch-aecobjects-001": {
+      "origin": "https://github.com/DomCR/ACadSharp/blob/d7dc111023477d8a9fffc2153139459c95b4f345/samples/aec_objects/AecObjects.dwg",
+      "rights_holder": "Albert Domenech and the ACadSharp contributors (the copyright holder named in the repository LICENSE)",
+      "licence": "MIT",
+      "licence_basis": "The repository licence (LICENSE at the pinned commit) covers the files in the repository. Who drew this particular sample is not established, so the verdict rests on that grant and the O3.6 audit rechecks it.",
+      "acquisition_date": "2026-10-28",
+      "acquired_sha256": "dc196e99b8944d169493c9f3205d45f8a579c0c96e81dbc7fc2f90cd971f7a7e",
+      "redistribution_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "discipline": "architectural",
+      "note": "A small AEC drawing with a wall object, attribute definitions, lines and polylines."
+    },
+    "blocks-dynamic-linear-001": {
+      "origin": "https://github.com/DomCR/ACadSharp/blob/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKLINEARPARAMETER.dwg",
+      "rights_holder": "Albert Domenech and the ACadSharp contributors (the copyright holder named in the repository LICENSE)",
+      "licence": "MIT",
+      "licence_basis": "The repository licence (LICENSE at the pinned commit) covers the files in the repository. Who drew this particular sample is not established, so the verdict rests on that grant and the O3.6 audit rechecks it.",
+      "acquisition_date": "2026-10-28",
+      "acquired_sha256": "36dc72bad541b911b051936287eeb8abf9a9e80e92f371033dfc1d49a0e965bf",
+      "redistribution_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "discipline": "block-heavy",
+      "note": "A dynamic block with a linear parameter, reached through nested INSERTs."
+    },
+    "general-sample-ac1032-001": {
+      "origin": "https://github.com/DomCR/ACadSharp/blob/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1032.dwg",
+      "rights_holder": "Albert Domenech and the ACadSharp contributors (the copyright holder named in the repository LICENSE)",
+      "licence": "MIT",
+      "licence_basis": "The repository licence (LICENSE at the pinned commit) covers the files in the repository. Who drew this particular sample is not established, so the verdict rests on that grant and the O3.6 audit rechecks it.",
+      "acquisition_date": "2026-10-28",
+      "acquired_sha256": "0e8faaca949c9429c92240082d9ea4d3524aca5baf7c7815ec439245c321b528",
+      "redistribution_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "discipline": "general annotation-heavy (mixed discipline)",
+      "note": "A general sample sheet with text, multileaders, hatches, polylines and two splines."
+    }
+  }
+}

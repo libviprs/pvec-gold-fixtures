@@ -1,0 +1,29 @@
+{
+  "expected": {
+    "converter_emits_nothing": false,
+    "entities": [
+      {
+        "count": 1,
+        "dwg_type": "OLE2FRAME",
+        "outcome": "UNSUPPORTED",
+        "reason": "An embedded OLE object is a foreign document, not geometry. It is recognised and refused."
+      }
+    ]
+  },
+  "fixture_id": "ole-001",
+  "problems": [],
+  "produced": {
+    "accepted_geometry": [],
+    "converter_emits_nothing": false,
+    "entities": [
+      {
+        "count": 1,
+        "dwg_type": "OLE2FRAME",
+        "outcome": "UNSUPPORTED"
+      }
+    ],
+    "unclassified": []
+  },
+  "reader": "ACadSharp@3.7.1+d7dc111",
+  "verdict": "MATCH"
+}

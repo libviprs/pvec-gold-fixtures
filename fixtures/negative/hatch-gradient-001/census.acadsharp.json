@@ -1,0 +1,42 @@
+{
+  "schema": "pvec-gold/dwg-census/1",
+  "reader": "ACadSharp@3.7.1\u002Bd7dc111",
+  "dwg_sha256": "2a25452af45c27c6960660d9261f944ef04494968c625be5241e0c61827e3202",
+  "dwg_version": "AC1032",
+  "summary": {
+    "entity_count": 1,
+    "class_histogram": {
+      "Hatch": 1
+    },
+    "max_block_depth": 0,
+    "spline_count": 0,
+    "max_abs_coordinate": 4,
+    "extent": {
+      "min": [
+        0,
+        0,
+        0
+      ],
+      "max": [
+        4,
+        3,
+        0
+      ],
+      "largest_side": 4
+    },
+    "bounding_box_unavailable": 0
+  },
+  "blocks": [
+    {
+      "name": "*Model_Space",
+      "xref": false,
+      "entities": [
+        {
+          "type": "Hatch",
+          "layer": "0",
+          "gradient": true
+        }
+      ]
+    }
+  ]
+}

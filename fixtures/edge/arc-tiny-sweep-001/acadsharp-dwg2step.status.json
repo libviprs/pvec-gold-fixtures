@@ -1,0 +1,13 @@
+{
+  "schema_version": "pvec-gold/converter-status/1",
+  "converter": "acadsharp-dwg2step",
+  "status": "OK",
+  "exit_code": 0,
+  "input": {"path": "/v/fixtures/edge/arc-tiny-sweep-001/source.dwg", "sha256": "f9c6beb5da3a5b495ce00d982639637f724386ebc4fe6260f4807d721c9c0eb0"},
+  "output": {"path": "/v/.out-corpus-open/edge/arc-tiny-sweep-001/primary.step", "sha256": "e72a43315695c64cebdfb15d25a146db0e2b6c17ab587c111373977897aa1427"},
+  "product": {"name": "ACadSharp", "version": "3.7.1\u002Bd7dc111"},
+  "declared_schema": "AP242_MANAGED_MODEL_BASED_3D_ENGINEERING_MIM_LF { 1 0 10303 442 1 1 4 }",
+  "wall_time_seconds": "0.111",
+  "warnings": ["INSUNITS is unitless: values are written unscaled and labelled metre"],
+  "error": null
+}

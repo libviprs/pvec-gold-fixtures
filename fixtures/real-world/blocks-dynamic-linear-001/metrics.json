@@ -1,0 +1,13 @@
+{
+  "class_histogram": {
+    "Circle": 1,
+    "Insert": 2
+  },
+  "discipline": "block-heavy",
+  "dwg_version": "AC1032",
+  "entity_count": 3,
+  "largest_extent_side": 27.5,
+  "max_abs_coordinate": 22.5,
+  "max_block_depth": 1,
+  "spline_count": 0
+}

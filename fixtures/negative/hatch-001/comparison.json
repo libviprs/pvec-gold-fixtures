@@ -1,0 +1,29 @@
+{
+  "expected": {
+    "converter_emits_nothing": false,
+    "entities": [
+      {
+        "count": 1,
+        "dwg_type": "HATCH",
+        "outcome": "IGNORED",
+        "reason": "A pattern fill is presentation. It has no stroke of its own and the boundary it fills is not asserted as a curve, so v1 drops it by policy."
+      }
+    ]
+  },
+  "fixture_id": "hatch-001",
+  "problems": [],
+  "produced": {
+    "accepted_geometry": [],
+    "converter_emits_nothing": false,
+    "entities": [
+      {
+        "count": 1,
+        "dwg_type": "HATCH",
+        "outcome": "IGNORED"
+      }
+    ],
+    "unclassified": []
+  },
+  "reader": "ACadSharp@3.7.1+d7dc111",
+  "verdict": "MATCH"
+}

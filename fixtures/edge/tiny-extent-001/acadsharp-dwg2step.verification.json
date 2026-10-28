@@ -1,0 +1,8 @@
+{
+  "schema_version": "pvec-gold/verification/1",
+  "tool": {"name": "step_eval", "evaluator_version": "1", "occt_version": "7.6.3"},
+  "numeric_policy_version": "PVec numeric policy v1",
+  "units": {"name": "METRE", "canonical": "metre", "scale_to_canonical": {"decimal": "1", "f64_hex": "0x3ff0000000000000"}, "source": "file"},
+  "entities": [
+  ]
+}

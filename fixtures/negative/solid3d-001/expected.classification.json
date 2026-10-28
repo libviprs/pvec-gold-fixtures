@@ -1,0 +1,24 @@
+{
+  "schema_version": "pvec-gold/expected.classification/1",
+  "fixture_id": "solid3d-001",
+  "evidence_class": "QUARANTINED",
+  "quarantine_reason": "UNSUPPORTED_ENTITY",
+  "entities": [
+    {
+      "dwg_type": "3DSOLID",
+      "count": 1,
+      "outcome": "UNSUPPORTED",
+      "reason": "An ACIS solid is three-dimensional boundary-representation data, outside the 2D profile. It is recognised and refused."
+    }
+  ],
+  "converter_emits_nothing": false,
+  "outcome": "UNSUPPORTED",
+  "reason": "An ACIS solid is three-dimensional boundary-representation data, outside the 2D profile. It is recognised and refused.",
+  "accepted_geometry": [],
+  "provenance": {
+    "derivation": "AUTHORING_PARAMETERS",
+    "authoring_script": "tools/authoring/author_corpus.py",
+    "parameter_file": "tools/authoring/corpus-params/negative/solid3d-001.json",
+    "parameter_file_sha256": "afa403317228a7efb60274623f28f47d305dd36c844f3a210d6cf970f599e0c3"
+  }
+}

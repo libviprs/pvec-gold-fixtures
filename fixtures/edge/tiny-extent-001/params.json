@@ -1,0 +1,1 @@
+{"id":"tiny-extent-001","group":"edge","kind":"line","description":"A valid straight segment 5e-9 m long (3e-9, 4e-9), well under any drawing tolerance but not zero, so a pipeline that snaps short segments to nothing shows. It is not the degenerate case: the end points differ.","start":["0","0","0"],"end":["0.000000003","0.000000004","0"]}

@@ -1,0 +1,13 @@
+{
+  "schema_version": "pvec-gold/converter-status/1",
+  "converter": "acadsharp-dwg2step",
+  "status": "ERROR",
+  "exit_code": 15,
+  "input": {"path": "/v/fixtures/negative/wipeout-001/source.dwg", "sha256": "39f218d8e8b8f61498aa83882fd3dcae8f08c12ba2e7def0acc9badbd4ca9325"},
+  "output": null,
+  "product": {"name": "ACadSharp", "version": "3.7.1\u002Bd7dc111"},
+  "declared_schema": null,
+  "wall_time_seconds": "0.111",
+  "warnings": ["skipped 1 entity(ies) of type Wipeout"],
+  "error": {"code": 15, "class": "CONVERSION_FAILED", "message": "no supported curve in model space"}
+}

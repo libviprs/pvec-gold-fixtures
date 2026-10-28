@@ -1,0 +1,8 @@
+{
+  "converter_agreement": null,
+  "differential": "PENDING_OPEN_CONVERTERS",
+  "evidence_class": "REAL_WORLD_DIFFERENTIAL",
+  "evidence_scope": "READER_CENSUS_ONLY",
+  "fixture_id": "arch-aecobjects-001",
+  "note": "No converter output exists for this drawing yet. When two open converters agree on it the agreement is recorded as DUAL_ORACLE_EQUIVALENT and is not source truth (agreement_record in runner/corpus.py)."
+}

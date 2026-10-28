@@ -1,0 +1,29 @@
+{
+  "expected": {
+    "converter_emits_nothing": false,
+    "entities": [
+      {
+        "count": 1,
+        "dwg_type": "IMAGE",
+        "outcome": "IGNORED",
+        "reason": "A raster image is an external pixel reference, not vector geometry. v1 drops it by policy."
+      }
+    ]
+  },
+  "fixture_id": "image-001",
+  "problems": [],
+  "produced": {
+    "accepted_geometry": [],
+    "converter_emits_nothing": false,
+    "entities": [
+      {
+        "count": 1,
+        "dwg_type": "IMAGE",
+        "outcome": "IGNORED"
+      }
+    ],
+    "unclassified": []
+  },
+  "reader": "ACadSharp@3.7.1+d7dc111",
+  "verdict": "MATCH"
+}

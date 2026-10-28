@@ -1,0 +1,25 @@
+{
+  "schema_version": "pvec-gold/expected.classification/1",
+  "fixture_id": "hatch-gradient-001",
+  "evidence_class": "QUARANTINED",
+  "quarantine_reason": "UNSUPPORTED_ENTITY",
+  "entities": [
+    {
+      "dwg_type": "HATCH",
+      "count": 1,
+      "outcome": "IGNORED",
+      "reason": "A gradient fill is presentation with a colour ramp on top of a hatch. v1 drops it by policy and never renders a ramp.",
+      "gradient": true
+    }
+  ],
+  "converter_emits_nothing": false,
+  "outcome": "IGNORED",
+  "reason": "A gradient fill is presentation with a colour ramp on top of a hatch. v1 drops it by policy and never renders a ramp.",
+  "accepted_geometry": [],
+  "provenance": {
+    "derivation": "AUTHORING_PARAMETERS",
+    "authoring_script": "tools/authoring/author_corpus.py",
+    "parameter_file": "tools/authoring/corpus-params/negative/hatch-gradient-001.json",
+    "parameter_file_sha256": "cd334d0a617db3291f62ec0e70a91177e844ba64676796e7d20d079bc8a81cb9"
+  }
+}

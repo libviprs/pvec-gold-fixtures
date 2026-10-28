@@ -1,0 +1,24 @@
+{
+  "schema_version": "pvec-gold/expected.classification/1",
+  "fixture_id": "dimension-001",
+  "evidence_class": "QUARANTINED",
+  "quarantine_reason": "UNSUPPORTED_ENTITY",
+  "entities": [
+    {
+      "dwg_type": "DIMENSION",
+      "count": 1,
+      "outcome": "UNSUPPORTED",
+      "reason": "A dimension is an annotation whose lines and arrowheads live in a generated anonymous block and a style. v1 has no annotation entity and does not explode one."
+    }
+  ],
+  "converter_emits_nothing": false,
+  "outcome": "UNSUPPORTED",
+  "reason": "A dimension is an annotation whose lines and arrowheads live in a generated anonymous block and a style. v1 has no annotation entity and does not explode one.",
+  "accepted_geometry": [],
+  "provenance": {
+    "derivation": "AUTHORING_PARAMETERS",
+    "authoring_script": "tools/authoring/author_corpus.py",
+    "parameter_file": "tools/authoring/corpus-params/negative/dimension-001.json",
+    "parameter_file_sha256": "bcea00dd81e35be0524cb1f6229d70ff6357279d2d6c54bbe8f3ce34d2db7dc8"
+  }
+}

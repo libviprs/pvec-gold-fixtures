@@ -90,6 +90,36 @@ What waits on a licence or a second open converter:
   layers, no key in logs).
 - Superseding `r0-open` with a vendor-qualified revision in `corpus/CHANGELOG.md` (issue 42's third criterion).
 
+## The synthetic and real-world corpus, and the negative suite (issues 11 and 18)
+
+What runs for real, on the open route (`oracle_scope` stays `NONE` because one open converter is a single oracle,
+see ADR 0009): the edge, mixed-entity and degenerate fixtures with authored records, the negative suite with an
+expected classification per entity, the real-world fixtures with provenance, the capability matrix, the `r1-open`
+manifest and the public release. `tools/corpus/run.sh` writes and reads the DWGs, `tools/corpus/open_route.sh` runs
+`dwg2step-acadsharp` over them, `tools/corpus/assemble.sh` builds the committed files, and
+`python3 -m runner.corpus check` re-checks all of it with the standard library and the vendored policy.
+
+What waits on a CAD Exchanger or ODA licence:
+
+- The vendor-written `source.dwg` and the CAD Exchanger and ODA STEP files, status records and verifications for every
+  edge, mixed, degenerate, negative and real-world fixture. They would set `oracle_scope: VENDOR_CONVERTERS` and let a
+  fixture claim `STEP_ORACLE` at vendor scope. `open-route.json` in each fixture is where their results join the
+  open converter's.
+- `DUAL_ORACLE_EQUIVALENT` for the real-world drawings on the vendor pair (the O2.7 comparison). `agreement_record`
+  in `runner/corpus.py` already refuses to call such agreement source truth.
+- Whether CAD Exchanger and ODA refuse the degenerate fixtures and classify the negative ones the way the expected
+  files say. The open converter's STEP held evaluable geometry for two of the three degenerate fixtures (the zero-radius
+  circle and the coincident-control-point spline), and the fixtures list that as a failure of the converter instead of hiding it.
+- The vendor image digests in `corpus/r1-open/manifest.json`. The manifest names the open writer and readers only.
+
+What waits on the second open converter (`libredwg-dwg2step`, not a licence question): any fixture claiming
+`STEP_ORACLE` at `OPEN_CONVERTERS` scope, which ADR 0009 gates on two converters with different lineages.
+
+What I could not find: real-world drawings with an established public licence for structural, mechanical,
+electrical, civil and industrial work, a spline-heavy drawing, or one with coordinates above 1e6. The real-world set
+is three public drawings (architectural, block-heavy, general annotation-heavy), listed with their gaps in
+`corpus/provenance.json`.
+
 ## Issue #20: benchmarks, orchestration tuning and signature artifacts
 
 What runs for real, on the open route (`dwg2step-acadsharp` plus `step_eval`): converter throughput and cost on native

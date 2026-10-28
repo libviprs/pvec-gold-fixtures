@@ -1,0 +1,13 @@
+{
+  "schema_version": "pvec-gold/converter-status/1",
+  "converter": "acadsharp-dwg2step",
+  "status": "OK",
+  "exit_code": 0,
+  "input": {"path": "/v/fixtures/edge/bspline-nonunit-domain-001/source.dwg", "sha256": "8626d2f5ac9a882fc0de2f3b0e6b792b349dc4f68811e5165aee1c7bf2434681"},
+  "output": {"path": "/v/.out-corpus-open/edge/bspline-nonunit-domain-001/primary.step", "sha256": "17bccaac53c1dfac1e6627128198197b3088e6a727e7f731edfa5ff7765886fa"},
+  "product": {"name": "ACadSharp", "version": "3.7.1\u002Bd7dc111"},
+  "declared_schema": "AP242_MANAGED_MODEL_BASED_3D_ENGINEERING_MIM_LF { 1 0 10303 442 1 1 4 }",
+  "wall_time_seconds": "0.115",
+  "warnings": ["INSUNITS is unitless: values are written unscaled and labelled metre"],
+  "error": null
+}

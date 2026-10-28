@@ -1,0 +1,24 @@
+{
+  "schema_version": "pvec-gold/expected.classification/1",
+  "fixture_id": "image-001",
+  "evidence_class": "QUARANTINED",
+  "quarantine_reason": "UNSUPPORTED_ENTITY",
+  "entities": [
+    {
+      "dwg_type": "IMAGE",
+      "count": 1,
+      "outcome": "IGNORED",
+      "reason": "A raster image is an external pixel reference, not vector geometry. v1 drops it by policy."
+    }
+  ],
+  "converter_emits_nothing": false,
+  "outcome": "IGNORED",
+  "reason": "A raster image is an external pixel reference, not vector geometry. v1 drops it by policy.",
+  "accepted_geometry": [],
+  "provenance": {
+    "derivation": "AUTHORING_PARAMETERS",
+    "authoring_script": "tools/authoring/author_corpus.py",
+    "parameter_file": "tools/authoring/corpus-params/negative/image-001.json",
+    "parameter_file_sha256": "f18511f8084b96166d6140b2b6d9fc0c4d99f323d2fdf42d88a08c2301ca244f"
+  }
+}
