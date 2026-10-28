@@ -60,3 +60,11 @@ before you commit.
 
 ## Proof that the guide works
 
+I followed steps 1 to 4 for a throw-away line fixture, `guide-line-001` (start `(-1.25, 0.5, 0)`, end `(2.5, -3.75, 0)`),
+in a scratch branch that was never pushed. Step 2 ran on MARS in the python container: the script wrote the record,
+`--check` reported it fresh, and `runner.expected_math` accepted it. Step 4 ran `tools/clean_host.sh mars` from a
+fresh checkout of that branch in a fresh docker daemon (native x64): the writer produced a DWG for it, both readers
+agreed with the authored truth, the converter converted it twice, and the run reported it `CONVERTED` with no
+unlisted divergence (source SHA-256 `35f95bce...`, signature SHA-256 `5b88122d...`). The run as a whole reported
+FAIL, correctly, because the bundle hash no longer matched the `r0-open` pin: the corpus had a 31st fixture, which
+is step 5. I did not keep the fixture.
