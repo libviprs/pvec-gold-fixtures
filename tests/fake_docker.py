@@ -23,7 +23,7 @@ log = os.environ["FAKE_LOG"]
 with open(log, "a") as f:
     f.write(" ".join(args) + "\n")
 ROOT = Path(os.environ["FAKE_ROOT"])
-IMAGES = {"cadex-converter": "pvec-gold/cadex-converter:local", "oda-converter": "pvec-gold/oda-converter:local",
+IMAGES = {"acadsharp-converter": "pvec-gold/acadsharp-converter:local", "libredwg-converter": "pvec-gold/libredwg-converter:local",
           "step-validator": "pvec-gold/step-validator:local"}
 
 

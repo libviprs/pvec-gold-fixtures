@@ -37,10 +37,12 @@ class SingleOracle(unittest.TestCase):
         for row in rep["capabilities"]:
             self.assertIn("single oracle", " ".join(row["reasons"]), row["capability"])
 
-    def test_open_scope_refuses_a_vendor_id(self):
+    def test_a_second_converter_of_the_same_lineage_is_refused(self):
         with tempfile.TemporaryDirectory() as t:
             with self.assertRaises(SystemExit):
-                q.main(["--probes", str(KT), "--out", str(Path(t) / "r.json"), "--primary", "cadex", t, "--lineage", "cadex=CADEX"])
+                q.main(["--probes", str(KT), "--out", str(Path(t) / "r.json"), "--primary", "first-dwg2step", t,
+                        "--secondary", "second-dwg2step", t, "--lineage", "first-dwg2step=ACadSharp",
+                        "--lineage", "second-dwg2step=ACadSharp"])
 
     def test_probes_without_a_dwg_say_why(self):
         with tempfile.TemporaryDirectory() as t:

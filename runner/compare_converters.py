@@ -8,7 +8,7 @@ plus the two per-converter reports written next to it when there is a known trut
 
 The oracles are whatever the revision's manifest names (ADR 0009): the primary open converter (ACadSharp
 lineage) and a secondary of another lineage (the LibreDWG converter, libviprs/pvec-oracle-libredwg) for the
-open route, or the licensed pair for the vendor route. This module never looks at an id, only at the
+open route. This module never looks at an id, only at the
 lineages, which must differ, and at the oracle scope, which must not be NONE.
 
 Classes: MATCH, EXACT_REPARAMETERIZATION, EQUIVALENT_GEOMETRY, MATERIAL_DIFFERENCE.
