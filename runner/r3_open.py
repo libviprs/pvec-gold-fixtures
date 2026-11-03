@@ -8,7 +8,7 @@
 only when the reader's dump matches the authored record: the viewport count, every paper rectangle and every view
 by exact f64 bits, and the clip polygon vertex for vertex (for a bounded-only clip, the reader's polygon, if it
 reports one, has to stay inside the authored bounds). Nothing but the standard library is used, so it runs on the
-host that has the files; `check` re-derives the same verdicts and the SHA256SUMS from what is committed.
+host that has the files; `check` re-derives the same verdicts, the SHA256SUMS, the generator hash, the sample hash and the r2-open include hash from what is committed.
 
 The large industrial drawing is never committed as a DWG. Its manifest entry carries the generator, its seed, the
 entity count and a size class, and the sample hash of the first SAMPLE entities so a consumer can confirm its
@@ -16,7 +16,9 @@ generator run is the one this revision means.
 """
 import hashlib
 import json
+import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -81,11 +83,6 @@ def compare(expected, read):
             if authored != read_poly:
                 bad.append("%s: the clip polygon differs from the authored one" % where)
     return bad
-
-
-def large_sample(count):
-    """The sample hash is computed by the generator itself in the container that builds the revision."""
-    return None
 
 
 def dump(doc):
@@ -181,10 +178,30 @@ def write_sums(d):
     (Path(d) / "SHA256SUMS").write_text("\n".join(lines) + "\n")
 
 
-def check(d=None):
+def generator_sample(count, seed):
+    """sha256 of the generator's output for `count` entities, run the way a consumer would run it."""
+    with tempfile.TemporaryDirectory() as t:
+        out = Path(t) / "sample.json"
+        subprocess.run([sys.executable, "-I", str(ROOT / GENERATOR), "--count", str(count), "--seed", str(seed),
+                        "--out", str(out)], check=True, capture_output=True)
+        return sha(out.read_bytes())
+
+
+def check(d=None, manifest=None):
     d = Path(d or ROOT / "corpus" / REVISION)
-    m = json.loads((d / "manifest.json").read_text())
+    m = manifest if manifest is not None else json.loads((d / "manifest.json").read_text())
     bad = []
+    r2 = ROOT / "corpus" / "r2-open" / "manifest.json"
+    if m["includes"]["r2-open"]["manifest_sha256"] != sha(r2.read_bytes()):
+        bad.append("includes.r2-open.manifest_sha256 is not the hash of corpus/r2-open/manifest.json")
+    for f in m["fixtures"]:
+        if "generator" not in f:
+            continue
+        if f["generator_sha256"] != sha((ROOT / f["generator"]).read_bytes()):
+            bad.append("%s: generator_sha256 is not the hash of %s" % (f["id"], f["generator"]))
+        if f["sample_sha256"] != generator_sample(f["sample_count"], f["seed"]):
+            bad.append("%s: sample_sha256 is not what the generator writes for %d entities at seed %d"
+                       % (f["id"], f["sample_count"], f["seed"]))
     for f in m["fixtures"]:
         for n, a in f["artifacts"].items():
             p = ROOT / a["path"]

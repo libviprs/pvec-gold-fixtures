@@ -93,5 +93,38 @@ class Revision(unittest.TestCase):
         self.assertTrue(any("bounds" in e for e in expected_math.validate_doc(doc)))
 
 
+class ManifestClaims(unittest.TestCase):
+    """Issue 99: check() re-derives the generator hash, the sample hash and the r2-open include hash."""
+
+    def manifest(self):
+        return json.loads((REVISION / "manifest.json").read_text())
+
+    def check_with(self, m):
+        from runner import r3_open
+        return r3_open.check(manifest=m)
+
+    def test_the_committed_claims_hold(self):
+        self.assertEqual(self.check_with(self.manifest()), [])
+
+    def test_a_stale_generator_hash_is_reported(self):
+        m = self.manifest()
+        next(f for f in m["fixtures"] if f["id"] == "large-industrial-001")["generator_sha256"] = "0" * 64
+        self.assertTrue(any("generator_sha256" in e for e in self.check_with(m)))
+
+    def test_a_stale_sample_hash_is_reported(self):
+        m = self.manifest()
+        next(f for f in m["fixtures"] if f["id"] == "large-industrial-001")["sample_sha256"] = "0" * 64
+        self.assertTrue(any("sample_sha256" in e for e in self.check_with(m)))
+
+    def test_a_stale_r2_include_hash_is_reported(self):
+        m = self.manifest()
+        m["includes"]["r2-open"]["manifest_sha256"] = "0" * 64
+        self.assertTrue(any("r2-open" in e for e in self.check_with(m)))
+
+    def test_the_dead_stub_is_gone(self):
+        from runner import r3_open
+        self.assertFalse(hasattr(r3_open, "large_sample"))
+
+
 if __name__ == "__main__":
     unittest.main()
