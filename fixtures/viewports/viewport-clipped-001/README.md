@@ -1,0 +1,7 @@
+# viewport-clipped-001
+
+One model-space line seen through one paper-space viewport that is clipped to a non-rectangular polygon. The clip polygon is stored exactly, so a reader has to keep the boundary and not only the rectangle around it.
+
+I authored this probe from `tools/authoring/params-r3/viewport-clipped-001.json`, and `expected.math.json` is derived from those parameters alone by `tools/authoring/author_probes.py`. No expected value comes from `primary.step` or `secondary.step`, and none ever should.
+
+`source.dwg` isn't here yet. It gets written from the same parameters by the open writer named in the corpus manifest, so this directory has the record without the drawing.

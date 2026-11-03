@@ -34,6 +34,7 @@
       }
     },
     "entities": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/entity" } },
+    "viewports": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/viewport" } },
     "assertions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/assertion" } },
     "derivative_exclusions": {
       "type": "array",
@@ -208,6 +209,45 @@
         "frozen": { "type": "boolean" }
       }
     },
+    "point2": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "$ref": "#/$defs/scalar" } },
+    "viewport": {
+      "type": "object",
+      "required": ["id", "layout", "paper", "view"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+        "layout": { "type": "string", "minLength": 1 },
+        "paper": {
+          "type": "object",
+          "required": ["center", "width", "height"],
+          "additionalProperties": false,
+          "properties": {
+            "center": { "$ref": "#/$defs/point2" },
+            "width": { "$ref": "#/$defs/scalar" },
+            "height": { "$ref": "#/$defs/scalar" }
+          }
+        },
+        "view": {
+          "type": "object",
+          "required": ["center", "height"],
+          "additionalProperties": false,
+          "properties": {
+            "center": { "$ref": "#/$defs/point2" },
+            "height": { "$ref": "#/$defs/scalar" }
+          }
+        },
+        "clip": {
+          "type": "object",
+          "required": ["polygon", "bounded_only"],
+          "additionalProperties": false,
+          "properties": {
+            "polygon": { "type": "array", "minItems": 3, "items": { "$ref": "#/$defs/point2" } },
+            "bounded_only": { "type": "boolean" },
+            "bounds": { "type": "array", "minItems": 4, "maxItems": 4, "items": { "$ref": "#/$defs/scalar" } }
+          }
+        }
+      }
+    },
     "rejection": {
       "type": "object",
       "required": ["classification", "disposition"],
@@ -254,7 +294,7 @@
         "kind": { "enum": ["STRUCTURAL", "GEOMETRIC", "SOURCE_MAPPING"] },
         "entity": { "type": "string" },
         "claim": {
-          "enum": ["CLASS_PRESERVED", "DEGREE_PRESERVED", "CONTROL_POINTS_PRESERVED", "KNOTS_PRESERVED", "WEIGHTS_PRESERVED", "PARAMETERIZATION_PRESERVED", "VERTEX_ORDER_PRESERVED", "CLOSURE_KIND_PRESERVED", "TRANSFORM_PRESERVED", "ORIENTATION_PRESERVED", "WORLD_SPACE_RESULT", "REJECTED", "LAYER_STATE_PRESERVED"]
+          "enum": ["CLASS_PRESERVED", "DEGREE_PRESERVED", "CONTROL_POINTS_PRESERVED", "KNOTS_PRESERVED", "WEIGHTS_PRESERVED", "PARAMETERIZATION_PRESERVED", "VERTEX_ORDER_PRESERVED", "CLOSURE_KIND_PRESERVED", "TRANSFORM_PRESERVED", "ORIENTATION_PRESERVED", "WORLD_SPACE_RESULT", "REJECTED", "LAYER_STATE_PRESERVED", "VIEWPORT_COUNT_PRESERVED", "VIEWPORT_CLIP_PRESERVED"]
         },
         "statement": { "type": "string", "minLength": 1 }
       }

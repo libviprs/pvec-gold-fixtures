@@ -1,5 +1,9 @@
 # corpus changelog
 
+## r3-open (candidate)
+
+Adds what libviprs#1055 and #1064 need (#96) on top of `r2-open`, which it includes unchanged: a clipped viewport (exact and bounded-only), a paper-space layout with 20 viewports, and `large-industrial-001`, a generated drawing of one million entities that has a generator and a size class but no committed DWG. The record shape for viewports is in [docs/fixtures/expected-math.md](../docs/fixtures/expected-math.md). The three viewport fixtures are `KNOWN_TRUTH_EXACT` with `READER_MAPPING_ONLY` scope: acadrust's reader is the only reader that has looked at them, and no STEP converter can express a viewport.
+
 ## r2-open (candidate)
 
 The first `STEP_ORACLE` revision (#78). It holds the 59 fixtures of `r1-open` (which lists `r0-open`'s) with the result of running both open converters, `acadsharp-dwg2step` and `libredwg-dwg2step`, over each, in a clean docker daemon (`tools/clean_host_r2.sh`). `oracle_scope` is `OPEN_CONVERTERS`. Nothing earlier is edited: `r0-open` and `r1-open` stay as they were, and `r2-open` points at their DWGs.

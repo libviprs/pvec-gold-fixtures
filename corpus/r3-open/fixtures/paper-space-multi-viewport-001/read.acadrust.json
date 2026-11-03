@@ -1,0 +1,391 @@
+{
+  "block_census": [
+    {
+      "block": "*Model_Space",
+      "entities": [
+        "Line"
+      ],
+      "paper_space": false
+    },
+    {
+      "block": "*Paper_Space",
+      "entities": [
+        "Viewport",
+        "Viewport",
+        "Viewport",
+        "Viewport",
+        "Viewport",
+        "Viewport",
+        "Viewport",
+        "Viewport",
+        "Viewport",
+        "Viewport",
+        "Viewport",
+        "Viewport",
+        "Viewport",
+        "Viewport",
+        "Viewport",
+        "Viewport",
+        "Viewport",
+        "Viewport",
+        "Viewport",
+        "Viewport"
+      ],
+      "paper_space": true
+    }
+  ],
+  "blocks": [
+    {
+      "entities": [
+        {
+          "end": [
+            "0x4028000000000000",
+            "0x4022000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "start": [
+            "0x0000000000000000",
+            "0x0000000000000000",
+            "0x0000000000000000"
+          ],
+          "type": "LINE"
+        }
+      ],
+      "name": "*Model_Space"
+    }
+  ],
+  "dwg_sha256": "8abc2af72df15e3f8f42b72996fae2a7ab8bf0fc04186330f2c57e127e292d50",
+  "dwg_version": "AC1032",
+  "layers": [
+    {
+      "frozen": false,
+      "name": "0",
+      "on": true
+    }
+  ],
+  "reader": "acadrust@0.5.5+d35691f",
+  "schema": "pvec-gold/r0-open-dwg-read/2",
+  "viewports": [
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x403e000000000000",
+        "0x403e000000000000"
+      ],
+      "clip_polygon": null,
+      "height": "0x4044000000000000",
+      "id": 0,
+      "view_center": [
+        "0x3ff0000000000000",
+        "0x3ff0000000000000"
+      ],
+      "view_height": "0x4010000000000000",
+      "width": "0x4049000000000000"
+    },
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x4056800000000000",
+        "0x403e000000000000"
+      ],
+      "clip_polygon": null,
+      "height": "0x4044000000000000",
+      "id": 0,
+      "view_center": [
+        "0x4000000000000000",
+        "0x3ff0000000000000"
+      ],
+      "view_height": "0x4014000000000000",
+      "width": "0x4049000000000000"
+    },
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x4062c00000000000",
+        "0x403e000000000000"
+      ],
+      "clip_polygon": null,
+      "height": "0x4044000000000000",
+      "id": 0,
+      "view_center": [
+        "0x4008000000000000",
+        "0x3ff0000000000000"
+      ],
+      "view_height": "0x4018000000000000",
+      "width": "0x4049000000000000"
+    },
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x406a400000000000",
+        "0x403e000000000000"
+      ],
+      "clip_polygon": null,
+      "height": "0x4044000000000000",
+      "id": 0,
+      "view_center": [
+        "0x4010000000000000",
+        "0x3ff0000000000000"
+      ],
+      "view_height": "0x4010000000000000",
+      "width": "0x4049000000000000"
+    },
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x4070e00000000000",
+        "0x403e000000000000"
+      ],
+      "clip_polygon": null,
+      "height": "0x4044000000000000",
+      "id": 0,
+      "view_center": [
+        "0x4014000000000000",
+        "0x3ff0000000000000"
+      ],
+      "view_height": "0x4014000000000000",
+      "width": "0x4049000000000000"
+    },
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x403e000000000000",
+        "0x4054000000000000"
+      ],
+      "clip_polygon": null,
+      "height": "0x4044000000000000",
+      "id": 0,
+      "view_center": [
+        "0x3ff0000000000000",
+        "0x4000000000000000"
+      ],
+      "view_height": "0x4018000000000000",
+      "width": "0x4049000000000000"
+    },
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x4056800000000000",
+        "0x4054000000000000"
+      ],
+      "clip_polygon": null,
+      "height": "0x4044000000000000",
+      "id": 0,
+      "view_center": [
+        "0x4000000000000000",
+        "0x4000000000000000"
+      ],
+      "view_height": "0x4010000000000000",
+      "width": "0x4049000000000000"
+    },
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x4062c00000000000",
+        "0x4054000000000000"
+      ],
+      "clip_polygon": null,
+      "height": "0x4044000000000000",
+      "id": 0,
+      "view_center": [
+        "0x4008000000000000",
+        "0x4000000000000000"
+      ],
+      "view_height": "0x4014000000000000",
+      "width": "0x4049000000000000"
+    },
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x406a400000000000",
+        "0x4054000000000000"
+      ],
+      "clip_polygon": null,
+      "height": "0x4044000000000000",
+      "id": 0,
+      "view_center": [
+        "0x4010000000000000",
+        "0x4000000000000000"
+      ],
+      "view_height": "0x4018000000000000",
+      "width": "0x4049000000000000"
+    },
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x4070e00000000000",
+        "0x4054000000000000"
+      ],
+      "clip_polygon": null,
+      "height": "0x4044000000000000",
+      "id": 0,
+      "view_center": [
+        "0x4014000000000000",
+        "0x4000000000000000"
+      ],
+      "view_height": "0x4010000000000000",
+      "width": "0x4049000000000000"
+    },
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x403e000000000000",
+        "0x4060400000000000"
+      ],
+      "clip_polygon": null,
+      "height": "0x4044000000000000",
+      "id": 0,
+      "view_center": [
+        "0x3ff0000000000000",
+        "0x4008000000000000"
+      ],
+      "view_height": "0x4014000000000000",
+      "width": "0x4049000000000000"
+    },
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x4056800000000000",
+        "0x4060400000000000"
+      ],
+      "clip_polygon": null,
+      "height": "0x4044000000000000",
+      "id": 0,
+      "view_center": [
+        "0x4000000000000000",
+        "0x4008000000000000"
+      ],
+      "view_height": "0x4018000000000000",
+      "width": "0x4049000000000000"
+    },
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x4062c00000000000",
+        "0x4060400000000000"
+      ],
+      "clip_polygon": null,
+      "height": "0x4044000000000000",
+      "id": 0,
+      "view_center": [
+        "0x4008000000000000",
+        "0x4008000000000000"
+      ],
+      "view_height": "0x4010000000000000",
+      "width": "0x4049000000000000"
+    },
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x406a400000000000",
+        "0x4060400000000000"
+      ],
+      "clip_polygon": null,
+      "height": "0x4044000000000000",
+      "id": 0,
+      "view_center": [
+        "0x4010000000000000",
+        "0x4008000000000000"
+      ],
+      "view_height": "0x4014000000000000",
+      "width": "0x4049000000000000"
+    },
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x4070e00000000000",
+        "0x4060400000000000"
+      ],
+      "clip_polygon": null,
+      "height": "0x4044000000000000",
+      "id": 0,
+      "view_center": [
+        "0x4014000000000000",
+        "0x4008000000000000"
+      ],
+      "view_height": "0x4018000000000000",
+      "width": "0x4049000000000000"
+    },
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x403e000000000000",
+        "0x4066800000000000"
+      ],
+      "clip_polygon": null,
+      "height": "0x4044000000000000",
+      "id": 0,
+      "view_center": [
+        "0x3ff0000000000000",
+        "0x4010000000000000"
+      ],
+      "view_height": "0x4010000000000000",
+      "width": "0x4049000000000000"
+    },
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x4056800000000000",
+        "0x4066800000000000"
+      ],
+      "clip_polygon": null,
+      "height": "0x4044000000000000",
+      "id": 0,
+      "view_center": [
+        "0x4000000000000000",
+        "0x4010000000000000"
+      ],
+      "view_height": "0x4014000000000000",
+      "width": "0x4049000000000000"
+    },
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x4062c00000000000",
+        "0x4066800000000000"
+      ],
+      "clip_polygon": null,
+      "height": "0x4044000000000000",
+      "id": 0,
+      "view_center": [
+        "0x4008000000000000",
+        "0x4010000000000000"
+      ],
+      "view_height": "0x4018000000000000",
+      "width": "0x4049000000000000"
+    },
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x406a400000000000",
+        "0x4066800000000000"
+      ],
+      "clip_polygon": null,
+      "height": "0x4044000000000000",
+      "id": 0,
+      "view_center": [
+        "0x4010000000000000",
+        "0x4010000000000000"
+      ],
+      "view_height": "0x4010000000000000",
+      "width": "0x4049000000000000"
+    },
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x4070e00000000000",
+        "0x4066800000000000"
+      ],
+      "clip_polygon": null,
+      "height": "0x4044000000000000",
+      "id": 0,
+      "view_center": [
+        "0x4014000000000000",
+        "0x4010000000000000"
+      ],
+      "view_height": "0x4014000000000000",
+      "width": "0x4049000000000000"
+    }
+  ]
+}

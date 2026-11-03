@@ -14,8 +14,8 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-PARAMS = ROOT / "tools" / "authoring" / "params"
-KNOWN = ROOT / "fixtures" / "known-truth"
+PARAMS = ROOT / "tools" / "authoring" / "params-r3"
+KNOWN = ROOT / "fixtures" / "viewports"
 GEN = ROOT / "tools" / "authoring" / "gen_large_industrial.py"
 REVISION = ROOT / "corpus" / "r3-open"
 
@@ -69,6 +69,28 @@ class LargeIndustrialGenerator(unittest.TestCase):
         self.assertEqual(e["entity_count"], 1000000)
         self.assertEqual(e["generator"], "tools/authoring/gen_large_industrial.py")
         self.assertFalse(list((REVISION).rglob("large-industrial-001*.dwg")), "the large drawing must be generated, not committed")
+
+
+class Revision(unittest.TestCase):
+    def test_the_committed_revision_checks_clean(self):
+        from runner import r3_open
+        self.assertEqual(r3_open.check(), [])
+
+    def test_a_moved_clip_vertex_is_a_mismatch(self):
+        from runner import r3_open
+        exp = json.loads((KNOWN / "viewport-clipped-001" / "expected.math.json").read_text())
+        read = json.loads((REVISION / "fixtures" / "viewport-clipped-001" / "read.acadrust.json").read_text())
+        self.assertEqual(r3_open.compare(exp, read), [])
+        read["viewports"][0]["clip_polygon"][0][0] = "0x4051800000000001"
+        self.assertTrue(r3_open.compare(exp, read))
+
+    def test_the_records_validate_and_a_clip_without_bounds_does_not(self):
+        from runner import expected_math
+        for fid in ("viewport-clipped-001", "viewport-clipped-bounded-001", "paper-space-multi-viewport-001"):
+            self.assertEqual(expected_math.validate_file(str(KNOWN / fid / "expected.math.json")), [], fid)
+        doc = json.loads((KNOWN / "viewport-clipped-bounded-001" / "expected.math.json").read_text())
+        del doc["viewports"][0]["clip"]["bounds"]
+        self.assertTrue(any("bounds" in e for e in expected_math.validate_doc(doc)))
 
 
 if __name__ == "__main__":

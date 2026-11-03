@@ -26,6 +26,10 @@ from runner import canon, expected_math as em  # noqa: E402
 mp.dps = 60
 PARAMS = ROOT / "tools" / "authoring" / "params"
 OUT = ROOT / "fixtures" / "known-truth"
+# r3-open (issue 96): the viewport fixtures are not probes of the r0-open writer family, so they have their own
+# parameter directory and output directory, selected with --r3.
+PARAMS_R3 = ROOT / "tools" / "authoring" / "params-r3"
+OUT_R3 = ROOT / "fixtures" / "viewports"
 SCRIPT = "tools/authoring/author_probes.py"
 CL0 = {"closed_by_endpoint": False, "closed_by_knots": False, "periodic": False}
 
@@ -299,12 +303,50 @@ def exclusions_for(ents):
     return out
 
 
+def build_viewport_fixture(s):
+    """viewport_clipped, viewport_clipped_bounded and paper_space_layout: one model-space line (so the
+    drawing has something to look at) and the viewports that look at it. Every number comes from the
+    parameter file and nothing is derived from a converter or a reader."""
+    def p2(v):
+        return [S(c) for c in v]
+
+    def vp(i, layout, v, clip):
+        out = {"id": i, "layout": layout,
+               "paper": {"center": p2(v["center"]), "width": S(v["width"]), "height": S(v["height"])},
+               "view": {"center": p2(v["view_center"]), "height": S(v["view_height"])}}
+        if clip:
+            xs = [mpf(p[0]) for p in clip["polygon"]]
+            ys = [mpf(p[1]) for p in clip["polygon"]]
+            out["clip"] = {"polygon": [p2(p) for p in clip["polygon"]],
+                           "bounded_only": clip["exactness"] == "BOUNDED_ONLY",
+                           "bounds": [S(min(xs)), S(min(ys)), S(max(xs)), S(max(ys))]}
+        return out
+    layout = s["layout"]
+    if s["kind"] == "paper_space_layout":
+        vps = [vp(v["id"], layout, v, None) for v in s["viewports"]]
+    else:
+        vps = [vp(s["id"] + "-vp", layout, s["viewport"], s["clip"])]
+    line = build_curve(dict(s["model_curve"], **{"class": "line"}))
+    ents = [{"id": s["id"] + "-model-line", **line, "structure": "CURVE_ONLY"}]
+    asserts = [(ents[0]["id"], ("STRUCTURAL", "VIEWPORT_COUNT_PRESERVED",
+                          "The layout %s keeps exactly %d viewport(s); none is dropped or merged." % (layout, len(vps))))]
+    if s["kind"] != "paper_space_layout":
+        bounded = s["clip"]["exactness"] == "BOUNDED_ONLY"
+        asserts.append((vps[0]["id"], ("STRUCTURAL", "VIEWPORT_CLIP_PRESERVED",
+                                       "The clip is bounded only: a reader may report the polygon or only its bounding box, never anything outside the bounds."
+                                       if bounded else "The clip polygon is kept exactly, vertex for vertex, and not replaced by the viewport rectangle.")))
+    return ents, vps, asserts
+
+
 def build_fixture(path):
     raw = path.read_bytes()
     s = json.loads(raw)
     rel = str(path.relative_to(ROOT))
     extra = ""
-    if s["kind"] == "transform":
+    viewports = None
+    if s["kind"] in ("viewport_clipped", "viewport_clipped_bounded", "paper_space_layout"):
+        ents, viewports, asserts_by = build_viewport_fixture(s)
+    elif s["kind"] == "transform":
         ent, asserts, extra = build_transform_fixture(s)
         ents = [ent]
         assertions = asserts
@@ -349,6 +391,8 @@ def build_fixture(path):
         "entities": ents,
         "assertions": [{"id": "a%d" % (i + 1), "kind": k, "entity": eid, "claim": c, "statement": t} for i, (eid, (k, c, t)) in enumerate(asserts_by)],
     }
+    if viewports:
+        doc["viewports"] = viewports
     ex = exclusions_for(ents)
     if ex:
         doc["derivative_exclusions"] = ex
@@ -377,16 +421,17 @@ def readme_for(s, rel, extra):
             % (s["id"], s["description"], rel, SCRIPT, extra))
 
 
-def all_fixtures():
-    for p in sorted(PARAMS.rglob("*.json")):
+def all_fixtures(r3=False):
+    for p in sorted((PARAMS_R3 if r3 else PARAMS).rglob("*.json")):
         yield build_fixture(p)
 
 
 def main(argv):
     check = "--check" in argv
+    r3 = "--r3" in argv
     bad = 0
-    for rel, expected, readme in all_fixtures():
-        d = OUT / rel
+    for rel, expected, readme in all_fixtures(r3):
+        d = (OUT_R3 if r3 else OUT) / rel
         for name, text in (("expected.math.json", expected), ("README.md", readme)):
             f = d / name
             if check:

@@ -186,6 +186,24 @@ def semantic_check(doc):
     ids = [e["id"] for e in doc["entities"]]
     if len(set(ids)) != len(ids):
         errs.append("duplicate entity id")
+    vids = [v["id"] for v in doc.get("viewports", [])]
+    if len(set(vids)) != len(vids):
+        errs.append("duplicate viewport id")
+    for v in doc.get("viewports", []):
+        w = "viewports[%s]" % v["id"]
+        for name, sc in (("paper.width", v["paper"]["width"]), ("paper.height", v["paper"]["height"]),
+                         ("view.height", v["view"]["height"])):
+            if _fr(sc) <= 0:
+                errs.append("%s: %s must be positive" % (w, name))
+        clip = v.get("clip")
+        if clip and clip["bounded_only"] and "bounds" not in clip:
+            errs.append("%s: a bounded_only clip must carry its bounds" % w)
+        if clip and "bounds" in clip:
+            xs = [_fr(p[0]) for p in clip["polygon"]]
+            ys = [_fr(p[1]) for p in clip["polygon"]]
+            b = [_fr(x) for x in clip["bounds"]]
+            if b != [min(xs), min(ys), max(xs), max(ys)]:
+                errs.append("%s: clip.bounds is not the polygon's bounding box" % w)
     for ent in doc["entities"]:
         w = "entities[%s]" % ent["id"]
         _check_curve(ent, w, errs)
@@ -250,7 +268,8 @@ def semantic_check(doc):
         if a["id"] in seen:
             errs.append("duplicate assertion id %s" % a["id"])
         seen.add(a["id"])
-        if a["entity"] not in ids:
+        known = set(ids) | (set(vids) if a["claim"].startswith("VIEWPORT_") else set())
+        if a["entity"] not in known:
             errs.append("assertion %s names unknown entity %s" % (a["id"], a["entity"]))
         if a["claim"] == "TRANSFORM_PRESERVED" and a["kind"] != "SOURCE_MAPPING":
             errs.append("assertion %s: TRANSFORM_PRESERVED is a source-mapping assertion (pvec ADR 0017), kind must be SOURCE_MAPPING" % a["id"])

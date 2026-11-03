@@ -1,0 +1,143 @@
+{
+  "corpus_revision": "r3-open",
+  "dwg_version": "AC1032",
+  "fixtures": [
+    {
+      "artifacts": {
+        "README.md": {
+          "path": "corpus/r3-open/fixtures/viewport-clipped-001/README.md",
+          "sha256": "1e70304d47f741cbf95329eb5cff49819d00efb24efec224d91e1f08fb82bb2e"
+        },
+        "expected.math.json": {
+          "path": "corpus/r3-open/fixtures/viewport-clipped-001/expected.math.json",
+          "sha256": "489051b6e228f047d4f2d37b68f2b31121e4f536bec2b93e7bd37c933420fcca"
+        },
+        "read.acadrust.json": {
+          "path": "corpus/r3-open/fixtures/viewport-clipped-001/read.acadrust.json",
+          "sha256": "983a4f9ed71d2121006023bf6b0036925d224bae83939f23245454d2337b1caf"
+        },
+        "source.dwg": {
+          "path": "corpus/r3-open/fixtures/viewport-clipped-001/source.dwg",
+          "sha256": "bb07f1bda7b6f5b035fe1f3092a9aa4e0ca38bb1406b26f36ed6b0de1f5a2f7d"
+        }
+      },
+      "dwg_sha256": "bb07f1bda7b6f5b035fe1f3092a9aa4e0ca38bb1406b26f36ed6b0de1f5a2f7d",
+      "dwg_version": "AC1032",
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "group": "viewports",
+      "id": "viewport-clipped-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracle_scope": "NONE",
+      "provenance": "SYNTHETIC_AUTHORED",
+      "readers": [
+        "acadrust"
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "artifacts": {
+        "README.md": {
+          "path": "corpus/r3-open/fixtures/viewport-clipped-bounded-001/README.md",
+          "sha256": "905dcbc3e3da1e02afd93194791b73cc04224a9ed46d8d297adf92218d4a57f3"
+        },
+        "expected.math.json": {
+          "path": "corpus/r3-open/fixtures/viewport-clipped-bounded-001/expected.math.json",
+          "sha256": "a1c0844f0b1d60a8cc5e0d3f6e6032a803ae6acffce1989b62ddf51eccf874de"
+        },
+        "read.acadrust.json": {
+          "path": "corpus/r3-open/fixtures/viewport-clipped-bounded-001/read.acadrust.json",
+          "sha256": "983a4f9ed71d2121006023bf6b0036925d224bae83939f23245454d2337b1caf"
+        },
+        "source.dwg": {
+          "path": "corpus/r3-open/fixtures/viewport-clipped-bounded-001/source.dwg",
+          "sha256": "bb07f1bda7b6f5b035fe1f3092a9aa4e0ca38bb1406b26f36ed6b0de1f5a2f7d"
+        }
+      },
+      "dwg_sha256": "bb07f1bda7b6f5b035fe1f3092a9aa4e0ca38bb1406b26f36ed6b0de1f5a2f7d",
+      "dwg_version": "AC1032",
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "group": "viewports",
+      "id": "viewport-clipped-bounded-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracle_scope": "NONE",
+      "provenance": "SYNTHETIC_AUTHORED",
+      "readers": [
+        "acadrust"
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "artifacts": {
+        "README.md": {
+          "path": "corpus/r3-open/fixtures/paper-space-multi-viewport-001/README.md",
+          "sha256": "0ebe7d892021ba681d25a59cacb4ad3e5de81dab116b47cced43ab98600f24d5"
+        },
+        "expected.math.json": {
+          "path": "corpus/r3-open/fixtures/paper-space-multi-viewport-001/expected.math.json",
+          "sha256": "26fd4da52aa6077772abe6d35e42dda7ded83e4fef1fa857b2e7f3bc3045a138"
+        },
+        "read.acadrust.json": {
+          "path": "corpus/r3-open/fixtures/paper-space-multi-viewport-001/read.acadrust.json",
+          "sha256": "9397b538d01ebd390d720573116a7750490bdab02f36be942b1b2303789f2266"
+        },
+        "source.dwg": {
+          "path": "corpus/r3-open/fixtures/paper-space-multi-viewport-001/source.dwg",
+          "sha256": "8abc2af72df15e3f8f42b72996fae2a7ab8bf0fc04186330f2c57e127e292d50"
+        }
+      },
+      "dwg_sha256": "8abc2af72df15e3f8f42b72996fae2a7ab8bf0fc04186330f2c57e127e292d50",
+      "dwg_version": "AC1032",
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "group": "viewports",
+      "id": "paper-space-multi-viewport-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracle_scope": "NONE",
+      "provenance": "SYNTHETIC_AUTHORED",
+      "readers": [
+        "acadrust"
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "artifacts": {
+        "README.md": {
+          "path": "corpus/r3-open/fixtures/large-industrial-001/README.md",
+          "sha256": "bb4ab253f2a9dbff9518d385a4da8ff5d0ba4cd7e61738fad5c8da36049ccc1c"
+        },
+        "params.json": {
+          "path": "corpus/r3-open/fixtures/large-industrial-001/params.json",
+          "sha256": "5c9cca538a4f5f916e8bf9e5be4962893b7a660148b9c37d69c235883e71bf0f"
+        }
+      },
+      "entity_count": 1000000,
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "GENERATED_AT_USE",
+      "generator": "tools/authoring/gen_large_industrial.py",
+      "generator_sha256": "445e87730eb2f77762e6dec08869e9662ee40b3a42999a22dbca561ef530dfcc",
+      "group": "large",
+      "id": "large-industrial-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracle_scope": "NONE",
+      "provenance": "SYNTHETIC_AUTHORED",
+      "sample_count": 1000,
+      "sample_sha256": "5301fd575a724e5be4b729d8f6d75c44fdb6e09ee67abfc5d6f29f1303840cde",
+      "seed": 96,
+      "size_class": "large",
+      "status": "ACCEPTED"
+    }
+  ],
+  "includes": {
+    "r2-open": {
+      "manifest_sha256": "5ac9f3c0cd1db9a9a72ef9aed7759f53cf540b1287e8a8ab3658a9d949e20685"
+    }
+  },
+  "numeric_policy_version": "PVec numeric policy v1",
+  "oracle_note": "No STEP oracle ran on this revision: a STEP file cannot express a viewport or a paper-space layout.",
+  "oracle_scope": "NONE",
+  "schema_version": "pvec-gold/corpus-manifest/1",
+  "status": "CANDIDATE",
+  "writer": "acadrust@0.5.5+d35691f"
+}

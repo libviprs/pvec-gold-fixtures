@@ -166,3 +166,7 @@ period (the last equals the first plus the period). Pole `i` is supported on the
 the domain. That is the convention `runner/curves.py` evaluates. STEP has no periodic form, so a
 converter has to write a clamped spline with wrapped poles, which is a structural difference the
 qualification reports, not a failure to represent the curve.
+
+## Viewports and paper-space layouts (issue 96)
+
+A record may carry a `viewports` array next to `entities` (and `entities` still needs one model-space curve, so the drawing has something to look at). Per viewport: `id`, `layout` (the paper-space layout name), `paper` (`center`, `width`, `height`, in paper space), `view` (`center`, `height`, the model-space window it shows) and, when it is clipped, `clip`: `polygon` (paper space, at least three vertices), `bounded_only` and `bounds` (`[xmin, ymin, xmax, ymax]`, which must be the polygon's bounding box). With `bounded_only` false a reader has to return the polygon vertex for vertex. With it true a reader may return the polygon or only its bounding box, and nothing outside `bounds`. A paper-space layout is the set of viewports that share a `layout`. Two claims cover them, `VIEWPORT_COUNT_PRESERVED` and `VIEWPORT_CLIP_PRESERVED`, and an assertion with a `VIEWPORT_` claim may name a viewport id as its entity. `corpus/r3-open` holds the fixtures.
