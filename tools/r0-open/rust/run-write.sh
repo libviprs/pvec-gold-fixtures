@@ -12,6 +12,15 @@ rm -rf "$OUT"
 mkdir -p "$OUT/run1" "$OUT/run2"
 $B write --kt /work/fixtures/known-truth --params /work/tools/authoring/params --out "$OUT/run1" --version "$VER" >/dev/null
 $B write --kt /work/fixtures/known-truth --params /work/tools/authoring/params --out "$OUT/run2" --version "$VER" >/dev/null
+# r3-open (issue 96): the viewport fixtures have their own parameter and record directories.
+mkdir -p "$OUT/r3/run1" "$OUT/r3/run2"
+$B write --kt /work/fixtures/viewports --params /work/tools/authoring/params-r3 --out "$OUT/r3/run1" --version "$VER" >/dev/null
+$B write --kt /work/fixtures/viewports --params /work/tools/authoring/params-r3 --out "$OUT/r3/run2" --version "$VER" >/dev/null
+for d in "$OUT"/r3/run1/*/; do
+  id=$(basename "$d")
+  if cmp -s "$OUT/r3/run1/$id/source.dwg" "$OUT/r3/run2/$id/source.dwg"; then echo "deterministic r3 $id"; else echo "DIFFERS r3 $id"; fi
+  $B read --dwg "$OUT/r3/run1/$id/source.dwg" --out "$OUT/r3/run1/$id/acadrust.read.json" || echo "READFAIL $id"
+done
 for d in "$OUT"/run1/*/; do
   id=$(basename "$d")
   if cmp -s "$OUT/run1/$id/source.dwg" "$OUT/run2/$id/source.dwg"; then echo "deterministic $id"; else echo "DIFFERS $id"; fi

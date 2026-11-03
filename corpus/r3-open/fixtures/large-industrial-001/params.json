@@ -1,0 +1,5 @@
+{
+  "count": 1000000,
+  "generator": "tools/authoring/gen_large_industrial.py",
+  "seed": 96
+}

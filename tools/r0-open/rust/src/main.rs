@@ -309,10 +309,59 @@ fn build_layers(expected: &Value, doc: &mut CadDocument) -> Result<(), Skip> {
     Ok(())
 }
 
+fn p2(v: &Value) -> Vector2 {
+    let a = v.as_array().expect("point2");
+    Vector2::new(fx(&a[0]), fx(&a[1]))
+}
+
+/// viewport_clipped, viewport_clipped_bounded and paper_space_layout: the model-space line goes in model
+/// space, and every viewport of the record goes in the paper-space layout. A clip polygon becomes a closed
+/// LWPOLYLINE in the same layout, and the viewport's clip boundary handle names it, which is how a DWG says
+/// that a viewport is not rectangular. Numbers come from the f64_hex fields of the record, never from the
+/// decimals.
+fn build_viewports(expected: &Value, doc: &mut CadDocument) -> Result<(), Skip> {
+    let line = make_curve(&expected["entities"][0], None)?;
+    if let Err(e) = doc.add_entity(line) {
+        return skip("MALFORMED_FIXTURE", format!("add_entity: {e:?}"));
+    }
+    let vps = expected["viewports"].as_array().unwrap();
+    let layout = vps[0]["layout"].as_str().unwrap();
+    // A new document already carries Layout1, so adding it again is an error that means "it is there". Any
+    // other missing layout is reported by the first add_entity_to_layout below.
+    let _ = doc.add_layout(layout);
+    for (i, v) in vps.iter().enumerate() {
+        let c = p2(&v["paper"]["center"]);
+        let mut vp = Viewport::with_size(Vector3::new(c.x, c.y, 0.0), fx(&v["paper"]["width"]), fx(&v["paper"]["height"]));
+        vp.id = (i + 2) as i16; // id 1 is the layout's own overall viewport
+        let vc = p2(&v["view"]["center"]);
+        vp.view_center = Vector3::new(vc.x, vc.y, 0.0);
+        vp.view_target = Vector3::new(vc.x, vc.y, 0.0);
+        vp.view_height = fx(&v["view"]["height"]);
+        if let Some(clip) = v.get("clip") {
+            let pts: Vec<Vector2> = clip["polygon"].as_array().unwrap().iter().map(p2).collect();
+            let mut pl = LwPolyline::from_points(pts);
+            pl.close();
+            let h = match doc.add_entity_to_layout(EntityType::LwPolyline(pl), layout) {
+                Ok(h) => h,
+                Err(e) => return skip("MALFORMED_FIXTURE", format!("clip boundary: {e:?}")),
+            };
+            vp.clip_boundary_handle = h;
+        }
+        if let Err(e) = doc.add_entity_to_layout(EntityType::Viewport(vp), layout) {
+            return skip("UNSUPPORTED_ENTITY", format!("a VIEWPORT could not be added to {layout}: {e:?}"));
+        }
+    }
+    Ok(())
+}
+
 fn build(id: &str, expected: &Value, params: &Value, version: DxfVersion) -> Result<CadDocument, Skip> {
     let ent = &expected["entities"][0];
     let mut doc = CadDocument::with_version(version);
     let dwg_entity = params.get("dwg_entity").and_then(|v| v.as_str());
+    if expected.get("viewports").is_some() {
+        build_viewports(expected, &mut doc)?;
+        return Ok(doc);
+    }
     if ent.get("layer").is_some() {
         build_layers(expected, &mut doc)?;
         return Ok(doc);
@@ -475,7 +524,39 @@ fn cmd_read(args: &[String]) {
         let es: Vec<Value> = doc.entities_in_block(&n).map(dump_entity).collect();
         blocks.insert(n, es);
     }
+    let mut viewports: Vec<Value> = Vec::new();
+    let mut block_census: Vec<Value> = Vec::new();
+    for br in doc.block_records.iter() {
+        let n = br.name().to_string();
+        let kinds: Vec<String> = doc.entities_in_block(&n).map(|e| format!("{e:?}").split(|c: char| c == '(' || c == ' ').next().unwrap_or("").to_string()).collect();
+        block_census.push(json!({"block": n, "paper_space": br.is_paper_space(), "entities": kinds}));
+    }
+    for br in doc.block_records.iter() {
+        let n = br.name().to_string();
+        if !n.starts_with("*Paper_Space") {
+            continue;
+        }
+        let ents: Vec<&EntityType> = doc.entities_in_block(&n).collect();
+        for e in &ents {
+            if let EntityType::Viewport(v) = e {
+                let clip = ents.iter().find_map(|o| match o {
+                    EntityType::LwPolyline(p) if p.common.handle == v.clip_boundary_handle && !v.clip_boundary_handle.is_null() => {
+                        Some(p.vertices.iter().map(|x| json!([hex(x.location.x), hex(x.location.y)])).collect::<Vec<_>>())
+                    }
+                    _ => None,
+                });
+                viewports.push(json!({
+                    "block": n, "id": v.id,
+                    "center": [hex(v.center.x), hex(v.center.y)], "width": hex(v.width), "height": hex(v.height),
+                    "view_center": [hex(v.view_center.x), hex(v.view_center.y)], "view_height": hex(v.view_height),
+                    "clip_polygon": clip,
+                }));
+            }
+        }
+    }
     let rec = json!({
+        "viewports": viewports,
+        "block_census": block_census,
         "schema": "pvec-gold/r0-open-dwg-read/2",
         "layers": dump_layers(&doc),
         "reader": READER_ID,

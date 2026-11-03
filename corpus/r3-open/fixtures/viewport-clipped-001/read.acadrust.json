@@ -1,0 +1,86 @@
+{
+  "block_census": [
+    {
+      "block": "*Model_Space",
+      "entities": [
+        "Line"
+      ],
+      "paper_space": false
+    },
+    {
+      "block": "*Paper_Space",
+      "entities": [
+        "LwPolyline",
+        "Viewport"
+      ],
+      "paper_space": true
+    }
+  ],
+  "blocks": [
+    {
+      "entities": [
+        {
+          "end": [
+            "0x4022000000000000",
+            "0x401c000000000000",
+            "0x0000000000000000"
+          ],
+          "layer": "0",
+          "start": [
+            "0x3ff0000000000000",
+            "0x3ff0000000000000",
+            "0x0000000000000000"
+          ],
+          "type": "LINE"
+        }
+      ],
+      "name": "*Model_Space"
+    }
+  ],
+  "dwg_sha256": "bb07f1bda7b6f5b035fe1f3092a9aa4e0ca38bb1406b26f36ed6b0de1f5a2f7d",
+  "dwg_version": "AC1032",
+  "layers": [
+    {
+      "frozen": false,
+      "name": "0",
+      "on": true
+    }
+  ],
+  "reader": "acadrust@0.5.5+d35691f",
+  "schema": "pvec-gold/r0-open-dwg-read/2",
+  "viewports": [
+    {
+      "block": "*Paper_Space",
+      "center": [
+        "0x4059000000000000",
+        "0x4052c00000000000"
+      ],
+      "clip_polygon": [
+        [
+          "0x4051800000000000",
+          "0x404b800000000000"
+        ],
+        [
+          "0x4060400000000000",
+          "0x404e000000000000"
+        ],
+        [
+          "0x405e000000000000",
+          "0x4057c00000000000"
+        ],
+        [
+          "0x4055400000000000",
+          "0x4059000000000000"
+        ]
+      ],
+      "height": "0x404e000000000000",
+      "id": 0,
+      "view_center": [
+        "0x4014000000000000",
+        "0x4010000000000000"
+      ],
+      "view_height": "0x4024000000000000",
+      "width": "0x4054000000000000"
+    }
+  ]
+}
