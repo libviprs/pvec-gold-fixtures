@@ -37,7 +37,7 @@
       "name": "*Model_Space"
     }
   ],
-  "dwg_sha256": "bb07f1bda7b6f5b035fe1f3092a9aa4e0ca38bb1406b26f36ed6b0de1f5a2f7d",
+  "dwg_sha256": "72114a9e56e413d8acfcc4f2d6f485dc52233785f584a59a12012c1c3afcafaf",
   "dwg_version": "AC1032",
   "layers": [
     {
@@ -80,6 +80,11 @@
         "0x4010000000000000"
       ],
       "view_height": "0x4024000000000000",
+      "view_target": [
+        "0x0000000000000000",
+        "0x0000000000000000",
+        "0x0000000000000000"
+      ],
       "width": "0x4054000000000000"
     }
   ]

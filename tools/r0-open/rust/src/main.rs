@@ -333,9 +333,11 @@ fn build_viewports(expected: &Value, doc: &mut CadDocument) -> Result<(), Skip> 
         let c = p2(&v["paper"]["center"]);
         let mut vp = Viewport::with_size(Vector3::new(c.x, c.y, 0.0), fx(&v["paper"]["width"]), fx(&v["paper"]["height"]));
         vp.id = (i + 2) as i16; // id 1 is the layout's own overall viewport
+        // A DWG reads the view centre relative to the view target, so the target stays at the origin and
+        // the centre is the model point at the middle of the viewport, which is what the record means.
         let vc = p2(&v["view"]["center"]);
         vp.view_center = Vector3::new(vc.x, vc.y, 0.0);
-        vp.view_target = Vector3::new(vc.x, vc.y, 0.0);
+        vp.view_target = Vector3::new(0.0, 0.0, 0.0);
         vp.view_height = fx(&v["view"]["height"]);
         if let Some(clip) = v.get("clip") {
             let pts: Vec<Vector2> = clip["polygon"].as_array().unwrap().iter().map(p2).collect();
@@ -549,6 +551,7 @@ fn cmd_read(args: &[String]) {
                     "block": n, "id": v.id,
                     "center": [hex(v.center.x), hex(v.center.y)], "width": hex(v.width), "height": hex(v.height),
                     "view_center": [hex(v.view_center.x), hex(v.view_center.y)], "view_height": hex(v.view_height),
+                    "view_target": v3(&v.view_target),
                     "clip_polygon": clip,
                 }));
             }
