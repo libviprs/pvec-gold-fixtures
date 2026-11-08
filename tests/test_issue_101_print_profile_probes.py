@@ -5,7 +5,7 @@ layer in model and paper space, and two layouts with plot settings (one in milli
 parameters, an authored record and a DWG in r3-open whose reader dump matches the record field for field.
 """
 import json
-import math
+from decimal import Decimal
 import struct
 import unittest
 from pathlib import Path
@@ -47,7 +47,8 @@ class Records(unittest.TestCase):
 
     def test_the_twist_is_thirty_degrees_in_radians(self):
         v = record("viewport-twisted-001")["viewports"][0]
-        self.assertEqual(f(v["view"]["twist"]), math.pi / 6)
+        # pi/6 rounded once to f64; math.pi / 6 rounds twice and lands one ulp low.
+        self.assertEqual(f(v["view"]["twist"]), float(Decimal("0.523598775598298873077107230546583814032861566562517636829")))
 
     def test_the_non_plan_view_looks_along_minus_one_minus_one_one(self):
         v = record("viewport-non-plan-001")["viewports"][0]
@@ -137,12 +138,15 @@ class Revision(unittest.TestCase):
         self.assertTrue(self.mutated("no-plot-layer-001", plots))
 
     def test_a_changed_plot_setting_is_a_mismatch(self):
+        def layout1(r):
+            return next(l for l in r["layouts"] if l["name"] == "Layout1")
+
         def scale(r):
-            r["layout_plot"]["scale_denominator"] = "0x4049000000000001"
+            layout1(r)["scale_denominator"] = "0x4049000000000001"
         self.assertTrue(self.mutated("layout-plot-settings-mm-001", scale))
 
         def lineweights(r):
-            r["layout_plot"]["print_lineweights"] = True
+            layout1(r)["print_lineweights"] = True
         self.assertTrue(self.mutated("layout-plot-settings-mm-001", lineweights))
 
 

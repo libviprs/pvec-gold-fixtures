@@ -43,9 +43,57 @@
     {
       "frozen": false,
       "name": "0",
-      "on": true
+      "on": true,
+      "plottable": true
     }
   ],
+  "layouts": [
+    {
+      "margins": [
+        "0x0000000000000000",
+        "0x0000000000000000",
+        "0x0000000000000000",
+        "0x0000000000000000"
+      ],
+      "name": "Layout1",
+      "origin": [
+        "0x0000000000000000",
+        "0x0000000000000000"
+      ],
+      "paper_height": "0x0000000000000000",
+      "paper_size": "",
+      "paper_units": 0,
+      "paper_width": "0x0000000000000000",
+      "plot_style_sheet": "",
+      "print_lineweights": false,
+      "rotation": 0,
+      "scale_denominator": "0x3ff0000000000000",
+      "scale_numerator": "0x3ff0000000000000"
+    },
+    {
+      "margins": [
+        "0x0000000000000000",
+        "0x0000000000000000",
+        "0x0000000000000000",
+        "0x0000000000000000"
+      ],
+      "name": "Model",
+      "origin": [
+        "0x0000000000000000",
+        "0x0000000000000000"
+      ],
+      "paper_height": "0x0000000000000000",
+      "paper_size": "",
+      "paper_units": 0,
+      "paper_width": "0x0000000000000000",
+      "plot_style_sheet": "",
+      "print_lineweights": false,
+      "rotation": 0,
+      "scale_denominator": "0x3ff0000000000000",
+      "scale_numerator": "0x3ff0000000000000"
+    }
+  ],
+  "paper_entities": [],
   "reader": "acadrust@0.5.5+d35691f",
   "schema": "pvec-gold/r0-open-dwg-read/2",
   "viewports": [
@@ -73,11 +121,20 @@
           "0x4059000000000000"
         ]
       ],
+      "frozen_layers": [],
       "height": "0x404e000000000000",
+      "hide_plot": false,
       "id": 0,
+      "layer": "0",
+      "twist": "0x0000000000000000",
       "view_center": [
         "0x4014000000000000",
         "0x4010000000000000"
+      ],
+      "view_direction": [
+        "0x0000000000000000",
+        "0x0000000000000000",
+        "0x3ff0000000000000"
       ],
       "view_height": "0x4024000000000000",
       "view_target": [

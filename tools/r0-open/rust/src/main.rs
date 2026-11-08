@@ -15,6 +15,7 @@
 use acadrust::entities::*;
 use acadrust::types::{DxfVersion, Vector2, Vector3};
 use acadrust::tables::Layer;
+use acadrust::objects::ObjectType;
 use acadrust::{BlockRecord, CadDocument, DwgReader, DwgWriter, TableEntry};
 use serde_json::{json, Value};
 use sha2::{Digest, Sha256};
@@ -319,16 +320,59 @@ fn p2(v: &Value) -> Vector2 {
 /// LWPOLYLINE in the same layout, and the viewport's clip boundary handle names it, which is how a DWG says
 /// that a viewport is not rectangular. Numbers come from the f64_hex fields of the record, never from the
 /// decimals.
+///
+/// viewport_print (#101) adds a layer table with plot flags, lines on named layers in model and paper space, a
+/// view direction, a twist, layers frozen in a viewport, hide_plot, the VIEWPORT entity's own layer, and the
+/// layout's plot settings.
 fn build_viewports(expected: &Value, doc: &mut CadDocument) -> Result<(), Skip> {
-    let line = make_curve(&expected["entities"][0], None)?;
-    if let Err(e) = doc.add_entity(line) {
-        return skip("MALFORMED_FIXTURE", format!("add_entity: {e:?}"));
+    for l in expected.get("layers").and_then(|v| v.as_array()).into_iter().flatten() {
+        let mut layer = Layer::new(l["name"].as_str().unwrap());
+        layer.is_plottable = l["plottable"].as_bool().unwrap();
+        // A viewport names the layers it freezes by handle, and a new table entry has none until written.
+        layer.set_handle(doc.allocate_handle());
+        if let Err(err) = doc.layers.add(layer) {
+            return skip("MALFORMED_FIXTURE", format!("layers.add: {err}"));
+        }
     }
     let vps = expected["viewports"].as_array().unwrap();
     let layout = vps[0]["layout"].as_str().unwrap();
     // A new document already carries Layout1, so adding it again is an error that means "it is there". Any
     // other missing layout is reported by the first add_entity_to_layout below.
     let _ = doc.add_layout(layout);
+    for e in expected["entities"].as_array().unwrap() {
+        let mut curve = make_curve(e, None)?;
+        if let Some(l) = e.get("layer") {
+            curve.common_mut().layer = l["name"].as_str().unwrap().to_string();
+        }
+        let added = if e.get("space").and_then(|s| s.as_str()) == Some("PAPER") {
+            doc.add_entity_to_layout(curve, layout)
+        } else {
+            doc.add_entity(curve)
+        };
+        if let Err(err) = added {
+            return skip("MALFORMED_FIXTURE", format!("add_entity: {err:?}"));
+        }
+    }
+    if let Some(lp) = expected.get("layout_plot") {
+        let Some(ObjectType::Layout(l)) =
+            doc.objects.values_mut().find(|o| matches!(o, ObjectType::Layout(l) if l.name == layout))
+        else {
+            return skip("MALFORMED_FIXTURE", format!("no layout {layout} to carry the plot settings"));
+        };
+        let m: Vec<f64> = lp["margins"].as_array().unwrap().iter().map(fx).collect();
+        let o = p2(&lp["origin"]);
+        l.paper_size = lp["paper_size"].as_str().unwrap().to_string();
+        l.paper_width = fx(&lp["paper_width"]);
+        l.paper_height = fx(&lp["paper_height"]);
+        l.plot_paper_units = lp["paper_units"].as_i64().unwrap() as i16;
+        l.plot_rotation = lp["rotation"].as_i64().unwrap() as i16;
+        l.plot_scale_numerator = fx(&lp["scale_numerator"]);
+        l.plot_scale_denominator = fx(&lp["scale_denominator"]);
+        (l.plot_margin_left, l.plot_margin_bottom, l.plot_margin_right, l.plot_margin_top) = (m[0], m[1], m[2], m[3]);
+        (l.plot_origin_x, l.plot_origin_y) = (o.x, o.y);
+        l.plot_flags.print_lineweights = lp["print_lineweights"].as_bool().unwrap();
+        l.plot_style_sheet = lp["plot_style_sheet"].as_str().unwrap().to_string();
+    }
     for (i, v) in vps.iter().enumerate() {
         let c = p2(&v["paper"]["center"]);
         let mut vp = Viewport::with_size(Vector3::new(c.x, c.y, 0.0), fx(&v["paper"]["width"]), fx(&v["paper"]["height"]));
@@ -339,6 +383,22 @@ fn build_viewports(expected: &Value, doc: &mut CadDocument) -> Result<(), Skip> 
         vp.view_center = Vector3::new(vc.x, vc.y, 0.0);
         vp.view_target = Vector3::new(0.0, 0.0, 0.0);
         vp.view_height = fx(&v["view"]["height"]);
+        if let Some(d) = v["view"].get("direction") {
+            vp.view_direction = p3(d);
+        }
+        if let Some(t) = v["view"].get("twist") {
+            vp.twist_angle = fx(t);
+        }
+        for name in v.get("frozen_layers").and_then(|x| x.as_array()).into_iter().flatten() {
+            match doc.layers.get(name.as_str().unwrap()) {
+                Some(l) => vp.frozen_layers.push(l.handle),
+                None => return skip("MALFORMED_FIXTURE", format!("frozen layer {name} is not in the drawing")),
+            }
+        }
+        vp.status.hide_plot = v.get("hide_plot").and_then(|x| x.as_bool()).unwrap_or(false);
+        if let Some(l) = v.get("entity_layer") {
+            vp.common.layer = l.as_str().unwrap().to_string();
+        }
         if let Some(clip) = v.get("clip") {
             let pts: Vec<Vector2> = clip["polygon"].as_array().unwrap().iter().map(p2).collect();
             let mut pl = LwPolyline::from_points(pts);
@@ -507,7 +567,11 @@ fn dump_geometry(e: &EntityType) -> Value {
 }
 
 fn dump_layers(doc: &CadDocument) -> Vec<Value> {
-    let mut v: Vec<(String, Value)> = doc.layers.iter().map(|l| (l.name.clone(), json!({"name": l.name, "on": !l.is_off(), "frozen": l.is_frozen()}))).collect();
+    let mut v: Vec<(String, Value)> = doc
+        .layers
+        .iter()
+        .map(|l| (l.name.clone(), json!({"name": l.name, "on": !l.is_off(), "frozen": l.is_frozen(), "plottable": l.is_plottable})))
+        .collect();
     v.sort_by(|a, b| a.0.cmp(&b.0));
     v.into_iter().map(|x| x.1).collect()
 }
@@ -552,12 +616,41 @@ fn cmd_read(args: &[String]) {
                     "center": [hex(v.center.x), hex(v.center.y)], "width": hex(v.width), "height": hex(v.height),
                     "view_center": [hex(v.view_center.x), hex(v.view_center.y)], "view_height": hex(v.view_height),
                     "view_target": v3(&v.view_target),
+                    "view_direction": v3(&v.view_direction), "twist": hex(v.twist_angle),
+                    "frozen_layers": v.frozen_layers.iter().map(|h| doc.layers.iter().find(|l| l.handle == *h).map(|l| l.name.clone()).unwrap_or_else(|| format!("{h:?}"))).collect::<Vec<_>>(),
+                    "hide_plot": v.status.hide_plot, "layer": v.common.layer,
                     "clip_polygon": clip,
                 }));
             }
         }
     }
+    // Paper-space entities other than the viewports and their clip boundaries, and every layout's plot settings (#101).
+    let mut paper: Vec<Value> = Vec::new();
+    for br in doc.block_records.iter() {
+        let n = br.name().to_string();
+        if n.starts_with("*Paper_Space") {
+            paper.extend(doc.entities_in_block(&n).filter(|e| !matches!(e, EntityType::Viewport(_) | EntityType::LwPolyline(_))).map(dump_entity));
+        }
+    }
+    let mut layouts: Vec<Value> = doc
+        .objects
+        .values()
+        .filter_map(|o| match o {
+            ObjectType::Layout(l) => Some(json!({
+                "name": l.name, "paper_size": l.paper_size, "paper_width": hex(l.paper_width), "paper_height": hex(l.paper_height),
+                "paper_units": l.plot_paper_units, "rotation": l.plot_rotation,
+                "scale_numerator": hex(l.plot_scale_numerator), "scale_denominator": hex(l.plot_scale_denominator),
+                "margins": [hex(l.plot_margin_left), hex(l.plot_margin_bottom), hex(l.plot_margin_right), hex(l.plot_margin_top)],
+                "origin": [hex(l.plot_origin_x), hex(l.plot_origin_y)],
+                "print_lineweights": l.plot_flags.print_lineweights, "plot_style_sheet": l.plot_style_sheet,
+            })),
+            _ => None,
+        })
+        .collect();
+    layouts.sort_by(|a, b| a["name"].as_str().cmp(&b["name"].as_str()));
     let rec = json!({
+        "paper_entities": paper,
+        "layouts": layouts,
         "viewports": viewports,
         "block_census": block_census,
         "schema": "pvec-gold/r0-open-dwg-read/2",

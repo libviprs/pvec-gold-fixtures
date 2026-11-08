@@ -25,7 +25,11 @@ ROOT = Path(__file__).resolve().parent.parent
 REVISION = "r3-open"
 KT = ROOT / "fixtures" / "viewports"
 GENERATOR = "tools/authoring/gen_large_industrial.py"
-IDS = ("viewport-clipped-001", "viewport-clipped-bounded-001", "paper-space-multi-viewport-001")
+IDS = ("viewport-clipped-001", "viewport-clipped-bounded-001", "paper-space-multi-viewport-001",
+       # #101: the print-profile probes.
+       "viewport-twisted-001", "viewport-frozen-layer-001", "viewport-non-plan-001", "viewport-hide-plot-001",
+       "no-plot-layer-001", "layout-plot-settings-mm-001", "layout-plot-settings-inch-001")
+PLAN = [0, 0, 0x3ff0000000000000]
 LARGE = {"id": "large-industrial-001", "entity_count": 1000000, "seed": 96, "sample_count": 1000}
 
 
@@ -66,6 +70,20 @@ def compare(expected, read):
             bad.append("%s: the reader dump has no view_target" % where)
         elif any(hexbits(t) != 0 for t in target):
             bad.append("%s: view_target is not the origin: %s" % (where, target))
+        # #101: the view direction (plan unless authored), the twist (zero unless authored), the layers frozen in
+        # the viewport, hide_plot and the VIEWPORT entity's own layer.
+        want_dir = [bits(c) for c in w["view"]["direction"]] if "direction" in w["view"] else PLAN
+        if [hexbits(c) for c in g.get("view_direction", [])] != want_dir:
+            bad.append("%s: view_direction differs from the authored one" % where)
+        want_twist = bits(w["view"]["twist"]) if "twist" in w["view"] else 0
+        if g.get("twist") is None or hexbits(g["twist"]) != want_twist:
+            bad.append("%s: twist authored 0x%016x, read %s" % (where, want_twist, g.get("twist")))
+        if sorted(g.get("frozen_layers", [])) != sorted(w.get("frozen_layers", [])):
+            bad.append("%s: frozen_layers authored %s, read %s" % (where, w.get("frozen_layers", []), g.get("frozen_layers")))
+        if g.get("hide_plot") != w.get("hide_plot", False):
+            bad.append("%s: hide_plot authored %s, read %s" % (where, w.get("hide_plot", False), g.get("hide_plot")))
+        if g.get("layer") != w.get("entity_layer", "0"):
+            bad.append("%s: the VIEWPORT's layer authored %s, read %s" % (where, w.get("entity_layer", "0"), g.get("layer")))
         clip = w.get("clip")
         poly = g.get("clip_polygon")
         if clip is None:
@@ -89,6 +107,41 @@ def compare(expected, read):
             read_poly = [[hexbits(c) for c in p] for p in (poly or [])]
             if authored != read_poly:
                 bad.append("%s: the clip polygon differs from the authored one" % where)
+    return bad + compare_print(expected, read)
+
+
+def compare_print(expected, read):
+    """#101: the layer table's plot flags, every authored line on its layer and in its space, and the layout's
+    plot settings, by exact bits."""
+    bad = []
+    layers = {l["name"]: l for l in read.get("layers", [])}
+    for l in expected.get("layers", []):
+        r = layers.get(l["name"])
+        if r is None or r.get("plottable") != l["plottable"]:
+            bad.append("layer %s: plottable authored %s, read %s" % (l["name"], l["plottable"], r and r.get("plottable")))
+    model = next((b["entities"] for b in read.get("blocks", []) if b["name"] == "*Model_Space"), [])
+    for e in expected["entities"]:
+        if e["class"] != "line":
+            continue
+        pool = read.get("paper_entities", []) if e.get("space") == "PAPER" else model
+        want = (e.get("layer", {}).get("name", "0"), [bits(c) for c in e["geometry"]["start"]], [bits(c) for c in e["geometry"]["end"]])
+        if not any(r.get("type") == "LINE" and (r.get("layer"), [hexbits(c) for c in r["start"]], [hexbits(c) for c in r["end"]]) == want
+                   for r in pool):
+            bad.append("entity %s: no %s line on %s with the authored ends" % (e["id"], e.get("space", "MODEL").lower(), want[0]))
+    lp = expected.get("layout_plot")
+    if lp:
+        r = next((x for x in read.get("layouts", []) if x["name"] == lp["layout"]), None)
+        if r is None:
+            return bad + ["layout %s: the reader found no such layout" % lp["layout"]]
+        for k in ("paper_size", "paper_units", "rotation", "print_lineweights", "plot_style_sheet"):
+            if r.get(k) != lp[k]:
+                bad.append("layout %s: %s authored %r, read %r" % (lp["layout"], k, lp[k], r.get(k)))
+        for k in ("paper_width", "paper_height", "scale_numerator", "scale_denominator"):
+            if hexbits(r[k]) != bits(lp[k]):
+                bad.append("layout %s: %s authored 0x%016x, read %s" % (lp["layout"], k, bits(lp[k]), r[k]))
+        for k in ("margins", "origin"):
+            if [hexbits(x) for x in r[k]] != [bits(x) for x in lp[k]]:
+                bad.append("layout %s: %s differ from the authored ones" % (lp["layout"], k))
     return bad
 
 
@@ -173,6 +226,11 @@ def assemble(run, out, sample_sha=None):
         "when it is clipped, `clip` (`polygon` in paper space, `bounded_only`, `bounds`). `bounded_only` means a reader may "
         "report the polygon or only its bounding box, and may not report anything outside `bounds`. A paper-space layout is "
         "the set of viewports that share a `layout` name. Assertions use `VIEWPORT_COUNT_PRESERVED` and `VIEWPORT_CLIP_PRESERVED`.\n\n"
+        "The print-profile probes (#101) add a `layers` table with plot flags, lines on named layers in model and paper space "
+        "(`space: PAPER`), and per viewport a view `direction` and `twist` (radians), `frozen_layers`, `hide_plot` and "
+        "`entity_layer`, plus the layout's plot settings in `layout_plot`. Their claims are `VIEWPORT_VIEW_PRESERVED`, "
+        "`VIEWPORT_FREEZE_PRESERVED`, `VIEWPORT_PLOT_STATE_PRESERVED`, `LAYER_PLOT_STATE_PRESERVED` and "
+        "`LAYOUT_PLOT_SETTINGS_PRESERVED`.\n\n"
         "The large fixture has no DWG, only a generator and a size class (`size_class: large`).\n")
     write_sums(out)
 
