@@ -59,6 +59,13 @@ def compare(expected, read):
         for name, a, b in pairs:
             if a != b:
                 bad.append("%s: %s authored 0x%016x, read 0x%016x" % (where, name, a, b))
+        # The view centre is relative to the view target, so the record's centre is only the model point
+        # it names when the target is at the origin (#102).
+        target = g.get("view_target")
+        if target is None:
+            bad.append("%s: the reader dump has no view_target" % where)
+        elif any(hexbits(t) != 0 for t in target):
+            bad.append("%s: view_target is not the origin: %s" % (where, target))
         clip = w.get("clip")
         poly = g.get("clip_polygon")
         if clip is None:
@@ -162,7 +169,7 @@ def assemble(run, out, sample_sha=None):
         "# r3-open (candidate)\n\nAdds the viewport, paper-space and large-industrial fixtures libviprs#1055 and #1064 "
         "need (#96) on top of `r2-open`, which it includes unchanged.\n\n"
         "## Record shape\n\nA fixture with viewports carries a `viewports` array in `expected.math.json`: per viewport `id`, "
-        "`layout`, `paper` (`center`, `width`, `height`, in paper space), `view` (`center`, `height`, the model-space window) and, "
+        "`layout`, `paper` (`center`, `width`, `height`, in paper space), `view` (`center`, `height`, the model-space window; the target is the origin, so the centre is the model point at the middle of the viewport) and, "
         "when it is clipped, `clip` (`polygon` in paper space, `bounded_only`, `bounds`). `bounded_only` means a reader may "
         "report the polygon or only its bounding box, and may not report anything outside `bounds`. A paper-space layout is "
         "the set of viewports that share a `layout` name. Assertions use `VIEWPORT_COUNT_PRESERVED` and `VIEWPORT_CLIP_PRESERVED`.\n\n"

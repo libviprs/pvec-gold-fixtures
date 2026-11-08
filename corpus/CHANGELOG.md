@@ -4,6 +4,8 @@
 
 Adds what libviprs#1055 and #1064 need (#96) on top of `r2-open`, which it includes unchanged: a clipped viewport (exact and bounded-only), a paper-space layout with 20 viewports, and `large-industrial-001`, a generated drawing of one million entities that has a generator and a size class but no committed DWG. The record shape for viewports is in [docs/fixtures/expected-math.md](../docs/fixtures/expected-math.md). The three viewport fixtures are `KNOWN_TRUTH_EXACT` with `READER_MAPPING_ONLY` scope: acadrust's reader is the only reader that has looked at them, and no STEP converter can express a viewport.
 
+The three viewport probes were rewritten once (#102): the writer used to put each viewport's view target on its view centre, which a DWG reader places at twice the authored point, because it reads the centre relative to the target. Every target is now the origin, so the centre is the model point the record names. The reader dump records `view_target` and `check` refuses one off the origin. The probes keep their names and records; `source.dwg`, `read.acadrust.json`, the manifest and `SHA256SUMS` changed.
+
 ## r2-open (candidate)
 
 The first `STEP_ORACLE` revision (#78). It holds the 59 fixtures of `r1-open` (which lists `r0-open`'s) with the result of running both open converters, `acadsharp-dwg2step` and `libredwg-dwg2step`, over each, in a clean docker daemon (`tools/clean_host_r2.sh`). `oracle_scope` is `OPEN_CONVERTERS`. Nothing earlier is edited: `r0-open` and `r1-open` stay as they were, and `r2-open` points at their DWGs.
