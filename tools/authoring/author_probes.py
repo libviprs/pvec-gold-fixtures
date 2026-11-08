@@ -338,14 +338,81 @@ def build_viewport_fixture(s):
     return ents, vps, asserts
 
 
+def build_print_fixture(s):
+    """viewport_print (#101): what the print profile is measured against. Model and paper-space lines on named
+    layers, a layer table with plot flags, viewports that may carry a twist, a view direction, layers frozen in
+    them, hide_plot and the layer of the VIEWPORT entity itself, and optionally the layout's plot settings. Every
+    number comes from the parameter file; the twist is given in degrees and recorded in radians."""
+    def p2(v):
+        return [S(c) for c in v]
+    layout = s["layout"]
+    layers = [{"name": l["name"], "on": True, "frozen": False, "plottable": l["plottable"]} for l in s["layers"]]
+    ents = []
+    for space, key in (("MODEL", "model_curves"), ("PAPER", "paper_curves")):
+        for i, c in enumerate(s[key]):
+            rec = build_curve({"class": "line", "start": c["start"], "end": c["end"]})
+            e = {"id": "%s-%s-%d" % (s["id"], space.lower(), i + 1), **rec, "structure": "CURVE_ONLY",
+                 "layer": {"name": c["layer"], "on": True, "frozen": False}}
+            if space == "PAPER":
+                e["space"] = "PAPER"
+            ents.append(e)
+    vps = []
+    for v in s["viewports"]:
+        view = {"center": p2(v["view_center"]), "height": S(v["view_height"])}
+        if "view_direction" in v:
+            view["direction"] = p2(v["view_direction"])
+        if "twist_deg" in v:
+            view["twist"] = S(mpf(v["twist_deg"]) * pi / 180)
+        out = {"id": v["id"], "layout": layout,
+               "paper": {"center": p2(v["center"]), "width": S(v["width"]), "height": S(v["height"])}, "view": view}
+        if v.get("frozen_layers"):
+            out["frozen_layers"] = list(v["frozen_layers"])
+        if v.get("hide_plot"):
+            out["hide_plot"] = True
+        if "layer" in v:
+            out["entity_layer"] = v["layer"]
+        vps.append(out)
+    first = ents[0]["id"]
+    asserts = [(first, ("STRUCTURAL", "VIEWPORT_COUNT_PRESERVED",
+                        "The layout %s keeps exactly %d viewport(s); none is dropped or merged." % (layout, len(vps))))]
+    for v in vps:
+        if "twist" in v["view"] or "direction" in v["view"]:
+            asserts.append((v["id"], ("STRUCTURAL", "VIEWPORT_VIEW_PRESERVED",
+                                      "The view direction and twist are kept as authored, so a plan view stays plan and a twisted one keeps its sign.")))
+        if "frozen_layers" in v:
+            asserts.append((v["id"], ("STRUCTURAL", "VIEWPORT_FREEZE_PRESERVED",
+                                      "The layers frozen in this viewport (%s) stay frozen in it and nowhere else." % ", ".join(v["frozen_layers"]))))
+        if "hide_plot" in v or "entity_layer" in v:
+            asserts.append((v["id"], ("STRUCTURAL", "VIEWPORT_PLOT_STATE_PRESERVED",
+                                      "hide_plot and the layer of the VIEWPORT entity are kept, so whether it prints is unchanged.")))
+    for e in ents:
+        if not next(l for l in layers + [{"name": "0", "plottable": True}] if l["name"] == e["layer"]["name"])["plottable"]:
+            asserts.append((e["id"], ("STRUCTURAL", "LAYER_PLOT_STATE_PRESERVED",
+                                      "The entity stays on %s, which does not plot; it is neither dropped nor moved to a layer that plots." % e["layer"]["name"])))
+    plot = None
+    if "layout_plot" in s:
+        lp = s["layout_plot"]
+        plot = {"layout": layout, "paper_size": lp["paper_size"], "paper_width": S(lp["paper_width"]),
+                "paper_height": S(lp["paper_height"]), "paper_units": lp["paper_units"], "rotation": lp["rotation"],
+                "scale_numerator": S(lp["scale_numerator"]), "scale_denominator": S(lp["scale_denominator"]),
+                "margins": p2(lp["margins"]), "origin": p2(lp["origin"]), "print_lineweights": lp["print_lineweights"],
+                "plot_style_sheet": lp["plot_style_sheet"]}
+        asserts.append((first, ("STRUCTURAL", "LAYOUT_PLOT_SETTINGS_PRESERVED",
+                                "Every plot setting of %s (paper, unit, rotation, scale, margins, origin, lineweights, style table) is kept as authored." % layout)))
+    return ents, vps, asserts, layers, plot
+
+
 def build_fixture(path):
     raw = path.read_bytes()
     s = json.loads(raw)
     rel = str(path.relative_to(ROOT))
     extra = ""
     viewports = None
+    layers = plot = None
     if s["kind"] in ("viewport_clipped", "viewport_clipped_bounded", "paper_space_layout"):
         ents, viewports, asserts_by = build_viewport_fixture(s)
+    elif s["kind"] == "viewport_print":
+        ents, viewports, asserts_by, layers, plot = build_print_fixture(s)
     elif s["kind"] == "transform":
         ent, asserts, extra = build_transform_fixture(s)
         ents = [ent]
@@ -393,6 +460,10 @@ def build_fixture(path):
     }
     if viewports:
         doc["viewports"] = viewports
+    if layers:
+        doc["layers"] = layers
+    if plot:
+        doc["layout_plot"] = plot
     ex = exclusions_for(ents)
     if ex:
         doc["derivative_exclusions"] = ex

@@ -204,6 +204,23 @@ def semantic_check(doc):
             b = [_fr(x) for x in clip["bounds"]]
             if b != [min(xs), min(ys), max(xs), max(ys)]:
                 errs.append("%s: clip.bounds is not the polygon's bounding box" % w)
+    # #101: a viewport or entity names its layer, and a layer other than 0 has to be in the record's layer table.
+    names = {l["name"] for l in doc.get("layers", [])} | {"0"}
+    for v in doc.get("viewports", []):
+        for n in v.get("frozen_layers", []) + [v.get("entity_layer", "0")]:
+            if n not in names:
+                errs.append("viewports[%s]: layer %s is not in the record's layers" % (v["id"], n))
+    if "layers" in doc:
+        for ent in doc["entities"]:
+            if "layer" in ent and ent["layer"]["name"] not in names:
+                errs.append("entities[%s]: layer %s is not in the record's layers" % (ent["id"], ent["layer"]["name"]))
+    lp = doc.get("layout_plot")
+    if lp:
+        for name in ("paper_width", "paper_height", "scale_numerator", "scale_denominator"):
+            if _fr(lp[name]) <= 0:
+                errs.append("layout_plot.%s must be positive" % name)
+        if lp["layout"] not in {v["layout"] for v in doc.get("viewports", [])}:
+            errs.append("layout_plot.layout %s has no viewport in the record" % lp["layout"])
     for ent in doc["entities"]:
         w = "entities[%s]" % ent["id"]
         _check_curve(ent, w, errs)

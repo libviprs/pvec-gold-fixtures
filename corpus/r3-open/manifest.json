@@ -14,7 +14,7 @@
         },
         "read.acadrust.json": {
           "path": "corpus/r3-open/fixtures/viewport-clipped-001/read.acadrust.json",
-          "sha256": "168088ed4660a9cb65ca4fcc8393e6b91c1eba5430435785c3cb6483ab323d7a"
+          "sha256": "1e86aff637c3cdf89389d6f9768d98786fe777b01a9ac9772600711e8ff690ce"
         },
         "source.dwg": {
           "path": "corpus/r3-open/fixtures/viewport-clipped-001/source.dwg",
@@ -47,7 +47,7 @@
         },
         "read.acadrust.json": {
           "path": "corpus/r3-open/fixtures/viewport-clipped-bounded-001/read.acadrust.json",
-          "sha256": "168088ed4660a9cb65ca4fcc8393e6b91c1eba5430435785c3cb6483ab323d7a"
+          "sha256": "1e86aff637c3cdf89389d6f9768d98786fe777b01a9ac9772600711e8ff690ce"
         },
         "source.dwg": {
           "path": "corpus/r3-open/fixtures/viewport-clipped-bounded-001/source.dwg",
@@ -80,7 +80,7 @@
         },
         "read.acadrust.json": {
           "path": "corpus/r3-open/fixtures/paper-space-multi-viewport-001/read.acadrust.json",
-          "sha256": "60b481e0d90f120d5bca9f47af16f9d48418be99ba6cd24b3f1d2012247271ed"
+          "sha256": "82a8783b30b9106a9b168930d49e9d0086a6347178c684007b3f9315cb11db66"
         },
         "source.dwg": {
           "path": "corpus/r3-open/fixtures/paper-space-multi-viewport-001/source.dwg",
@@ -93,6 +93,237 @@
       "evidence_scope": "READER_MAPPING_ONLY",
       "group": "viewports",
       "id": "paper-space-multi-viewport-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracle_scope": "NONE",
+      "provenance": "SYNTHETIC_AUTHORED",
+      "readers": [
+        "acadrust"
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "artifacts": {
+        "README.md": {
+          "path": "corpus/r3-open/fixtures/viewport-twisted-001/README.md",
+          "sha256": "5da127bf87c53f8502c8f1ddd2c964cc3c6649fa8cd0191509c353efff976b73"
+        },
+        "expected.math.json": {
+          "path": "corpus/r3-open/fixtures/viewport-twisted-001/expected.math.json",
+          "sha256": "89ce8518483711450157e7290648d54d340b5f77b4748374eb69b393a97333ac"
+        },
+        "read.acadrust.json": {
+          "path": "corpus/r3-open/fixtures/viewport-twisted-001/read.acadrust.json",
+          "sha256": "6a7aad375a268adb9289c96e10b9601bb9fa1cf8a1f15233c616a3f4dcf9cb51"
+        },
+        "source.dwg": {
+          "path": "corpus/r3-open/fixtures/viewport-twisted-001/source.dwg",
+          "sha256": "71904a48042618aa5a0f612a1c26af3ec5d0adf132a3ae2cd83e7d894d34e511"
+        }
+      },
+      "dwg_sha256": "71904a48042618aa5a0f612a1c26af3ec5d0adf132a3ae2cd83e7d894d34e511",
+      "dwg_version": "AC1032",
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "group": "viewports",
+      "id": "viewport-twisted-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracle_scope": "NONE",
+      "provenance": "SYNTHETIC_AUTHORED",
+      "readers": [
+        "acadrust"
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "artifacts": {
+        "README.md": {
+          "path": "corpus/r3-open/fixtures/viewport-frozen-layer-001/README.md",
+          "sha256": "394873cc8994c53a5367b9a359a7722cdc1d6e1143a0cbd7364c3bc2e0d34666"
+        },
+        "expected.math.json": {
+          "path": "corpus/r3-open/fixtures/viewport-frozen-layer-001/expected.math.json",
+          "sha256": "0d70239d39362632b286bb30fa98be8ce91b4d7e1fd94f96051b9d4838d1ea80"
+        },
+        "read.acadrust.json": {
+          "path": "corpus/r3-open/fixtures/viewport-frozen-layer-001/read.acadrust.json",
+          "sha256": "010792b5def5fe43c5a3b2f099d3e5b55fa1e98c2e4ba3753b919e869611356d"
+        },
+        "source.dwg": {
+          "path": "corpus/r3-open/fixtures/viewport-frozen-layer-001/source.dwg",
+          "sha256": "329755d29eb15e348e56ecaf035177daedbbbe9284feaa1d5f90d060157055e8"
+        }
+      },
+      "dwg_sha256": "329755d29eb15e348e56ecaf035177daedbbbe9284feaa1d5f90d060157055e8",
+      "dwg_version": "AC1032",
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "group": "viewports",
+      "id": "viewport-frozen-layer-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracle_scope": "NONE",
+      "provenance": "SYNTHETIC_AUTHORED",
+      "readers": [
+        "acadrust"
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "artifacts": {
+        "README.md": {
+          "path": "corpus/r3-open/fixtures/viewport-non-plan-001/README.md",
+          "sha256": "b62d1e20c77a7a0675fd95ddab186cbbb2238cb7d4aa507dbccb031aac2fcef2"
+        },
+        "expected.math.json": {
+          "path": "corpus/r3-open/fixtures/viewport-non-plan-001/expected.math.json",
+          "sha256": "f22b1dd25e37947d3042799abc9b6cd1c11cd8d59414f2cd965284ed5cb1b5d3"
+        },
+        "read.acadrust.json": {
+          "path": "corpus/r3-open/fixtures/viewport-non-plan-001/read.acadrust.json",
+          "sha256": "0c5ff508f17b240e467c8251a181ac0520c1cd67ae9e4af7c861e559440d8f01"
+        },
+        "source.dwg": {
+          "path": "corpus/r3-open/fixtures/viewport-non-plan-001/source.dwg",
+          "sha256": "912cf75be9b6d9d5cb673db53647d46fe45ec4c4138f1f36939a78a7976e1b1e"
+        }
+      },
+      "dwg_sha256": "912cf75be9b6d9d5cb673db53647d46fe45ec4c4138f1f36939a78a7976e1b1e",
+      "dwg_version": "AC1032",
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "group": "viewports",
+      "id": "viewport-non-plan-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracle_scope": "NONE",
+      "provenance": "SYNTHETIC_AUTHORED",
+      "readers": [
+        "acadrust"
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "artifacts": {
+        "README.md": {
+          "path": "corpus/r3-open/fixtures/viewport-hide-plot-001/README.md",
+          "sha256": "17fca00de7fee40a2b03ea7310043f2fc2a597a59e1e03a9d451df01a219cef9"
+        },
+        "expected.math.json": {
+          "path": "corpus/r3-open/fixtures/viewport-hide-plot-001/expected.math.json",
+          "sha256": "34fc1562d4b77b9c93a882d7db14b16356d0658441ec4b01b7cef5c8e3f21c58"
+        },
+        "read.acadrust.json": {
+          "path": "corpus/r3-open/fixtures/viewport-hide-plot-001/read.acadrust.json",
+          "sha256": "a3f8727ad3819fbef749d5406c991fa006e75d9cbbd8349651a573d0a5264e06"
+        },
+        "source.dwg": {
+          "path": "corpus/r3-open/fixtures/viewport-hide-plot-001/source.dwg",
+          "sha256": "b4475b573e764fe9c2ef758f1cdbf32ab2ea0f4c00b5f6db2c67b825ca4b8042"
+        }
+      },
+      "dwg_sha256": "b4475b573e764fe9c2ef758f1cdbf32ab2ea0f4c00b5f6db2c67b825ca4b8042",
+      "dwg_version": "AC1032",
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "group": "viewports",
+      "id": "viewport-hide-plot-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracle_scope": "NONE",
+      "provenance": "SYNTHETIC_AUTHORED",
+      "readers": [
+        "acadrust"
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "artifacts": {
+        "README.md": {
+          "path": "corpus/r3-open/fixtures/no-plot-layer-001/README.md",
+          "sha256": "aa479ac2f2b427d6927c52dd3a4bd6cdd5fd8d59df2dd64cc6b8f3b7388f042c"
+        },
+        "expected.math.json": {
+          "path": "corpus/r3-open/fixtures/no-plot-layer-001/expected.math.json",
+          "sha256": "ae632657dfa8e33388096706d1a094780a09a663274a2346f3604665af0722cc"
+        },
+        "read.acadrust.json": {
+          "path": "corpus/r3-open/fixtures/no-plot-layer-001/read.acadrust.json",
+          "sha256": "3d398acd67120eecc0833c383d19ab2c2d4632ed933c73988adda89f8c67efb2"
+        },
+        "source.dwg": {
+          "path": "corpus/r3-open/fixtures/no-plot-layer-001/source.dwg",
+          "sha256": "5d2f9569d15c75a362a0c8da72c4d8dadf93b2036a387e5e9c51b62fd2461581"
+        }
+      },
+      "dwg_sha256": "5d2f9569d15c75a362a0c8da72c4d8dadf93b2036a387e5e9c51b62fd2461581",
+      "dwg_version": "AC1032",
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "group": "viewports",
+      "id": "no-plot-layer-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracle_scope": "NONE",
+      "provenance": "SYNTHETIC_AUTHORED",
+      "readers": [
+        "acadrust"
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "artifacts": {
+        "README.md": {
+          "path": "corpus/r3-open/fixtures/layout-plot-settings-mm-001/README.md",
+          "sha256": "68fa2946fef1b613ffade256fdd8b29ce7f754d2e9d56c4082e5cfff1d0c72f1"
+        },
+        "expected.math.json": {
+          "path": "corpus/r3-open/fixtures/layout-plot-settings-mm-001/expected.math.json",
+          "sha256": "70894b714506449108f53922e947dcb06cd89b3b12ac2ceaf3286e66a796db36"
+        },
+        "read.acadrust.json": {
+          "path": "corpus/r3-open/fixtures/layout-plot-settings-mm-001/read.acadrust.json",
+          "sha256": "6b94a5e710fd79b315d3916129a79a6ef895d9edb0e8edd3bfae9e0ea6edc21b"
+        },
+        "source.dwg": {
+          "path": "corpus/r3-open/fixtures/layout-plot-settings-mm-001/source.dwg",
+          "sha256": "bd59ba571683f24c2da418238f7e9bed13a26c4e8895a8b698759939b5d27981"
+        }
+      },
+      "dwg_sha256": "bd59ba571683f24c2da418238f7e9bed13a26c4e8895a8b698759939b5d27981",
+      "dwg_version": "AC1032",
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "group": "viewports",
+      "id": "layout-plot-settings-mm-001",
+      "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
+      "oracle_scope": "NONE",
+      "provenance": "SYNTHETIC_AUTHORED",
+      "readers": [
+        "acadrust"
+      ],
+      "status": "ACCEPTED"
+    },
+    {
+      "artifacts": {
+        "README.md": {
+          "path": "corpus/r3-open/fixtures/layout-plot-settings-inch-001/README.md",
+          "sha256": "6962d59ea967b25142d1990bcf68eb0e84fb12a1e74400c45dc77fe21f17e20f"
+        },
+        "expected.math.json": {
+          "path": "corpus/r3-open/fixtures/layout-plot-settings-inch-001/expected.math.json",
+          "sha256": "adc6a2468ded4df7101cb2b9236d7bb442a59375352c984711f8a5fffc5c3fe1"
+        },
+        "read.acadrust.json": {
+          "path": "corpus/r3-open/fixtures/layout-plot-settings-inch-001/read.acadrust.json",
+          "sha256": "fcbda06aa6dedc78cc08e48f3eeda1a6f19a629e157f7e0b63bb6a7bc66cc85b"
+        },
+        "source.dwg": {
+          "path": "corpus/r3-open/fixtures/layout-plot-settings-inch-001/source.dwg",
+          "sha256": "d99c556516e429fb765c89b858a969eb2a43583bfbc15844d05427e4da35816e"
+        }
+      },
+      "dwg_sha256": "d99c556516e429fb765c89b858a969eb2a43583bfbc15844d05427e4da35816e",
+      "dwg_version": "AC1032",
+      "evidence_class": "KNOWN_TRUTH_EXACT",
+      "evidence_scope": "READER_MAPPING_ONLY",
+      "group": "viewports",
+      "id": "layout-plot-settings-inch-001",
       "licence_verdict": "PUBLIC_REDISTRIBUTABLE",
       "oracle_scope": "NONE",
       "provenance": "SYNTHETIC_AUTHORED",

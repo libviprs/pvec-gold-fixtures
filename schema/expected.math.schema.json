@@ -35,6 +35,8 @@
     },
     "entities": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/entity" } },
     "viewports": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/viewport" } },
+    "layers": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/layer_state" } },
+    "layout_plot": { "$ref": "#/$defs/layout_plot" },
     "assertions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/assertion" } },
     "derivative_exclusions": {
       "type": "array",
@@ -206,7 +208,27 @@
       "properties": {
         "name": { "type": "string", "minLength": 1 },
         "on": { "type": "boolean" },
-        "frozen": { "type": "boolean" }
+        "frozen": { "type": "boolean" },
+        "plottable": { "type": "boolean" }
+      }
+    },
+    "layout_plot": {
+      "type": "object",
+      "required": ["layout", "paper_size", "paper_width", "paper_height", "paper_units", "rotation", "scale_numerator", "scale_denominator", "margins", "origin", "print_lineweights", "plot_style_sheet"],
+      "additionalProperties": false,
+      "properties": {
+        "layout": { "type": "string", "minLength": 1 },
+        "paper_size": { "type": "string" },
+        "paper_width": { "$ref": "#/$defs/scalar" },
+        "paper_height": { "$ref": "#/$defs/scalar" },
+        "paper_units": { "enum": [0, 1, 2] },
+        "rotation": { "enum": [0, 1, 2, 3] },
+        "scale_numerator": { "$ref": "#/$defs/scalar" },
+        "scale_denominator": { "$ref": "#/$defs/scalar" },
+        "margins": { "type": "array", "minItems": 4, "maxItems": 4, "items": { "$ref": "#/$defs/scalar" } },
+        "origin": { "$ref": "#/$defs/point2" },
+        "print_lineweights": { "type": "boolean" },
+        "plot_style_sheet": { "type": "string" }
       }
     },
     "point2": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "$ref": "#/$defs/scalar" } },
@@ -233,9 +255,14 @@
           "additionalProperties": false,
           "properties": {
             "center": { "$ref": "#/$defs/point2" },
-            "height": { "$ref": "#/$defs/scalar" }
+            "height": { "$ref": "#/$defs/scalar" },
+            "direction": { "$ref": "#/$defs/point3" },
+            "twist": { "$ref": "#/$defs/scalar" }
           }
         },
+        "frozen_layers": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "hide_plot": { "type": "boolean" },
+        "entity_layer": { "type": "string", "minLength": 1 },
         "clip": {
           "type": "object",
           "required": ["polygon", "bounded_only"],
@@ -279,7 +306,8 @@
             "orientation": { "$ref": "#/$defs/orientation" },
             "world": { "$ref": "#/$defs/world_curve" },
             "rejection": { "$ref": "#/$defs/rejection" },
-            "layer": { "$ref": "#/$defs/layer_state" }
+            "layer": { "$ref": "#/$defs/layer_state" },
+            "space": { "enum": ["MODEL", "PAPER"] }
           }
         }
       ],
@@ -294,7 +322,7 @@
         "kind": { "enum": ["STRUCTURAL", "GEOMETRIC", "SOURCE_MAPPING"] },
         "entity": { "type": "string" },
         "claim": {
-          "enum": ["CLASS_PRESERVED", "DEGREE_PRESERVED", "CONTROL_POINTS_PRESERVED", "KNOTS_PRESERVED", "WEIGHTS_PRESERVED", "PARAMETERIZATION_PRESERVED", "VERTEX_ORDER_PRESERVED", "CLOSURE_KIND_PRESERVED", "TRANSFORM_PRESERVED", "ORIENTATION_PRESERVED", "WORLD_SPACE_RESULT", "REJECTED", "LAYER_STATE_PRESERVED", "VIEWPORT_COUNT_PRESERVED", "VIEWPORT_CLIP_PRESERVED"]
+          "enum": ["CLASS_PRESERVED", "DEGREE_PRESERVED", "CONTROL_POINTS_PRESERVED", "KNOTS_PRESERVED", "WEIGHTS_PRESERVED", "PARAMETERIZATION_PRESERVED", "VERTEX_ORDER_PRESERVED", "CLOSURE_KIND_PRESERVED", "TRANSFORM_PRESERVED", "ORIENTATION_PRESERVED", "WORLD_SPACE_RESULT", "REJECTED", "LAYER_STATE_PRESERVED", "VIEWPORT_COUNT_PRESERVED", "VIEWPORT_CLIP_PRESERVED", "VIEWPORT_VIEW_PRESERVED", "VIEWPORT_FREEZE_PRESERVED", "VIEWPORT_PLOT_STATE_PRESERVED", "LAYER_PLOT_STATE_PRESERVED", "LAYOUT_PLOT_SETTINGS_PRESERVED"]
         },
         "statement": { "type": "string", "minLength": 1 }
       }
