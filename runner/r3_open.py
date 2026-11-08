@@ -78,7 +78,7 @@ def compare(expected, read):
         want_twist = bits(w["view"]["twist"]) if "twist" in w["view"] else 0
         if g.get("twist") is None or hexbits(g["twist"]) != want_twist:
             bad.append("%s: twist authored 0x%016x, read %s" % (where, want_twist, g.get("twist")))
-        if sorted(g.get("frozen_layers", [])) != sorted(w.get("frozen_layers", [])):
+        if "frozen_layers" not in g or sorted(g["frozen_layers"]) != sorted(w.get("frozen_layers", [])):
             bad.append("%s: frozen_layers authored %s, read %s" % (where, w.get("frozen_layers", []), g.get("frozen_layers")))
         if g.get("hide_plot") != w.get("hide_plot", False):
             bad.append("%s: hide_plot authored %s, read %s" % (where, w.get("hide_plot", False), g.get("hide_plot")))
@@ -117,17 +117,26 @@ def compare_print(expected, read):
     layers = {l["name"]: l for l in read.get("layers", [])}
     for l in expected.get("layers", []):
         r = layers.get(l["name"])
-        if r is None or r.get("plottable") != l["plottable"]:
-            bad.append("layer %s: plottable authored %s, read %s" % (l["name"], l["plottable"], r and r.get("plottable")))
-    model = next((b["entities"] for b in read.get("blocks", []) if b["name"] == "*Model_Space"), [])
-    for e in expected["entities"]:
-        if e["class"] != "line":
+        if r is None:
+            bad.append("layer %s: the reader found no such layer" % l["name"])
             continue
-        pool = read.get("paper_entities", []) if e.get("space") == "PAPER" else model
-        want = (e.get("layer", {}).get("name", "0"), [bits(c) for c in e["geometry"]["start"]], [bits(c) for c in e["geometry"]["end"]])
-        if not any(r.get("type") == "LINE" and (r.get("layer"), [hexbits(c) for c in r["start"]], [hexbits(c) for c in r["end"]]) == want
-                   for r in pool):
-            bad.append("entity %s: no %s line on %s with the authored ends" % (e["id"], e.get("space", "MODEL").lower(), want[0]))
+        for k in ("plottable", "on", "frozen"):
+            if r.get(k) != l[k]:
+                bad.append("layer %s: %s authored %s, read %s" % (l["name"], k, l[k], r.get(k)))
+    # Every authored line is read back once, on its layer, in its space, and nothing else is there: model
+    # lines in *Model_Space, paper lines in the block of the viewports' layout.
+    model = next((b["entities"] for b in read.get("blocks", []) if b["name"] == "*Model_Space"), [])
+    blocks = {v.get("block") for v in read.get("viewports", [])}
+    paper = [r for r in read.get("paper_entities", []) if r.get("block") in blocks]
+    if len(paper) != len(read.get("paper_entities", [])):
+        bad.append("paper space holds entities outside the viewports' layout")
+    for space, pool in (("MODEL", model), ("PAPER", paper)):
+        want = sorted((e.get("layer", {}).get("name", "0"), [bits(c) for c in e["geometry"]["start"]], [bits(c) for c in e["geometry"]["end"]])
+                      for e in expected["entities"] if e.get("space", "MODEL") == space)
+        got = sorted((r.get("layer"), [hexbits(c) for c in r["start"]], [hexbits(c) for c in r["end"]]) if r.get("type") == "LINE"
+                     else (r.get("type"), [], []) for r in pool)
+        if want != got:
+            bad.append("%s space: authored lines %s, read %s" % (space.lower(), want, got))
     lp = expected.get("layout_plot")
     if lp:
         r = next((x for x in read.get("layouts", []) if x["name"] == lp["layout"]), None)

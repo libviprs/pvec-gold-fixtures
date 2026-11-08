@@ -629,7 +629,14 @@ fn cmd_read(args: &[String]) {
     for br in doc.block_records.iter() {
         let n = br.name().to_string();
         if n.starts_with("*Paper_Space") {
-            paper.extend(doc.entities_in_block(&n).filter(|e| !matches!(e, EntityType::Viewport(_) | EntityType::LwPolyline(_))).map(dump_entity));
+            let ents: Vec<&EntityType> = doc.entities_in_block(&n).collect();
+            // A clip boundary belongs to its viewport, which the viewport rows already describe.
+            let clips: Vec<_> = ents.iter().filter_map(|e| match e { EntityType::Viewport(v) => Some(v.clip_boundary_handle), _ => None }).collect();
+            for e in ents.iter().filter(|e| !matches!(e, EntityType::Viewport(_)) && !clips.contains(&e.common().handle)) {
+                let mut d = dump_entity(e);
+                d["block"] = json!(n);
+                paper.push(d);
+            }
         }
     }
     let mut layouts: Vec<Value> = doc

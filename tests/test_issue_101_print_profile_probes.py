@@ -137,6 +137,28 @@ class Revision(unittest.TestCase):
                     l["plottable"] = True
         self.assertTrue(self.mutated("no-plot-layer-001", plots))
 
+    def test_an_extra_or_misplaced_line_is_a_mismatch(self):
+        def extra(r):
+            model = next(b for b in r["blocks"] if b["name"] == "*Model_Space")
+            model["entities"].append(dict(model["entities"][0]))
+        self.assertTrue(self.mutated("no-plot-layer-001", extra))
+
+        def swap(r):
+            for e in r["paper_entities"]:
+                e["layer"] = "0" if e["layer"] == "NOPLOT" else "NOPLOT"
+        self.assertTrue(self.mutated("no-plot-layer-001", swap))
+
+    def test_a_dump_without_frozen_layers_or_a_turned_off_layer_is_a_mismatch(self):
+        def drop(r):
+            del r["viewports"][1]["frozen_layers"]
+        self.assertTrue(self.mutated("viewport-frozen-layer-001", drop))
+
+        def off(r):
+            for l in r["layers"]:
+                if l["name"] == "DOORS":
+                    l["on"] = False
+        self.assertTrue(self.mutated("viewport-frozen-layer-001", off))
+
     def test_a_changed_plot_setting_is_a_mismatch(self):
         def layout1(r):
             return next(l for l in r["layouts"] if l["name"] == "Layout1")

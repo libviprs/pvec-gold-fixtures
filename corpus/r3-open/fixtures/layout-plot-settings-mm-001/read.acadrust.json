@@ -95,6 +95,7 @@
   ],
   "paper_entities": [
     {
+      "block": "*Paper_Space",
       "end": [
         "0x4079000000000000",
         "0x0000000000000000",
